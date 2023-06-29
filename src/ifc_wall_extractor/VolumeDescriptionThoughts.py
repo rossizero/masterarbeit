@@ -22,13 +22,14 @@ planes = [
 
 # Beispiel-Liste von Ebenen in Hessescher Normalform
 planes = [
+    # cube
     [1, 0, 0, -1.0],
     [1, 0, 0, 1.0],
     [0, 1, 0, 0.5],
     [0, 1, 0, -0.5],
     [0, 0, 1, 0.5],
     [0, 0, 1, -0.5],
-
+    # L shape
     [1, 0, 0, 0],
     [0, 0, 1, 2],
 ]
@@ -90,12 +91,10 @@ print(len(intersections))
 #print(intersections, faces)
 m = mesh.Mesh(np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype))
 print(intersections)
+print(faces)
 for i, f in enumerate(faces):
     for j in range(3):
         # TODO L shape is not working -> displays a cube
-        print(f, f[j])
-        print(intersections[int(f[j])])
-        print(intersections[int(f[j]), :])
         m.vectors[i][j] = intersections[int(f[j]), :]
 
 m.save('tile.stl', mode=Mode.ASCII)
