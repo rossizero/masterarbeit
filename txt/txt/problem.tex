@@ -1,0 +1,20 @@
+\section{Problemstellung}
+Ziel der Arbeit ist es einen Workflow zu schaffen, welcher es einem Nutzer ermöglicht ein Gebäude in einem 3D Designer zu planen, das im Anschluss in einen durch einen heterogenen Roboterschwarm ausführbaren Bauplan übersetzt wird.
+Dies erfolgt in mehreren Schritten, welche sich jeweils mit unterschiedlichen Fragestellungen befassen.
+Anhand der Teilschritte lässt sich diese umfangreiche Problemstellung logisch einteilen und die jeweilgen Kernprobleme und Fragestellungen der einzelnen Schritte werden klar.
+
+
+Roboter auf Mauer -> Test nicht mit Schaumstoffbricks möglich da gewicht
+Lücken (Fenster, Türen)
+
+\subsection{Bausteindefinition}
+Wie können wir zu einem bestimmten Wandtyp ein Set an Bausteintypen definieren, mit welchen Wände diesen Typs gebaut werden müssen.
+Dabei sollen die Bausteine nicht auf Quader beschränkt, sondern beliebige Körpern sein können.
+Ebenfalls relevant sind eventuelle die Bausteinverbindungen, die ebenfalls Einschränkungen haben.
+Ein Beispiel dafür ist etwa Mörtel bei Ziegelwänden.
+
+\subsection{Wall-Detailing und Tiling}
+Wie kann man algorithmisch mit einem Set an Bausteintypen eine Wand, welche als Mesh vorliegt, vollständig erbauen und daraus einen Bauplan herleiten (Stichwort Abhängigkeitsgraph).
+
+\subsection{Definition Bauplan}
+Was muss ein Bauplan konkret beinhalten?
