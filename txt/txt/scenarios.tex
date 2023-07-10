@@ -1,4 +1,4 @@
-\section{Fallstudie}
+\section{Fallstudien}\label{scenarios}
 \begin{comment}
 subsection{Fallstudie Rossi Notes}
 
@@ -45,36 +45,61 @@ Dabei soll das Gebäude Elemente wie Fenster und Türen enthalten, um dem Proble
 Das Errechnen eines Bauplans ausgehend von einem 3D Modell eines Gebäudes soll für beliebig beschaffene Bausteine möglich sein, welche zuvor definiert werden.
 \end{comment}
 
-\subsection{Basis Szenario}
-Zu Beginn wird aus dem in Abbildung TODO zu sehenden Modells eines kleinen Hauses ein Bauplan generiert.
-Dieses Modell wurde in Blender - erweitert dem IFC Plugin - erstellt und verfügt nur über Wände eines bestimmten Typs, für welchen ein einzelner Bausteintyp definiert wird.
-Dieser Bausteintyp definiert einen nicht veränderbaren Quader.
-Das beudetet, dass das Bearbeiten der Bausteine, wie etwa das Schneiden eines Ziegelsteins, nicht berücksichtigt wird.
-Deshalb wird vorerst vorausgesetzt, dass die Wände des Modells mithilfe dieses Bausteintyps lückenlos "diskretisiert" werden können.
-Mit diesem kleinen Szenario wird die Zusammenarbeit aller notwendigen Komponenten ersichtlich und es werden verschiedene Ansätze untersucht, um einige Lösungen für den Bauplan der Wände zu erhalten und zu vergleichen.
-Außerdem müssen schon hier Regeln in den Planungsalgorithmus eingeführt werden, die diverse Mauerwerksverbände erzwingen zu können, um damit die Stabilität und gleichmäßige Kraftverteilung in einer Wand zu gewährleisten und sich gleichzeitig möglichst nah an der Realität des Mauerbaus zu bewegen.
-Mithilfe der Ergebnisse aus diesem Szenario wird in den Nachfolgenden ein Format zur Definition generischerer Bausteintypen entwickelt und verfeinert.
-Zusätzlich wird sowohl die Grundstruktur für die kommenden Szenarios abgeleitet als auch die Eignung von Blender und der IFC-Erweiterung für die Bearbeitung dieser Szenarien überprüft.
+\subsection{Bauplandeduktion am Beispiel von LEGO Gebäuden}
+Frage vorweg: Wenn der Konstruktionsplaner Teil meiner Ergebnisse aus der Masterarbeit ist, wieso macht es dann Sinn, dass ich dann in dem Szenario von einem Modell ausgehe, welches ich aber nur mit eben diesem Konstruktionsplaner erstellen konnte?
 
-\subsection{Konstruktionsplaner für Häuser am Beispiel von LEGO}
-Für dieses Szenario sind zwei Wandtypen definiert worden, die mit unterschiedlichen Sets an Bausteintypen errichtet werden sollen.
-So gibt es eine breite und eine dünne Wand.
-Für breite Wände gilt, dass diese immer 4 Noppen breit und mindestens zwei Noppen lang sein muss.
-Das entspricht einem quer gesetzten einzelnen Standardstein.
-Für dünne Wände hingegen gilt eine feste Breite von 2 Noppen und eine Mindestlänge von ebenfalls zwei Noppen.
-TODO Abbildungen mit den möglichen Bausteinen der beiden Sets.
-Das bedeutet, dass es von Nöten ist, dem Nutzer ein Raster für die Bearbeitung diesen Wänden aufzuzwingen, damit der Planungsalgorithmus immer eine lückenlose Lösung finden kann.
-Dies ist durch Anpassen der Blender-Bearbeitungsmöglichkeiten für ein mit einem der beiden Wandtypen annotiertes Objek umsetzbar.
-Nicht nur die Abmessungen der Wände müssen in ein Raster fallen, auch die Rotation dieser wird in diesem Szenario auf 90\textdegree{} Schritte limitiert. 
-Das stellt für dieses Szenario eine vertretbare Enschränkung dar, da es ohnehin dem intuitiven Umgang mit LEGO Steinen und gleichzeitig den Baustil von den meisten einfachen Gebäuden entspricht.
+\begin{figure}[ht]
+  \begin{subfigure}[b]{0.44\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario1_screenshot.png}
+    \caption{3D Modell innerhalb von Blender.}
+    \label{fig:Scenario1 Screenshot}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.505\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario1_story_plan.jpg}
+    \caption{Gebäudeplan des 3D Modells.}
+    \label{fig:Scenario1 Gebäudeplan}
+  \end{subfigure}
+  \label{fig:Scenario1 komplett}
+  \caption{Modell eines Studentenzimmers (verschiedene Darstellungsformen).}
+\end{figure}
+
+Ziel dieses Szenarios ist es, aus dem in Abbildung \ref{fig:Scenario1 Screenshot} dargestellten 3D Modell ein Bauplan zu generieren.
+Zu sehen ist der Plan eines einfachen Hauses mit einem Stockwerk.
+Dieses besitzt eine Eingangstür, eine Terassentür neben einem Fenster und eine Tür, die das Badezimmer vom Hauptraum trennt.
+Türen und Fenster stellen eine Herausforderung für den Planungsalgorithmus dar, da der Verlauf einer ansonsten durchgängigen Wand dadurch unterbrochen wird und Lücken aufweist.
+Details wie Duschen, Betten, Toiletten und ähnliche Komponenten, sind für dieses Szenario irrelevant, da diese keinen Effekt auf die Struktur der Wände haben und wurden aus diesem Grund bewusst weggelassen.
+Das Modell wurde mithilfe der in Kapitel \ref{basics} näher behandelten Technologien erstellt und enstpricht in seiner Struktur einem verbreiteten Industriestandard.
+Dafür wurden zwei Wandtypen definiert, die jeweils unterschiedliche Wanddicken vorgeben.
+So gibt es breite Außen- und dünne Innenwände.
+Diese entsprechen in ihren Maßen dem Raster, welches das \textit{LEGO System} (siehe Kapitel \ref{basics}) vorgibt.
+Für breite Wände gilt, dass diese immer zwei Noppen breit, mindestens eine Noppe lang und einen Stein hoch sein muss.
+Für dünne Wände hingegen gilt eine feste Breite von einer Noppe, ebenfalls eine Mindestlänge von einer Noppe und eine Mindesthöhe von einem Stein.
+Beide Wandtypen können nur Höhen beziehungsweise Längen aufweisen, die jeweils einem Vielfachen der Höhe oder Länge des kleinsten Legosteins aufweisen, der zum Bau der Wände verwendet werden soll (hier der 1x1 Stein).
+Daraus resultiert ein Raster, welches ebenfalls für die Ausmaße und Positionen der Fenster und Türen einzuhalten ist.
+Dieses Raster gilt es, abhängig des ausgewählten Wandtyps, in den Editor zu integrieren, um das Modellieren solcher Gebäude nutzerfreundlich zu gestalten und nicht durch ständiges Messen und Eintragen genauer Positionen oder Maße zu unterbrechen.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.6\columnwidth]{fig/scenario1_lego_set.png}
+    \caption{LEGO Steintypen für die Innen- und Außenwände. (TODO Bild ist sehr hässlich)}
+    \label{fig:Scenario1 Lego Set}
+\end{figure}
+
+Nicht nur die Abmessungen der Wände müssen in ein Raster fallen, auch deren Rotation wird in diesem Szenario auf 90\textdegree{} Schritte limitiert. 
+Das stellt in diesem Fall eine vertretbare Enschränkung dar, da es ohnehin dem intuitiven Umgang mit LEGO Steinen und gleichzeitig dem Baustil der meisten einfachen Gebäuden entspricht.
 Folglich muss ein Format für die Bausteintypen entwickelt werden, aus welchen all diese Informationen abgeleitet werden können.
-Dieses Format muss sowohl innerhalb von Blender verwendet, als auch zur Berechnung innerhalb des Planungsalgorithmus herangezogen werden.
-Als zusätzliches Problem werden in dem Szenario Fenster und TÜren, die Lücken in einer Wand darstellen, betrachtet.
-Außerdem werden weitere Regeln eingeführt, um den resultierenden Plan näher an das Vorgehen eines realen Baus zu bringen.
-So werden beim Errichten von Häusern standardmäßig zuerst die Ecken (der Schnittpunkt zweier Wände) um eine Stufe erhöht, um im Anschluss die geraden Wandabschnitte aufzufüllen.
+Dieses Format muss sowohl von dem Editor selbst verwendet, als auch zur Berechnung innerhalb des Planungsalgorithmus herangezogen werden.
+Außerdem werden weitere Regeln benötigt, um den resultierenden Plan näher an das Vorgehen eines realen Baus zu bringen.
+So werden beim Errichten von Häusern zuerst die Ecken (der Schnittpunkt zweier Wände) um eine Stufe erhöht, um im Anschluss die geraden Wandabschnitte aufzufüllen.
 Damit wird vermieden, dass in den ohnehin schon komplexeren Eckbereichen auch noch zugeschnittene Ziegel notwenig werden.
 Stattdessen schneidet man diese erst zurecht, wenn sich dann eher mittig im Wandabschnitt Lücken ergeben, die kleiner sind als die vorhandenen Ziegel.
 Zwar wird dies im Fall von Legosteinen nie auftreten, aber es ist übersichtlicher das Problem in dem vorliegenden eingeschränkten Szenario zu beschreiben.
+Zusätzlich müssen Regeln in den Planungsalgorithmus eingeführt werden, die diverse Mauerwerksverbände (vorgestellt in Kapitel \ref{basics}) erzwingen zu können, um damit die Stabilität und gleichmäßige Kraftverteilung in einer Wand zu gewährleisten und sich ebenfalls möglichst nah an der Realität des Mauerbaus zu bewegen.
+
+\subsection{Szenario mit Läufern und Bindern}
+Dicke Wände, die mit Läufern und Bindern erstellt werden müssen.
+Eckfälle sehr komplex (siehe Basics)
 
 \subsection{Szenario mit veränderbaren Bausteintypen}
 Wie können wir die Bausteine veränderbar machen, sprich die Bearbeitungsmöglichkeiten während des Baus (schneiden eines Ziegels) miteinbeziehen in unser Bausteinformat.

@@ -1,4 +1,4 @@
-\section{Grundlagen}
+\section{Grundlagen} \label{basics}
 Wie bereits oben erwähnt, wird für diese Arbeit ein geeignetes Speicherformat für 3D Modelle von Gebäuden benötigt.
 Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} vollständig digital abbilden zu können. 
 Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in dem Modell zu integrieren auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
@@ -164,6 +164,23 @@ Das stellt einen Praxisbezug zum aktuell verwendeten Stand dieser Technologien h
 Wie auch Blender untertützt BIM-Server das Einbinden von eigenen Plugins, sodass eine Erweiterung um neue Funktionalität möglich ist.
 Die Plugins werden in Java geschrieben.
 Der Server bietet aber auch eine REST Schnittstelle an, um Clients in anderen Sprachen anzubinden.
+
+\subsection{LEGO}
+Ein 1x1 LEGO Stein hat eine  quadratische Grundfläche von \(7.8mm\) x \(7.8mm\).
+Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2mm\).
+Daraus ergibt sich ein Rastermaß von \(8mm\) x  \(8mm\).
+In Abbildung \ref{fig:Lego 2x4 Brick} werden zur Veranschaulichung die Maße des populären 2x4 Steines aufgeschlüsselt.
+Die für ein dreidimensionales Raster noch fehlende Größe ist die Höhe der Steine.
+Diese beträgt \(9.6mm\).
+Der Abstand zwischen zwei übereinander gestapelten Steinen hängt von dem Druck ab, der beim Zusammenstecken geleistet wurde.
+Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet werden.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/LEGO 2x4 Brick horizontal.png}
+    \caption{Maße des Standard 2x4 LEGO Steins \cite{LEGOBric2:online}}
+    \label{fig:Lego 2x4 Brick}
+\end{figure}
 
 \subsection{Mauerwerksverband}
 Als Mauerwerksverband bezeichnet man bestimmte, gleichmäßige Anordnungen von Mauersteinen, um einen homogenen Mauerwerkskörper zu erreichen \cite{Mauerwer39:online}.
