@@ -12,7 +12,7 @@ print("OCC version", VERSION)
 settings = geom.settings()
 settings.set(settings.USE_WORLD_COORDS, True)
 
-ifc_file = ifcopenshell.open("../models/sample_house.ifc")
+ifc_file = ifcopenshell.open("../../models/scenario11.ifc")
 products = ifc_file.by_type("IfcProduct")
 meshes = []
 
