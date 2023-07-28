@@ -53,6 +53,7 @@ Blablabla so können aus einem IFC Projekt alle relevanten Klassen mit den für 
 
 
 \subsubsection{IfcOpeningElement}
+\label{basic:IfcOpeningElement}
 Wie funktionieren Löcher in z.B. IfcWall? -> IfcOpeningElement.
 Am Beispiel eines Fensters erklären. In dessen Doku steht dass Windows auf ein IfcOpeningElement verweisen, welches ein Stück Wand wegmacht und z.b. durch das Fenster aufgefüllt wird.
 %(https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcWindow.htm) 
@@ -61,7 +62,7 @@ TODO: mit rausparsen und aus wandmeshes rauschneiden vor detailing.
 
 ifcopeningelement um lücken in wände zu machen.
 "The opening element stands for opening, recess or chase, all reflecting voids. It represents a void within any element that has physical manifestation. Openings can be inserted into walls, slabs, beams, columns, or other elements." Auszug aus Doku. und This also includes IfcOpeningElements, the mechanism used to extract openings for windows and doors, typically from walls. %https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-construct-new-geometry/
-
+%https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcDoor.htm
 
 \subsection{IFC for Blender}
 \subsubsection{Blender}
@@ -182,12 +183,42 @@ Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet w
     \label{fig:Lego 2x4 Brick}
 \end{figure}
 
-\subsection{Mauerwerksverband}
+\subsection{Mauerwerksbau}
+Der Mauerwerksbau ist eine Art des Massivbaus, bei welchem Natur- oder Formsteine aufgeschichtet werden, um Wände beziehungsweise Mauern zu errichten.
+Eine derart gebaute Wand besteht demnach aus Steinen und den dazwischen entstehenden Fugen.
+Mörtel ist dabei nicht zwangsläufig notwendig.
+Man spricht von trocken versetzten Steinen oder einer Trockenmauer, wenn darauf verzichtet wird.
+Heutzutage wird fast ausschließlich mit quaderförmigen Formsteinen gebaut.
+Zur Beschreibung solcher Formsteine existieren zwei relevante Größen.
+Die eine ist das sogenannte \textit{Baunennmaß}, mit dem die tatsächliche Größe des Steins angegeben wird.
+Die andere das \textit{Baurichtmaß}, das sich aus Baunennmaß und dem Fugenmaß zusammensetzt.
+Baurichtmaße sind gemäß dem oktametrischen Maßsystem immer ein Vielfaches von \(12,5 cm\) (das entspricht \(1/8 m\)) und mindestens \(6.25cm\).
+Dies gilt sowohl für die Breite als auch die Höhe der Steine.
+Das System ist in der DIN 4172 Maßordnung im Hochbau geregelt und ist das fest definierte Grundmaß für das Bauwesen in Europa \cite{DIN417224} .
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/Ziegelsteinformate DF NF 2DF 6DF.png}
+    \caption{Darstellung verschiedener Steinformate nach DIN 4172 (Baunennmaß in Millimetern) \cite{Steinfor38:online}}
+    \label{fig:Steinformate}
+\end{figure}
+
+Daraus gehen insbesondere folgende zwei Formate für Ziegelsteine hervor:
+Das Normalformat (NF) mit \(240 x 115 x 71 mm\) und das Dünnformat (DF) mit  \(240 x 115 x 52 mm\) (Länge x Breite x Höhe).
+Alle anderen Formate werden mithilfe dieser beiden Grundsteine angegeben.
+So sind zum Beispiel die in Abbildung \ref{fig:Steinformate} gezeigten 2 DF und 6 DF Steine eine Kombination aus mehreren Steinen im Dünnformat.
+Dabei sieht die Norm ein Fugenmaß von \(1 cm\) für Stoßfugen (vertikal) und \(1.2 cm\) for Lagerfugen (horizontal) vor.
+Für Systeme, die eine schmalere oder keine Fuge benötigen, werden entsprechend größere Steine hergestellt, um der Maßordnung zu entsprechen.
+Mithilfe des Systems ist man zusätzlich in der Lage Türen und Fenster an die daraus entstehenden Öffnungen anzupassen und vermeidet zeitaufwendiges, nachträgliches Anpassen.
+
+\subsubsection{Mauerwerksverband}
+\label{basics:Mauerwerksverband}
 Als Mauerwerksverband bezeichnet man bestimmte, gleichmäßige Anordnungen von Mauersteinen, um einen homogenen Mauerwerkskörper zu erreichen \cite{Mauerwer39:online}.
 Damit kann eine gleichmäßige Kraftverteilung innerhalb der Mauer gewährleistet werden.
 Eine wichtige Rolle nimmt dabei das Überbindemaß ein, welches die Mindestüberlappung von Mauersteinen aus zwei Schichten der Mauer vorgibt.
 Für das planmäßige Überbindemaß \(l_{ ol }\) gilt für übliche Mauersteine mit Schichthöhen \(h_{ u } \leq 249 mm\) nach DIN EN 1996-1-1: \( l_{ ol } \geq 0,4 · h_{ u } \geq 45 mm\)\cite{Bemessun72:online}\cite{DIN_EN_1996_1_1}.
-Zudem wird darin die Mindestwanddicke für tragendes Mauerwerk, sofern aus Gründen der Standsicherheit, der Bauphysik oder des Brandschutzes nicht größere Dicken erforderlich sind, auf  \(t_{ min } = 115 mm\) festgelegt \cite{Bemessun72:online}\cite{DIN_EN_1996_1_1}.
+Zudem wird darin die Mindestwanddicke für tragendes Mauerwerk, "sofern aus Gründen der Standsicherheit, der Bauphysik oder des Brandschutzes nicht größere Dicken erforderlich sind" \cite{Bemessun72:online}, auf  \(t_{ min } = 115 mm\) festgelegt \cite{DIN_EN_1996_1_1}.
+Dies ist, wie in Abbildung \ref{fig:Steinformate} zu sehen, exakt die Breite der kleinsten Ziegelformate NF und DF.
 
 Man unterscheidet zwei Arten von Mauerwerk: dem Einsteinmauerwerk und dem Verbandsmauerwerk.
 Wie schon dem Namen zu entnehmen, handelt es sich beim Einsteinmauerwerk und ein Mauerwerk, bei welchem die Wanddicke der Steindicke entspricht.

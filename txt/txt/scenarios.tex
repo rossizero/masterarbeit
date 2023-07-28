@@ -45,9 +45,8 @@ Dabei soll das Gebäude Elemente wie Fenster und Türen enthalten, um dem Proble
 Das Errechnen eines Bauplans ausgehend von einem 3D Modell eines Gebäudes soll für beliebig beschaffene Bausteine möglich sein, welche zuvor definiert werden.
 \end{comment}
 
-\subsection{Bauplandeduktion am Beispiel von LEGO Gebäuden}
-Frage vorweg: Wenn der Konstruktionsplaner Teil meiner Ergebnisse aus der Masterarbeit ist, wieso macht es dann Sinn, dass ich dann in dem Szenario von einem Modell ausgehe, welches ich aber nur mit eben diesem Konstruktionsplaner erstellen konnte?
-
+\subsection{Planung und Bauplandeduktion eines LEGO Gebäudes mit Einsteinmauerwerk}
+Ziel dieses Szenarios ist es, aus dem in Abbildung \ref{fig:Scenario1 Screenshot} dargestellten 3D Modell ein Bauplan zu generieren.
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.44\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario1_screenshot.png}
@@ -63,8 +62,6 @@ Frage vorweg: Wenn der Konstruktionsplaner Teil meiner Ergebnisse aus der Master
   \label{fig:Scenario1 komplett}
   \caption{Modell eines Studentenzimmers (verschiedene Darstellungsformen).}
 \end{figure}
-
-Ziel dieses Szenarios ist es, aus dem in Abbildung \ref{fig:Scenario1 Screenshot} dargestellten 3D Modell ein Bauplan zu generieren.
 Zu sehen ist der Plan eines einfachen Hauses mit einem Stockwerk.
 Dieses besitzt eine Eingangstür, eine Terassentür neben einem Fenster und eine Tür, die das Badezimmer vom Hauptraum trennt.
 Türen und Fenster stellen eine Herausforderung für den Planungsalgorithmus dar, da der Verlauf einer ansonsten durchgängigen Wand dadurch unterbrochen wird und Lücken aufweist.
@@ -78,14 +75,12 @@ Für dünne Wände hingegen gilt eine feste Breite von einer Noppe, ebenfalls ei
 Beide Wandtypen können nur Höhen beziehungsweise Längen aufweisen, die jeweils einem Vielfachen der Höhe oder Länge des kleinsten Legosteins aufweisen, der zum Bau der Wände verwendet werden soll (hier der 1x1 Stein).
 Daraus resultiert ein Raster, welches ebenfalls für die Ausmaße und Positionen der Fenster und Türen einzuhalten ist.
 Dieses Raster gilt es, abhängig des ausgewählten Wandtyps, in den Editor zu integrieren, um das Modellieren solcher Gebäude nutzerfreundlich zu gestalten und nicht durch ständiges Messen und Eintragen genauer Positionen oder Maße zu unterbrechen.
-
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.6\columnwidth]{fig/scenario1_lego_set.png}
     \caption{LEGO Steintypen für die Innen- und Außenwände. (TODO Bild ist sehr hässlich)}
     \label{fig:Scenario1 Lego Set}
 \end{figure}
-
 Nicht nur die Abmessungen der Wände müssen in ein Raster fallen, auch deren Rotation wird in diesem Szenario auf 90\textdegree{} Schritte limitiert. 
 Das stellt in diesem Fall eine vertretbare Enschränkung dar, da es ohnehin dem intuitiven Umgang mit LEGO Steinen und gleichzeitig dem Baustil der meisten einfachen Gebäuden entspricht.
 Folglich muss ein Format für die Bausteintypen entwickelt werden, aus welchen all diese Informationen abgeleitet werden können.
@@ -95,10 +90,48 @@ So werden beim Errichten von Häusern zuerst die Ecken (der Schnittpunkt zweier 
 Damit wird vermieden, dass in den ohnehin schon komplexeren Eckbereichen auch noch zugeschnittene Ziegel notwenig werden.
 Stattdessen schneidet man diese erst zurecht, wenn sich dann eher mittig im Wandabschnitt Lücken ergeben, die kleiner sind als die vorhandenen Ziegel.
 Zwar wird dies im Fall von Legosteinen nie auftreten, aber es ist übersichtlicher das Problem in dem vorliegenden eingeschränkten Szenario zu beschreiben.
-Zusätzlich müssen Regeln in den Planungsalgorithmus eingeführt werden, die diverse Mauerwerksverbände (vorgestellt in Kapitel \ref{basics}) erzwingen zu können, um damit die Stabilität und gleichmäßige Kraftverteilung in einer Wand zu gewährleisten und sich ebenfalls möglichst nah an der Realität des Mauerbaus zu bewegen.
+Zusätzlich müssen Regeln in den Planungsalgorithmus eingeführt werden, die diverse Mauerwerksverbände (vorgestellt in Kapitel \ref{basics}) erzwingen zu können, um damit die Stabilität und gleichmäßige Kraftverteilung innerhalb einer Wand zu gewährleisten und sich ebenfalls möglichst nah an der Realität des Mauerbaus zu bewegen.
 
-\subsection{Szenario mit Läufern und Bindern}
-Dicke Wände, die mit Läufern und Bindern erstellt werden müssen.
+\subsubsection{Problemstellung}
+Bevor für das Modell ein passender Bauplan entwickelt werden kann, muss das sogenannte \textit{Wall Detailing} (vgl. Kapitel \ref{basics:wall-detailing}) stattfinden.
+Darunter versteht man das Berechnen einer Bausteinkombination, die eine Wand möglichst gut abbildet.
+Dabei bedeutet "möglichst gut", dass die Proportionen der Bausteinkombination möglichst den der Ursprungswand entsprechen und keine nicht gewollten Lücken entstehen.
+In diesem Szenario wird durch Auflegen des Rasters des LEGO Systems schon während des Modelliervorgangs sichergestellt, dass das resultierende Modell mit Legosteinen baubar ist.
+Darum ist das Ziel des \textit{Wall Detailing} Schrittes in diesem Szenario, jede Wand lückenlos mit Bausteinen zu füllen.
+Zusätzlich existieren folgende Einschränkungen und Eigenschaften, die für das Ergebnis dieses Schrittes gelten sollen.
+
+\paragraph{Überbindemaß}
+Obwohl in dem vorliegenden Modell ausschließlich Einsteinmauerwerke vorgesehen sind, gilt es die in Kapitel \ref{basics:Mauerwerksverband} erläuterte Regel zum Überbindemaß von Bausteinen zu beachten.
+Da es sich hierbei aber um LEGO Steine handelt, die wesentlich kleiner sind als die genormten Formate für Ziegelsteine, wird der für das Überbeindemaß vorgesehene Mindestwert von 45mm ignoriert.
+Außerdem ist ein Versatz von unter 50\% der Dicke eines Legosteines in den meisten Fällen nicht umsetzbar, da diese nicht frei übereinander gesteckt werden können.
+Darum wird für dieses Szenario wird ein Überbindemaß von exakt 50\% der Steindicke verwendet, was den Einschränkungen des Überbindemaßes entspricht, welches einen Mindestversatz von 40\% der Steindicke voraussetzt.
+Für die in Abbildung \ref{fig:Scenario1 Lego Set} dargestellten Lego Steine kann mit einem solchen Überbindemaß gleichzeitig auch das vorgesehene Raster des Lego Systems eingehalten werden, da diese alle eine gerade Anzahl an Noppen besitzen.
+TODO Bild von dumm gestapelter LEGO Wand zu LEGO Wand mit Überbindemaß.
+
+\paragraph{Anstoßende Wandstücke} 
+Besonders herausfordernd ist die Einhaltung des Überbindemaßes an anstoßenden Wandstücken.
+Solche Wandstücke entstehen zum Beispiel an Ecken, also 90 Grad zueinanderstehende Wände oder aber an den Übergängen von Außenwänden zu Innenwänden.
+Wie in Abbildung \ref{fig:Scenario1 Screenshot} zu erkennen treten in diesem Szenario beide Fälle auf.
+Zunächst müssen daher alle anstoßenden Wandstücke aus dem Modell gefiltert werden.
+In Kapitel \ref{basics:Mauerwerksverband} werden gängige Praktiken zur Lösung von anstoßenden Wandstücken vorgestellt.
+Mit diesen Informationen muss der Planungsalgorithmus zunächst eine Lösung für solche Wandstücke finden und anschließend die restlichen Flächen mit dem Vorgehen von oben auffüllen.
+
+\paragraph{Öffnungen}
+Das Fenster und die drei Türen sind hier die einzigen Besonderheiten in dem Modell.
+Für den Mauerbau bedeutet dies an den entsprechenden Stellen Öffnungen zu lassen.
+Die Informationen über diese Öffunungen liegen innerhalb des Formates vor, in welchem das Modell erstellt wurde (siehe \ref{basic:IfcOpeningElement}).
+So lassen sich Größe und Position leicht herausfinden und das Ergebnis der beiden obigen Schritte dementsprechend abändern.
+
+Nun liegt eine Beschreibung des Modells mit dem zuvor definierten Set an Legosteinen vor.
+Als letzten Schritt gilt es daraus eine Abfolge an Bauinstruktionen zu finden, die unter Beachtung von diversen Einschränkungen zum gewünschten Ergebnis führen.
+Mit dieser Problemstellung hat sich Ludwig (TODO) in  seiner Dissertation auseinandergesetzt (siehe Kapitel \ref{related:ludwigs dis}). 
+Einschränkungen, die beim Bau von Legokonstruktionen gelten sind:
+Deadlock, Überhang etc. (TODO)
+Das Vorgehen in seiner Arbeit soll für dieses Szenario evaluiert und gegebenenfalls angepasst werden.
+
+
+\subsection{Planung und Bauplandeduktion eines Lego Gebäudes mit Verbandsmauerwerk}
+Kein Einsteinmauerwerk -> dicke Wände, die mit Läufern und Bindern erstellt werden müssen.
 Eckfälle sehr komplex (siehe Basics)
 
 \subsection{Szenario mit veränderbaren Bausteintypen}
