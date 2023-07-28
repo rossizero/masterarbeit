@@ -391,88 +391,88 @@ facet normal 0.0 -0.0 0.0048
     vertex -0.016 3.115315e-09 0.12
   endloop
 endfacet
-facet normal -0.004800001 0.0 0.0
+facet normal -0.004800013 0.0 0.0
   outer loop
-    vertex 0.0 0.30400002 0.0
-    vertex 0.0 0.28800002 0.0
-    vertex 0.0 0.28800002 0.3
+    vertex 2.0 3.016 5.0
+    vertex 2.0 3.0 5.0
+    vertex 2.0 3.0 5.3
   endloop
 endfacet
-facet normal -0.004800001 0.0 0.0
+facet normal -0.004800013 0.0 0.0
   outer loop
-    vertex 0.0 0.30400002 0.0
-    vertex 0.0 0.28800002 0.3
-    vertex 0.0 0.30400002 0.3
+    vertex 2.0 3.016 5.0
+    vertex 2.0 3.0 5.3
+    vertex 2.0 3.016 5.3
   endloop
 endfacet
-facet normal 0.0 0.036000002 0.0
+facet normal 0.0 0.035999987 0.0
   outer loop
-    vertex 0.120000005 0.30400002 0.0
-    vertex 0.0 0.30400002 0.0
-    vertex 0.0 0.30400002 0.3
+    vertex 2.12 3.016 5.0
+    vertex 2.0 3.016 5.0
+    vertex 2.0 3.016 5.3
   endloop
 endfacet
-facet normal 0.0 0.036000002 -0.0
+facet normal 0.0 0.035999987 -0.0
   outer loop
-    vertex 0.120000005 0.30400002 0.0
-    vertex 0.0 0.30400002 0.3
-    vertex 0.120000005 0.30400002 0.3
+    vertex 2.12 3.016 5.0
+    vertex 2.0 3.016 5.3
+    vertex 2.12 3.016 5.3
   endloop
 endfacet
-facet normal 0.004800001 0.0 0.0
+facet normal 0.004800013 0.0 0.0
   outer loop
-    vertex 0.120000005 0.28800002 0.0
-    vertex 0.120000005 0.30400002 0.0
-    vertex 0.120000005 0.30400002 0.3
+    vertex 2.12 3.0 5.0
+    vertex 2.12 3.016 5.0
+    vertex 2.12 3.016 5.3
   endloop
 endfacet
-facet normal 0.004800001 0.0 0.0
+facet normal 0.004800013 0.0 0.0
   outer loop
-    vertex 0.120000005 0.28800002 0.0
-    vertex 0.120000005 0.30400002 0.3
-    vertex 0.120000005 0.28800002 0.3
+    vertex 2.12 3.0 5.0
+    vertex 2.12 3.016 5.3
+    vertex 2.12 3.0 5.3
   endloop
 endfacet
-facet normal 0.0 -0.036000002 0.0
+facet normal 0.0 -0.035999987 0.0
   outer loop
-    vertex 0.0 0.28800002 0.0
-    vertex 0.120000005 0.28800002 0.0
-    vertex 0.120000005 0.28800002 0.3
+    vertex 2.0 3.0 5.0
+    vertex 2.12 3.0 5.0
+    vertex 2.12 3.0 5.3
   endloop
 endfacet
-facet normal 0.0 -0.036000002 0.0
+facet normal 0.0 -0.035999987 0.0
   outer loop
-    vertex 0.0 0.28800002 0.0
-    vertex 0.120000005 0.28800002 0.3
-    vertex 0.0 0.28800002 0.3
+    vertex 2.0 3.0 5.0
+    vertex 2.12 3.0 5.3
+    vertex 2.0 3.0 5.3
   endloop
 endfacet
-facet normal 0.0 0.0 -0.0019200004
+facet normal 0.0 0.0 -0.001920002
   outer loop
-    vertex 0.0 0.30400002 0.0
-    vertex 0.120000005 0.30400002 0.0
-    vertex 0.120000005 0.28800002 0.0
+    vertex 2.0 3.016 5.0
+    vertex 2.12 3.016 5.0
+    vertex 2.12 3.0 5.0
   endloop
 endfacet
-facet normal 0.0 0.0 -0.0019200004
+facet normal 0.0 0.0 -0.001920002
   outer loop
-    vertex 0.0 0.30400002 0.0
-    vertex 0.120000005 0.28800002 0.0
-    vertex 0.0 0.28800002 0.0
+    vertex 2.0 3.016 5.0
+    vertex 2.12 3.0 5.0
+    vertex 2.0 3.0 5.0
   endloop
 endfacet
-facet normal 0.0 -0.0 0.0019200004
+facet normal 0.0 -0.0 0.001920002
   outer loop
-    vertex 0.120000005 0.28800002 0.3
-    vertex 0.120000005 0.30400002 0.3
-    vertex 0.0 0.30400002 0.3
+    vertex 2.12 3.0 5.3
+    vertex 2.12 3.016 5.3
+    vertex 2.0 3.016 5.3
   endloop
 endfacet
-facet normal 0.0 0.0 0.0019200004
+facet normal 0.0 0.0 0.001920002
   outer loop
-    vertex 0.0 0.28800002 0.3
-    vertex 0.120000005 0.28800002 0.3
-    vertex 0.0 0.30400002 0.3
+    vertex 2.0 3.0 5.3
+    vertex 2.12 3.0 5.3
+    vertex 2.0 3.016 5.3
   endloop
 endfacet
 endsolid cube.stl

@@ -1,13 +1,16 @@
+
+
 bl_info = {
     "name": "IFC Modeling Helper",
     "blender": (2, 80, 0),
     "category": "Object",
 }
 
+from ifcopenshell.api import run
 import bpy
 import blenderbim.tool as tool
 import ifcopenshell.util.element
-
+import numpy as np
 
 class IfcModelingHelper:
     last_selection = []
@@ -56,9 +59,12 @@ class IfcModelingHelper:
 
     @classmethod
     def apply_grid(cls, obj, grid):
+        matrix = np.eye(4)
+
         if grid:
-            for i, val in enumerate(grid):
-                obj.location[i] = round((obj.location[i] / val)) * val
+            matrix[:, 3][0:3] = [round((obj.location[i] / val)) * val for i, val in enumerate(grid)]
+            obj.location = [round((obj.location[i] / val)) * val for i, val in enumerate(grid)]
+            run("geometry.edit_object_placement", tool.Ifc.get(), product=obj, matrix=matrix)
             obj.dimensions = [round((obj.dimensions[i] / val)) * val for i, val in enumerate(grid)]
 
     @classmethod
