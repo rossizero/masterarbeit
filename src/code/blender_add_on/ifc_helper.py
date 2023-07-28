@@ -8,9 +8,11 @@ bl_info = {
 
 from ifcopenshell.api import run
 import bpy
+import blenderbim
 import blenderbim.tool as tool
 import ifcopenshell.util.element
 import numpy as np
+
 
 class IfcModelingHelper:
     last_selection = []
@@ -62,9 +64,17 @@ class IfcModelingHelper:
         matrix = np.eye(4)
 
         if grid:
-            matrix[:, 3][0:3] = [round((obj.location[i] / val)) * val for i, val in enumerate(grid)]
+            id_ = obj.BIMObjectProperties.ifc_definition_id
+            if id_ is not None and id_ != 0:
+                cls.ifc_file = tool.Ifc.get()
+                bim_obj = cls.ifc_file.by_id(obj.BIMObjectProperties.ifc_definition_id)
+
+            #matrix[:, 3][0:3] = [round((obj.location[i] / val)) * val for i, val in enumerate(grid)]
             obj.location = [round((obj.location[i] / val)) * val for i, val in enumerate(grid)]
-            run("geometry.edit_object_placement", tool.Ifc.get(), product=obj, matrix=matrix)
+            #bpy.ops.bim.edit_object_placement(obj=obj)
+            #bpy.ops.bim.edit_object_placement(tool.Ifc, tool.Geometry, tool.Surveyor, obj=obj)
+            #blenderbim.core.geometry.edit_object_placement(tool.Ifc, tool.Geometry, tool.Surveyor, obj=obj)
+            #run("geometry.edit_object_placement", tool.Ifc.get(), product=bim_obj, matrix=matrix)
             obj.dimensions = [round((obj.dimensions[i] / val)) * val for i, val in enumerate(grid)]
 
     @classmethod
