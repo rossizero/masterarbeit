@@ -81,12 +81,15 @@ class IfcModelingHelper:
                     transform = np.array(cls.last_object.location - obj.location)
                     ids = np.where(transform != 0.0)
                     if len(ids) > 0 and len(ids[0]) > 0:
+                        old_ = cls.current_transform
                         cls.current_transform = int(ids[0][0])
+                        if old_ != cls.current_transform:
+                            print(cls.current_transform)
+                            cls.set_snap_parameters(scene)
+
                         if cls.grid:
                             for i, val in enumerate(cls.grid):
                                 obj.location[i] = (obj.location[i] / val) * val
-                        print(cls.current_transform)
-                        cls.set_snap_parameters(scene)
 
                 cls.last_object = obj.copy()
 
@@ -130,14 +133,25 @@ class IfcModelingHelper:
             scene.tool_settings.use_snap_grid_absolute = cls.reset_settings_list[3]
             print("reset settings", cls.reset_settings_list)
 
-
     @classmethod
     def set_snap_parameters(cls, scene):
-        for area in bpy.data.screens["Scripting"].areas:
+        for area in bpy.context.screen.areas:
             if area.type == 'VIEW_3D':
                 for space in area.spaces:
                     if space.type == 'VIEW_3D':
                         space.overlay.grid_scale = cls.grid[cls.current_transform]
+
+                        # reset tool
+                        mode = bpy.context.mode
+                        print(mode)
+                        current_tool = bpy.context.workspace.tools.from_space_view3d_mode(mode, create=False).idname
+                        print(current_tool)
+                        bpy.ops.wm.tool_set_by_id(name=current_tool)
+
+                        override = bpy.context.copy()
+                        override["space_data"] = space
+                        override["area"] = area
+                        bpy.ops.wm.tool_set_by_id(override, name=current_tool)
                         break
 
         scene.tool_settings.use_snap = True
