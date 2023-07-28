@@ -69,7 +69,6 @@ class IfcModelingHelper:
             if len(bpy.context.selected_objects) != 0:
                 obj = bpy.context.selected_objects[0]
                 cls.grid = cls.look_for_grid(obj)
-
                 cls.apply_grid(bpy.context.selected_objects[0], cls.grid)
 
         depsgraph = bpy.context.evaluated_depsgraph_get()
