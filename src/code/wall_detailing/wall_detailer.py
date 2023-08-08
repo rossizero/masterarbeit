@@ -123,19 +123,22 @@ class WallDetailer:
         if self.is_cubic(wall.occ_shape):
             # Apply the inverted translation and rotation to our shape to get axis aligned shape at [0, 0, 0]
             transformation = gp_Trsf()
-            original_translation = np.array([wall.occ_shape.Location().Transformation().TranslationPart().X(),
-                                             wall.occ_shape.Location().Transformation().TranslationPart().Y(),
-                                             wall.occ_shape.Location().Transformation().TranslationPart().Z()])
-            transformation.SetTranslation(gp_Vec(wall.occ_shape.Location().Transformation().TranslationPart().Reversed()))
-            shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
 
-            shape = shape.Reversed()
+
+            shape = wall.occ_shape.Reversed()
             transformation = gp_Trsf()
             original_rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),
                                               shape.Location().Transformation().GetRotation().X(),
                                               shape.Location().Transformation().GetRotation().Y(),
                                               shape.Location().Transformation().GetRotation().Z())
             transformation.SetRotation(shape.Location().Transformation().GetRotation().Inverted())
+            shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+            original_translation = np.array([shape.Location().Transformation().TranslationPart().X(),
+                                             shape.Location().Transformation().TranslationPart().Y(),
+                                             shape.Location().Transformation().TranslationPart().Z()])
+            transformation.SetTranslation(
+                gp_Vec(shape.Location().Transformation().TranslationPart().Reversed()))
             shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
             print(shape.Location().Transformation().TranslationPart().X(),
@@ -177,6 +180,7 @@ class WallDetailer:
             length_leftover = length % length_step
             print(rotate, length_step, length_steps, length_leftover)  # TODO what if leftover
 
+            print(original_translation)
             r = math.pi / 2.0 if not rotate else 0
             for j in range(num_layers):
                 offset = j % 2 * length_step / 2.0  # TODO
@@ -263,7 +267,7 @@ def make_occ_box(length, width, height, position, rotation):
 
 
 if __name__ == "__main__":
-    wall = Wall(make_occ_box(10, 1, 5, [1, 1, 1], quaternion.from_euler_angles(0, 0, math.pi/3)))
+    wall = Wall(make_occ_box(10, 1, 5, [1, 1, 1], quaternion.from_euler_angles(1.3, 1.02, math.pi/3)))
     wall.ifc_wall_type = "test"
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     walls = [wall]
