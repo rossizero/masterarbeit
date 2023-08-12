@@ -2,6 +2,7 @@ import math
 from typing import List, Dict
 import numpy as np
 import quaternion
+
 from OCC.Core.BRep import BRep_Tool
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepBndLib import brepbndlib_Add
@@ -17,58 +18,8 @@ from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import TopoDS_Shape, topods
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Ax3, gp_Vec
 
-
-class BrickInformation:
-    def __init__(self, length, width, height):
-        self.length = max(length, width)
-        self.width = min(length, width)
-        self.height = height
-
-    def volume(self):
-        return self.length * self.width * self.height
-
-
-class Brick(BrickInformation):
-    def __init__(self, length, width, height, position: np.array, rotation: quaternion):
-        super().__init__(length, width, height)
-        self.position = position
-        self.rotation = rotation
-
-    def get_brep_shape(self):
-        offset = 0.01
-        corner = gp_Pnt(0, 0, 0)
-
-        shape = BRepPrimAPI_MakeBox(corner, self.length - offset, self.width - offset, self.height - offset).Shape()
-
-        # translate to center shape around 0 0 0
-        transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0))
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # rotate around local rotation
-        transformation = gp_Trsf()
-        rotation = quaternion.from_euler_angles(0, 0, math.pi/2.0)
-        rotation = gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w)
-        transformation.SetRotation(rotation)
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # translate back
-        transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(self.length / 2.0, self.width / 2.0, self.height / 2.0))
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # translate to global position
-        transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(*self.position))
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # rotate
-        transformation = gp_Trsf()
-        rotation = gp_Quaternion(self.rotation.x, self.rotation.y, self.rotation.z, self.rotation.w)
-        transformation.SetRotation(rotation)
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-        return shape
-
+from masonry_bonds.bond import BlockBond, StrechedBond
+from masonry_bonds.brick import BrickInformation, Brick
 
 class Wall:
     def __init__(self, shape: TopoDS_Shape):
@@ -199,12 +150,18 @@ class WallDetailer:
 
             print(original_translation)
             r = math.pi / 2.0 if not rotate else 0
+            bond = StrechedBond(module)  # TODO
             for j in range(num_layers):
+                bond.up()
                 offset = j % 2 * length_step / 2.0  # TODO
                 for i in range(length_steps - j % 2):
+                    transform = bond.next()
+                    local_position = transform.get_position()
+                    local_rotation = transform.get_rotation()
                     pos = np.array([offset + i * length_step, 0, j * module.height]) + original_translation
+                    pos = local_position + original_translation
                     rot = original_rotation
-                    print(pos, r, rot)
+                    print("pos", pos)
                     b = Brick(module.length, module.width, module.height, pos, rot)
                     brick_ret.append(b)
 
