@@ -40,7 +40,24 @@ class Brick(BrickInformation):
 
         shape = BRepPrimAPI_MakeBox(corner, self.length - offset, self.width - offset, self.height - offset).Shape()
 
-        # translate
+        # translate to center shape around 0 0 0
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0))
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        # rotate around local rotation
+        transformation = gp_Trsf()
+        rotation = quaternion.from_euler_angles(0, 0, math.pi/2.0)
+        rotation = gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w)
+        transformation.SetRotation(rotation)
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        # translate back
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(self.length / 2.0, self.width / 2.0, self.height / 2.0))
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        # translate to global position
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*self.position))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
