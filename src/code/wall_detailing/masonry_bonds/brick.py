@@ -1,4 +1,3 @@
-import math
 import numpy as np
 import quaternion
 
@@ -9,19 +8,22 @@ from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 
 class BrickInformation:
     def __init__(self, length, width, height):
-        self.length = max(length, width)
-        self.width = min(length, width)
+        self.length, self.width = max(length, width), min(length, width)
         self.height = height
 
     def volume(self):
         return self.length * self.width * self.height
 
 
-class Brick(BrickInformation):
-    def __init__(self, length, width, height, position: np.array, rotation: quaternion):
-        super().__init__(length, width, height)
+class Brick:
+    def __init__(self, brick_information: BrickInformation, position: np.array, global_rotation: quaternion, local_rotation: quaternion):
         self.position = position
-        self.rotation = rotation
+        self.global_rotation = global_rotation
+        self.local_rotation = local_rotation
+        self.__brick_information = brick_information
+        self.length = self.__brick_information.length
+        self.width = self.__brick_information.width
+        self.height = self.__brick_information.height
 
     def get_brep_shape(self):
         offset = 0.01
@@ -29,31 +31,31 @@ class Brick(BrickInformation):
 
         shape = BRepPrimAPI_MakeBox(corner, self.length - offset, self.width - offset, self.height - offset).Shape()
 
-        # translate to center shape around 0 0 0
+        # translate the center of the shape to 0 0 0...
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
-        # rotate around local rotation
+        # ...to rotate around local rotation....
         transformation = gp_Trsf()
-        rotation = quaternion.from_euler_angles(0, 0, 0)
+        rotation = self.local_rotation
         rotation = gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w)
         transformation.SetRotation(rotation)
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
-        # translate back
+        # ...then translate back to...
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(self.length / 2.0, self.width / 2.0, self.height / 2.0))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
-        # translate to global position
+        # ...translate to global position
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*self.position))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
-        # rotate
+        # Now rotate globally
         transformation = gp_Trsf()
-        rotation = gp_Quaternion(self.rotation.x, self.rotation.y, self.rotation.z, self.rotation.w)
+        rotation = gp_Quaternion(self.global_rotation.x, self.global_rotation.y, self.global_rotation.z, self.global_rotation.w)
         transformation.SetRotation(rotation)
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
         return shape

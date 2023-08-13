@@ -90,9 +90,6 @@ class WallDetailer:
         brick_ret = []
         if self.is_cubic(wall.occ_shape):
             # Apply the inverted translation and rotation to our shape to get axis aligned shape at [0, 0, 0]
-            transformation = gp_Trsf()
-
-
             shape = wall.occ_shape.Reversed()
             transformation = gp_Trsf()
             original_rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),
@@ -129,46 +126,26 @@ class WallDetailer:
             length = round(xmax - xmin, 6)
             width = round(ymax - ymin, 6)
             height = round(zmax - zmin, 6)
-            tmp = length
-            length = max(length, width)
-            width = min(tmp, width)
+            length, width = max(length, width), min(length, width)
             print(length, width, height)
 
             # get "biggest" brick TODO maybe there is a better criteria?
             bricks.sort(key=lambda x: x.volume(), reverse=True)
             print(bricks[0].volume())
             module = bricks[0]
-            num_layers = int(height / module.height)
-            leftover_layer = height % module.height
-            print(num_layers, leftover_layer)  # TODO what if leftover
-            # whether we use the module's length or width as "Läufer"
-            rotate = module.width != width  # TODO
-            length_step = module.width if rotate else module.length
-            length_steps = int(length / length_step)
-            length_leftover = length % length_step
-            print(rotate, length_step, length_steps, length_leftover)  # TODO what if leftover
+
 
             print(original_translation)
-            r = math.pi / 2.0 if not rotate else 0
-            bond = StrechedBond(module)  # TODO
-            for j in range(num_layers):
-                bond.up()
-                offset = j % 2 * length_step / 2.0  # TODO
-                for i in range(length_steps - j % 2):
-                    transform = bond.next()
-                    local_position = transform.get_position()
-                    local_rotation = transform.get_rotation()
-                    pos = np.array([offset + i * length_step, 0, j * module.height]) + original_translation
-                    pos = local_position + original_translation
-                    rot = original_rotation
-                    print("pos", pos)
-                    b = Brick(module.length, module.width, module.height, pos, rot)
-                    brick_ret.append(b)
 
-            #for b in brick_ret:
-            #    b.position += np.array([xmin, ymin, zmin])
-            #    b.rotation += original_rotation
+            bond = BlockBond(module)  # TODO
+            transformations = bond.apply(length, width, height)
 
+            for tf in transformations:
+                local_position = tf.get_position()
+                local_rotation = tf.get_rotation()
+                global_position = local_position + original_translation
+                b = Brick(module, global_position, global_rotation=original_rotation, local_rotation=local_rotation)
+                brick_ret.append(b)
         return brick_ret
 
     def detail_corner(self, wall1: Wall, wall2: Wall, bricks: List[BrickInformation]):
@@ -248,4 +225,4 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(walls, brick_information)
     bb = wall_detailer.detail()
     #b = [Brick(1, 2, 0.5, np.ones(shape=(3,)) * i, quaternion.from_euler_angles(math.pi * 2 / 20.0 * i, 0, 0)) for i in range(80)]
-    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[wall.occ_shape])
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
