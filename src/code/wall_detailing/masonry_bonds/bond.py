@@ -65,7 +65,8 @@ class Bond(ABC):
         if position is not None:
             layer, step = position
         ret = self.plan[layer % self.repeat_layer][step % self.repeat_step].copy()
-        ret.set_mask_multiplier(step, step, layer)
+        multiplier = math.floor(step / self.repeat_step)
+        ret.set_mask_multiplier(multiplier, multiplier, layer)
         return ret
 
     def __next(self):
@@ -91,7 +92,7 @@ class Bond(ABC):
             self.__up()
             num_bricks = self.bricks_in_layer(j, length)
             # print("num bricks in layer", j, ":", num_bricks)
-            for i in range(self.bricks_in_layer(j, length)):
+            for i in range(num_bricks):
                 tf = self.__next()
                 ret.append(tf)
         return ret
@@ -103,8 +104,10 @@ class Bond(ABC):
         tf = transformations[counter].copy()
         tf.set_mask_multiplier(multiplier, multiplier, layer)
         pos = tf.get_position()
+        l, _, _ = self.module.get_rotated_dimensions(tf.get_rotation())
 
-        while pos[0] + self.l <= length: # TODO calculate instead of expensive "exploration"
+        print("l", l)
+        while pos[0] + l <= length:  # TODO calculate instead of expensive "exploration"
             counter += 1
             tf = transformations[counter % len(transformations)].copy()
             multiplier = math.floor(counter / float(len(transformations)))
@@ -121,7 +124,7 @@ class BlockBond(Bond):
         plan = [
             [
                 Transformation(translation=MaskedArray(value=np.array([self.l, 0, self.h]), mask=np.array([1, 0, 1]))),
-                Transformation(translation=MaskedArray(offset=np.array([-self.l, self.w, 0]), value=np.array([self.l, 0, self.h]), mask=np.array([1, 0, 1]))),
+                Transformation(translation=MaskedArray(offset=np.array([0, self.w, 0]), value=np.array([self.l, 0, self.h]), mask=np.array([1, 0, 1]))),
             ],
             [
                 Transformation(translation=MaskedArray(offset=np.array([self.w * 0.5, 0, 0]), value=np.array([self.w, 0, self.h]), mask=np.array([1, 0, 1])),

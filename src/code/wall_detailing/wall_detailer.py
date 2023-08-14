@@ -135,7 +135,7 @@ class WallDetailer:
             module = bricks[0]
 
 
-            print(original_translation)
+            print("og translation", original_translation)
 
             bond = BlockBond(module)  # TODO
             transformations = bond.apply(length, width, height)
@@ -143,7 +143,7 @@ class WallDetailer:
             for tf in transformations:
                 local_position = tf.get_position()
                 local_rotation = tf.get_rotation()
-                global_position = local_position + original_translation
+                global_position = local_position + original_translation - np.array([length/2, width/2, height/2])
                 b = Brick(module, global_position, global_rotation=original_rotation, local_rotation=local_rotation)
                 brick_ret.append(b)
         return brick_ret
@@ -195,7 +195,7 @@ class WallDetailer:
 
 
 def make_occ_box(length, width, height, position, rotation):
-    corner = gp_Pnt(0, 0, 0)
+    corner = gp_Pnt(-length/2.0, -width/2.0, -height/2.0)
 
     shape = BRepPrimAPI_MakeBox(corner, length, width, height).Shape()
 
@@ -219,6 +219,7 @@ def make_occ_box(length, width, height, position, rotation):
 
 if __name__ == "__main__":
     wall = Wall(make_occ_box(10, 1, 5, [1, 1, 1], quaternion.from_euler_angles(1.3, 1.02, math.pi/3)))
+    wall = Wall(make_occ_box(10, 1, 5, [0,0,0], quaternion.from_euler_angles(0,0,0)))
     wall.ifc_wall_type = "test"
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     walls = [wall]
