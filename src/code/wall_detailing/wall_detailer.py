@@ -134,7 +134,6 @@ class WallDetailer:
             print(bricks[0].volume())
             module = bricks[0]
 
-
             print("og translation", original_translation)
 
             bond = GothicBond(module)  # TODO
@@ -219,11 +218,9 @@ def make_occ_box(length, width, height, position, rotation):
 
 if __name__ == "__main__":
     wall = Wall(make_occ_box(10, 1, 5, [1, 1, 1], quaternion.from_euler_angles(1.3, 1.02, math.pi/3)))
-    #wall = Wall(make_occ_box(10, 1, 5, [0,0,0], quaternion.from_euler_angles(0,0,0)))
     wall.ifc_wall_type = "test"
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     walls = [wall]
     wall_detailer = WallDetailer(walls, brick_information)
     bb = wall_detailer.detail()
-    #b = [Brick(1, 2, 0.5, np.ones(shape=(3,)) * i, quaternion.from_euler_angles(math.pi * 2 / 20.0 * i, 0, 0)) for i in range(80)]
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
