@@ -18,7 +18,7 @@ from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import TopoDS_Shape, topods
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Ax3, gp_Vec
 
-from masonry_bonds.bond import BlockBond, StrechedBond
+from masonry_bonds.bond import BlockBond, StrechedBond, CrossBond, HeadBond, GothicBond
 from masonry_bonds.brick import BrickInformation, Brick
 
 class Wall:
@@ -137,7 +137,7 @@ class WallDetailer:
 
             print("og translation", original_translation)
 
-            bond = BlockBond(module)  # TODO
+            bond = GothicBond(module)  # TODO
             transformations = bond.apply(length, width, height)
 
             for tf in transformations:
@@ -219,7 +219,7 @@ def make_occ_box(length, width, height, position, rotation):
 
 if __name__ == "__main__":
     wall = Wall(make_occ_box(10, 1, 5, [1, 1, 1], quaternion.from_euler_angles(1.3, 1.02, math.pi/3)))
-    wall = Wall(make_occ_box(10, 1, 5, [0,0,0], quaternion.from_euler_angles(0,0,0)))
+    #wall = Wall(make_occ_box(10, 1, 5, [0,0,0], quaternion.from_euler_angles(0,0,0)))
     wall.ifc_wall_type = "test"
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     walls = [wall]

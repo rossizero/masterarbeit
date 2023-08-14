@@ -53,10 +53,10 @@ class Brick:
         self.height = self.__brick_information.height
 
     def get_brep_shape(self):
-        offset = 0.02
-        corner = gp_Pnt(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0)
+        offset = 0.0325
+        corner = gp_Pnt(-self.length / 2.0 + offset, -self.width / 2.0 + offset, -self.height / 2.0 + offset)
 
-        shape = BRepPrimAPI_MakeBox(corner, self.length - offset, self.width - offset, self.height - offset).Shape()
+        shape = BRepPrimAPI_MakeBox(corner, self.length - offset * 2, self.width - offset * 2, self.height - offset * 2).Shape()
 
         # translate the center of the shape to 0 0 0...
         #transformation = gp_Trsf()
