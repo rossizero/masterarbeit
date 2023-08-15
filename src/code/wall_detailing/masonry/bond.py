@@ -4,7 +4,7 @@ import math
 import numpy as np
 import quaternion
 
-from masonry_bonds.brick import BrickInformation
+from masonry.brick import BrickInformation
 
 
 class MaskedArray:

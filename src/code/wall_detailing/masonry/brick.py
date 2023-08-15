@@ -78,7 +78,6 @@ class Brick:
 
     def get_brep_shape(self):
         """
-
         :return: the accordingly rotated brep shape of this brick in world-coordinates
         """
         offset = 0.0325
