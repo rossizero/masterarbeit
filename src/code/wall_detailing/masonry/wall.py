@@ -78,6 +78,13 @@ class Wall:
 
         return np.unique(vertices, axis=0)
 
+    def rotation(self) -> quaternion:
+        ret = np.quaternion(self.occ_shape.Location().Transformation().GetRotation().W(),
+                            self.occ_shape.Location().Transformation().GetRotation().X(),
+                            self.occ_shape.Location().Transformation().GetRotation().Y(),
+                            self.occ_shape.Location().Transformation().GetRotation().Z())
+        return ret
+
     def _is_cubic(self) -> bool:
         """
         Compares properties of self.occ_shape to the properties of its bounding box

@@ -122,9 +122,10 @@ class WallDetailer:
                     continue
 
                 # Check if they touch each other
+                # TODO check what happens when they overlap -> wie können wir das raussortieren?
                 dist_calculator = BRepExtrema_DistShapeShape(w1.occ_shape, w2.occ_shape)
                 dist_calculator.Perform()
-                t = dist_calculator.IsDone() and dist_calculator.Value() <= 0.000001
+                t = dist_calculator.IsDone() and dist_calculator.Value() <= 1e-9
                 print("touching", i, j, t)
                 p1 = dist_calculator.PointOnShape1(2)
                 p2 = dist_calculator.PointOnShape1(2)
@@ -132,7 +133,14 @@ class WallDetailer:
                 print("p2", p2.X(), p2.Y(), p2.Z())
                 if t:
                     print("Rossi", dist_calculator.NbSolution())
-                    print(dist_calculator.DumpToString())
+                    # print(dist_calculator.DumpToString())
+                    a1 = w1.rotation()
+                    a2 = w2.rotation()
+                    diff = a2 * a1.inverse()
+
+                    print("HALLO", a1, a2, diff, diff.angle(), math.degrees(diff.angle()))
+                    print(quaternion.as_rotation_vector(a1), quaternion.as_rotation_vector(a2))
+                    print(math.degrees(abs(quaternion.as_rotation_vector(a1)[2] - quaternion.as_rotation_vector(a2)[2])))
                 # print(dist_calculator.PointOnShape1(1), dist_calculator.PointOnShape2(1))
 
                 # if yes -> at what angle?
@@ -201,13 +209,13 @@ def make_occ_box(length, width, height, position, rotation):
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     walls = [
-        Wall(make_occ_box(10, 1, 5, [0, 0, 0], quaternion.from_euler_angles(0, 0, math.pi/2)), ifc_wall_type="test"),
+        Wall(make_occ_box(10, 1, 5, [0, 0, 0], quaternion.from_euler_angles(0, 0, math.pi / 2)), ifc_wall_type="test"),
     ]
     walls.extend(
         [
             Wall(make_occ_box(10, 1, 5, [10, 0, 0], quaternion.from_euler_angles(0, 0, math.pi / 2)),
                  ifc_wall_type="test"),
-            Wall(make_occ_box(10, 1, 5, [4.5, -5.5, 0], quaternion.from_euler_angles(0, 0, 0)), ifc_wall_type="test"),
+            Wall(make_occ_box(10, 1, 5, [4.5, -5.5, 0], quaternion.from_euler_angles(0, 0, 2 * math.pi)), ifc_wall_type="test"),
         ]
     )
     wall_detailer = WallDetailer(walls, brick_information)

@@ -177,7 +177,12 @@ class Bond(ABC):
         :param length: length of the wall
         :return: number of bricks that fit into given length of the wall by following layout plan for given layer
         """
-        transformations = self.plan[layer % self.repeat_layer]
+        def get_length(t: Transformation):
+            l, _, _ = self.module.get_rotated_dimensions(t.get_rotation())
+            return l
+
+        transformations = self.plan[layer % self.repeat_layer].copy()
+        transformations.sort(key=lambda x: get_length(x))
         counter = 0
         multiplier = 0
         tf = transformations[counter].copy()
@@ -191,6 +196,7 @@ class Bond(ABC):
             multiplier = math.floor(counter / float(len(transformations)))
             tf.set_mask_multiplier(multiplier, multiplier, layer)
             pos = tf.get_position()
+            l = get_length(tf)
         return counter
 
 
