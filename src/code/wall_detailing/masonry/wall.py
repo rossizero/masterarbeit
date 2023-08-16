@@ -33,7 +33,50 @@ class Wall:
         self.occ_shape = shape
         self.ifc_wall_type = ifc_wall_type
         self.openings = []
+        self.vertices = self._get_vertices(False)  # vertices in world coordinates
         self.is_cubic = self._is_cubic()
+
+        dimensions = self._get_dimensions()
+        self.length = max(dimensions[0], dimensions[1])
+        self.width = min(dimensions[0], dimensions[1])
+        self.height = dimensions[2]
+
+    def _get_dimensions(self) -> np.array:
+        """
+        returns dimensions of the not rotated objects boundingbox of the shape
+        """
+        v = self._get_vertices(True)
+        x = max(v[:, 0]) - min(v[:, 0])
+        y = max(v[:, 1]) - min(v[:, 1])
+        z = max(v[:, 2]) - min(v[:, 2])
+        return np.array(np.around([x, y, z], decimals=6))
+
+    def _get_vertices(self, relative: bool = False):
+        rotated_box_shape = self.occ_shape
+        if relative:
+            # Apply the inverted rotation to our shape to get axis aligned shape
+            rotated_box_shape = self.occ_shape.Reversed()
+            transformation = gp_Trsf()
+            transformation.SetTranslation(gp_Vec(self.occ_shape.Location().Transformation().TranslationPart().Reversed()))
+            rotated_box_shape = BRepBuilderAPI_Transform(rotated_box_shape, transformation).Shape()
+
+            transformation = gp_Trsf()
+            transformation.SetRotation(self.occ_shape.Location().Transformation().GetRotation().Inverted())
+            rotated_box_shape = BRepBuilderAPI_Transform(rotated_box_shape, transformation).Shape()
+
+        edge_explorer = TopExp_Explorer(rotated_box_shape, TopAbs_EDGE)
+        vertices = []
+        while edge_explorer.More():
+            edge = topods.Edge(edge_explorer.Current())
+            vertex_explorer = TopExp_Explorer(edge, TopAbs_VERTEX)
+            while vertex_explorer.More():
+                vertex = topods.Vertex(vertex_explorer.Current())
+                vertex_point = BRep_Tool.Pnt(vertex)
+                vertices.append(np.array([vertex_point.X(), vertex_point.Y(), vertex_point.Z()]))
+                vertex_explorer.Next()
+            edge_explorer.Next()
+
+        return np.unique(vertices, axis=0)
 
     def _is_cubic(self) -> bool:
         """
@@ -66,19 +109,11 @@ class Wall:
         width = ymax - ymin
         height = zmax - zmin
 
-        edge_explorer = TopExp_Explorer(rotated_box_shape, TopAbs_EDGE)
-        coords = [[], [], []]
-        while edge_explorer.More():
-            edge = topods.Edge(edge_explorer.Current())
-            vertex_explorer = TopExp_Explorer(edge, TopAbs_VERTEX)
-            while vertex_explorer.More():
-                vertex = topods.Vertex(vertex_explorer.Current())
-                vertex_point = BRep_Tool.Pnt(vertex)
-                coords[0].append(vertex_point.X())
-                coords[1].append(vertex_point.Y())
-                coords[2].append(vertex_point.Z())
-                vertex_explorer.Next()
-            edge_explorer.Next()
+        # get relative coordinates of vertices
+        v = self._get_vertices(True)
+        coords = [
+            v[:, 0], v[:, 1], v[:, 2]
+        ]
 
         gprops = GProp_GProps()
         brepgprop_VolumeProperties(self.occ_shape, gprops)

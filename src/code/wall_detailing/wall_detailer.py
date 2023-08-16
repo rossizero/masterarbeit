@@ -1,5 +1,5 @@
 import math
-from typing import List, Dict
+from typing import List, Dict, Optional
 import numpy as np
 import quaternion
 
@@ -30,7 +30,7 @@ class WallDetailer:
         self.brick_information = brick_information
 
     def detail_wall(self, wall: Wall, bricks: List[BrickInformation]):
-        print(wall, bricks)
+        print(wall, bricks, wall.is_cubic)
         brick_ret = []
         if wall.is_cubic:
             # Apply the inverted translation and rotation to our shape to get axis aligned shape at [0, 0, 0]
@@ -101,6 +101,16 @@ class WallDetailer:
 
     def detail_opening(self, wall: Wall, opening, bricks: List[BrickInformation]):
         pass
+
+    def combine_walls(self, wall1: Wall, wall2: Wall) -> Optional[Wall]:
+        """
+
+        """
+        if wall1.ifc_wall_type != wall2.ifc_wall_type:
+            return None
+        wall = Wall(shape=wall1.occ_shape, ifc_wall_type=wall1.ifc_wall_type)
+
+        return wall
 
     def check_walls(self):
         for i, w1 in enumerate(self.walls):
@@ -203,4 +213,8 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(walls, brick_information)
     bb = wall_detailer.detail()
 
+    print(len(walls[0].vertices), walls[0].vertices)
+    print(len(walls[0]._get_vertices(True)), walls[0]._get_vertices(True))
+    print(walls[0]._get_dimensions())
+    print(walls[0].length, walls[0].width, walls[0].height)
     # WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.occ_shape for w in walls])
