@@ -104,15 +104,28 @@ class WallDetailer:
 
     def combine_walls(self, wall1: Wall, wall2: Wall) -> Optional[Wall]:
         """
-
+        Combines two wall Elements to one.
+        Does not check whether they actually touch or whatever
         """
         if wall1.ifc_wall_type != wall2.ifc_wall_type:
             return None
-        wall = Wall(shape=wall1.occ_shape, ifc_wall_type=wall1.ifc_wall_type)
-
+        occ_shape = BRepAlgoAPI_Fuse(wall1.occ_shape, wall2.occ_shape).Shape()
+        wall = Wall(shape=occ_shape, ifc_wall_type=wall1.ifc_wall_type)
+        xs = wall.vertices[:, 0]
+        ys = wall.vertices[:, 1]
+        zs = wall.vertices[:, 2]
+        l = max(max(xs) - min(xs), max(ys) - min(ys))
+        w = min(max(xs) - min(xs), max(ys) - min(ys))
+        h = max(zs) - min(zs)
+        pos = [((max(xs) - min(xs)) / 2.0),
+               ((max(xs) - min(xs)) / 2.0),
+               ((max(xs) - min(xs)) / 2.0)]
+        shape = make_occ_box(l, w, h, pos, wall1.rotation())
+        wall = Wall(shape, ifc_wall_type=wall1.ifc_wall_type)
         return wall
 
     def check_walls(self):
+        to_combine = []
         for i, w1 in enumerate(self.walls):
             if not w1.is_cubic:
                 continue
@@ -125,25 +138,59 @@ class WallDetailer:
                 # TODO check what happens when they overlap -> wie können wir das raussortieren?
                 dist_calculator = BRepExtrema_DistShapeShape(w1.occ_shape, w2.occ_shape)
                 dist_calculator.Perform()
-                t = dist_calculator.IsDone() and dist_calculator.Value() <= 1e-9
-                print("touching", i, j, t)
-                p1 = dist_calculator.PointOnShape1(2)
-                p2 = dist_calculator.PointOnShape1(2)
-                print("p1", p1.X(), p1.Y(), p1.Z())
-                print("p2", p2.X(), p2.Y(), p2.Z())
-                if t:
-                    print("Rossi", dist_calculator.NbSolution())
-                    # print(dist_calculator.DumpToString())
+                touching = dist_calculator.IsDone() and dist_calculator.Value() <= 1e-9
+                if touching:
                     a1 = w1.rotation()
                     a2 = w2.rotation()
                     diff = a2 * a1.inverse()
+                    angle = round(diff.angle(), 6)
+                    if angle == math.pi or angle == 0.0 and dist_calculator.NbSolution() == 4:
+                        combine = True
+                        for k in range(1, dist_calculator.NbSolution()+1):
+                            v1 = np.array([dist_calculator.PointOnShape1(k).X(),
+                                           dist_calculator.PointOnShape1(k).Y(),
+                                           dist_calculator.PointOnShape1(k).Z(),
+                                           ])
 
-                    print("HALLO", a1, a2, diff, diff.angle(), math.degrees(diff.angle()))
-                    print(quaternion.as_rotation_vector(a1), quaternion.as_rotation_vector(a2))
-                    print(math.degrees(abs(quaternion.as_rotation_vector(a1)[2] - quaternion.as_rotation_vector(a2)[2])))
-                # print(dist_calculator.PointOnShape1(1), dist_calculator.PointOnShape2(1))
+                            v2 = np.array([dist_calculator.PointOnShape2(k).X(),
+                                           dist_calculator.PointOnShape2(k).Y(),
+                                           dist_calculator.PointOnShape2(k).Z(),
+                                           ])
+                            if v1 not in w1.vertices or v2 not in w2.vertices:
+                                combine = False
+                                break
+                        if combine:
+                            to_combine.append((w1, w2))
 
-                # if yes -> at what angle?
+                    elif angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6):
+                        print("90 degree edge!!!!!!!!!!!!!!!!!!!!", dist_calculator.NbSolution())
+                        for k in range(1, dist_calculator.NbSolution()+1):
+                            v1 = np.array([dist_calculator.PointOnShape1(k).X(),
+                                           dist_calculator.PointOnShape1(k).Y(),
+                                           dist_calculator.PointOnShape1(k).Z(),
+                                           ])
+
+                            v2 = np.array([dist_calculator.PointOnShape2(k).X(),
+                                           dist_calculator.PointOnShape2(k).Y(),
+                                           dist_calculator.PointOnShape2(k).Z(),
+                                           ])
+                            print(v1, v2, np.array_equal(v1, v2))
+                            print("v1", v1 in w1.vertices)
+                            print("v2", v2 in w2.vertices)
+
+                        t_joint = False
+                        if t_joint:
+                            pass
+                        else:
+                            pass
+                    else:
+                        print("Sternchenaufgabe!!!! Edge with angle", math.degrees(angle))
+
+
+        for w1, w2 in to_combine:
+            walls.append(self.combine_walls(w1, w2))
+            walls.remove(w1)
+            walls.remove(w2)
 
     def detail(self) -> List[Brick]:
         bricks = []
@@ -225,4 +272,4 @@ if __name__ == "__main__":
     print(len(walls[0]._get_vertices(True)), walls[0]._get_vertices(True))
     print(walls[0]._get_dimensions())
     print(walls[0].length, walls[0].width, walls[0].height)
-    # WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.occ_shape for w in walls])
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.occ_shape for w in walls])
