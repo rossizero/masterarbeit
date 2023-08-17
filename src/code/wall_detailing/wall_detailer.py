@@ -17,7 +17,7 @@ from OCC.Core.StlAPI import StlAPI_Writer
 from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX, TopAbs_ShapeEnum
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import TopoDS_Shape, topods
-from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Ax3, gp_Vec
+from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Ax1, gp_Vec
 
 from masonry.bond import BlockBond, StrechedBond, CrossBond, HeadBond, GothicBond
 from masonry.brick import BrickInformation, Brick
@@ -110,20 +110,27 @@ class WallDetailer:
         if wall1.ifc_wall_type != wall2.ifc_wall_type:
             return None
         occ_shape = BRepAlgoAPI_Fuse(wall1.occ_shape, wall2.occ_shape).Shape()
+        transformation = gp_Trsf()
+        transformation.SetRotation(wall1.occ_shape.Location().Transformation().GetRotation())
+        occ_shape = BRepBuilderAPI_Transform(occ_shape, transformation).Shape()
         wall = Wall(shape=occ_shape, ifc_wall_type=wall1.ifc_wall_type)
+
         # TODO make differently -> just Fusing doesnt work because the rotation gets messed up.
         # doing it like below messes the position of the resulting wall up
-        xs = wall.vertices[:, 0]
-        ys = wall.vertices[:, 1]
-        zs = wall.vertices[:, 2]
-        l = max(max(xs) - min(xs), max(ys) - min(ys))
-        w = min(max(xs) - min(xs), max(ys) - min(ys))
-        h = max(zs) - min(zs)
-        pos = [((max(xs) - min(xs)) / 2.0),
-               ((max(xs) - min(xs)) / 2.0),
-               ((max(xs) - min(xs)) / 2.0)]
-        shape = make_occ_box(l, w, h, pos, wall1.rotation())
-        wall = Wall(shape, ifc_wall_type=wall1.ifc_wall_type)
+        #xs = wall._get_vertices(True)[:, 0]
+        #ys = wall._get_vertices(True)[:, 1]
+        #zs = wall._get_vertices(True)[:, 2]
+        #l = max(xs) - min(xs)
+        #w = max(ys) - min(ys)
+        #h = max(zs) - min(zs)
+        #print(l, w, h)
+        #xs = wall1.vertices[:, 0]
+        #ys = wall._get_vertices(False)[:, 1]
+        #zs = wall._get_vertices(False)[:, 2]
+        #print("llllllllllll", min(xs), min(ys), min(zs))
+        #pos = [min(xs) + l/2, min(ys) + w/2, min(zs) + h/2]
+        #shape = make_occ_box(max(l, w), min(l, w), h, pos, wall1.rotation())
+        wall = Wall(occ_shape, ifc_wall_type=wall1.ifc_wall_type)
         return wall
 
     def check_walls(self):
@@ -146,6 +153,9 @@ class WallDetailer:
                     a2 = w2.rotation()
                     diff = a2 * a1.inverse()
                     angle = round(diff.angle(), 6)
+                    print("HALLO", a1, a2, diff, diff.angle(), math.degrees(diff.angle()))
+                    print(quaternion.as_rotation_vector(a1), quaternion.as_rotation_vector(a2))
+                    # angle = abs(quaternion.as_rotation_vector(a1)[2] - quaternion.as_rotation_vector(a2)[2])
                     if angle == math.pi or angle == 0.0 and dist_calculator.NbSolution() == 4:
                         combine = True
                         for k in range(1, dist_calculator.NbSolution()+1):
@@ -188,11 +198,10 @@ class WallDetailer:
                     else:
                         print("Sternchenaufgabe!!!! Edge with angle", math.degrees(angle))
 
-
         for w1, w2 in to_combine:
-            walls.append(self.combine_walls(w1, w2))
-            walls.remove(w1)
-            walls.remove(w2)
+            self.walls.append(self.combine_walls(w1, w2))
+            self.walls.remove(w1)
+            self.walls.remove(w2)
 
     def detail(self) -> List[Brick]:
         bricks = []
@@ -274,4 +283,5 @@ if __name__ == "__main__":
     print(len(walls[0]._get_vertices(True)), walls[0]._get_vertices(True))
     print(walls[0]._get_dimensions())
     print(walls[0].length, walls[0].width, walls[0].height)
+    print("walls len", len(walls))
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.occ_shape for w in walls])
