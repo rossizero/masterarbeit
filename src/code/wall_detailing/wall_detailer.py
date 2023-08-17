@@ -111,6 +111,8 @@ class WallDetailer:
             return None
         occ_shape = BRepAlgoAPI_Fuse(wall1.occ_shape, wall2.occ_shape).Shape()
         wall = Wall(shape=occ_shape, ifc_wall_type=wall1.ifc_wall_type)
+        # TODO make differently -> just Fusing doesnt work because the rotation gets messed up.
+        # doing it like below messes the position of the resulting wall up
         xs = wall.vertices[:, 0]
         ys = wall.vertices[:, 1]
         zs = wall.vertices[:, 2]
