@@ -109,11 +109,45 @@ class WallDetailer:
         """
         if wall1.ifc_wall_type != wall2.ifc_wall_type:
             return None
-        occ_shape = BRepAlgoAPI_Fuse(wall1.occ_shape, wall2.occ_shape).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetRotation(wall2.occ_shape.Location().Transformation().GetRotation().Inverted())
+        w1 = BRepBuilderAPI_Transform(wall1.occ_shape, transformation, True, True).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(wall2.occ_shape.Location().Transformation().TranslationPart().Reversed()))
+        w1 = BRepBuilderAPI_Transform(w1, transformation).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetRotation(wall2.occ_shape.Location().Transformation().GetRotation().Inverted())
+        w2 = BRepBuilderAPI_Transform(wall2.occ_shape, transformation, True, True).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(wall2.occ_shape.Location().Transformation().TranslationPart().Reversed()))
+        w2 = BRepBuilderAPI_Transform(w2, transformation).Shape()
+
+        occ_shape = BRepAlgoAPI_Fuse(w2, w1).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(wall1.occ_shape.Location().Transformation().TranslationPart()))
+        #occ_shape = BRepBuilderAPI_Transform(occ_shape, transformation).Shape()
+
         transformation = gp_Trsf()
         transformation.SetRotation(wall1.occ_shape.Location().Transformation().GetRotation())
-        occ_shape = BRepBuilderAPI_Transform(occ_shape, transformation).Shape()
+        #occ_shape = BRepBuilderAPI_Transform(occ_shape, transformation).Shape()
+
+        print("combined", occ_shape.Location().Transformation().TranslationPart().X(),
+              occ_shape.Location().Transformation().TranslationPart().Y(),
+              occ_shape.Location().Transformation().TranslationPart().Z())
+        print("combined 2", wall2.occ_shape.Location().Transformation().TranslationPart().X(),
+              wall2.occ_shape.Location().Transformation().TranslationPart().Y(),
+              wall2.occ_shape.Location().Transformation().TranslationPart().Z())
+        print(occ_shape.Location().Transformation().GetRotation().X(),
+              occ_shape.Location().Transformation().GetRotation().Y(),
+              occ_shape.Location().Transformation().GetRotation().Z(),
+              occ_shape.Location().Transformation().GetRotation().W(),)
         wall = Wall(shape=occ_shape, ifc_wall_type=wall1.ifc_wall_type)
+        print(wall.length, wall.width, wall.height)
 
         # TODO make differently -> just Fusing doesnt work because the rotation gets messed up.
         # doing it like below messes the position of the resulting wall up
@@ -130,7 +164,7 @@ class WallDetailer:
         #print("llllllllllll", min(xs), min(ys), min(zs))
         #pos = [min(xs) + l/2, min(ys) + w/2, min(zs) + h/2]
         #shape = make_occ_box(max(l, w), min(l, w), h, pos, wall1.rotation())
-        wall = Wall(occ_shape, ifc_wall_type=wall1.ifc_wall_type)
+        # wall = Wall(occ_shape, ifc_wall_type=wall1.ifc_wall_type)
         return wall
 
     def check_walls(self):
@@ -200,8 +234,10 @@ class WallDetailer:
 
         for w1, w2 in to_combine:
             self.walls.append(self.combine_walls(w1, w2))
-            self.walls.remove(w1)
-            self.walls.remove(w2)
+            if w1 in self.walls:
+                self.walls.remove(w1)
+            if w2 in self.walls:
+                self.walls.remove(w2)
 
     def detail(self) -> List[Brick]:
         bricks = []
