@@ -33,62 +33,28 @@ class WallDetailer:
         print(wall, bricks, wall.is_cubic)
         brick_ret = []
         if wall.is_cubic:
-            # Apply the inverted translation and rotation to our shape to get axis aligned shape at [0, 0, 0]
-            shape = wall.occ_shape.Reversed()
-            transformation = gp_Trsf()
-            original_rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),
-                                              shape.Location().Transformation().GetRotation().X(),
-                                              shape.Location().Transformation().GetRotation().Y(),
-                                              shape.Location().Transformation().GetRotation().Z())
-            transformation.SetRotation(shape.Location().Transformation().GetRotation().Inverted())
-            shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+            original_rotation = wall.rotation
+            original_translation = wall.translation
+            dimensions = np.array([wall.length, wall.width, wall.height])
 
-            original_translation = np.array([shape.Location().Transformation().TranslationPart().X(),
-                                             shape.Location().Transformation().TranslationPart().Y(),
-                                             shape.Location().Transformation().TranslationPart().Z()])
-            transformation.SetTranslation(
-                gp_Vec(shape.Location().Transformation().TranslationPart().Reversed()))
-            shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-            print(shape.Location().Transformation().TranslationPart().X(),
-                  shape.Location().Transformation().TranslationPart().Y(),
-                  shape.Location().Transformation().TranslationPart().Z())
-
-            print(shape.Location().Transformation().GetRotation().X(),
-                  shape.Location().Transformation().GetRotation().Y(),
-                  shape.Location().Transformation().GetRotation().Z(),
-                  shape.Location().Transformation().GetRotation().W())
-            print("og", original_rotation)
-            # create a boundingbox around the shape
-            bounding_box = Bnd_Box()
-            brepbndlib_Add(shape, bounding_box)
-
-            # Get the minimum and maximum coordinates of the bounding box
-            xmin, ymin, zmin, xmax, ymax, zmax = bounding_box.Get()
-            print(xmin, ymin, zmin, xmax, ymax, zmax)
-
-            length = round(xmax - xmin, 6)
-            width = round(ymax - ymin, 6)
-            height = round(zmax - zmin, 6)
-            length, width = max(length, width), min(length, width)
-            print(length, width, height)
+            print("og rotation", original_rotation)
+            print("og translation", original_translation)
+            print("dimensions", *dimensions)
 
             # get "biggest" brick TODO maybe there is a better criteria?
             bricks.sort(key=lambda x: x.volume(), reverse=True)
             print(bricks[0].volume())
             module = bricks[0]
 
-            print("og translation", original_translation)
-
             bond = GothicBond(module)  # TODO must be set somewhere else
-            transformations = bond.apply(length, width, height)
+            transformations = bond.apply(*dimensions)
 
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself
                 local_rotation = tf.get_rotation()  # rotation of the brick around itself
 
                 # need to substract half wall dimensions since its position coordinates are at its center
-                global_position = local_position + original_translation - np.array([length/2, width/2, height/2])
+                global_position = local_position + original_translation - dimensions / 2.0
                 b = Brick(module, global_position, global_rotation=original_rotation, local_rotation=local_rotation)
                 brick_ret.append(b)
         return brick_ret
@@ -109,62 +75,42 @@ class WallDetailer:
         """
         if wall1.ifc_wall_type != wall2.ifc_wall_type:
             return None
+        shape = BRepAlgoAPI_Fuse(wall1.get_shape(), wall2.get_shape()).Shape()
 
         transformation = gp_Trsf()
-        transformation.SetRotation(wall2.occ_shape.Location().Transformation().GetRotation().Inverted())
-        w1 = BRepBuilderAPI_Transform(wall1.occ_shape, transformation, True, True).Shape()
+        rotation = wall1.get_rotation()
+        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
+        shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
         transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(wall2.occ_shape.Location().Transformation().TranslationPart().Reversed()))
-        w1 = BRepBuilderAPI_Transform(w1, transformation).Shape()
+        translation = gp_Vec(*wall1.get_translation()).Reversed()
+        transformation.SetTranslation(translation)
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
+        wall = Wall(shape=shape, ifc_wall_type=wall1.ifc_wall_type)
+
+        print("combine")
+        print("a", wall.occ_shape.Location().Transformation().TranslationPart().X(),
+              wall.occ_shape.Location().Transformation().TranslationPart().Y(),
+              wall.occ_shape.Location().Transformation().TranslationPart().Z())
+        # translate back (rotation is set to 0 after fusing)
         transformation = gp_Trsf()
-        transformation.SetRotation(wall2.occ_shape.Location().Transformation().GetRotation().Inverted())
-        w2 = BRepBuilderAPI_Transform(wall2.occ_shape, transformation, True, True).Shape()
+        translation = gp_Vec(*wall1.get_translation())
+        transformation.SetTranslation(translation)
+        wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
 
-        transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(wall2.occ_shape.Location().Transformation().TranslationPart().Reversed()))
-        w2 = BRepBuilderAPI_Transform(w2, transformation).Shape()
+        print("b",wall.occ_shape.Location().Transformation().TranslationPart().X(),
+              wall.occ_shape.Location().Transformation().TranslationPart().Y(),
+              wall.occ_shape.Location().Transformation().TranslationPart().Z())
 
-        occ_shape = BRepAlgoAPI_Fuse(w2, w1).Shape()
+        print("c", wall.get_translation())
+        print("wall1", wall1.get_translation())
 
-        transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(wall1.occ_shape.Location().Transformation().TranslationPart()))
-        #occ_shape = BRepBuilderAPI_Transform(occ_shape, transformation).Shape()
-
-        transformation = gp_Trsf()
-        transformation.SetRotation(wall1.occ_shape.Location().Transformation().GetRotation())
-        #occ_shape = BRepBuilderAPI_Transform(occ_shape, transformation).Shape()
-
-        print("combined", occ_shape.Location().Transformation().TranslationPart().X(),
-              occ_shape.Location().Transformation().TranslationPart().Y(),
-              occ_shape.Location().Transformation().TranslationPart().Z())
-        print("combined 2", wall2.occ_shape.Location().Transformation().TranslationPart().X(),
-              wall2.occ_shape.Location().Transformation().TranslationPart().Y(),
-              wall2.occ_shape.Location().Transformation().TranslationPart().Z())
-        print(occ_shape.Location().Transformation().GetRotation().X(),
-              occ_shape.Location().Transformation().GetRotation().Y(),
-              occ_shape.Location().Transformation().GetRotation().Z(),
-              occ_shape.Location().Transformation().GetRotation().W(),)
-        wall = Wall(shape=occ_shape, ifc_wall_type=wall1.ifc_wall_type)
-        print(wall.length, wall.width, wall.height)
-
-        # TODO make differently -> just Fusing doesnt work because the rotation gets messed up.
-        # doing it like below messes the position of the resulting wall up
-        #xs = wall._get_vertices(True)[:, 0]
-        #ys = wall._get_vertices(True)[:, 1]
-        #zs = wall._get_vertices(True)[:, 2]
-        #l = max(xs) - min(xs)
-        #w = max(ys) - min(ys)
-        #h = max(zs) - min(zs)
-        #print(l, w, h)
-        #xs = wall1.vertices[:, 0]
-        #ys = wall._get_vertices(False)[:, 1]
-        #zs = wall._get_vertices(False)[:, 2]
-        #print("llllllllllll", min(xs), min(ys), min(zs))
-        #pos = [min(xs) + l/2, min(ys) + w/2, min(zs) + h/2]
-        #shape = make_occ_box(max(l, w), min(l, w), h, pos, wall1.rotation())
-        # wall = Wall(occ_shape, ifc_wall_type=wall1.ifc_wall_type)
+        # set rotation (translation is already set in constructor of the wall)
+        wall.rotation = wall1.get_rotation()
+        print(wall.get_translation())
+        print(quaternion.as_euler_angles(wall.get_rotation()))
+        print(quaternion.as_euler_angles(wall1.get_rotation()))
         return wall
 
     def check_walls(self):
@@ -179,12 +125,12 @@ class WallDetailer:
 
                 # Check if they touch each other
                 # TODO check what happens when they overlap -> wie können wir das raussortieren?
-                dist_calculator = BRepExtrema_DistShapeShape(w1.occ_shape, w2.occ_shape)
+                dist_calculator = BRepExtrema_DistShapeShape(w1.get_shape(), w2.get_shape())
                 dist_calculator.Perform()
                 touching = dist_calculator.IsDone() and dist_calculator.Value() <= 1e-9
                 if touching:
-                    a1 = w1.rotation()
-                    a2 = w2.rotation()
+                    a1 = w1.get_rotation()
+                    a2 = w2.get_rotation()
                     diff = a2 * a1.inverse()
                     angle = round(diff.angle(), 6)
                     print("HALLO", a1, a2, diff, diff.angle(), math.degrees(diff.angle()))
@@ -253,28 +199,33 @@ class WallDetailer:
         file_path = os.path.abspath(path)
         bricks_copy = bricks.copy()
         print(len(bricks_copy))
+        shape = None
 
         if len(bricks_copy) > 0:
             shape = bricks_copy.pop(0).get_brep_shape()
 
+        if shape is not None:
             for brick in bricks_copy:
                 shape = BRepAlgoAPI_Fuse(
                     shape,
                     brick.get_brep_shape()
                 ).Shape()
 
-            if additional_shapes is not None:
-                for s in additional_shapes:
-                    shape = BRepAlgoAPI_Fuse(
-                        shape,
-                        s
-                    ).Shape()
+        if additional_shapes is not None:
+            if shape is None:
+                shape = additional_shapes[0]
 
-            mesh = BRepMesh_IncrementalMesh(shape, detail)
-            mesh.Perform()
-            assert mesh.IsDone()
-            stl_export = StlAPI_Writer()
-            print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
+            for s in additional_shapes:
+                shape = BRepAlgoAPI_Fuse(
+                    shape,
+                    s
+                ).Shape()
+
+        mesh = BRepMesh_IncrementalMesh(shape, detail)
+        mesh.Perform()
+        assert mesh.IsDone()
+        stl_export = StlAPI_Writer()
+        print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
 
 def make_occ_box(length, width, height, position, rotation):
@@ -296,23 +247,24 @@ def make_occ_box(length, width, height, position, rotation):
 
     # Check if the shape is a solid
     brepgprop_VolumeProperties(shape, gprops)
-    print(gprops.Mass())
     return shape
 
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     walls = [
-        Wall(make_occ_box(10, 1, 5, [0, 0, 0], quaternion.from_euler_angles(0, 0, math.pi / 2)), ifc_wall_type="test"),
+        Wall(make_occ_box(10, 1, 5, [-11, 0, 0], quaternion.from_euler_angles(0, 0, math.pi/2)), ifc_wall_type="test"),
     ]
+
     walls.extend(
         [
-            Wall(make_occ_box(10, 1, 5, [10, 0, 0], quaternion.from_euler_angles(0, 0, math.pi / 2)),
+            Wall(make_occ_box(10, 1, 5, [-21, 0, 0], quaternion.from_euler_angles(0, 0, math.pi / 2)),
                  ifc_wall_type="test"),
             Wall(make_occ_box(10, 1, 5, [4.5, -5.5, 0], quaternion.from_euler_angles(0, 0, 2 * math.pi)), ifc_wall_type="test"),
         ]
     )
-    wall_detailer = WallDetailer(walls, brick_information)
+    wallss = walls.copy()
+    wall_detailer = WallDetailer(wallss, brick_information)
     bb = wall_detailer.detail()
 
     print(len(walls[0].vertices), walls[0].vertices)
@@ -320,4 +272,5 @@ if __name__ == "__main__":
     print(walls[0]._get_dimensions())
     print(walls[0].length, walls[0].width, walls[0].height)
     print("walls len", len(walls))
-    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.occ_shape for w in walls])
+    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in walls])
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.get_shape() for w in wallss])
