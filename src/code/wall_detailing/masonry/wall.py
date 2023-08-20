@@ -31,18 +31,12 @@ class Opening:
 class Wall:
     def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str):
         self.ifc_wall_type = ifc_wall_type
-        self._set_shape(shape)
+        self.update_shape(shape)
 
         self.openings = []
-        self.vertices = self._get_vertices(False)  # vertices in world coordinates
-        self.is_cubic = self._is_cubic()
 
-        dimensions = self._get_dimensions()
-        self.length = max(dimensions[0], dimensions[1])
-        self.width = min(dimensions[0], dimensions[1])
-        self.height = dimensions[2]
 
-    def _set_shape(self, shape: TopoDS_Shape):
+    def update_shape(self, shape: TopoDS_Shape):
         self.rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),
                                       shape.Location().Transformation().GetRotation().X(),
                                       shape.Location().Transformation().GetRotation().Y(),
@@ -62,11 +56,16 @@ class Wall:
         transformation.SetTranslation(translation)
         self.occ_shape = BRepBuilderAPI_Transform(self.occ_shape, transformation).Shape()
 
+        dimensions = self._get_dimensions()
+        self.length = max(dimensions[0], dimensions[1])
+        self.width = min(dimensions[0], dimensions[1])
+        self.height = dimensions[2]
+
     def _get_dimensions(self) -> np.array:
         """
         returns dimensions of the not rotated objects boundingbox of the shape
         """
-        v = self._get_vertices(True)
+        v = self.get_vertices(True)
         x = max(v[:, 0]) - min(v[:, 0])
         y = max(v[:, 1]) - min(v[:, 1])
         z = max(v[:, 2]) - min(v[:, 2])
@@ -86,7 +85,7 @@ class Wall:
 
         return shape
 
-    def _get_vertices(self, relative: bool = False):
+    def get_vertices(self, relative: bool = False):
         shape = self.occ_shape
         if not relative:
             shape = self.get_shape()
@@ -111,7 +110,7 @@ class Wall:
     def get_translation(self) -> np.array:
         return self.translation.copy()
 
-    def _is_cubic(self) -> bool:
+    def is_cubic(self) -> bool:
         """
         Compares properties of self.occ_shape to the properties of its bounding box
         if min and max vertex coordinates are equal to those of the bounding box after rotating self.occ_shape
@@ -134,7 +133,7 @@ class Wall:
         height = zmax - zmin
 
         # get relative coordinates of vertices
-        v = self._get_vertices(True)
+        v = self.get_vertices(True)
         coords = [
             v[:, 0], v[:, 1], v[:, 2]
         ]

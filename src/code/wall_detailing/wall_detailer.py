@@ -30,11 +30,11 @@ class WallDetailer:
         self.brick_information = brick_information
 
     def detail_wall(self, wall: Wall, bricks: List[BrickInformation]):
-        print(wall, bricks, wall.is_cubic)
+        print(wall, bricks, wall.is_cubic())
         brick_ret = []
-        if wall.is_cubic:
-            original_rotation = wall.rotation
-            original_translation = wall.translation
+        if wall.is_cubic():
+            original_rotation = wall.get_rotation()
+            original_translation = wall.get_translation()
             dimensions = np.array([wall.length, wall.width, wall.height])
 
             print("og rotation", original_rotation)
@@ -73,54 +73,41 @@ class WallDetailer:
         Combines two wall Elements to one.
         Does not check whether they actually touch or whatever
         """
-        if wall1.ifc_wall_type != wall2.ifc_wall_type:
-            return None
         shape = BRepAlgoAPI_Fuse(wall1.get_shape(), wall2.get_shape()).Shape()
+        rotation = wall1.get_rotation()
+        translation = wall1.get_translation()
+        scale = np.array([wall1.length, wall1.width, wall1.height])
 
         transformation = gp_Trsf()
-        rotation = wall1.get_rotation()
         transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
         shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
         transformation = gp_Trsf()
-        translation = gp_Vec(*wall1.get_translation()).Reversed()
-        transformation.SetTranslation(translation)
+        transformation.SetTranslation(gp_Vec(*translation).Reversed())
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
         wall = Wall(shape=shape, ifc_wall_type=wall1.ifc_wall_type)
 
-        print("combine")
-        print("a", wall.occ_shape.Location().Transformation().TranslationPart().X(),
-              wall.occ_shape.Location().Transformation().TranslationPart().Y(),
-              wall.occ_shape.Location().Transformation().TranslationPart().Z())
-        # translate back (rotation is set to 0 after fusing)
+        # translate mid of new wall to 0 0 0
         transformation = gp_Trsf()
-        translation = gp_Vec(*wall1.get_translation())
+        complete_translation = translation - (np.array([wall.length, wall.width, wall.height]) - scale) / 2.0
+        translation = gp_Vec(*complete_translation).Reversed()
         transformation.SetTranslation(translation)
+
         wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
 
-        print("b",wall.occ_shape.Location().Transformation().TranslationPart().X(),
-              wall.occ_shape.Location().Transformation().TranslationPart().Y(),
-              wall.occ_shape.Location().Transformation().TranslationPart().Z())
-
-        print("c", wall.get_translation())
-        print("wall1", wall1.get_translation())
-
-        # set rotation (translation is already set in constructor of the wall)
         wall.rotation = wall1.get_rotation()
-        print(wall.get_translation())
-        print(quaternion.as_euler_angles(wall.get_rotation()))
-        print(quaternion.as_euler_angles(wall1.get_rotation()))
+        wall.translation = complete_translation
         return wall
 
     def check_walls(self):
         to_combine = []
         for i, w1 in enumerate(self.walls):
-            if not w1.is_cubic:
+            if not w1.is_cubic():
                 continue
             for j in range(i+1, len(self.walls)):
                 w2 = self.walls[j]
-                if not w2.is_cubic:
+                if not w2.is_cubic():
                     continue
 
                 # Check if they touch each other
@@ -136,6 +123,8 @@ class WallDetailer:
                     print("HALLO", a1, a2, diff, diff.angle(), math.degrees(diff.angle()))
                     print(quaternion.as_rotation_vector(a1), quaternion.as_rotation_vector(a2))
                     # angle = abs(quaternion.as_rotation_vector(a1)[2] - quaternion.as_rotation_vector(a2)[2])
+                    w1_vertices = w1.get_vertices(False)
+                    w2_vertices = w2.get_vertices(False)
                     if angle == math.pi or angle == 0.0 and dist_calculator.NbSolution() == 4:
                         combine = True
                         for k in range(1, dist_calculator.NbSolution()+1):
@@ -148,7 +137,7 @@ class WallDetailer:
                                            dist_calculator.PointOnShape2(k).Y(),
                                            dist_calculator.PointOnShape2(k).Z(),
                                            ])
-                            if v1 not in w1.vertices or v2 not in w2.vertices:
+                            if v1 not in w1_vertices or v2 not in w2_vertices:
                                 combine = False
                                 break
                         if combine:
@@ -167,8 +156,8 @@ class WallDetailer:
                                            dist_calculator.PointOnShape2(k).Z(),
                                            ])
                             print(v1, v2, np.array_equal(v1, v2))
-                            print("v1", v1 in w1.vertices)
-                            print("v2", v2 in w2.vertices)
+                            #print("v1", v1 in w1.vertices)
+                            #print("v2", v2 in w2.vertices)
 
                         t_joint = False
                         if t_joint:
@@ -179,11 +168,13 @@ class WallDetailer:
                         print("Sternchenaufgabe!!!! Edge with angle", math.degrees(angle))
 
         for w1, w2 in to_combine:
-            self.walls.append(self.combine_walls(w1, w2))
-            if w1 in self.walls:
-                self.walls.remove(w1)
-            if w2 in self.walls:
-                self.walls.remove(w2)
+            combi = self.combine_walls(w2, w1)
+            if combi is not None:
+                self.walls.append(combi)
+                if w1 in self.walls:
+                    self.walls.remove(w1)
+                if w2 in self.walls:
+                    self.walls.remove(w2)
 
     def detail(self) -> List[Brick]:
         bricks = []
@@ -228,49 +219,34 @@ class WallDetailer:
         print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
 
-def make_occ_box(length, width, height, position, rotation):
+def make_wall(length, width, height, position, rotation, ifc_wall_type):
+    length, width = max(length, width), min(length, width)
     corner = gp_Pnt(-length/2.0, -width/2.0, -height/2.0)
 
     shape = BRepPrimAPI_MakeBox(corner, length, width, height).Shape()
-
-    transformation = gp_Trsf()
-    transformation.SetTranslation(gp_Vec(*position))
-    shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-    # numpy to occ quaternion
-    rotation = gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w)
-    transformation = gp_Trsf()
-    transformation.SetRotation(rotation)
-    shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+    wall = Wall(shape, ifc_wall_type)
+    wall.rotation = rotation
+    wall.translation = position
 
     gprops = GProp_GProps()
 
     # Check if the shape is a solid
     brepgprop_VolumeProperties(shape, gprops)
-    return shape
+    return wall
 
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    walls = [
-        Wall(make_occ_box(10, 1, 5, [-11, 0, 0], quaternion.from_euler_angles(0, 0, math.pi/2)), ifc_wall_type="test"),
-    ]
+    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
+    w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
+    w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
+    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, 0, 2 * math.pi), ifc_wall_type="test")
+    walls = [w1, w2, w3, w4]
 
-    walls.extend(
-        [
-            Wall(make_occ_box(10, 1, 5, [-21, 0, 0], quaternion.from_euler_angles(0, 0, math.pi / 2)),
-                 ifc_wall_type="test"),
-            Wall(make_occ_box(10, 1, 5, [4.5, -5.5, 0], quaternion.from_euler_angles(0, 0, 2 * math.pi)), ifc_wall_type="test"),
-        ]
-    )
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)
     bb = wall_detailer.detail()
 
-    print(len(walls[0].vertices), walls[0].vertices)
-    print(len(walls[0]._get_vertices(True)), walls[0]._get_vertices(True))
-    print(walls[0]._get_dimensions())
-    print(walls[0].length, walls[0].width, walls[0].height)
-    print("walls len", len(walls))
+    print("walls", len(wallss))
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in walls])
-    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.get_shape() for w in wallss])
+    WallDetailer.convert_to_stl(bb[:1], "output.stl", additional_shapes=[w.get_shape() for w in wallss])
