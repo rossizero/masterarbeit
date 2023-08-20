@@ -88,12 +88,11 @@ class WallDetailer:
 
         wall = Wall(shape=shape, ifc_wall_type=wall1.ifc_wall_type)
 
-        # translate mid of new wall to 0 0 0
+        # translate center of new wall to 0 0 0
         transformation = gp_Trsf()
         complete_translation = translation - (np.array([wall.length, wall.width, wall.height]) - scale) / 2.0
         translation = gp_Vec(*complete_translation).Reversed()
         transformation.SetTranslation(translation)
-
         wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
 
         wall.rotation = wall1.get_rotation()
@@ -167,14 +166,44 @@ class WallDetailer:
                     else:
                         print("Sternchenaufgabe!!!! Edge with angle", math.degrees(angle))
 
+        groups = {}
         for w1, w2 in to_combine:
-            combi = self.combine_walls(w2, w1)
-            if combi is not None:
-                self.walls.append(combi)
-                if w1 in self.walls:
-                    self.walls.remove(w1)
-                if w2 in self.walls:
-                    self.walls.remove(w2)
+            w1_ = w1
+            w2_ = w2
+            w1_key = (w1,)
+            w2_key = (w2,)
+
+            for key in groups.keys():
+                if w1 in key:
+                    w1_ = groups[key]
+                    w1_key = key
+                    break
+
+            for key in groups.keys():
+                if w2 in key:
+                    w2_ = groups[key]
+                    w2_key = key
+                    break
+
+            combi = self.combine_walls(w2_, w1_)
+            if w1_key in groups.keys(): del groups[w1_key]
+            if w2_key in groups.keys(): del groups[w2_key]
+
+            l1 = list(w1_key)
+            l2 = list(w2_key)
+            l1.extend(l2)
+            new_key = tuple(l1)
+            groups[new_key] = combi
+
+        for w1, w2 in to_combine:
+            if w1 in self.walls:
+                self.walls.remove(w1)
+            if w2 in self.walls:
+                self.walls.remove(w2)
+
+        for val in groups.values():
+            if val not in self.walls:
+                self.walls.append(val)
 
     def detail(self) -> List[Brick]:
         bricks = []
@@ -239,14 +268,16 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
     w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
+    w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
     w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
     w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, 0, 2 * math.pi), ifc_wall_type="test")
-    walls = [w1, w2, w3, w4]
+    #walls = [w1, w2, w3, w4, w5]
+    walls = [w5, w2, w4]
 
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)
     bb = wall_detailer.detail()
 
-    print("walls", len(wallss))
+    print("walls", len(wallss), "bricks", len(bb))
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in walls])
-    WallDetailer.convert_to_stl(bb[:1], "output.stl", additional_shapes=[w.get_shape() for w in wallss])
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.get_shape() for w in wallss])
