@@ -271,7 +271,7 @@ if __name__ == "__main__":
     w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
     w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
     w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, 0, 2 * math.pi), ifc_wall_type="test")
-    walls = [w1, w2]#, w3, w4]
+    walls = [w1, w2, w5]#, w3, w4]
 
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)
