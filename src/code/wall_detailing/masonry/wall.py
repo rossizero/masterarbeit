@@ -32,34 +32,36 @@ class Wall:
     def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str):
         self.ifc_wall_type = ifc_wall_type
         self.update_shape(shape)
+        self.update_dimensions()
 
         self.openings = []
 
-
-    def update_shape(self, shape: TopoDS_Shape):
-        self.rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),
-                                      shape.Location().Transformation().GetRotation().X(),
-                                      shape.Location().Transformation().GetRotation().Y(),
-                                      shape.Location().Transformation().GetRotation().Z())
-
-        self.translation = np.array([shape.Location().Transformation().TranslationPart().X(),
-                                     shape.Location().Transformation().TranslationPart().Y(),
-                                     shape.Location().Transformation().TranslationPart().Z()])
-
-        transformation = gp_Trsf()
-        rotation = self.rotation
-        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
-        self.occ_shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
-
-        transformation = gp_Trsf()
-        translation = gp_Vec(*self.translation).Reversed()
-        transformation.SetTranslation(translation)
-        self.occ_shape = BRepBuilderAPI_Transform(self.occ_shape, transformation).Shape()
-
+    def update_dimensions(self):
         dimensions = self._get_dimensions()
         self.length = max(dimensions[0], dimensions[1])
         self.width = min(dimensions[0], dimensions[1])
         self.height = dimensions[2]
+
+    def update_shape(self, shape: TopoDS_Shape):
+        rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),
+                                      shape.Location().Transformation().GetRotation().X(),
+                                      shape.Location().Transformation().GetRotation().Y(),
+                                      shape.Location().Transformation().GetRotation().Z())
+
+        translation = np.array([shape.Location().Transformation().TranslationPart().X(),
+                                     shape.Location().Transformation().TranslationPart().Y(),
+                                     shape.Location().Transformation().TranslationPart().Z()])
+
+        transformation = gp_Trsf()
+        rotation = rotation
+        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
+        self.occ_shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
+
+        transformation = gp_Trsf()
+        translation = gp_Vec(*translation).Reversed()
+        transformation.SetTranslation(translation)
+        self.occ_shape = BRepBuilderAPI_Transform(self.occ_shape, transformation).Shape()
+
 
     def _get_dimensions(self) -> np.array:
         """
