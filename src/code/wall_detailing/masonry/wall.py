@@ -31,6 +31,11 @@ class Opening:
 class Wall:
     def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str):
         self.ifc_wall_type = ifc_wall_type
+        self.length = 0.0
+        self.width = 0.0
+        self.height = 0.0
+        self.rotation = np.quaternion(1, 0, 0, 0)
+        self.translation = np.array([0, 0, 0])
         self.update_shape(shape)
         self.update_dimensions()
 
@@ -61,7 +66,6 @@ class Wall:
         translation = gp_Vec(*translation).Reversed()
         transformation.SetTranslation(translation)
         self.occ_shape = BRepBuilderAPI_Transform(self.occ_shape, transformation).Shape()
-
 
     def _get_dimensions(self) -> np.array:
         """
