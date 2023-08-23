@@ -160,6 +160,7 @@ class WallDetailer:
                                            dist_calculator.PointOnShape2(k).Y(),
                                            dist_calculator.PointOnShape2(k).Z(),
                                            ])
+                            print(v1, v2)
                         t_joint = False
                         if t_joint:
                             pass
@@ -168,7 +169,7 @@ class WallDetailer:
                     else:
                         print("Sternchenaufgabe!!!! Edge with angle", math.degrees(angle))
 
-        # combines all walls or the combinations of them in a correct manner
+        # combines multiple wall parts or the combinations of them to a complete wall
         groups = {}
         for w1, w2 in to_combine:
             w1_ = w1
@@ -198,12 +199,14 @@ class WallDetailer:
             new_key = tuple(l1)
             groups[new_key] = combi
 
+        # remove all wall parts
         for w1, w2 in to_combine:
             if w1 in self.walls:
                 self.walls.remove(w1)
             if w2 in self.walls:
                 self.walls.remove(w2)
 
+        # add all full walls
         for val in groups.values():
             if val not in self.walls:
                 self.walls.append(val)
@@ -264,12 +267,12 @@ def make_wall(length, width, height, position, rotation, ifc_wall_type):
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
+    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2), ifc_wall_type="test")
     w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
     w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
     w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, 0, 2 * math.pi), ifc_wall_type="test")
     w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
-    walls = [w1, w2, w5]#, w4, w5]
+    walls = [w1, w2, w3, w4, w5]
 
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)
