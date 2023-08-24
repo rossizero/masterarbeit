@@ -1,0 +1,59 @@
+import math
+
+import numpy as np
+import quaternion
+
+
+if __name__ == "__main__":
+    q1 = quaternion.z.copy()
+    angle = math.radians(90.0)
+    v1 = np.array([1.0, 0.0, 0.0])
+    v3 = np.array([0.0, 0.0, 1.0])
+
+    w1 = quaternion.from_euler_angles(0.0, 0.0, 0.0)
+    w1_ = quaternion.from_euler_angles(0.0, 0.0, 0.0)
+    w2 = quaternion.from_euler_angles(angle, 0.0, 0.0)
+    w3 = quaternion.from_euler_angles(0.0, angle, 0.0)
+    w4 = quaternion.from_euler_angles(0.0, 0.0, angle)
+
+    print(w1, w2, w3)
+    print(w1.w * w2.w + w1.x * w2.x + w1.y * w2.y + w1.z * w2.z, angle)
+    rot1 = quaternion.rotate_vectors(w1, v1.copy())
+    rot1_ = quaternion.rotate_vectors(w1_, v1.copy())
+    rot2 = quaternion.rotate_vectors(w2, v1.copy())
+    rot3 = quaternion.rotate_vectors(w3, v1.copy())
+    rot4 = quaternion.rotate_vectors(w4, v1.copy())
+
+    rot1_z = quaternion.rotate_vectors(w1, v3.copy())
+    rot1__z = quaternion.rotate_vectors(w1_, v3.copy())
+    rot2_z = quaternion.rotate_vectors(w2, v3.copy())
+    rot3_z = quaternion.rotate_vectors(w3, v3.copy())
+    rot4_z = quaternion.rotate_vectors(w4, v3.copy())
+
+    print(rot1, rot2)
+
+    print("test", np.dot(rot1_z, rot1__z))
+
+    print(np.dot(rot1, rot2))
+    print(np.dot(rot1_z, rot2_z))
+
+    print(np.dot(rot1, rot3))
+    print(np.dot(rot1_z, rot3_z))
+
+    print(np.dot(rot1, rot4))
+    print(np.dot(rot1_z, rot4_z))
+
+    rotation_matrix1 = quaternion.as_rotation_matrix(w1)
+    rotation_matrix2 = quaternion.as_rotation_matrix(w2)
+    rotation_matrix3 = quaternion.as_rotation_matrix(w3)
+    rotation_matrix4 = quaternion.as_rotation_matrix(w4)
+
+    x_axis = np.array([1, 0, 0])
+    rotated_x_axis1 = np.dot(rotation_matrix1, x_axis)
+    rotated_x_axis2 = np.dot(rotation_matrix2, x_axis)
+    rotated_x_axis3 = np.dot(rotation_matrix3, x_axis)
+    rotated_x_axis4 = np.dot(rotation_matrix4, x_axis)
+
+    print(np.dot(rotated_x_axis1, rotated_x_axis2))
+    print(np.dot(rotated_x_axis1, rotated_x_axis3))
+    print(np.dot(rotated_x_axis1, rotated_x_axis4))

@@ -30,23 +30,22 @@ class WallDetailer:
         self.brick_information = brick_information
 
     def detail_wall(self, wall: Wall, bricks: List[BrickInformation]):
-        print(wall, bricks, wall.is_cubic())
         brick_ret = []
         if wall.is_cubic():
             original_rotation = wall.get_rotation()
             original_translation = wall.get_translation()
             dimensions = np.array([wall.length, wall.width, wall.height])
 
-            print("og rotation", original_rotation)
-            print("og translation", original_translation)
-            print("dimensions", *dimensions)
+            #print("og rotation", original_rotation)
+            #print("og translation", original_translation)
+            #print("dimensions", *dimensions)
 
             # get "biggest" brick TODO maybe there is a better criteria?
             bricks.sort(key=lambda x: x.volume(), reverse=True)
-            print(bricks[0].volume())
+            #print(bricks[0].volume())
             module = bricks[0]
 
-            bond = GothicBond(module)  # TODO must be set somewhere else
+            bond = StrechedBond(module)  # TODO must be set somewhere else
             transformations = bond.apply(*dimensions)
 
             for tf in transformations:
@@ -125,50 +124,48 @@ class WallDetailer:
                     a2 = w2.get_rotation()
                     diff = a2 * a1.inverse()
                     angle = round(diff.angle(), 6)
-                    print("HALLO", a1, a2, diff, diff.angle(), math.degrees(diff.angle()))
-                    print(quaternion.as_rotation_vector(a1), quaternion.as_rotation_vector(a2))
-                    # angle = abs(quaternion.as_rotation_vector(a1)[2] - quaternion.as_rotation_vector(a2)[2])
-                    w1_vertices = w1.get_vertices(False)
-                    w2_vertices = w2.get_vertices(False)
-                    if angle == math.pi or angle == 0.0 and dist_calculator.NbSolution() == 4:
-                        combine = True
-                        for k in range(1, dist_calculator.NbSolution()+1):
-                            v1 = np.array([dist_calculator.PointOnShape1(k).X(),
-                                           dist_calculator.PointOnShape1(k).Y(),
-                                           dist_calculator.PointOnShape1(k).Z(),
-                                           ])
 
-                            v2 = np.array([dist_calculator.PointOnShape2(k).X(),
-                                           dist_calculator.PointOnShape2(k).Y(),
-                                           dist_calculator.PointOnShape2(k).Z(),
-                                           ])
-                            if v1 not in w1_vertices or v2 not in w2_vertices:
-                                combine = False
-                                break
-                        if combine:
-                            to_combine.append((w1, w2))
+                    z_part1 = quaternion.rotate_vectors(a1, np.array([0.0, 0.0, 1.0]))
+                    z_part2 = quaternion.rotate_vectors(a2, np.array([0.0, 0.0, 1.0]))
+                    z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
 
-                    elif angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6):
-                        print("90 degree edge!!!!!!!!!!!!!!!!!!!!", dist_calculator.NbSolution())
-                        for k in range(1, dist_calculator.NbSolution()+1):
-                            v1 = np.array([dist_calculator.PointOnShape1(k).X(),
-                                           dist_calculator.PointOnShape1(k).Y(),
-                                           dist_calculator.PointOnShape1(k).Z(),
-                                           ])
+                    if (angle == math.pi or angle == 0.0) and z_parallel and dist_calculator.NbSolution() >= 4:
+                        print("Combine", w1.name, "and", w2.name, dist_calculator.NbSolution())
+                        to_combine.append((w1, w2))
+                    elif (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6)) and z_parallel and dist_calculator.NbSolution() >= 4:
+                        print("90 degree corner between", w1.name, "and", w2.name, dist_calculator.NbSolution())
+                        x = np.array([1.0, 0.0, 0.0])
+                        mid_w1 = quaternion.rotate_vectors(a1, w1.get_translation())
+                        mid_w2 = quaternion.rotate_vectors(a2, w2.get_translation())
+                        dir_1 = quaternion.rotate_vectors(a1, x + np.array([0.0, w1.width / 2.0, 0.0]))
+                        dir_2 = quaternion.rotate_vectors(a2, x + np.array([0.0, w2.width / 2.0, 0.0]))
 
-                            v2 = np.array([dist_calculator.PointOnShape2(k).X(),
-                                           dist_calculator.PointOnShape2(k).Y(),
-                                           dist_calculator.PointOnShape2(k).Z(),
-                                           ])
-                            print(v1, v2)
+                        vector_between_points = mid_w2 - mid_w1
+                        print(vector_between_points)
+                        _ = np.cross(vector_between_points, dir_2)
+                        _ = np.dot(dir_1, dir_2)
+                        t = np.cross(vector_between_points, dir_2) / np.dot(dir_1, dir_2)
+
+                        # Calculate the intersection point
+                        intersection = mid_w1 + t * dir_1
+                        intersection2 = mid_w2 + t * dir_2
+
+                        print(mid_w1, mid_w2)
+                        print(dir_1, dir_2)
+                        print("t", np.round(np.array(t), 6))
+                        print(np.round(intersection, 6))
+                        print(np.round(intersection2, 6))
                         t_joint = False
                         if t_joint:
                             pass
                         else:
                             pass
+                    elif z_parallel and dist_calculator.NbSolution() >= 4:
+                        print("Sternchenaufgabe!!!! Edge with angle", w1.name, w2.name, math.degrees(angle))
                     else:
-                        print("Sternchenaufgabe!!!! Edge with angle", math.degrees(angle))
+                        print("Touching walls", w1.name, "and", w2.name, "with angle", math.degrees(angle), "and non parallel z axis with", dist_calculator.NbSolution(), "touching points")
 
+        
         # combines multiple wall parts or the combinations of them to a complete wall
         groups = {}
         for w1, w2 in to_combine:
@@ -254,12 +251,12 @@ class WallDetailer:
         print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
 
-def make_wall(length, width, height, position, rotation, ifc_wall_type):
+def make_wall(length, width, height, position, rotation, ifc_wall_type, name=""):
     length, width = max(length, width), min(length, width)
     corner = gp_Pnt(-length/2.0, -width/2.0, -height/2.0)
 
     shape = BRepPrimAPI_MakeBox(corner, length, width, height).Shape()
-    wall = Wall(shape, ifc_wall_type)
+    wall = Wall(shape, ifc_wall_type, name)
     wall.rotation = rotation
     wall.translation = position
     return wall
@@ -267,12 +264,13 @@ def make_wall(length, width, height, position, rotation, ifc_wall_type):
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2), ifc_wall_type="test")
-    w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
-    w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
-    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, 0, 2 * math.pi), ifc_wall_type="test")
-    w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 1.3, math.pi / 2), ifc_wall_type="test")
-    walls = [w1, w2, w3, w4, w5]
+    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2), ifc_wall_type="test", name="w1")
+    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, 0, 0), ifc_wall_type="test", name="w4")
+    w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w2")
+    w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w3")
+    w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w5")
+    w6 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, math.pi/2, 0), ifc_wall_type="test", name="w6")
+    walls = [w1, w2, w3, w4, w5, w6]
 
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)
@@ -280,4 +278,4 @@ if __name__ == "__main__":
 
     print("walls", len(wallss), "bricks", len(bb))
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in walls])
-    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[w.get_shape() for w in wallss])
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])

@@ -29,7 +29,8 @@ class Opening:
 
 
 class Wall:
-    def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str):
+    def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, name: str = ""):
+        self.name = name
         self.ifc_wall_type = ifc_wall_type
         self.length = 0.0
         self.width = 0.0
@@ -153,3 +154,4 @@ class Wall:
                                        max(coords[0]), max(coords[1]), max(coords[2])]), decimals=6)
         close = np.allclose(min_max_array_wall, min_max_array_bbox) or np.allclose(min_max_array_bbox, min_max_array_wall)
         return close and np.isclose(gprops.Mass(), length * width * height)
+

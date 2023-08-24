@@ -150,6 +150,13 @@ class Bond(ABC):
         """
         pass
 
+    @abstractmethod
+    def _get_corner_plan(self, rotation: quaternion) -> List[List[Transformation]]:
+        """
+        :return: the plan for a corner using this masonry bond
+        """
+        pass
+
     def apply(self, length, width, height) -> List[Transformation]:
         """
         Fills given dimensions with set layout plan
@@ -244,6 +251,19 @@ class StrechedBond(Bond):
                 Transformation(translation=MaskedArray(offset=np.array([(self.l * self.offset), 0, 0]),
                                                        value=np.array([self.l, 0, self.h]), mask=np.array([1, 0, 1])))
             ])
+        return plan
+
+    def _get_corner_plan(self, rotation: quaternion) -> List[List[Transformation]]:
+        plan = []
+        plan.append([
+            Transformation(translation=MaskedArray())
+        ])
+        plan.append([
+            Transformation(
+                translation=MaskedArray(),
+                rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+        ])
+
         return plan
 
 
