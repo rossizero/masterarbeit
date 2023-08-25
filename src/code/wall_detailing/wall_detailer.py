@@ -134,32 +134,28 @@ class WallDetailer:
                         to_combine.append((w1, w2))
                     elif (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6)) and z_parallel and dist_calculator.NbSolution() >= 4:
                         print("90 degree corner between", w1.name, "and", w2.name, dist_calculator.NbSolution())
-                        x = np.array([1.0, 0.0, 0.0])
+
                         mid_w1 = quaternion.rotate_vectors(a1, w1.get_translation())
                         mid_w2 = quaternion.rotate_vectors(a2, w2.get_translation())
-                        dir_1 = quaternion.rotate_vectors(a1, x + np.array([0.0, w1.width / 2.0, 0.0]))
-                        dir_2 = quaternion.rotate_vectors(a2, x + np.array([0.0, w2.width / 2.0, 0.0]))
 
-                        vector_between_points = mid_w2 - mid_w1
-                        print(vector_between_points)
-                        _ = np.cross(vector_between_points, dir_2)
-                        _ = np.dot(dir_1, dir_2)
-                        t = np.cross(vector_between_points, dir_2) / np.dot(dir_1, dir_2)
+                        direction1 = quaternion.rotate_vectors(a1, np.array([1, 0, 0]))
+                        direction2 = quaternion.rotate_vectors(a2, np.array([1, 0, 0]))
 
-                        # Calculate the intersection point
-                        intersection = mid_w1 + t * dir_1
-                        intersection2 = mid_w2 + t * dir_2
+                        A = np.vstack((direction1, -direction2, [1, 1, 1])).T
+                        b = mid_w2 - mid_w1
 
-                        print(mid_w1, mid_w2)
-                        print(dir_1, dir_2)
-                        print("t", np.round(np.array(t), 6))
-                        print(np.round(intersection, 6))
-                        print(np.round(intersection2, 6))
-                        t_joint = False
-                        if t_joint:
+                        try:
+                            t_values = np.linalg.solve(A, b)
+                            # Calculate the intersection points on both lines
+                            intersection_point1 = mid_w1 + t_values[0] * direction1
+                            intersection_point2 = mid_w2 + t_values[1] * direction2
+
+                            print("ip----", [round(a, 6) for a in intersection_point1])
+                            print("ip----", [round(a, 6) for a in intersection_point2])
+
+                        except np.linalg.LinAlgError:
                             pass
-                        else:
-                            pass
+
                     elif z_parallel and dist_calculator.NbSolution() >= 4:
                         print("Sternchenaufgabe!!!! Edge with angle", w1.name, w2.name, math.degrees(angle))
                     else:
@@ -216,8 +212,8 @@ class WallDetailer:
 
         return bricks
 
-    @classmethod
-    def convert_to_stl(cls, bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = None):
+    @staticmethod
+    def convert_to_stl(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = None):
         import os
         file_path = os.path.abspath(path)
         bricks_copy = bricks.copy()
@@ -264,8 +260,8 @@ def make_wall(length, width, height, position, rotation, ifc_wall_type, name="")
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2), ifc_wall_type="test", name="w1")
-    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, 0, 0), ifc_wall_type="test", name="w4")
+    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w1")
+    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0.0), ifc_wall_type="test", name="w4")
     w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w2")
     w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w3")
     w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w5")

@@ -29,6 +29,10 @@ class Opening:
 
 
 class Wall:
+    @property
+    def T(self) -> int:
+        return 5
+
     def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, name: str = ""):
         self.name = name
         self.ifc_wall_type = ifc_wall_type
