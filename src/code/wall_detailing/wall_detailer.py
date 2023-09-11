@@ -3,26 +3,28 @@ from typing import List, Dict, Optional
 import numpy as np
 import quaternion
 
-from OCC.Core.BRep import BRep_Tool
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
-from OCC.Core.BRepBndLib import brepbndlib_Add
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCC.Core.BRepExtrema import BRepExtrema_DistShapeShape
-from OCC.Core.BRepGProp import brepgprop_VolumeProperties
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
-from OCC.Core.Bnd import Bnd_Box
-from OCC.Core.GProp import GProp_GProps
 from OCC.Core.StlAPI import StlAPI_Writer
-from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX, TopAbs_ShapeEnum
-from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopoDS import TopoDS_Shape, topods
-from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Ax1, gp_Vec
+from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 
-from masonry.bond import BlockBond, StrechedBond, CrossBond, HeadBond, GothicBond
+from masonry.bond import StrechedBond
 from masonry.brick import BrickInformation, Brick
 from masonry.wall import Wall
-from masonry.edge import Edge
+from wall_detailing.masonry.Corner import Corner, Corners
+
+
+def quaternion_multiply(quaternion1, quaternion0):
+    w0, x0, y0, z0 = quaternion0.w, quaternion0.x, quaternion0.y, quaternion0.z
+    w1, x1, y1, z1 = quaternion1.w, quaternion1.x, quaternion1.y, quaternion1.z
+
+    return np.quaternion(-x1 * x0 - y1 * y0 - z1 * z0 + w1 * w0,
+                     x1 * w0 + y1 * z0 - z1 * y0 + w1 * x0,
+                     -x1 * z0 + y1 * w0 + z1 * x0 + w1 * y0,
+                     x1 * y0 - y1 * x0 + z1 * w0 + w1 * z0)
 
 
 class WallDetailer:
@@ -59,31 +61,34 @@ class WallDetailer:
                 brick_ret.append(b)
         return brick_ret
 
-    def detail_corner(self, wall1: Wall, wall2: Wall, bricks: List[BrickInformation]):
-        a1 = wall1.get_rotation()
-        a2 = wall2.get_rotation()
-        mid_w1 = quaternion.rotate_vectors(a1, wall1.get_translation())  # TODO do for each layer -> if walls are not the same height this calculation breaks
-        mid_w2 = quaternion.rotate_vectors(a2, wall2.get_translation())
+    def detail_corner(self, corner: Corner, bricks: List[BrickInformation]):
+        brick_ret = []
+        wall1 = list(corner.walls)[0]
+        wall2 = list(corner.walls)[1]
+        # get "biggest" brick TODO maybe there is a better criteria?
+        bricks.sort(key=lambda x: x.volume(), reverse=True)
+        # print(bricks[0].volume())
+        module = bricks[0]
+        bond = StrechedBond(module)  # TODO must be set somewhere else
 
-        direction1 = quaternion.rotate_vectors(a1, np.array([1, 0, 0]))
-        direction2 = quaternion.rotate_vectors(a2, np.array([1, 0, 0]))
+        transformations = bond.apply_corner(corner.line)
+        original_rotation = quaternion.from_euler_angles(0, 0, 0) # wall1.get_rotation()# quaternion.rotate_vectors(, np.array([0.0, 0.0, 1.0]))
+        corner_rotation = quaternion.from_euler_angles(0, 0, math.pi/3)
 
-        A = np.vstack((direction1, -direction2, [1, 1, 1])).T
-        b = mid_w2 - mid_w1
+        for tf in transformations:
+            local_position = tf.get_position()  # position in wall itself
+            local_rotation = quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
+            tmp = module.length / 2 - module.width / 2
+            test = quaternion.rotate_vectors(corner_rotation, np.array([-tmp, 0, 0]))
+            global_position = corner.line.p1 + local_position + test
+            b = Brick(module, global_position, global_rotation=original_rotation, local_rotation=local_rotation)
 
-        try:
-            t_values = np.linalg.solve(A, b)
-            # Calculate the intersection points on both lines
-            intersection_point1 = mid_w1 + t_values[0] * direction1
-            intersection_point2 = mid_w2 + t_values[1] * direction2
+            brick_ret.append(b)
+        # reduce wall size
 
-            print("ip----", [round(a, 6) for a in intersection_point1])
-            print("ip----", [round(a, 6) for a in intersection_point2])
+        return brick_ret
 
-        except np.linalg.LinAlgError:
-            pass
-
-    def detail_t_joint(self, wall1: Wall, wall2: Wall, bricks: List[BrickInformation]):
+    def detail_t_joint(self, corner: Corner, bricks: List[BrickInformation]):
         pass
 
     def detail_opening(self, wall: Wall, opening, bricks: List[BrickInformation]):
@@ -127,12 +132,15 @@ class WallDetailer:
         return wall
 
     def check_corners(self):
+        corners = Corners()
         for i, w1 in enumerate(self.walls):
             for j in range(i+1, len(self.walls)):
                 w2 = self.walls[j]
 
                 r1 = w1.get_rotation()
                 r2 = w2.get_rotation()
+                diff = r2 * r1.inverse()
+                angle = round(diff.angle(), 6)
 
                 A1, B1, C1, D1 = w1.get_corners()
                 A2, B2, C2, D2 = w2.get_corners()
@@ -145,56 +153,51 @@ class WallDetailer:
                 dist_calculator = BRepExtrema_DistShapeShape(w1.get_shape(), w2.get_shape())
                 dist_calculator.Perform()
                 touching = dist_calculator.IsDone() and dist_calculator.Value() <= 1e-9
-                
+                degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))
+
+                if not touching or not z_parallel or not degree90:
+                    continue
+
+                # TODO do for each layer -> if walls are not the same height this calculation breaks
+                mid_w1_bottom = w1.get_location(z_offset=-w1.height / 2.0)
+                mid_w2_bottom = w2.get_location(z_offset=-w2.height / 2.0)
+                mid_w1_top = w1.get_location(z_offset=w1.height / 2.0)
+                mid_w2_top = w2.get_location(z_offset=w2.height / 2.0)
+
+                direction1 = quaternion.rotate_vectors(r1, np.array([1, 0, 0]))
+                direction2 = quaternion.rotate_vectors(r2, np.array([1, 0, 0]))
+
+                A = np.vstack((direction1, -direction2, [1, 1, 1])).T
+                b_bottom = mid_w2_bottom - mid_w1_bottom
+                b_top = mid_w2_top - mid_w1_top
+
+                try:
+                    t_values_bottom = np.linalg.solve(A, b_bottom)
+                    t_values_top = np.linalg.solve(A, b_top)
+                    # Calculate the intersection points on both lines
+                    intersection_point1 = mid_w1_bottom + t_values_bottom[0] * direction1
+                    intersection_point2 = mid_w2_bottom + t_values_bottom[1] * direction2
+
+                    intersection_point3 = mid_w1_top + t_values_top[0] * direction1
+                    intersection_point4 = mid_w2_top + t_values_top[1] * direction2
+
+                    # both directions should return the same intersection point
+                    assert np.allclose(intersection_point1, intersection_point2)
+                    assert np.allclose(intersection_point3, intersection_point4)
+                    c = Corner(intersection_point1, intersection_point3)
+                    c.walls.update([w1, w2])
+                    corners.add_corner(c)
+                    print("found corner between", w1.name, "and", w2.name, "with angle", round(math.degrees(angle)))
+
+                except np.linalg.LinAlgError:
+                    print("no intersection found between", w1.name, "and", w2.name, "even though they are touching")
+                    continue
+                except AssertionError:
+                    print("intersection points are not the same for", w1.name, "and", w2.name, "even though they are touching")
+                    continue
+
                 print(z_parallel)
-
-        for i, w1 in enumerate(self.walls):
-            for j in range(i+1, len(self.walls)):
-                w2 = self.walls[j]
-
-                # Check if they touch each other
-                # TODO check what happens when they overlap -> wie können wir das raussortieren?
-                dist_calculator = BRepExtrema_DistShapeShape(w1.get_shape(), w2.get_shape())
-                dist_calculator.Perform()
-                touching = dist_calculator.IsDone() and dist_calculator.Value() <= 1e-9
-
-                if touching and w1.height == w2.height:
-                    a1 = w1.get_rotation()
-                    a2 = w2.get_rotation()
-                    diff = a2 * a1.inverse()
-                    angle = round(diff.angle(), 6)
-
-                    z_part1 = quaternion.rotate_vectors(a1, np.array([0.0, 0.0, 1.0]))
-                    z_part2 = quaternion.rotate_vectors(a2, np.array([0.0, 0.0, 1.0]))
-                    z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
-
-                    mid_w1 = quaternion.rotate_vectors(a1, w1.get_translation())  # TODO do for each layer -> if walls are not the same height this calculation breaks
-                    mid_w2 = quaternion.rotate_vectors(a2, w2.get_translation())
-
-                    direction1 = quaternion.rotate_vectors(a1, np.array([1, 0, 0]))
-                    direction2 = quaternion.rotate_vectors(a2, np.array([1, 0, 0]))
-
-                    A = np.vstack((direction1, -direction2, [1, 1, 1])).T
-                    b = mid_w2 - mid_w1
-
-                    if (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6)) and z_parallel and dist_calculator.NbSolution() >= 4:
-                        print("90 degree corner between", w1.name, "and", w2.name, dist_calculator.NbSolution())
-
-                        A = np.vstack((direction1, -direction2, [1, 1, 1])).T
-                        b = mid_w2 - mid_w1
-
-                        try:
-                            t_values = np.linalg.solve(A, b)
-                            # Calculate the intersection points on both lines
-                            intersection_point1 = mid_w1 + t_values[0] * direction1
-                            intersection_point2 = mid_w2 + t_values[1] * direction2
-
-                            print("ip----", [round(a, 6) for a in intersection_point1])
-                            print("ip----", [round(a, 6) for a in intersection_point2])
-                            edge = Edge(translation=intersection_point1, height=w1.height)
-
-                        except np.linalg.LinAlgError:
-                            pass
+        return corners
 
     def check_walls_to_combine(self):
         to_combine = []
@@ -222,12 +225,14 @@ class WallDetailer:
                         print("Combine", w1.name, "and", w2.name, dist_calculator.NbSolution())
                         to_combine.append((w1, w2))
                     elif (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6)) and z_parallel and dist_calculator.NbSolution() >= 4:
-                        print("90 degree corner between", w1.name, "and", w2.name, dist_calculator.NbSolution())
+                        #print("90 degree corner between", w1.name, "and", w2.name, dist_calculator.NbSolution())
                         to_corner.append((w1, w2))
                     elif z_parallel and dist_calculator.NbSolution() >= 4:
-                        print("Sternchenaufgabe!!!! Edge with angle", w1.name, w2.name, math.degrees(angle))
+                        #print("Sternchenaufgabe!!!! Edge with angle", w1.name, w2.name, math.degrees(angle))
+                        pass
                     else:
-                        print("Touching walls", w1.name, "and", w2.name, "with angle", math.degrees(angle), "and non parallel z axis with", dist_calculator.NbSolution(), "touching points")
+                        pass
+                        #print("Touching walls", w1.name, "and", w2.name, "with angle", math.degrees(angle), "and non parallel z axis with", dist_calculator.NbSolution(), "touching points")
 
         
         # combines multiple wall parts or the combinations of them to a complete wall
@@ -273,6 +278,7 @@ class WallDetailer:
                 self.walls.append(val)
 
     def detail(self) -> List[Brick]:
+        bricks = []
         # remove non cubic walls
         walls = self.walls.copy()
         for wall in walls:
@@ -281,11 +287,26 @@ class WallDetailer:
         # 1. Step look for walls that can be combined, combine them and remove the old parts from self.walls
         self.check_walls_to_combine()
         # 2. Step look at each wall "edge" and check if it is a corner or the end of a wall
-        self.check_corners()
+        corners = self.check_corners()
+        for corner in corners.corners:
+            walls = list(corner.walls)
+            if len(walls) == 2:
+                if walls[0].ifc_wall_type == walls[1].ifc_wall_type:
+                    # normal corner
+                    bricks.extend(self.detail_corner(corner, self.brick_information[walls[0].ifc_wall_type]))
+                else:
+                    # corner with two different wall types
+                    pass
+            elif len(walls) == 3:
+                # t-joint MAYDO combine t-joints
+                pass
+            else:
+                # crossing MAYDO combine two walls
+                pass
 
-        bricks = []
         for wall in self.walls:
-            bricks.extend(self.detail_wall(wall, self.brick_information[wall.ifc_wall_type]))
+            pass
+            #bricks.extend(self.detail_wall(wall, self.brick_information[wall.ifc_wall_type]))
 
         return bricks
 
@@ -337,15 +358,16 @@ def make_wall(length, width, height, position, rotation, ifc_wall_type, name="")
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w1")
+    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0, math.pi / 2), ifc_wall_type="test", name="w1")
     print(w1.get_corners(True))
     print(w1.get_corners(False))
-    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0.0), ifc_wall_type="test", name="w4")
-    w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w2")
-    w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w3")
-    w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w5")
-    w6 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0, math.pi/2, 0), ifc_wall_type="test", name="w6")
-    walls = [w1, w2, w3, w4, w5, w6]
+    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0.0, 0, 0.0), ifc_wall_type="test", name="w4")
+    #w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w2")
+    #w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w3")
+    #w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w5")
+    w6 = make_wall(4, 1, 5, np.array([-2.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2), ifc_wall_type="test", name="w6")
+    #walls = [w1, w2, w3, w4, w5, w6]
+    walls = [w1, w4, w6]
 
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)

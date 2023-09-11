@@ -6,6 +6,8 @@ import quaternion
 
 from masonry.brick import BrickInformation
 
+from wall_detailing.masonry.Corner import Line
+
 
 class MaskedArray:
     """
@@ -151,11 +153,25 @@ class Bond(ABC):
         pass
 
     @abstractmethod
-    def _get_corner_plan(self, rotation: quaternion) -> List[List[Transformation]]:
+    def _get_corner_plan(self) -> List[List[Transformation]]:
         """
         :return: the plan for a corner using this masonry bond
         """
         pass
+
+    def apply_corner(self, line: Line) -> List[Transformation]:
+        height = line.length()
+        num_layers = int(height / self.h)
+        leftover_layer = height % self.h
+        plan = self._get_corner_plan()
+        ret = []
+        for j in range(num_layers):
+            tmp = plan[j % len(plan)].copy()
+            for t in tmp:
+                tf = t.copy()
+                tf.set_mask_multiplier(0, 0, j)
+                ret.append(tf)
+        return ret
 
     def apply(self, length, width, height) -> List[Transformation]:
         """
@@ -253,14 +269,14 @@ class StrechedBond(Bond):
             ])
         return plan
 
-    def _get_corner_plan(self, rotation: quaternion) -> List[List[Transformation]]:
+    def _get_corner_plan(self) -> List[List[Transformation]]:
         plan = []
         plan.append([
-            Transformation(translation=MaskedArray())
+            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
         ])
         plan.append([
             Transformation(
-                translation=MaskedArray(),
+                translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
                 rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
         ])
 

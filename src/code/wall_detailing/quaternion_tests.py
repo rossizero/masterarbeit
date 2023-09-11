@@ -4,6 +4,16 @@ import numpy as np
 import quaternion
 
 
+def quaternion_multiply(quaternion1, quaternion0):
+    w0, x0, y0, z0 = quaternion0.w, quaternion0.x, quaternion0.y, quaternion0.z
+    w1, x1, y1, z1 = quaternion1.w, quaternion1.x, quaternion1.y, quaternion1.z
+
+    return np.quaternion(-x1 * x0 - y1 * y0 - z1 * z0 + w1 * w0,
+                     x1 * w0 + y1 * z0 - z1 * y0 + w1 * x0,
+                     -x1 * z0 + y1 * w0 + z1 * x0 + w1 * y0,
+                     x1 * y0 - y1 * x0 + z1 * w0 + w1 * z0)
+
+
 if __name__ == "__main__":
     q1 = quaternion.z.copy()
     angle = math.radians(90.0)
@@ -63,3 +73,6 @@ if __name__ == "__main__":
     arr = np.array([1, 0, 0])
     print(np.dot(quaternion.as_rotation_matrix(q90), arr))
     print(np.dot(quaternion.as_rotation_matrix(q90), arr.T).T)
+    print(q90)
+    print(quaternion_multiply(q90, q90))
+    print(quaternion_multiply(quaternion.from_euler_angles(0, 0, 0), q90))

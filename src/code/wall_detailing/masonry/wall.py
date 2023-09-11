@@ -147,10 +147,27 @@ class Wall:
         return np.unique(vertices, axis=0)
 
     def get_rotation(self) -> quaternion:
+        """
+        returns the rotation part of this walls transformation
+        """
         return self.rotation.copy()
 
     def get_translation(self) -> np.array:
+        """
+        returns the translation part of this walls transformation
+        """
         return self.translation.copy()
+
+    def get_location(self, x_offset: float = 0.0, y_offset: float = 0.0, z_offset: float = 0.0) -> np.array:
+        """
+        returns the translated and rotated position of this wall
+        optionally accepts offsets to this walls translation before rotating the point
+        """
+        translation = self.get_translation()
+        translation[0] += x_offset
+        translation[1] += y_offset
+        translation[2] += z_offset
+        return quaternion.rotate_vectors(self.get_rotation(), translation)
 
     def is_cubic(self) -> bool:
         """
