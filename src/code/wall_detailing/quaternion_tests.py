@@ -57,3 +57,9 @@ if __name__ == "__main__":
     print(np.dot(rotated_x_axis1, rotated_x_axis2))
     print(np.dot(rotated_x_axis1, rotated_x_axis3))
     print(np.dot(rotated_x_axis1, rotated_x_axis4))
+
+    print("----")
+    q90 = quaternion.from_euler_angles(0, 0, math.pi / 2.0)
+    arr = np.array([1, 0, 0])
+    print(np.dot(quaternion.as_rotation_matrix(q90), arr))
+    print(np.dot(quaternion.as_rotation_matrix(q90), arr.T).T)

@@ -14,6 +14,7 @@ from OCC.Core.TopoDS import TopoDS_Shape, topods
 from OCC.Core.gp import gp_Trsf, gp_Vec, gp_Quaternion, gp_Mat
 from quaternion.numpy_quaternion import quaternion
 from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Ax1, gp_Ax3, gp_Trsf
+import quaternion
 
 
 class Opening:
@@ -95,6 +96,36 @@ class Wall:
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
         return shape
+
+    def get_corners(self, relative: bool = False):
+        """
+        :return: two lines each represented by two positions
+        """
+        v = self.get_vertices(relative=True)
+        x1 = min(v[:, 0])  # left
+        x2 = max(v[:, 0])  # right
+        y_mid = (min(v[:, 1]) + max(v[:, 1])) / 2.0  # center of walls width
+        z1 = min(v[:, 2])  # bottom
+        z2 = max(v[:, 2])  # top
+
+        # left corner
+        p1 = np.array([x1, y_mid, z1])  # bottom left
+        p2 = np.array([x1, y_mid, z2])  # top left
+
+        # right corner
+        p3 = np.array([x2, y_mid, z1])  # bottom right
+        p4 = np.array([x2, y_mid, z2])  # top right
+
+        rotation_matrix = quaternion.as_rotation_matrix(self.rotation)
+
+        # TODO check if this is correct
+        if not relative:
+            p1 = np.dot(rotation_matrix, p1)
+            p2 = np.dot(rotation_matrix, p2)
+            p3 = np.dot(rotation_matrix, p3)
+            p4 = np.dot(rotation_matrix, p4)
+
+        return p2, p1, p4, p3
 
     def get_vertices(self, relative: bool = False):
         shape = self.occ_shape
