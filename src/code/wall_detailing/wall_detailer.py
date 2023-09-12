@@ -70,17 +70,19 @@ class WallDetailer:
         # print(bricks[0].volume())
         module = bricks[0]
         bond = StrechedBond(module)  # TODO must be set somewhere else
+        dimensions = np.array([wall1.length, wall1.width, wall1.height])
 
         transformations = bond.apply_corner(corner.line)
-        original_rotation = quaternion.from_euler_angles(0, 0, 0) # wall1.get_rotation()# quaternion.rotate_vectors(, np.array([0.0, 0.0, 1.0]))
+        original_rotation = wall1.get_rotation() # quaternion.from_euler_angles(0, 0, 0) # wall1.get_rotation()# quaternion.rotate_vectors(, np.array([0.0, 0.0, 1.0]))
         corner_rotation = quaternion.from_euler_angles(0, 0, math.pi/3)
 
         for tf in transformations:
             local_position = tf.get_position()  # position in wall itself
-            local_rotation = quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
+            local_rotation = tf.get_rotation()  # quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
             tmp = module.length / 2 - module.width / 2
             test = quaternion.rotate_vectors(corner_rotation, np.array([-tmp, 0, 0]))
-            global_position = corner.line.p1 + local_position + test
+            tttt = wall1.get_translation() - corner.line.p1
+            global_position = wall1.get_translation() + local_position - dimensions/2
             b = Brick(module, global_position, global_rotation=original_rotation, local_rotation=local_rotation)
 
             brick_ret.append(b)
