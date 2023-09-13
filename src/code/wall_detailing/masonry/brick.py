@@ -65,12 +65,15 @@ class BrickInformation:
 class Brick:
     """
     Represents an actual brick which has the assigned brick-information
-    It can be rotated around itself, globally and be translated globally
+    initial rotation and translation can be set and will be handled in following order:
+    local rotation is the rotation around the bricks own center
+    position is the translation of the brick
+    global rotation is the rotation around the origin after translation happened
     """
-    def __init__(self, brick_information: BrickInformation, position: np.array, global_rotation: quaternion, local_rotation: quaternion):
-        self._position = position
-        self.global_rotation = global_rotation
-        self.local_rotation = local_rotation
+    def __init__(self, brick_information: BrickInformation,
+                 position: np.array = np.array([0.0, 0.0, 0.0]),
+                 global_rotation: quaternion = np.quaternion(1, 0, 0, 0),
+                 local_rotation: quaternion = np.quaternion(1, 0, 0, 0)):
         self.__brick_information = brick_information
         self.length = self.__brick_information.length
         self.width = self.__brick_information.width
@@ -78,12 +81,9 @@ class Brick:
 
         self.offset = 0.0325
 
-        # create box around [0,0,0]
-        #corner = gp_Pnt(-self.length / 2.0 + offset, -self.width / 2.0 + offset, -self.height / 2.0 + offset)
-        #self.shape = BRepPrimAPI_MakeBox(corner, self.length - offset * 2, self.width - offset * 2,
-        #                            self.height - offset * 2).Shape()
         self.shape = BRepPrimAPI_MakeBox(gp_Pnt(self.offset, self.offset, self.offset), self.length - self.offset * 2, self.width - self.offset * 2,
                                     self.height - self.offset * 2).Shape()
+        self.rotate(local_rotation).translate(position).rotate_around(global_rotation)
 
     @property
     def position(self):
@@ -99,28 +99,30 @@ class Brick:
                              self.shape.Location().Transformation().GetRotation().Z())
 
     def translate(self, translation: np.array):
-        # ...translate...
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*translation))
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
         return self
 
-    def center(self, rotation):
-        transformation = gp_Trsf()
-        l, w, h = self.__brick_information.get_rotated_dimensions(rotation)
-        transformation.SetTranslation(gp_Vec(l / 2.0, w / 2.0, h / 2.0))
-        self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
-        return self
+    def _bottom_left_corner_offset(self):
+        """
+        see get_rotated_dimensions
+        returns the difference between the bricks center and its bottom left corner (needed to rotate around the center)
+        """
+        l, w, h = self.__brick_information.get_rotated_dimensions(self.orientation)
+        mid = np.array([l / 2.0, w / 2.0, h / 2.0])
+        return mid
 
     def rotate(self, rotation: np.quaternion):
         """
         rotates around center of brick
         """
         pos = self.shape.Location().Transformation().TranslationPart()
-        l, w, h = self.__brick_information.get_rotated_dimensions(self.orientation)
-        mid = np.array([l / 2.0, w / 2.0, h / 2.0])
 
-        # ...translate...
+        # get current dimensions of the axis aligned bounding box of the brick to center the brick
+        mid = self._bottom_left_corner_offset()
+
+        # ...translate to 0 0 0...
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(pos.Reversed()))
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
@@ -135,24 +137,21 @@ class Brick:
         transformation.SetRotation(rotation_)
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
 
-        l, w, h = self.__brick_information.get_rotated_dimensions(rotation)
-        mid = np.array([l / 2.0, w / 2.0, h / 2.0])
+        # now get the new dimensions of the axis aligned bounding box of the brick to move the bricks center to the
+        # original location
+        mid = self._bottom_left_corner_offset()
 
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*mid))
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
 
-        # ...translate...
+        # ...translate back to original position...
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(pos))
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
         return self
 
     def rotate_around(self, rotation: np.quaternion, pivot_point: np.array = np.array([0.0, 0.0, 0.0])):
-        vector = np.array([self.shape.Location().Transformation().TranslationPart().X(),
-                     self.shape.Location().Transformation().TranslationPart().Y(),
-                     self.shape.Location().Transformation().TranslationPart().Z()])
-
         # ...translate...
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*-pivot_point))
@@ -168,42 +167,4 @@ class Brick:
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*pivot_point))
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
-        r = self.shape.Location().Transformation().GetRotation()
-        t = self.shape.Location().Transformation().TranslationPart()
-        print(r.X(), r.Y(), r.Z(), r.W())
-        print(t.X(), t.Y(), t.Z())
         return self
-
-    def get_brep_shape(self):
-        """
-        :return: the accordingly rotated brep shape of this brick in world-coordinates
-        """
-        offset = 0.0325
-        # create box around [0,0,0]
-        corner = gp_Pnt(-self.length / 2.0 + offset, -self.width / 2.0 + offset, -self.height / 2.0 + offset)
-        shape = BRepPrimAPI_MakeBox(corner, self.length - offset * 2, self.width - offset * 2, self.height - offset * 2).Shape()
-
-        # ...rotate around local rotation....
-        transformation = gp_Trsf()
-        rotation = self.local_rotation
-        rotation = gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w)
-        transformation.SetRotation(rotation)
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # ...then translate back...
-        transformation = gp_Trsf()
-        l, w, h = self.__brick_information.get_rotated_dimensions(self.local_rotation)
-        transformation.SetTranslation(gp_Vec(l / 2.0, w / 2.0, h / 2.0))
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # ...to translate to global position
-        transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(*self._position))
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # Now rotate globally
-        transformation = gp_Trsf()
-        rotation = gp_Quaternion(self.global_rotation.x, self.global_rotation.y, self.global_rotation.z, self.global_rotation.w)
-        transformation.SetRotation(rotation)
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-        return shape
