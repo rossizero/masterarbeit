@@ -120,10 +120,10 @@ class Wall:
 
         # TODO check if this is correct
         if not relative:
-            p1 = np.dot(rotation_matrix, p1)
-            p2 = np.dot(rotation_matrix, p2)
-            p3 = np.dot(rotation_matrix, p3)
-            p4 = np.dot(rotation_matrix, p4)
+            p1 = np.dot(rotation_matrix, p1 + self.get_translation())
+            p2 = np.dot(rotation_matrix, p2 + self.get_translation())
+            p3 = np.dot(rotation_matrix, p3 + self.get_translation())
+            p4 = np.dot(rotation_matrix, p4 + self.get_translation())
 
         return p2, p1, p4, p3
 

@@ -152,6 +152,11 @@ class Brick:
         return self
 
     def rotate_around(self, rotation: np.quaternion, pivot_point: np.array = np.array([0.0, 0.0, 0.0])):
+        """
+        :param rotation:
+        :param pivot_point:
+        :return:
+        """
         # ...translate...
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*-pivot_point))
@@ -168,3 +173,14 @@ class Brick:
         transformation.SetTranslation(gp_Vec(*pivot_point))
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
         return self
+
+    """
+    Note:
+    This:
+        vec = np.array([module.width / 2, module.width / 2, 0.0])
+        b.translate(-vec)
+        b.rotate_around(corner.get_rotation())
+        b.translate(vec)
+    is the same as:
+        b.rotate_around(corner.get_rotation(), vec)
+    """

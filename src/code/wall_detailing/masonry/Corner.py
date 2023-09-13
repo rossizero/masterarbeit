@@ -12,6 +12,16 @@ class Line:
         self.p1 = p1
         self.p2 = p2
 
+    def distance_to_line(self, point: np.array):
+        """
+        :return: min distance to line
+        """
+        diff12 = self.p1 - self.p2
+        diff1p = self.p1 - point
+        diffp2 = point - self.p2
+        d = np.linalg.norm(np.cross(diff12, diff1p)) / np.linalg.norm(diffp2)
+        return d
+
     def on_line(self, point: np.array, between: bool = True):
         """
         :param point: the point to check
@@ -40,6 +50,35 @@ class Corner:
         self.line = Line(bottom_point, top_point)
         self.walls = set()
 
+    def get_main_wall(self):
+        """
+        :return: the (or a) wall in which this corner lies in
+        """
+        # TODO what if 1, 3 or more walls
+        wall1 = list(self.walls)[0]
+        wall2 = list(self.walls)[1]
+        d11 = Line(wall1.get_corners()[0], wall1.get_corners()[2]).on_line(self.line.p1)
+        d21 = Line(wall1.get_corners()[0], wall1.get_corners()[2]).on_line(self.line.p2)
+        d31 = Line(wall1.get_corners()[1], wall1.get_corners()[3]).on_line(self.line.p1)
+        d41 = Line(wall1.get_corners()[1], wall1.get_corners()[3]).on_line(self.line.p2)
+        w1 = d11 or d21 or d31 or d41
+
+        d12 = Line(wall2.get_corners()[0], wall2.get_corners()[2]).on_line(self.line.p1)
+        d22 = Line(wall2.get_corners()[0], wall2.get_corners()[2]).on_line(self.line.p2)
+        d32 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p1)
+        d42 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p2)
+        w2 = d12 or d22 or d32 or d42
+
+        if w1 and w1:
+            return wall1
+        elif w1:
+            return wall1
+        elif w2:
+            return wall2
+        else:
+            return None
+
+
     def get_rotation(self) -> np.quaternion:
         ret = np.quaternion(1, 0, 0, 0)
         if len(self.walls) == 2:
@@ -47,7 +86,7 @@ class Corner:
             r2 = list(self.walls)[1].get_rotation()
             diff = r2 * r1.inverse()
             angle = round(diff.angle(), 6)
-            ret = quaternion.from_euler_angles(0, 0, math.pi + angle)
+            ret = quaternion.from_euler_angles(0, 0, 0)
         return ret
 
     def __eq__(self, other: "Corner"):

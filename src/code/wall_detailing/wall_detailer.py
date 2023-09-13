@@ -14,7 +14,7 @@ from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 from masonry.bond import StrechedBond, GothicBond, CrossBond
 from masonry.brick import BrickInformation, Brick
 from masonry.wall import Wall
-from masonry.Corner import Corner, Corners
+from masonry.Corner import Corner, Corners, Line
 
 
 def quaternion_multiply(quaternion1, quaternion0):
@@ -58,9 +58,9 @@ class WallDetailer:
 
     def detail_corner(self, corner: Corner, bricks: List[BrickInformation]):
         brick_ret = []
-        wall1 = list(corner.walls)[0]
-        wall2 = list(corner.walls)[1]
-        wall = wall1
+        wall = corner.get_main_wall()
+
+        print("main wall", wall.name)
         # get "biggest" brick TODO maybe there is a better criteria?
         bricks.sort(key=lambda x: x.volume(), reverse=True)
         # print(bricks[0].volume())
@@ -70,20 +70,32 @@ class WallDetailer:
         transformations = bond.apply_corner(corner.line)
         original_rotation = wall.get_rotation() # quaternion.from_euler_angles(0, 0, 0) # wall1.get_rotation()# quaternion.rotate_vectors(, np.array([0.0, 0.0, 1.0]))
         #corner_rotation = corner.get_rotation()
+        print(wall.get_translation() - dimensions / 2.0)
+        print(corner.line.p1)
 
         for tf in transformations:
             local_position = tf.get_position()  # position in wall itself
-            local_rotation = tf.get_rotation() # quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
-            tmp = module.length / 2 - module.width / 2
-            global_position = wall.get_translation() + local_position + dimensions/2
-            global_position = (corner.line.p2 - corner.line.p1) / 2.0 + local_position + wall.get_translation() + dimensions/2
-            global_position = local_position + wall.get_translation() - dimensions/2
+            local_rotation = tf.get_rotation()  # quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
+            global_position = corner.line.p1 + local_position
+
             b = Brick(module)
             b.rotate(local_rotation)
+
+            # mid of two overlapping modules
             vec = np.array([module.width / 2, module.width / 2, 0.0])
             b.rotate_around(corner.get_rotation(), vec)
-            b.translate(global_position)
+
+            tmp = local_position + wall.get_translation() - dimensions / 2.0
+            mid = np.array([module.length/2, module.width/2, module.height/2])
+
+            b.translate(tmp)
             b.rotate_around(original_rotation)
+            #b.translate(-tmp)
+            #b.translate(-wall.get_translation() + dimensions / 2.0)
+
+
+            #b.translate(dimensions / 2.0 - wall.get_translation() + corner.line.p1)
+            #b.translate(corner.line.p1)
             brick_ret.append(b)
         # reduce wall size
 
@@ -288,8 +300,8 @@ class WallDetailer:
         # 1. Step look for walls that can be combined, combine them and remove the old parts from self.walls
         self.check_walls_to_combine()
         # 2. Step look at each wall "edge" and check if it is a corner or the end of a wall
-        corners = self.check_corners()
-        for corner in corners.corners:
+        cs = self.check_corners()
+        for corner in cs.corners:
             walls = list(corner.walls)
             if len(walls) == 2:
                 if walls[0].ifc_wall_type == walls[1].ifc_wall_type:
@@ -358,13 +370,14 @@ def make_wall(length, width, height, position, rotation, ifc_wall_type, name="")
 
 
 if __name__ == "__main__":
+    an = math.pi/2
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.3, math.pi / 2), ifc_wall_type="test", name="w1")
+    w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0.0, an, math.pi / 2), ifc_wall_type="test", name="w1")
     print(w1.get_corners(True))
     print(w1.get_corners(False))
-    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0.0, 0.3, 0.0), ifc_wall_type="test", name="w4")
-    w41 = make_wall(10, 1, 5, np.array([4.5, -16.5, 0.0]), quaternion.from_euler_angles(0.0, 0.3, 0.0), ifc_wall_type="test", name="w41")
-    w42 = make_wall(10, 1, 5, np.array([-11.0, -9.0, 0.0]), quaternion.from_euler_angles(0.0, 0.3,  math.pi / 2), ifc_wall_type="test", name="w42")
+    w4 = make_wall(10, 1, 5, np.array([4.5, -5.5, 0.0]), quaternion.from_euler_angles(0.0, an, 0.0), ifc_wall_type="test", name="w4")
+    w41 = make_wall(10, 1, 5, np.array([4.5, -16.5, 0.0]), quaternion.from_euler_angles(0.0, an, 0.0), ifc_wall_type="test", name="w41")
+    w42 = make_wall(10, 1, 5, np.array([-11.0, -9.0, 0.0]), quaternion.from_euler_angles(0.0, an,  math.pi / 2), ifc_wall_type="test", name="w42")
     w2 = make_wall(10, 1, 5, np.array([-21.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w2")
     w3 = make_wall(20, 1, 5, np.array([-16.0, 5.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w3")
     w5 = make_wall(10, 1, 5, np.array([-31.0, 0.0, 0.0]), quaternion.from_euler_angles(0, math.pi / 2, math.pi / 2), ifc_wall_type="test", name="w5")
