@@ -86,7 +86,7 @@ class Corner:
             r2 = list(self.walls)[1].get_rotation()
             diff = r2 * r1.inverse()
             angle = round(diff.angle(), 6)
-            ret = quaternion.from_euler_angles(0, 0, 0)
+            ret = quaternion.from_euler_angles(0, 0, math.pi/2)
         return ret
 
     def __eq__(self, other: "Corner"):

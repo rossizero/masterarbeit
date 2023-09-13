@@ -85,7 +85,11 @@ class WallDetailer:
             vec = np.array([module.width / 2, module.width / 2, 0.0])
             b.rotate_around(corner.get_rotation(), vec)
 
-            tmp = local_position + wall.get_translation() - dimensions / 2.0
+            p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.line.p1)
+
+            diff = wall.get_translation() - dimensions / 2.0 - p1_rotated
+            print(diff)
+            tmp = local_position + p1_rotated - vec
             mid = np.array([module.length/2, module.width/2, module.height/2])
 
             b.translate(tmp)
@@ -370,7 +374,7 @@ def make_wall(length, width, height, position, rotation, ifc_wall_type, name="")
 
 
 if __name__ == "__main__":
-    an = math.pi/2
+    an = math.pi/3
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     w1 = make_wall(10, 1, 5, np.array([-11.0, 0.0, 0.0]), quaternion.from_euler_angles(0.0, an, math.pi / 2), ifc_wall_type="test", name="w1")
     print(w1.get_corners(True))
