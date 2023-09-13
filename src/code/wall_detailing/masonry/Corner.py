@@ -1,4 +1,7 @@
+import math
+
 import numpy as np
+import quaternion
 
 
 class Line:
@@ -36,6 +39,16 @@ class Corner:
     def __init__(self, bottom_point: np.array, top_point: np.array):
         self.line = Line(bottom_point, top_point)
         self.walls = set()
+
+    def get_rotation(self) -> np.quaternion:
+        ret = np.quaternion(1, 0, 0, 0)
+        if len(self.walls) == 2:
+            r1 = list(self.walls)[0].get_rotation()
+            r2 = list(self.walls)[1].get_rotation()
+            diff = r2 * r1.inverse()
+            angle = round(diff.angle(), 6)
+            ret = quaternion.from_euler_angles(0, 0, math.pi + angle)
+        return ret
 
     def __eq__(self, other: "Corner"):
         return self.line.on_line(other.line.p1) and self.line.on_line(other.line.p2)
