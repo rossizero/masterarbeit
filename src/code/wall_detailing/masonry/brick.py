@@ -76,6 +76,46 @@ class Brick:
         self.width = self.__brick_information.width
         self.height = self.__brick_information.height
 
+        offset = 0.0325
+
+        # create box around [0,0,0]
+        corner = gp_Pnt(-self.length / 2.0 + offset, -self.width / 2.0 + offset, -self.height / 2.0 + offset)
+        self.shape = BRepPrimAPI_MakeBox(corner, self.length - offset * 2, self.width - offset * 2,
+                                    self.height - offset * 2).Shape()
+
+    def translate(self, translation: np.array):
+        # ...translate...
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(*translation))
+        self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
+        return self
+
+    def rotate_around(self, pivot_point: np.array, rotation: np.quaternion):
+        vector = np.array([self.shape.Location().Transformation().TranslationPart().X(),
+                     self.shape.Location().Transformation().TranslationPart().Y(),
+                     self.shape.Location().Transformation().TranslationPart().Z()]) - pivot_point
+
+        # ...translate...
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(*-pivot_point))
+        self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
+
+        # ...rotate....
+        transformation = gp_Trsf()
+        rotation = gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w)
+        transformation.SetRotation(rotation)
+        self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
+
+        # ...then translate back...
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(*pivot_point))
+        self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
+        r = self.shape.Location().Transformation().GetRotation()
+        t = self.shape.Location().Transformation().TranslationPart()
+        print(r.X(), r.Y(), r.Z(), r.W())
+        print(t.X(), t.Y(), t.Z())
+        return self
+
     def get_brep_shape(self):
         """
         :return: the accordingly rotated brep shape of this brick in world-coordinates

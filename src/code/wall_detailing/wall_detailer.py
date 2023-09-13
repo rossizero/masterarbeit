@@ -14,7 +14,7 @@ from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 from masonry.bond import StrechedBond
 from masonry.brick import BrickInformation, Brick
 from masonry.wall import Wall
-from wall_detailing.masonry.Corner import Corner, Corners
+from masonry.Corner import Corner, Corners
 
 
 def quaternion_multiply(quaternion1, quaternion0):
@@ -74,17 +74,17 @@ class WallDetailer:
 
         transformations = bond.apply_corner(corner.line)
         original_rotation = wall1.get_rotation() # quaternion.from_euler_angles(0, 0, 0) # wall1.get_rotation()# quaternion.rotate_vectors(, np.array([0.0, 0.0, 1.0]))
-        corner_rotation = quaternion.from_euler_angles(0, 0, math.pi/3)
+        corner_rotation = quaternion.from_euler_angles(0, 0, math.pi/2)
 
         for tf in transformations:
             local_position = tf.get_position()  # position in wall itself
-            local_rotation = tf.get_rotation()  # quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
+            local_rotation = quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
             tmp = module.length / 2 - module.width / 2
             test = quaternion.rotate_vectors(corner_rotation, np.array([-tmp, 0, 0]))
             tttt = wall1.get_translation() - corner.line.p1
             global_position = wall1.get_translation() + local_position - dimensions/2
             b = Brick(module, global_position, global_rotation=original_rotation, local_rotation=local_rotation)
-
+            b.translate(np.array([10.0, 0.0, 0.0])).rotate_around(np.array([10.0, 0.0, 0.0]), corner_rotation)
             brick_ret.append(b)
         # reduce wall size
 
@@ -321,13 +321,13 @@ class WallDetailer:
         shape = None
 
         if len(bricks_copy) > 0:
-            shape = bricks_copy.pop(0).get_brep_shape()
+            shape = bricks_copy.pop(0).shape  # get_brep_shape()
 
         if shape is not None:
             for brick in bricks_copy:
                 shape = BRepAlgoAPI_Fuse(
                     shape,
-                    brick.get_brep_shape()
+                    brick.shape  # get_brep_shape()
                 ).Shape()
 
         if additional_shapes is not None:

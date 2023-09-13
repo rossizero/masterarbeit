@@ -6,7 +6,7 @@ import quaternion
 
 from masonry.brick import BrickInformation
 
-from wall_detailing.masonry.Corner import Line
+from masonry.Corner import Line
 
 
 class MaskedArray:
