@@ -339,6 +339,10 @@ class GothicBond(Bond):
         ]
         return plan
 
+    def _get_corner_plan(self) -> List[List[Transformation]]:
+        plan = []
+        return plan
+
 
 class CrossBond(Bond):
     def __init__(self, module: BrickInformation):
