@@ -81,30 +81,34 @@ class Corner:
     def get_rotation(self) -> np.quaternion:
         ret = np.quaternion(1, 0, 0, 0)
         if len(self.walls) == 2:
+            # the wall we "place" the corner onto
+
+            main_wall = self.get_main_wall()
             w1 = list(self.walls)[0]
             w2 = list(self.walls)[1]
-            r1 = list(self.walls)[0].get_rotation()
-            r2 = list(self.walls)[1].get_rotation()
 
+            # mid of both walls
             m1 = w1.get_location(z_offset=-w1.height / 2.0)
             m2 = w2.get_location(z_offset=-w2.height / 2.0)
 
+            # lower coordinate of corner
             c1 = self.line.p1
 
-            wall_orientation_1 = c1 - m1
+            # unit vector from corner to mid
+            wall_orientation_1 = m1 - c1
             wall_orientation_2 = m2 - c1
-
             wall_orientation_1 = wall_orientation_1 / np.linalg.norm(wall_orientation_1)
             wall_orientation_2 = wall_orientation_2 / np.linalg.norm(wall_orientation_2)
 
-            mid = (m1 + m2) / 2 - c1
-            z_part1 = quaternion.rotate_vectors(r1, np.array([0.0, 0.0, 1.0]))
-            tmp = quaternion.from_rotation_vector(z_part1)
+            # mid of those vectors -> the point in the corner between both walls and 45 degrees from both walls
+            mid = (wall_orientation_1 + wall_orientation_2) / 2
 
-            
+            # normalise rotation
+            mid = quaternion.rotate_vectors(main_wall.get_rotation().inverse(), mid)
+            z_rot = np.arctan2(mid[1], mid[0])
 
-
-            ret = quaternion.from_euler_angles(0, 0, math.pi)
+            # subtract the 45 degrees from above
+            ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi/4)
         return ret
 
     def __eq__(self, other: "Corner"):

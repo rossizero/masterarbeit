@@ -54,18 +54,15 @@ class WallDetailer:
         brick_ret = []
         wall = corner.get_main_wall()
 
-        print("main wall", wall.name)
         # get "biggest" brick TODO maybe there is a better criteria?
         bricks.sort(key=lambda x: x.volume(), reverse=True)
-        # print(bricks[0].volume())
+
         module = bricks[0]
         bond = StrechedBond(module)  # TODO must be set somewhere else
         dimensions = np.array([wall.length, wall.width, wall.height])
         transformations = bond.apply_corner(corner.line)
         original_rotation = wall.get_rotation() # quaternion.from_euler_angles(0, 0, 0) # wall1.get_rotation()# quaternion.rotate_vectors(, np.array([0.0, 0.0, 1.0]))
-        #corner_rotation = corner.get_rotation()
-        print(wall.get_translation() - dimensions / 2.0)
-        print(corner.line.p1)
+        corner_rotation = corner.get_rotation()
 
         for tf in transformations:
             local_position = tf.get_position()  # position in wall itself
@@ -77,26 +74,18 @@ class WallDetailer:
 
             # mid of two overlapping modules
             vec = np.array([module.width / 2, module.width / 2, 0.0])
-            b.rotate_around(corner.get_rotation(), vec)
+            b.rotate_around(corner_rotation, vec)
 
             p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.line.p1)
 
             diff = wall.get_translation() - dimensions / 2.0 - p1_rotated
-            print(diff)
             tmp = local_position + p1_rotated - vec
             mid = np.array([module.length/2, module.width/2, module.height/2])
 
             b.translate(tmp)
             b.rotate_around(original_rotation)
-            #b.translate(-tmp)
-            #b.translate(-wall.get_translation() + dimensions / 2.0)
 
-
-            #b.translate(dimensions / 2.0 - wall.get_translation() + corner.line.p1)
-            #b.translate(corner.line.p1)
             brick_ret.append(b)
-        # reduce wall size
-
         return brick_ret
 
     def detail_t_joint(self, corner: Corner, bricks: List[BrickInformation]):
@@ -375,7 +364,7 @@ def make_wall(length, width, height, position, rotation, ifc_wall_type, name="")
 
 
 if __name__ == "__main__":
-    an = math.pi/3
+    an = math.pi / 2 * 1.22432
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
 
     w1 = make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w1")
@@ -383,10 +372,10 @@ if __name__ == "__main__":
     w3 = make_wall(10, 1, 5, np.array([-5.5, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w3")
     w4 = make_wall(10, 1, 5, np.array([0.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w4")
 
-    w1.rotate_around(quaternion.from_euler_angles(0.0, an, an))
-    w2.rotate_around(quaternion.from_euler_angles(0.0, an, an))
-    w3.rotate_around(quaternion.from_euler_angles(0.0, an, an))
-    w4.rotate_around(quaternion.from_euler_angles(0.0, an, an))
+    w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w2.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w3.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
     walls = [w1, w2, w3, w4]
     wallss = walls.copy()
