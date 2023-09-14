@@ -70,10 +70,7 @@ class Brick:
     position is the translation of the brick
     global rotation is the rotation around the origin after translation happened
     """
-    def __init__(self, brick_information: BrickInformation,
-                 position: np.array = np.array([0.0, 0.0, 0.0]),
-                 global_rotation: quaternion = np.quaternion(1, 0, 0, 0),
-                 local_rotation: quaternion = np.quaternion(1, 0, 0, 0)):
+    def __init__(self, brick_information: BrickInformation):
         self.__brick_information = brick_information
         self.length = self.__brick_information.length
         self.width = self.__brick_information.width
@@ -83,7 +80,6 @@ class Brick:
 
         self.shape = BRepPrimAPI_MakeBox(gp_Pnt(self.offset, self.offset, self.offset), self.length - self.offset * 2, self.width - self.offset * 2,
                                     self.height - self.offset * 2).Shape()
-        self.rotate(local_rotation).translate(position).rotate_around(global_rotation)
 
     @property
     def position(self):

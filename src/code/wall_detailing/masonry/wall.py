@@ -40,8 +40,11 @@ class Wall:
         self.length = 0.0
         self.width = 0.0
         self.height = 0.0
+
         self.rotation = np.quaternion(1, 0, 0, 0)
         self.translation = np.array([0, 0, 0])
+        self.occ_shape = shape
+
         self.update_shape(shape)
         self.update_dimensions()
 
@@ -63,15 +66,20 @@ class Wall:
                                      shape.Location().Transformation().TranslationPart().Y(),
                                      shape.Location().Transformation().TranslationPart().Z()])
 
-        transformation = gp_Trsf()
-        rotation = rotation
-        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
-        self.occ_shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
+        self.translation = translation
+        self.rotation = rotation
 
         transformation = gp_Trsf()
         translation = gp_Vec(*translation).Reversed()
         transformation.SetTranslation(translation)
-        self.occ_shape = BRepBuilderAPI_Transform(self.occ_shape, transformation).Shape()
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        self.occ_shape = shape
+
 
     def _get_dimensions(self) -> np.array:
         """
@@ -85,16 +93,15 @@ class Wall:
 
     def get_shape(self) -> TopoDS_Shape:
         # Apply the translation and rotation to our shape
-
-        transformation = gp_Trsf()
-        translation = gp_Vec(*self.translation)
-        transformation.SetTranslation(translation)
-        shape = BRepBuilderAPI_Transform(self.occ_shape, transformation, True, True).Shape()
+        shape = self.occ_shape
 
         transformation = gp_Trsf()
         transformation.SetRotation(gp_Quaternion(self.rotation.x, self.rotation.y, self.rotation.z, self.rotation.w))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(*self.translation))
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
         return shape
 
     def get_corners(self, relative: bool = False):
@@ -116,14 +123,14 @@ class Wall:
         p3 = np.array([x2, y_mid, z1])  # bottom right
         p4 = np.array([x2, y_mid, z2])  # top right
 
-        rotation_matrix = quaternion.as_rotation_matrix(self.rotation)
+        rotation_matrix = quaternion.as_rotation_matrix(self.get_rotation())
 
         # TODO check if this is correct
         if not relative:
-            p1 = np.dot(rotation_matrix, p1 + self.get_translation())
-            p2 = np.dot(rotation_matrix, p2 + self.get_translation())
-            p3 = np.dot(rotation_matrix, p3 + self.get_translation())
-            p4 = np.dot(rotation_matrix, p4 + self.get_translation())
+            p1 = np.dot(rotation_matrix, p1) + self.get_translation()
+            p2 = np.dot(rotation_matrix, p2) + self.get_translation()
+            p3 = np.dot(rotation_matrix, p3) + self.get_translation()
+            p4 = np.dot(rotation_matrix, p4) + self.get_translation()
 
         return p2, p1, p4, p3
 
@@ -160,14 +167,14 @@ class Wall:
 
     def get_location(self, x_offset: float = 0.0, y_offset: float = 0.0, z_offset: float = 0.0) -> np.array:
         """
-        returns the translated and rotated position of this wall
+        returns the world coordinates of this wall
         optionally accepts offsets to this walls translation before rotating the point
         """
         translation = self.get_translation()
-        translation[0] += x_offset
-        translation[1] += y_offset
-        translation[2] += z_offset
-        return quaternion.rotate_vectors(self.get_rotation(), translation)
+        position = np.array([x_offset, y_offset, z_offset])
+        vec = quaternion.rotate_vectors(self.get_rotation(), position)
+        vec += translation
+        return vec
 
     def is_cubic(self) -> bool:
         """
@@ -207,3 +214,26 @@ class Wall:
         close = np.allclose(min_max_array_wall, min_max_array_bbox) or np.allclose(min_max_array_bbox, min_max_array_wall)
         return close and np.isclose(gprops.Mass(), length * width * height)
 
+    def rotate_around(self, rotation: np.quaternion, pivot_point: np.array = np.array([0.0, 0.0, 0.0])):
+        """
+        :param rotation:
+        :param pivot_point:
+        :return:
+        """
+        # ...translate...
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(*-pivot_point))
+        shape = BRepBuilderAPI_Transform(self.get_shape(), transformation, True, True).Shape()
+
+        # ...rotate....
+        transformation = gp_Trsf()
+        rotation = gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w)
+        transformation.SetRotation(rotation)
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        # ...then translate back...
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(*pivot_point))
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        self.update_shape(shape)

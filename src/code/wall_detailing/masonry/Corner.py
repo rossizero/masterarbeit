@@ -78,7 +78,6 @@ class Corner:
         else:
             return None
 
-
     def get_rotation(self) -> np.quaternion:
         ret = np.quaternion(1, 0, 0, 0)
         if len(self.walls) == 2:
