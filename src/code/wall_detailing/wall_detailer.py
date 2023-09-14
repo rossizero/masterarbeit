@@ -306,7 +306,7 @@ class WallDetailer:
 
         for wall in self.walls:
             pass
-            #bricks.extend(self.detail_wall(wall, self.brick_information[wall.ifc_wall_type]))
+            bricks.extend(self.detail_wall(wall, self.brick_information[wall.ifc_wall_type]))
 
         return bricks
 
@@ -368,7 +368,7 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
 
     w1 = make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w1")
-    w2 = make_wall(10, 1, 5, np.array([11.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w2")
+    w2 = make_wall(10, 1, 5, np.array([10.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w2")
     w3 = make_wall(10, 1, 5, np.array([-5.5, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w3")
     w4 = make_wall(10, 1, 5, np.array([0.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w4")
 

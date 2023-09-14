@@ -68,9 +68,10 @@ class Corner:
         d32 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p1)
         d42 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p2)
         w2 = d12 or d22 or d32 or d42
+        assert w1 or w2
 
-        if w1 and w1:
-            return wall1
+        if w1 and w2:
+            return wall2
         elif w1:
             return wall1
         elif w2:
