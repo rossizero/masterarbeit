@@ -317,7 +317,7 @@ class WallDetailer:
 
         for wall in self.walls:
             pass
-            bricks.extend(self.detail_wall(wall, self.brick_information[wall.ifc_wall_type]))
+            #bricks.extend(self.detail_wall(wall, self.brick_information[wall.ifc_wall_type]))
 
         return bricks
 

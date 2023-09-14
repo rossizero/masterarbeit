@@ -81,11 +81,46 @@ class Corner:
     def get_rotation(self) -> np.quaternion:
         ret = np.quaternion(1, 0, 0, 0)
         if len(self.walls) == 2:
+            w1 = list(self.walls)[0]
+            w2 = list(self.walls)[1]
             r1 = list(self.walls)[0].get_rotation()
             r2 = list(self.walls)[1].get_rotation()
             diff = r2 * r1.inverse()
             angle = round(diff.angle(), 6)
-            ret = quaternion.from_euler_angles(0, 0, math.pi/2)
+
+            z_part1 = quaternion.rotate_vectors(r1, np.array([0.0, 0.0, 1.0]))
+            z_part1 = z_part1 / np.linalg.norm(z_part1)
+
+            dddd = self.line.p2 - self.line.p1
+            dddd = dddd / np.linalg.norm(dddd)
+
+            # z direction of the corner == z direction of the wall
+            assert np.allclose(z_part1, dddd, atol=1e-6), f"{z_part1} != {dddd}"
+
+            t = np.round(z_part1 - dddd, 6)
+
+            m1 = w1.get_location(z_offset=-w1.height / 2.0)
+            m2 = w2.get_location(z_offset=-w2.height / 2.0)
+            m = self.line.p1 - (m1 + m2) / 2.0
+
+
+            m1 = self.line.p1 - m1
+            m2 = self.line.p1 - m2
+
+            x_part1 = quaternion.rotate_vectors(r1, np.array([1.0, 0.0, 0.0]))
+            x_part1 = self.line.p1 + x_part1 / np.linalg.norm(x_part1)
+            m = m / np.linalg.norm(m)
+
+            #x_part2 = self.line.p1 - quaternion.rotate_vectors(r2, np.array([1.0, 0.0, 0.0]))
+            #
+            #x_part2 = x_part2 / np.linalg.norm(x_part2)
+
+            lalala = np.dot(x_part1, m) / (np.linalg.norm(x_part1) * np.linalg.norm(m))
+            lelele = lalala
+            lalala = np.arccos(lalala)
+            lululu = math.degrees(lalala)
+
+            ret = quaternion.from_euler_angles(0, 0, math.pi)
         return ret
 
     def __eq__(self, other: "Corner"):
