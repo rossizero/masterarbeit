@@ -50,6 +50,7 @@ class Transformation:
         self.rotation = rotation
         self.translation = translation
         self.mask_multiplier = np.array([0, 0, 0])
+        self.module = None
 
     def set_mask_multiplier(self, x: int, y: int, z: int):
         """
@@ -110,7 +111,7 @@ class Bond(ABC):
         self.repeat_layer = len(self.plan)
         self.repeat_step = len(self.plan[self.layer % self.repeat_layer])
 
-    def __get(self, position: Tuple[int, int] = None):
+    def __get(self, position: Tuple[int, int] = None) -> Transformation:
         """
         :param position: optional [layer, step in layer] else the internal position is being used
         :return: the Transformation of the plan for this bond at [layer, step]
@@ -124,7 +125,7 @@ class Bond(ABC):
         ret.set_mask_multiplier(multiplier, multiplier, layer)
         return ret
 
-    def __next(self):
+    def __next(self) -> Transformation:
         """
         move a step further on current layer
         :return:
@@ -159,6 +160,13 @@ class Bond(ABC):
         """
         pass
 
+    @abstractmethod
+    def _get_ending_plan(self) -> List[List[Transformation]]:
+        """
+        :return: the plan for a corner using this masonry bond
+        """
+        pass
+
     def apply_corner(self, line: Line) -> List[Transformation]:
         height = line.length()
         num_layers = int(height / self.h)
@@ -173,7 +181,7 @@ class Bond(ABC):
                 ret.append(tf)
         return ret
 
-    def apply(self, length, width, height) -> List[Transformation]:
+    def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False) -> List[Transformation]:
         """
         Fills given dimensions with set layout plan
         :param length: length of wall we want to be filled with this masonry bond
@@ -188,9 +196,21 @@ class Bond(ABC):
         ret = []
         for j in range(num_layers):
             self.__up()
-            num_bricks = self.bricks_in_layer(j, length)
+            num_bricks, leftover_left, leftover_right = self.bricks_in_layer(j, length)
             for i in range(num_bricks):
                 tf = self.__next()
+                tf.module = self.module
+                ret.append(tf)
+
+            if leftover_left > 0.0 and fill_left:
+                tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
+                tf.module = BrickInformation(leftover_left, width, self.module.height)
+                tf.set_mask_multiplier(1, 1, j)
+                ret.append(tf)
+            if leftover_right > 0.0 and fill_right:
+                tf = Transformation(MaskedArray(value=np.array([length-leftover_right, 0, self.h]), mask=np.array([1, 0, 1])))
+                tf.module = BrickInformation(leftover_right, width, self.module.height)
+                tf.set_mask_multiplier(1, 1, j)
                 ret.append(tf)
         return ret
 
@@ -210,14 +230,19 @@ class Bond(ABC):
         pos = tf.get_position()
         l = self.module.get_rotated_dimensions(tf.get_rotation())[0]
 
+        leftover_left = pos[0]
+        leftover_right = length - pos[0] - l
+
         while pos[0] + l <= length:  # TODO calculate instead of expensive "exploration"
             counter += 1
+            leftover_right = length - pos[0] - l
+
             tf = transformations[counter % len(transformations)].copy()
             multiplier = math.floor(counter / float(len(transformations)))
             tf.set_mask_multiplier(multiplier, multiplier, layer)
             pos = tf.get_position()
             l = self.module.get_rotated_dimensions(tf.get_rotation())[0]
-        return counter
+        return counter, leftover_left, leftover_right
 
 
 class BlockBond(Bond):
@@ -282,6 +307,19 @@ class StrechedBond(Bond):
 
         return plan
 
+    def _get_ending_plan(self) -> List[List[Transformation]]:
+        plan = []
+        plan.append([
+            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+        ])
+        plan.append([
+            Transformation(
+                translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+        ])
+
+        return plan
+
 
 class HeadBond(Bond):
     def __init__(self, module: BrickInformation):
@@ -302,6 +340,14 @@ class HeadBond(Bond):
                     rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
             ]
         ]
+        return plan
+
+    def _get_corner_plan(self) -> List[List[Transformation]]:
+        plan = []
+        return plan
+
+    def _get_ending_plan(self) -> List[List[Transformation]]:
+        plan = []
         return plan
 
 
@@ -343,6 +389,10 @@ class GothicBond(Bond):
         plan = []
         return plan
 
+    def _get_ending_plan(self) -> List[List[Transformation]]:
+        plan = []
+        return plan
+
 
 class CrossBond(Bond):
     def __init__(self, module: BrickInformation):
@@ -379,6 +429,11 @@ class CrossBond(Bond):
             ],
         ]
         return plan
+
     def _get_corner_plan(self) -> List[List[Transformation]]:
+        plan = []
+        return plan
+
+    def _get_ending_plan(self) -> List[List[Transformation]]:
         plan = []
         return plan

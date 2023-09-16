@@ -20,6 +20,13 @@ class Line:
         diff1p = self.p1 - point
         diffp2 = point - self.p2
         d = np.linalg.norm(np.cross(diff12, diff1p)) / np.linalg.norm(diffp2)
+
+
+        l = self.p2 - self.p1
+        p = point - self.p1
+        proj = np.dot(p, l) / np.dot(l, l)
+        proj_point = self.p1 + proj * l
+        d =  np.linalg.norm(point - proj_point)
         return d
 
     def on_line(self, point: np.array, between: bool = True):

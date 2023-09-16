@@ -34,13 +34,15 @@ class WallDetailer:
             module = bricks[0]
 
             bond = StrechedBond(module)  # TODO must be set somewhere else
-            transformations = bond.apply(*dimensions)
+            fill_left = len(wall.left_connections) == 0
+            fill_right = len(wall.right_connections) == 0
+            transformations = bond.apply(*dimensions, fill_left, fill_right)
 
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
                 local_rotation = tf.get_rotation()  # rotation of the brick around itself
 
-                b = Brick(module)
+                b = Brick(tf.module)
                 b.rotate(local_rotation)
 
                 # need to substract half wall dimensions since its position coordinates are at its center
@@ -49,6 +51,14 @@ class WallDetailer:
                 b.translate(original_translation)  # translate to wall
                 brick_ret.append(b)
         return brick_ret
+
+    def detail_wall_endings(self, wall: Wall):
+        if len(wall.left_connections) == 0:
+            pass
+
+        if len(wall.right_connections) == 0:
+            pass
+
 
     def detail_corner(self, corner: Corner, bricks: List[BrickInformation]):
         brick_ret = []
@@ -133,6 +143,7 @@ class WallDetailer:
 
     def check_corners(self):
         corners = Corners()
+
         for i, w1 in enumerate(self.walls):
             for j in range(i+1, len(self.walls)):
                 w2 = self.walls[j]
@@ -141,6 +152,7 @@ class WallDetailer:
                 r2 = w2.get_rotation()
                 diff = r2 * r1.inverse()
                 angle = round(diff.angle(), 6)
+
 
                 A1, B1, C1, D1 = w1.get_corners()
                 A2, B2, C2, D2 = w2.get_corners()
@@ -187,6 +199,17 @@ class WallDetailer:
                     c = Corner(intersection_point1, intersection_point3)
                     c.walls.update([w1, w2])
                     corners.add_corner(c)
+
+                    if np.round(c.line.distance_to_line(A1), 6) <= w1.width/2.0:
+                        w1.left_connections.append(w2)
+                    elif np.round(c.line.distance_to_line(C1), 6) <= w1.width/2.0:
+                        w1.right_connections.append(w2)
+
+                    if np.round(c.line.distance_to_line(A2), 6) <= w2.width/2.0:
+                        w2.left_connections.append(w1)
+                    elif np.round(c.line.distance_to_line(C2), 6) <= w2.width/2.0:
+                        w2.right_connections.append(w1)
+
                     print("found corner between", w1.name, "and", w2.name, "with angle", round(math.degrees(angle)))
 
                 except np.linalg.LinAlgError:
@@ -293,6 +316,7 @@ class WallDetailer:
             if len(walls) == 2:
                 if walls[0].ifc_wall_type == walls[1].ifc_wall_type:
                     # normal corner
+                    pass
                     bricks.extend(self.detail_corner(corner, self.brick_information[walls[0].ifc_wall_type]))
                 else:
                     # corner with two different wall types

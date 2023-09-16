@@ -30,10 +30,6 @@ class Opening:
 
 
 class Wall:
-    @property
-    def T(self) -> int:
-        return 5
-
     def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, name: str = ""):
         self.name = name
         self.ifc_wall_type = ifc_wall_type
@@ -49,6 +45,9 @@ class Wall:
         self.update_dimensions()
 
         self.openings = []
+
+        self.left_connections = []
+        self.right_connections = []
 
     def update_dimensions(self):
         dimensions = self._get_dimensions()
@@ -80,7 +79,6 @@ class Wall:
 
         self.occ_shape = shape
 
-
     def _get_dimensions(self) -> np.array:
         """
         returns dimensions of the not rotated objects boundingbox of the shape
@@ -104,8 +102,15 @@ class Wall:
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
         return shape
 
-    def get_corners(self, relative: bool = False):
+    def get_corners(self, relative: bool = False, inner=False):
         """
+        ----------                  ----------
+        |                           |
+        .      ==  inner=False      |   .        == inner=True (distance = width/2)
+        |                           |
+        ----------                  ----------
+        :param relative: coordinates of the corners in world or relative coordinates
+        :param inner: see image above
         :return: two lines each represented by two positions
         """
         v = self.get_vertices(relative=True)
@@ -114,6 +119,10 @@ class Wall:
         y_mid = (min(v[:, 1]) + max(v[:, 1])) / 2.0  # center of walls width
         z1 = min(v[:, 2])  # bottom
         z2 = max(v[:, 2])  # top
+
+        if inner:
+            x1 += y_mid
+            x2 -= y_mid
 
         # left corner
         p1 = np.array([x1, y_mid, z1])  # bottom left
