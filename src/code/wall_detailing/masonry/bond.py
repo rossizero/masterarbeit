@@ -189,7 +189,6 @@ class Bond(ABC):
         :param height: length of wall we want to be filled with this masonry bond
         :return: a list of Transformations for each brick
         """
-        length, width = max(length, width), min(length, width)
         num_layers = int(height / self.h)
         leftover_layer = height % self.h
 
@@ -205,10 +204,14 @@ class Bond(ABC):
             if leftover_left > 0.0 and fill_left:
                 tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
                 tf.module = BrickInformation(leftover_left, width, self.module.height)
+                if leftover_left < width:
+                    tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
                 tf.set_mask_multiplier(1, 1, j)
                 ret.append(tf)
             if leftover_right > 0.0 and fill_right:
                 tf = Transformation(MaskedArray(value=np.array([length-leftover_right, 0, self.h]), mask=np.array([1, 0, 1])))
+                if leftover_right < width:
+                    tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
                 tf.module = BrickInformation(leftover_right, width, self.module.height)
                 tf.set_mask_multiplier(1, 1, j)
                 ret.append(tf)
@@ -231,18 +234,19 @@ class Bond(ABC):
         l = self.module.get_rotated_dimensions(tf.get_rotation())[0]
 
         leftover_left = pos[0]
-        leftover_right = length - pos[0] - l
+        leftover_right = pos[0] + l
 
         while pos[0] + l <= length:  # TODO calculate instead of expensive "exploration"
             counter += 1
-            leftover_right = length - pos[0] - l
+            leftover_right = max(leftover_right, pos[0] + l)
+            leftover_left = min(leftover_left, pos[0])
 
             tf = transformations[counter % len(transformations)].copy()
             multiplier = math.floor(counter / float(len(transformations)))
             tf.set_mask_multiplier(multiplier, multiplier, layer)
             pos = tf.get_position()
             l = self.module.get_rotated_dimensions(tf.get_rotation())[0]
-        return counter, leftover_left, leftover_right
+        return counter, leftover_left, length - leftover_right
 
 
 class BlockBond(Bond):

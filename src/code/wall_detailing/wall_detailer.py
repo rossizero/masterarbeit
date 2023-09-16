@@ -402,6 +402,7 @@ if __name__ == "__main__":
     w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
     walls = [w1, w2, w3, w4]
+    #walls = [w1]
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)
     bb = wall_detailer.detail()
