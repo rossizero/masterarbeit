@@ -14,19 +14,13 @@ class Line:
 
     def distance_to_line(self, point: np.array):
         """
-        :return: min distance to line
+        :return: distance to line
         """
-        diff12 = self.p1 - self.p2
-        diff1p = self.p1 - point
-        diffp2 = point - self.p2
-        d = np.linalg.norm(np.cross(diff12, diff1p)) / np.linalg.norm(diffp2)
-
-
         l = self.p2 - self.p1
         p = point - self.p1
-        proj = np.dot(p, l) / np.dot(l, l)
-        proj_point = self.p1 + proj * l
-        d =  np.linalg.norm(point - proj_point)
+        projection_distance = np.dot(p, l) / np.dot(l, l)  # squared length of l
+        projected_point = self.p1 + projection_distance * l
+        d = np.linalg.norm(point - projected_point)
         return d
 
     def on_line(self, point: np.array, between: bool = True):
@@ -75,16 +69,12 @@ class Corner:
         d32 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p1)
         d42 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p2)
         w2 = d12 or d22 or d32 or d42
-        assert w1 or w2
 
-        if w1 and w2:
-            return wall2
-        elif w1:
-            return wall1
-        elif w2:
-            return wall2
-        else:
-            return None
+        # Prevents an error in which none of the wall is actually the main wall.
+        # Indicates that mistakes have been made earlier.
+        assert w1 or w2
+        return wall2 if w2 else wall1
+
 
     def get_rotation(self) -> np.quaternion:
         ret = np.quaternion(1, 0, 0, 0)
