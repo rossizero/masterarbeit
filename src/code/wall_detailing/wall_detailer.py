@@ -11,10 +11,10 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.StlAPI import StlAPI_Writer
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 
-from masonry.bond import StrechedBond, GothicBond, CrossBond
+from masonry.bond import StrechedBond
 from masonry.brick import BrickInformation, Brick
-from masonry.wall import Wall
-from masonry.Corner import Corner, Corners, Line
+from detailing.wall import Wall
+from masonry.Corner import Corner, Corners
 
 
 class WallDetailer:

@@ -1,5 +1,3 @@
-from typing import List, Union, Tuple
-
 import numpy as np
 
 from OCC.Core.BRep import BRep_Tool
@@ -11,22 +9,10 @@ from OCC.Core.GProp import GProp_GProps
 from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import TopoDS_Shape, topods
-from OCC.Core.gp import gp_Trsf, gp_Vec, gp_Quaternion, gp_Mat
+from OCC.Core.gp import gp_Quaternion
 from quaternion.numpy_quaternion import quaternion
-from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Ax1, gp_Ax3, gp_Trsf
+from OCC.Core.gp import gp_Vec, gp_Trsf
 import quaternion
-
-
-class Opening:
-    """
-    basically a box that describes a hole in a wall
-    """
-    def __init__(self, position: np.array, rotation: quaternion, dimensions: Tuple[float, float, float]):
-        self.position = position
-        self.rotation = rotation
-        self.length = max(dimensions[0], dimensions[1])
-        self.width = min(dimensions[0], dimensions[1])
-        self.height = dimensions[2]
 
 
 class Wall:
@@ -90,6 +76,9 @@ class Wall:
         return np.array(np.around([x, y, z], decimals=6))
 
     def get_shape(self) -> TopoDS_Shape:
+        """
+        :return: the rotated and translated occ shape
+        """
         # Apply the translation and rotation to our shape
         shape = self.occ_shape
 
@@ -143,7 +132,11 @@ class Wall:
 
         return p2, p1, p4, p3
 
-    def get_vertices(self, relative: bool = False):
+    def get_vertices(self, relative: bool = False) -> np.array:
+        """
+        :param relative: whether vertex positions are in world or relative coordinates
+        :return: list of 3D Points as np.array
+        """
         shape = self.occ_shape
         if not relative:
             shape = self.get_shape()
@@ -225,8 +218,8 @@ class Wall:
 
     def rotate_around(self, rotation: np.quaternion, pivot_point: np.array = np.array([0.0, 0.0, 0.0])):
         """
-        :param rotation:
-        :param pivot_point:
+        :param rotation: rotate
+        :param pivot_point: around this point
         :return:
         """
         # ...translate...
