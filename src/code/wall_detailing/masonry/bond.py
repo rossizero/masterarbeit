@@ -133,12 +133,12 @@ class Bond(ABC):
         self.step += 1
         return self.__get()
 
-    def __up(self):
+    def __up(self, n: int = 1):
         """
         move one layer up (resets the current step)
         :return:
         """
-        self.layer += 1
+        self.layer += n
         self.repeat_step = len(self.plan[self.layer % self.repeat_layer])
         self.step = -1
 
@@ -181,16 +181,19 @@ class Bond(ABC):
                 ret.append(tf)
         return ret
 
-    def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False) -> List[Transformation]:
+    def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0) -> List[Transformation]:
         """
         Fills given dimensions with set layout plan
         :param length: length of wall we want to be filled with this masonry bond
-        :param width: length of wall we want to be filled with this masonry bond
-        :param height: length of wall we want to be filled with this masonry bond
+        :param width: width of wall we want to be filled with this masonry bond
+        :param height: height of wall we want to be filled with this masonry bond
         :return: a list of Transformations for each brick
         """
         num_layers = int(height / self.h)
         leftover_layer = height % self.h
+
+        self.__reset()
+        self.__up(layer)
 
         ret = []
         for j in range(num_layers):

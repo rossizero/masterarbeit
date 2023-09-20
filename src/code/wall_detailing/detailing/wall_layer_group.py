@@ -1,4 +1,5 @@
 import math
+from typing import List
 
 import numpy as np
 import quaternion
@@ -11,7 +12,7 @@ from masonry.brick import BrickInformation
 class WallLayerGroup:
     def __init__(self, module: BrickInformation, name: str = None):
         self.module = module
-        self.layers = []
+        self.layers: List[WallLayer] = []
         self.rotation = np.quaternion(1, 0, 0, 0)
         self.translation = np.array([0, 0, 0])  # of wall mid
         self.name = name

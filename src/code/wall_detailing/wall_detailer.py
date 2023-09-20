@@ -28,7 +28,7 @@ class WallDetailer:
         ret = []
 
         combined = False
-        while len(groups) > 1:
+        while len(groups) > 0:
             if not combined:
                 curr = groups.pop(0)
                 ret.append(curr)
@@ -42,7 +42,37 @@ class WallDetailer:
         return ret
 
     def detail_wall_new(self, wall: WallLayerGroup):
-        pass
+        brick_ret = []
+        original_rotation = wall.get_rotation()
+        module = wall.module
+        bond = StrechedBond(module)
+        width = module.width  # TODO bond width
+
+        # TODO iterate over heights then over layers that are on this height
+        counter = 0
+        for layer in wall.layers:
+            dimensions = np.array([layer.length, width, module.height])
+            original_translation = layer.center
+            original_translation[2] = wall.layers[0].center[2] - module.height/2.0
+            #fill_left = len(wall.left_connections) == 0
+            #fill_right = len(wall.right_connections) == 0
+            transformations = bond.apply(*dimensions, True, True, counter)
+
+            for tf in transformations:
+                local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
+                local_rotation = tf.get_rotation()  # rotation of the brick around itself
+
+                b = Brick(tf.module)
+                b.rotate(local_rotation)
+
+                # need to substract half wall dimensions since its position coordinates are at its center
+                b.translate(local_position - dimensions/2)
+                b.rotate_around(original_rotation)  # rotate to fit wall rotation
+                b.translate(original_translation)  # translate to wall
+                brick_ret.append(b)
+            counter += 1
+
+        return brick_ret
 
     def detail_wall(self, wall: Wall, bricks: List[BrickInformation]):
         brick_ret = []
@@ -362,14 +392,15 @@ class WallDetailer:
 
         # convert walls to layergroups
         for w in self.walls:
-            bricks = self.brick_information[w.ifc_wall_type]
-            bricks.sort(key=lambda x: x.volume(), reverse=True)
-            module = bricks[0]
+            module = self.brick_information[w.ifc_wall_type]
+            module.sort(key=lambda x: x.volume(), reverse=True)
+            module = module[0]
             wall_layer_groups.append(WallLayerGroup.from_wall(w, module))
 
         # combine groups if possible
         wall_layer_groups = self.combine_layer_groups(wall_layer_groups)
-
+        for wall in wall_layer_groups:
+            bricks.extend(self.detail_wall_new(wall))
         return bricks
 
     @staticmethod
@@ -444,11 +475,11 @@ if __name__ == "__main__":
     w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
     walls = [w1, w2, w3, w4]
-    walls = [w1, w111]
+    walls = [w1]
     wallss = walls.copy()
     wall_detailer = WallDetailer(wallss, brick_information)
     bb = wall_detailer.detail_new()
 
     #print("walls", len(wallss), "bricks", len(bb))
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in walls])
-    #WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
