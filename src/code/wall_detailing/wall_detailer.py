@@ -24,6 +24,11 @@ class WallDetailer:
         self.brick_information = brick_information
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
+        """
+        Combines all WallLayerGroups that touch, have the same z orientation and are at 180 degrees to each other
+        :param wall_layer_groups:
+        :return:
+        """
         groups = wall_layer_groups.copy()
         ret = []
 
@@ -45,18 +50,16 @@ class WallDetailer:
         brick_ret = []
         original_rotation = wall.get_rotation()
         module = wall.module
-        bond = StrechedBond(module)
+        bond = GothicBond(module)
         width = module.width  # TODO bond width
 
-        # TODO iterate over heights then over layers that are on this height
         counter = 0
         original_translation = wall.get_translation()
-        bottom_layer = wall.layers[0].center[2]
-        heights = [layer.center[2] for layer in wall.layers]
 
         for layers in wall.get_sorted_layers():
             for layer in layers:
                 dimensions = np.array([layer.length, width, module.height])
+
                 #fill_left = len(wall.left_connections) == 0
                 #fill_right = len(wall.right_connections) == 0
                 transformations = bond.apply(*dimensions, True, True, counter, layer.relative_x_offset)
@@ -66,55 +69,16 @@ class WallDetailer:
 
                     b = Brick(tf.module)
                     b.rotate(local_rotation)
+                    # need to substract half of dimensions since its position coordinates are at its center
                     center = layer.translation.copy() - dimensions / 2.0
                     local_position += center
                     local_position[2] = center[2] - module.height / 2.0
-                    # need to substract half wall dimensions since its position coordinates are at its center
                     b.translate(local_position)
                     b.rotate_around(original_rotation)  # rotate to fit wall rotation
                     b.translate(original_translation)  # translate to wall
                     brick_ret.append(b)
             counter += 1
-
         return brick_ret
-
-    def detail_wall(self, wall: Wall, bricks: List[BrickInformation]):
-        brick_ret = []
-        if wall.is_cubic():
-            original_rotation = wall.get_rotation()
-            original_translation = wall.get_translation()
-            dimensions = np.array([wall.length, wall.width, wall.height])
-
-            # get "biggest" brick TODO maybe there is a better criteria?
-            bricks.sort(key=lambda x: x.volume(), reverse=True)
-            module = bricks[0]
-
-            bond = StrechedBond(module)  # TODO must be set somewhere else
-            fill_left = len(wall.left_connections) == 0
-            fill_right = len(wall.right_connections) == 0
-            transformations = bond.apply(*dimensions, fill_left, fill_right)
-
-            for tf in transformations:
-                local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
-                local_rotation = tf.get_rotation()  # rotation of the brick around itself
-
-                b = Brick(tf.module)
-                b.rotate(local_rotation)
-
-                # need to substract half wall dimensions since its position coordinates are at its center
-                b.translate(local_position - dimensions/2)
-                b.rotate_around(original_rotation)  # rotate to fit wall rotation
-                b.translate(original_translation)  # translate to wall
-                brick_ret.append(b)
-        return brick_ret
-
-    def detail_wall_endings(self, wall: Wall):
-        if len(wall.left_connections) == 0:
-            pass
-
-        if len(wall.right_connections) == 0:
-            pass
-
 
     def detail_corner(self, corner: Corner, bricks: List[BrickInformation]):
         brick_ret = []
@@ -159,43 +123,6 @@ class WallDetailer:
 
     def detail_opening(self, wall: Wall, opening, bricks: List[BrickInformation]):
         pass
-
-    def combine_walls(self, wall1: Wall, wall2: Wall) -> Optional[Wall]:
-        """
-        Combines two wall elements to one.
-        Does not check whether they actually touch or whatever.
-        Works properly for cubic walls, but I think it doesn't make much sense to use it for non cubic walls, because
-        the length/width/height is being used to move the walls around.
-        """
-        shape = BRepAlgoAPI_Fuse(wall1.get_shape(), wall2.get_shape()).Shape()  # Fuse Operation -> rotation is set to 0
-        # transformation details (it doesn't matter if we use wall1's or wall2's data)
-        rotation = wall1.get_rotation()
-        translation = wall1.get_translation()
-        scale = np.array([wall1.length, wall1.width, wall1.height])
-
-        # rotate backwards
-        transformation = gp_Trsf()
-        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
-        shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
-
-        # translate prior wall1 center to 0 0 0
-        transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(*translation).Reversed())
-        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-        # create a new wall object to retrieve the fused dimensions
-        wall = Wall(shape=shape, ifc_wall_type=wall1.ifc_wall_type)
-
-        # translate center of new wall to 0 0 0
-        transformation = gp_Trsf()
-        complete_translation = translation + (np.array([wall.length, wall.width, wall.height] - scale) / 2.0)
-        transformation.SetTranslation(gp_Vec(*complete_translation).Reversed())
-        wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
-
-        # set transformation parameters accordingly
-        wall.rotation = rotation
-        wall.translation = complete_translation
-        return wall
 
     def check_corners(self):
         corners = Corners()
@@ -277,84 +204,6 @@ class WallDetailer:
 
                 print(z_parallel)
         return corners
-
-    def check_walls_to_combine(self):
-        to_combine = []
-        to_corner = []
-        for i, w1 in enumerate(self.walls):
-            for j in range(i+1, len(self.walls)):
-                w2 = self.walls[j]
-
-                # Check if they touch each other
-                # TODO check what happens when they overlap -> wie können wir das raussortieren?
-                dist_calculator = BRepExtrema_DistShapeShape(w1.get_shape(), w2.get_shape())
-                dist_calculator.Perform()
-                touching = dist_calculator.IsDone() and dist_calculator.Value() <= 1e-9
-                if touching:
-                    a1 = w1.get_rotation()
-                    a2 = w2.get_rotation()
-                    diff = a2 * a1.inverse()
-                    angle = round(diff.angle(), 6)
-
-                    z_part1 = quaternion.rotate_vectors(a1, np.array([0.0, 0.0, 1.0]))
-                    z_part2 = quaternion.rotate_vectors(a2, np.array([0.0, 0.0, 1.0]))
-                    z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
-
-                    if (angle == math.pi or angle == 0.0) and z_parallel and dist_calculator.NbSolution() >= 4:
-                        print("Combine", w1.name, "and", w2.name, dist_calculator.NbSolution())
-                        to_combine.append((w1, w2))
-                    elif (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6)) and z_parallel and dist_calculator.NbSolution() >= 4:
-                        #print("90 degree corner between", w1.name, "and", w2.name, dist_calculator.NbSolution())
-                        to_corner.append((w1, w2))
-                    elif z_parallel and dist_calculator.NbSolution() >= 4:
-                        #print("Sternchenaufgabe!!!! Edge with angle", w1.name, w2.name, math.degrees(angle))
-                        pass
-                    else:
-                        pass
-                        #print("Touching walls", w1.name, "and", w2.name, "with angle", math.degrees(angle), "and non parallel z axis with", dist_calculator.NbSolution(), "touching points")
-
-        
-        # combines multiple wall parts or the combinations of them to a complete wall
-        groups = {}
-        for w1, w2 in to_combine:
-            w1_ = w1
-            w2_ = w2
-            w1_key = (w1,)
-            w2_key = (w2,)
-
-            for key in groups.keys():
-                if w1 in key:
-                    w1_ = groups[key]
-                    w1_key = key
-                    break
-
-            for key in groups.keys():
-                if w2 in key:
-                    w2_ = groups[key]
-                    w2_key = key
-                    break
-
-            combi = self.combine_walls(w2_, w1_)
-            if w1_key in groups.keys(): del groups[w1_key]
-            if w2_key in groups.keys(): del groups[w2_key]
-
-            l1 = list(w1_key)
-            l2 = list(w2_key)
-            l1.extend(l2)
-            new_key = tuple(l1)
-            groups[new_key] = combi
-
-        # remove all wall parts
-        for w1, w2 in to_combine:
-            if w1 in self.walls:
-                self.walls.remove(w1)
-            if w2 in self.walls:
-                self.walls.remove(w2)
-
-        # add all full walls
-        for val in groups.values():
-            if val not in self.walls:
-                self.walls.append(val)
 
     def detail(self) -> List[Brick]:
         bricks = []
