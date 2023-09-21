@@ -21,7 +21,10 @@ class WallLayer:
         self.length = total_length
 
     @property
-    def left_edge(self, relative: bool = False) -> np.array:
+    def left_edge(self):
+        return self.get_left_edge()
+
+    def get_left_edge(self, relative: bool = False) -> np.array:
         ret = self.translation.copy()
         ret[0] -= self.length/2.0
 
@@ -31,7 +34,10 @@ class WallLayer:
         return ret
 
     @property
-    def right_edge(self, relative: bool = False) -> np.array:
+    def right_edge(self):
+        return self.get_right_edge()
+
+    def get_right_edge(self, relative: bool = False) -> np.array:
         ret = self.translation.copy()
         ret[0] += self.length / 2.0
 
@@ -39,6 +45,16 @@ class WallLayer:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
         return ret
+
+    @property
+    def relative_x_offset(self):
+        """
+
+        :return: the difference between the lowest x coordinate of all layers of the parent and self
+        """
+        a = min(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
+        b = self.parent.get_lowest_local_x()
+        return a - b
 
     @property
     def center(self, relative: bool = False) -> np.array:

@@ -12,7 +12,7 @@ from OCC.Core.StlAPI import StlAPI_Writer
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 
 from detailing.wall_layer_group import WallLayerGroup
-from masonry.bond import StrechedBond
+from masonry.bond import StrechedBond, GothicBond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corner, Corners
@@ -50,23 +50,26 @@ class WallDetailer:
 
         # TODO iterate over heights then over layers that are on this height
         counter = 0
+        original_translation = wall.get_translation()
+        bottom_layer = wall.layers[0].center[2]
+        heights = [layer.center[2] for layer in wall.layers]
+
         for layer in wall.layers:
             dimensions = np.array([layer.length, width, module.height])
-            original_translation = layer.center
-            original_translation[2] = wall.layers[0].center[2] - module.height/2.0
             #fill_left = len(wall.left_connections) == 0
             #fill_right = len(wall.right_connections) == 0
-            transformations = bond.apply(*dimensions, True, True, counter)
-
+            transformations = bond.apply(*dimensions, True, True, counter, layer.relative_x_offset)
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
                 local_rotation = tf.get_rotation()  # rotation of the brick around itself
 
                 b = Brick(tf.module)
                 b.rotate(local_rotation)
-
+                center = layer.translation.copy() - dimensions / 2.0
+                local_position += center
+                local_position[2] = center[2] - module.height / 2.0
                 # need to substract half wall dimensions since its position coordinates are at its center
-                b.translate(local_position - dimensions/2)
+                b.translate(local_position)
                 b.rotate_around(original_rotation)  # rotate to fit wall rotation
                 b.translate(original_translation)  # translate to wall
                 brick_ret.append(b)
@@ -461,23 +464,28 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
 
     w1 = make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w1")
-    w11 = make_wall(10, 1, 5, np.array([5.5, 10.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11")
+    w11 = make_wall(10, 1, 5, np.array([5.5, 10.0, -1.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11")
     w111 = make_wall(5, 1, 5, np.array([5.5, -7.5, 3.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w111")
     w2 = make_wall(10, 1, 5, np.array([10.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w2")
     w3 = make_wall(10, 1, 5, np.array([-5.5, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w3")
     w4 = make_wall(10, 1, 5, np.array([0.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w4")
 
-    #w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    #w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    #w111.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w111.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w2.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w3.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
     walls = [w1, w2, w3, w4]
-    walls = [w1]
+    walls = [w1, w11, w111]
     wallss = walls.copy()
+
+    p = gp_Pnt(0.0, 0.0, 0.0)
+    BRepPrimAPI_MakeBox(p, 1.0, 1.0, 1.0).Shape()
+
     wall_detailer = WallDetailer(wallss, brick_information)
+    bb = []
     bb = wall_detailer.detail_new()
 
     #print("walls", len(wallss), "bricks", len(bb))

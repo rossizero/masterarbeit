@@ -49,6 +49,7 @@ class WallLayerGroup:
                     local_mid = l.center - self.get_translation()
                     local_mid = quaternion.rotate_vectors(self.get_rotation().inverse(), local_mid)
                     l.translation = local_mid
+                    l.parent = self
                     self.layers.append(l)
         return to_combine and combined
 
@@ -75,6 +76,13 @@ class WallLayerGroup:
         returns the translation part of this walls transformation
         """
         return self.translation.copy()
+
+    def get_lowest_local_x(self):
+        if len(self.layers) > 0:
+            lefts = min([l.get_left_edge(True)[0] for l in self.layers])
+            rights = min([l.get_right_edge(True)[0] for l in self.layers])  # TODO maybe unnecessary
+            return min(lefts, rights)
+        return None
 
     @classmethod
     def from_wall(cls, wall: Wall, module: BrickInformation):

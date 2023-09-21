@@ -181,7 +181,7 @@ class Bond(ABC):
                 ret.append(tf)
         return ret
 
-    def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0) -> List[Transformation]:
+    def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
         """
         Fills given dimensions with set layout plan
         :param length: length of wall we want to be filled with this masonry bond
@@ -198,33 +198,40 @@ class Bond(ABC):
         ret = []
         for j in range(num_layers):
             self.__up()
-            num_bricks, leftover_left, leftover_right = self.bricks_in_layer(j, length)
+            num_bricks, leftover_left, leftover_right = self.bricks_in_layer(self.layer, length + x_offset)
+            leftover_left = length
+
             for i in range(num_bricks):
                 tf = self.__next()
                 tf.module = self.module
-                ret.append(tf)
+                tf.translation.offset[0] -= x_offset
+                if tf.get_position()[0] >= 0:
+                    ret.append(tf)
+                    leftover_left = min(leftover_left, tf.get_position()[0])
 
+            leftover_right = round(leftover_right, 6)  # necessary because sometimes too smal for the occ backend to handle
+            leftover_left = round(leftover_left, 6)
             if leftover_left > 0.0 and fill_left:
                 tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
                 tf.module = BrickInformation(leftover_left, width, self.module.height)
                 if leftover_left < width:
                     tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
-                tf.set_mask_multiplier(1, 1, j)
+                tf.set_mask_multiplier(1, 1, self.layer)
                 ret.append(tf)
             if leftover_right > 0.0 and fill_right:
                 tf = Transformation(MaskedArray(value=np.array([length-leftover_right, 0, self.h]), mask=np.array([1, 0, 1])))
                 if leftover_right < width:
                     tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
                 tf.module = BrickInformation(leftover_right, width, self.module.height)
-                tf.set_mask_multiplier(1, 1, j)
+                tf.set_mask_multiplier(1, 1, self.layer)
                 ret.append(tf)
         return ret
 
     def bricks_in_layer(self, layer: int, length: float) -> int:
         """
-
         :param layer: num of layer (0 is at floor)
         :param length: length of the wall
+        :param x_offset: offset in x direction
         :return: number of bricks that fit into given length of the wall by following layout plan for given layer
         """
         transformations = self.plan[layer % self.repeat_layer].copy()
@@ -237,7 +244,7 @@ class Bond(ABC):
         l = self.module.get_rotated_dimensions(tf.get_rotation())[0]
 
         leftover_left = pos[0]
-        leftover_right = pos[0] + l
+        leftover_right = 0  #pos[0] + l
 
         while pos[0] + l <= length:  # TODO calculate instead of expensive "exploration"
             counter += 1
