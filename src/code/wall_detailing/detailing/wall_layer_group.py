@@ -84,6 +84,29 @@ class WallLayerGroup:
             return min(lefts, rights)
         return None
 
+    def get_sorted_layers(self) -> List[List[WallLayer]]:
+        """
+
+        :return: a list containing lists of layers that share the same z height sorted
+        """
+        self.layers.sort(key=lambda x: x.translation[2])
+        ret = []
+        curr = []
+        last_height = self.layers[0].translation[2]
+
+        for layer in self.layers:
+            if last_height == layer.translation[2]:
+                curr.append(layer)
+                if len(curr) > 1:
+                    pass
+            else:
+                ret.append(curr)
+                curr = [layer]
+                last_height = layer.translation[2]
+        if len(curr) > 0:
+            ret.append(curr)
+        return ret
+
     @classmethod
     def from_wall(cls, wall: Wall, module: BrickInformation):
         """

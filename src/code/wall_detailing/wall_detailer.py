@@ -54,25 +54,26 @@ class WallDetailer:
         bottom_layer = wall.layers[0].center[2]
         heights = [layer.center[2] for layer in wall.layers]
 
-        for layer in wall.layers:
-            dimensions = np.array([layer.length, width, module.height])
-            #fill_left = len(wall.left_connections) == 0
-            #fill_right = len(wall.right_connections) == 0
-            transformations = bond.apply(*dimensions, True, True, counter, layer.relative_x_offset)
-            for tf in transformations:
-                local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
-                local_rotation = tf.get_rotation()  # rotation of the brick around itself
+        for layers in wall.get_sorted_layers():
+            for layer in layers:
+                dimensions = np.array([layer.length, width, module.height])
+                #fill_left = len(wall.left_connections) == 0
+                #fill_right = len(wall.right_connections) == 0
+                transformations = bond.apply(*dimensions, True, True, counter, layer.relative_x_offset)
+                for tf in transformations:
+                    local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
+                    local_rotation = tf.get_rotation()  # rotation of the brick around itself
 
-                b = Brick(tf.module)
-                b.rotate(local_rotation)
-                center = layer.translation.copy() - dimensions / 2.0
-                local_position += center
-                local_position[2] = center[2] - module.height / 2.0
-                # need to substract half wall dimensions since its position coordinates are at its center
-                b.translate(local_position)
-                b.rotate_around(original_rotation)  # rotate to fit wall rotation
-                b.translate(original_translation)  # translate to wall
-                brick_ret.append(b)
+                    b = Brick(tf.module)
+                    b.rotate(local_rotation)
+                    center = layer.translation.copy() - dimensions / 2.0
+                    local_position += center
+                    local_position[2] = center[2] - module.height / 2.0
+                    # need to substract half wall dimensions since its position coordinates are at its center
+                    b.translate(local_position)
+                    b.rotate_around(original_rotation)  # rotate to fit wall rotation
+                    b.translate(original_translation)  # translate to wall
+                    brick_ret.append(b)
             counter += 1
 
         return brick_ret
@@ -464,15 +465,15 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
 
     w1 = make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w1")
-    w11 = make_wall(10, 1, 5, np.array([5.5, 10.0, -1.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11")
-    w111 = make_wall(5, 1, 5, np.array([5.5, -7.5, 3.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w111")
+    w11 = make_wall(10, 1, 10, np.array([5.5, 10.0, -1.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11")
+    w111 = make_wall(5, 1, 10, np.array([5.5, -7.5, 1.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w111")
     w2 = make_wall(10, 1, 5, np.array([10.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w2")
     w3 = make_wall(10, 1, 5, np.array([-5.5, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w3")
     w4 = make_wall(10, 1, 5, np.array([0.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w4")
 
-    w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w111.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    #w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    #w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    #w111.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w2.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w3.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
