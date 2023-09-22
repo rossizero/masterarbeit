@@ -113,6 +113,15 @@ class WallLayerGroup:
             ret.append(curr)
         return ret
 
+    def is_touching(self, other: 'WallLayerGroup'):
+        # TODO make faster ^^
+        for l1 in self.layers:
+            for l2 in other.layers:
+                width = max(self.module.width, other.module.width)  # TODO use wall width
+                if l1.is_touching(l2, width):
+                    return True
+        return False
+
     @classmethod
     def from_wall(cls, wall: Wall, module: BrickInformation):
         """
@@ -125,6 +134,8 @@ class WallLayerGroup:
         ret.rotation = wall.get_rotation()
         ret.translation = wall.get_translation()
         length, width, height = wall.length, wall.width, wall.height
+
+        # TODO? wall.is_cubic()
 
         layers = int(height / module.height)
         leftover = height % module.height

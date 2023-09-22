@@ -12,6 +12,9 @@ class WallLayer:
         self.height = parent.module.height if height is None else height
         self.length = length
 
+        self.left_connections: List['WallLayer'] = []
+        self.right_connections: List['WallLayer'] = []
+
     def combine(self, other: 'WallLayer'):
         total_length = self.length + other.length
         global_mid = (self.center * self.length + other.center * other.length) / total_length
@@ -68,11 +71,11 @@ class WallLayer:
             ret += self.parent.get_translation()
         return ret
 
-    def is_touching(self, other: 'WallLayer'):
-        a = np.allclose(self.right_edge, other.left_edge)
-        b = np.allclose(self.right_edge, other.right_edge)
-        c = np.allclose(self.left_edge, other.left_edge)
-        d = np.allclose(self.left_edge, other.right_edge)
+    def is_touching(self, other: 'WallLayer', tolerance: float =1.e-8):
+        a = np.allclose(self.right_edge, other.left_edge, atol=tolerance)
+        b = np.allclose(self.right_edge, other.right_edge, atol=tolerance)
+        c = np.allclose(self.left_edge, other.left_edge, atol=tolerance)
+        d = np.allclose(self.left_edge, other.right_edge, atol=tolerance)
         return a or b or c or d
 
     def is_above_or_below(self, other: 'WallLayer', height:float = 0.0):
