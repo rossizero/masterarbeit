@@ -44,6 +44,11 @@ class WallLayerGroup:
                         others.remove(l2)
                         l1.combine(l2)
                         combined = True
+            for l1 in self.layers:
+                for l in others:
+                    if l1.is_above_or_below(l, self.module.height):
+                        combined = True
+                        break
             if combined:
                 for l in others:
                     local_mid = l.center - self.get_translation()

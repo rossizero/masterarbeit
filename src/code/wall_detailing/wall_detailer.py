@@ -50,7 +50,7 @@ class WallDetailer:
         brick_ret = []
         original_rotation = wall.get_rotation()
         module = wall.module
-        bond = GothicBond(module)
+        bond = StrechedBond(module)
         width = module.width  # TODO bond width
 
         counter = 0
@@ -122,6 +122,9 @@ class WallDetailer:
         pass
 
     def detail_opening(self, wall: Wall, opening, bricks: List[BrickInformation]):
+        pass
+
+    def check_corners_new(self, wall_layer_groups: List[WallLayerGroup]):
         pass
 
     def check_corners(self):
@@ -315,6 +318,8 @@ if __name__ == "__main__":
 
     w1 = make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w1")
     w11 = make_wall(10, 1, 10, np.array([5.5, 10.0, -1.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11")
+    w11_ = make_wall(5, 1, 10, np.array([5.5, 10.0, 9.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11_")
+    w11_2 = make_wall(5, 1, 10, np.array([5.5, 10.0, -11.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11_2")
     w111 = make_wall(5, 1, 10, np.array([5.5, -7.5, 1.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w111")
     w2 = make_wall(10, 1, 5, np.array([10.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w2")
     w3 = make_wall(10, 1, 5, np.array([-5.5, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w3")
@@ -328,7 +333,8 @@ if __name__ == "__main__":
     w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
     walls = [w1, w2, w3, w4]
-    walls = [w1, w11, w111]
+    walls = [w1, w11_,w11_2, w11, w111]
+    walls = [w11_,w11_2, w11]
     wallss = walls.copy()
 
     p = gp_Pnt(0.0, 0.0, 0.0)
