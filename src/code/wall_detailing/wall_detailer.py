@@ -325,16 +325,18 @@ if __name__ == "__main__":
     w3 = make_wall(10, 1, 5, np.array([-5.5, 0.0, 0.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w3")
     w4 = make_wall(10, 1, 5, np.array([0.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w4")
 
-    #w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    #w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    #w111.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w11_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w11_2.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+    w111.rotate_around(quaternion.from_euler_angles(0.3, an, an))
+
     w2.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w3.rotate_around(quaternion.from_euler_angles(0.3, an, an))
     w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
     walls = [w1, w2, w3, w4]
     walls = [w1, w11_,w11_2, w11, w111]
-    walls = [w11_,w11_2, w11]
     wallss = walls.copy()
 
     p = gp_Pnt(0.0, 0.0, 0.0)

@@ -58,6 +58,9 @@ class WallLayer:
 
     @property
     def center(self, relative: bool = False) -> np.array:
+        return self.get_center()
+
+    def get_center(self, relative: bool = False) -> np.array:
         ret = self.translation.copy()
 
         if not relative:

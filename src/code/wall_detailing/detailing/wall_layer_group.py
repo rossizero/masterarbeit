@@ -95,19 +95,20 @@ class WallLayerGroup:
         :return: a list containing lists of layers that share the same z height sorted
         """
         self.layers.sort(key=lambda x: x.translation[2])
+
         ret = []
         curr = []
-        last_height = self.layers[0].translation[2]
+        last_height = round(self.layers[0].translation[2], 6)
 
         for layer in self.layers:
-            if last_height == layer.translation[2]:
+            if last_height == round(layer.translation[2], 6):
                 curr.append(layer)
                 if len(curr) > 1:
                     pass
             else:
                 ret.append(curr)
                 curr = [layer]
-                last_height = layer.translation[2]
+                last_height = round(layer.translation[2], 6)
         if len(curr) > 0:
             ret.append(curr)
         return ret
