@@ -75,7 +75,6 @@ class Corner:
         assert w1 or w2
         return wall2 if w2 else wall1
 
-
     def get_rotation(self) -> np.quaternion:
         ret = np.quaternion(1, 0, 0, 0)
         if len(self.walls) == 2:

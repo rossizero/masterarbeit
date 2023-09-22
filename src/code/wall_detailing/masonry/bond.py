@@ -209,7 +209,7 @@ class Bond(ABC):
                     ret.append(tf)
                     leftover_left = min(leftover_left, tf.get_position()[0])
 
-            leftover_right = round(leftover_right, 6)  # necessary because sometimes too smal for the occ backend to handle
+            leftover_right = round(leftover_right, 6)  # necessary because sometimes too small for the occ backend to handle
             leftover_left = round(leftover_left, 6)
             if leftover_left > 0.0 and fill_left:
                 tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))

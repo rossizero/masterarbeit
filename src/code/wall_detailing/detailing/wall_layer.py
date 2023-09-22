@@ -71,3 +71,22 @@ class WallLayer:
         c = np.allclose(self.left_edge, other.left_edge)
         d = np.allclose(self.left_edge, other.right_edge)
         return a or b or c or d
+
+    def is_above_or_below(self, other: 'WallLayer', height:float = 0.0):
+        a = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), self.left_edge)
+        b = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), self.right_edge)
+
+        c = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), other.left_edge)
+        d = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), other.right_edge)
+
+        x_between = a[0] <= c[0] <= b[0] or c[0] <= a[0] <= d[0] or a[0] <= d[0] <= b[0] or c[0] <= b[0] <= d[0]
+        y_same = np.allclose(a[1], [b[1], c[1], d[1]])
+
+        aa = abs(a[2] - c[2])
+        bb = abs(a[2] - d[2])
+        cc = abs(b[2] - c[2])
+        dd = abs(b[2] - d[2])
+        z_diff_same = np.allclose(aa, [bb, cc, dd])
+        z_diff_right = np.isclose(aa, height)
+
+        return x_between and y_same and z_diff_same and z_diff_right
