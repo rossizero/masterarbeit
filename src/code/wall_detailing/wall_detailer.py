@@ -25,7 +25,8 @@ class WallDetailer:
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
         """
-        Combines all WallLayerGroups that touch, have the same z orientation and are at 180 degrees to each other
+        Combines all WallLayerGroups that touch, have the same z orientation and are at 0 / 180 degrees to each other
+        or are exactly above / beyond each other
         :param wall_layer_groups:
         :return:
         """
@@ -60,9 +61,9 @@ class WallDetailer:
             for layer in layers:
                 dimensions = np.array([layer.length, width, module.height])
 
-                #fill_left = len(wall.left_connections) == 0
-                #fill_right = len(wall.right_connections) == 0
-                transformations = bond.apply(*dimensions, True, True, counter, layer.relative_x_offset)
+                fill_left = len(layer.left_connections) == 0
+                fill_right = len(layer.right_connections) == 0
+                transformations = bond.apply(*dimensions, fill_left, fill_right, counter, layer.relative_x_offset)
                 for tf in transformations:
                     local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
                     local_rotation = tf.get_rotation()  # rotation of the brick around itself
