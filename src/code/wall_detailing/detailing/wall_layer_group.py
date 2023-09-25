@@ -10,12 +10,16 @@ from masonry.brick import BrickInformation
 
 
 class WallLayerGroup:
+    idd = 0
+
     def __init__(self, module: BrickInformation, name: str = None):
         self.module = module
         self.layers: List[WallLayer] = []
         self.rotation = np.quaternion(1, 0, 0, 0)
         self.translation = np.array([0, 0, 0])  # of wall mid
         self.name = name
+        self.id = WallLayerGroup.idd
+        WallLayerGroup.idd += 1
 
     def combine(self, other: 'WallLayerGroup'):
         """
@@ -152,3 +156,8 @@ class WallLayerGroup:
             wall_layer = WallLayer(ret, length, translation=translation, height=leftover)
             ret.layers.append(wall_layer)
         return ret
+
+    def __lt__(self, other):
+        if type(other) is WallLayerGroup:
+            return self.id < other.id
+        return True

@@ -181,8 +181,10 @@ class Bond(ABC):
     def get_corner_width(self, layer: int = 0, rotation: np.quaternion = np.quaternion(1, 0, 0, 0)) -> float:  # TODO yet to be tested with more complex bonds that stretched
         plan = self._get_corner_plan()
         ret = 0
+
         for t in plan[layer % len(plan)].copy():
-            l = self.module.get_rotated_dimensions(t.get_rotation() * rotation)[0]
+            l = self.module.get_rotated_dimensions(t.get_rotation())
+            l = abs(quaternion.rotate_vectors(rotation, l)[0])
             t.set_mask_multiplier(0, 0, 1)
             l += t.get_position()[0]
             ret = max(ret, l)

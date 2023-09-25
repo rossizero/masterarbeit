@@ -16,6 +16,7 @@ from masonry.bond import StrechedBond, GothicBond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
+from scenarios.scenarios import SimpleCorners
 
 
 class WallDetailer:
@@ -84,7 +85,8 @@ class WallDetailer:
     def detail_corner(self, corner: Corn):
         brick_ret = []
         main_layer = corner.get_main_layer()
-
+        print("main", main_layer.parent.name)
+        
         module = main_layer.parent.module
         bond = StrechedBond(module)  # TODO must be set somewhere else
 
@@ -114,14 +116,11 @@ class WallDetailer:
 
             brick_ret.append(b)
 
-        local_corner = corner.point.copy() - main_layer.parent.get_translation()
-        local_corner = quaternion.rotate_vectors(original_rotation.inverse(), local_corner)
-
         for layer in corner.layers:
             # how far the corner stretches into the layer (x direction)
             relative_rotation = layer.parent.get_rotation() / main_layer.parent.get_rotation()
-            corner_length = bond.get_corner_width(layer_index, relative_rotation)
-            print("length", corner_length)
+
+            corner_length = bond.get_corner_width(layer.get_layer_index(), relative_rotation)
             layer.move_edge(corner.point, corner_length)
 
         return brick_ret
@@ -260,62 +259,13 @@ class WallDetailer:
             print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
 
-def make_wall(length, width, height, position, rotation, ifc_wall_type, name=""):
-    length, width = max(length, width), min(length, width)
-    corner = gp_Pnt(-length/2.0, -width/2.0, -height/2.0)
-
-    shape = BRepPrimAPI_MakeBox(corner, length, width, height).Shape()
-
-    transformation = gp_Trsf()
-    transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w))
-    shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-    transformation = gp_Trsf()
-    transformation.SetTranslation(gp_Vec(*position))
-    shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-    wall = Wall(shape, ifc_wall_type, name)
-    return wall
-
-
 if __name__ == "__main__":
-    an = math.pi / 2 * 1.22432
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
+    scenario = SimpleCorners()
 
-    w1 = make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w1")
-    w11 = make_wall(10, 1, 10, np.array([5.5, 10.0, -1.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11")
-    w11_ = make_wall(5, 1, 10, np.array([5.5, 10.0, 9.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11_")
-    w11_2 = make_wall(5, 1, 10, np.array([5.5, 10.0, -11.0]), quaternion.from_euler_angles(0, 0, math.pi/2 + math.pi), ifc_wall_type="test", name="w11_2")
-    w111 = make_wall(5, 1, 10, np.array([5.5, -7.5, 1.0]), quaternion.from_euler_angles(0, 0, math.pi/2), ifc_wall_type="test", name="w111")
-    w2 = make_wall(10, 1, 5, np.array([10.0, 4.5, 1.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w2")
-    w3 = make_wall(10, 1, 5, np.array([-5.5, 0.0, -1.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w3")
-    w4 = make_wall(10, 1, 5, np.array([0.0, -4.5, -3.0]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w4")
-    w4_ = make_wall(4, 1, 5, np.array([0.0, -4.5, 2]), quaternion.from_euler_angles(0.0, 0.0, 0), ifc_wall_type="test", name="w4_")
-    w41_ = make_wall(4, 1, 5, np.array([1.5, -2.0, 3]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2), ifc_wall_type="test", name="w41_")
+    wall_detailer = WallDetailer(scenario.walls, brick_information)
 
-    w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w11_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w11_2.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w111.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-
-    w2.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w3.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w4_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-    w41_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-
-    walls = [w1, w2, w3, w4, w4_, w41_]
-    #walls = [w1, w11_,w11_2, w11, w111]
-    wallss = walls.copy()
-
-    p = gp_Pnt(0.0, 0.0, 0.0)
-    BRepPrimAPI_MakeBox(p, 1.0, 1.0, 1.0).Shape()
-
-    wall_detailer = WallDetailer(wallss, brick_information)
     bb = []
     bb = wall_detailer.detail_new()
-
-    #print("walls", len(wallss), "bricks", len(bb))
-    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in walls])
+    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])

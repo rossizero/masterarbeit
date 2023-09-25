@@ -84,4 +84,9 @@ if __name__ == "__main__":
     print(quaternion.as_euler_angles(q180))
     q180 /= q90
     print(quaternion.as_euler_angles(q180))
+    vec = [2, 1, 0]
+    print(quaternion.rotate_vectors(q90, vec))
+    print(quaternion.rotate_vectors(quaternion.from_euler_angles(0, 0, -math.pi / 2.0), vec))
+    print(quaternion.rotate_vectors(q90*q90, vec))
+    print(quaternion.rotate_vectors(q90*quaternion.from_euler_angles(0, 0, -math.pi / 2.0), vec))
 

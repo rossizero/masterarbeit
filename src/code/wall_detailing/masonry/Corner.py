@@ -46,72 +46,6 @@ class Line:
         return np.linalg.norm(self.p1 - self.p2)
 
 
-class Corner:
-    def __init__(self, bottom_point: np.array, top_point: np.array):
-        self.line = Line(bottom_point, top_point)
-        self.walls = set()
-
-    def get_main_wall(self):
-        """
-        :return: the (or a) wall in which this corner lies in
-        """
-        # TODO what if 1, 3 or more walls
-        wall1 = list(self.walls)[0]
-        wall2 = list(self.walls)[1]
-        d11 = Line(wall1.get_corners()[0], wall1.get_corners()[2]).on_line(self.line.p1)
-        d21 = Line(wall1.get_corners()[0], wall1.get_corners()[2]).on_line(self.line.p2)
-        d31 = Line(wall1.get_corners()[1], wall1.get_corners()[3]).on_line(self.line.p1)
-        d41 = Line(wall1.get_corners()[1], wall1.get_corners()[3]).on_line(self.line.p2)
-        w1 = d11 or d21 or d31 or d41
-
-        d12 = Line(wall2.get_corners()[0], wall2.get_corners()[2]).on_line(self.line.p1)
-        d22 = Line(wall2.get_corners()[0], wall2.get_corners()[2]).on_line(self.line.p2)
-        d32 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p1)
-        d42 = Line(wall2.get_corners()[1], wall2.get_corners()[3]).on_line(self.line.p2)
-        w2 = d12 or d22 or d32 or d42
-
-        # Prevents an error in which none of the wall is actually the main wall.
-        # Indicates that mistakes have been made earlier.
-        assert w1 or w2
-        return wall2 if w2 else wall1
-
-    def get_rotation(self) -> np.quaternion:
-        ret = np.quaternion(1, 0, 0, 0)
-        if len(self.walls) == 2:
-            # the wall we "place" the corner onto
-
-            main_wall = self.get_main_wall()
-            w1 = list(self.walls)[0]
-            w2 = list(self.walls)[1]
-
-            # mid of both walls
-            m1 = w1.get_location(z_offset=-w1.height / 2.0)
-            m2 = w2.get_location(z_offset=-w2.height / 2.0)
-
-            # lower coordinate of corner
-            c1 = self.line.p1
-
-            # unit vector from corner to mid
-            wall_orientation_1 = m1 - c1
-            wall_orientation_2 = m2 - c1
-            wall_orientation_1 = wall_orientation_1 / np.linalg.norm(wall_orientation_1)
-            wall_orientation_2 = wall_orientation_2 / np.linalg.norm(wall_orientation_2)
-
-            # mid of those vectors -> the point in the corner between both walls and 45 degrees from both walls
-            mid = (wall_orientation_1 + wall_orientation_2) / 2
-
-            # normalise rotation
-            mid = quaternion.rotate_vectors(main_wall.get_rotation().inverse(), mid)
-            z_rot = np.arctan2(mid[1], mid[0])
-
-            # subtract the 45 degrees from above
-            ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi/4)
-        return ret
-
-    def __eq__(self, other: "Corner"):
-        return self.line.on_line(other.line.p1) and self.line.on_line(other.line.p2)
-
-
 class Corn:
     def __init__(self, point: np.array):
         self.point = point
@@ -125,7 +59,10 @@ class Corn:
         :return: the (or a) layer in which this corner point lies in
         """
         ret = None
-        for l in self.layers:
+        li = list(self.layers)  # we want to get the same layer for layers of the same two walls
+        li.sort()
+
+        for l in li:
             main = Line(l.left_edge, l.right_edge).on_line(self.point)
             if main:
                 ret = l
