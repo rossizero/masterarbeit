@@ -83,15 +83,17 @@ class WallDetailer:
 
     def detail_corner(self, corner: Corn):
         brick_ret = []
-        layer = corner.get_main_layer()
-        module = layer.parent.module
+        main_layer = corner.get_main_layer()
+
+        module = main_layer.parent.module
         bond = StrechedBond(module)  # TODO must be set somewhere else
 
-        dimensions = np.array([layer.length, module.width, module.height])
-        original_rotation = layer.parent.get_rotation()
+        dimensions = np.array([main_layer.length, module.width, module.height])
+        original_rotation = main_layer.parent.get_rotation()
         corner_rotation = corner.get_rotation()
+        layer_index = main_layer.get_layer_index()
 
-        for tf in bond.apply_corner(layer.get_layer_index()):
+        for tf in bond.apply_corner(layer_index):
             local_position = tf.get_position()  # position in wall itself
             local_position[2] = 0.0  # MAYDO ugly
             local_rotation = tf.get_rotation()
@@ -111,6 +113,17 @@ class WallDetailer:
             b.rotate_around(original_rotation)
 
             brick_ret.append(b)
+
+        local_corner = corner.point.copy() - main_layer.parent.get_translation()
+        local_corner = quaternion.rotate_vectors(original_rotation.inverse(), local_corner)
+
+        for layer in corner.layers:
+            # how far the corner stretches into the layer (x direction)
+            relative_rotation = layer.parent.get_rotation() / main_layer.parent.get_rotation()
+            corner_length = bond.get_corner_width(layer_index, relative_rotation)
+            print("length", corner_length)
+            layer.move_edge(corner.point, corner_length)
+
         return brick_ret
 
     def check_corners_new(self, wall_layer_groups: List[WallLayerGroup]) -> Corns:
@@ -207,10 +220,9 @@ class WallDetailer:
             else:
                 # crossing MAYDO combine two walls
                 pass
-
         for wall in wall_layer_groups:
             pass
-            #bricks.extend(self.detail_wall_new(wall))
+            bricks.extend(self.detail_wall_new(wall))
         return bricks
 
     @staticmethod

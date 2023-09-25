@@ -76,3 +76,12 @@ if __name__ == "__main__":
     print(q90)
     print(quaternion_multiply(q90, q90))
     print(quaternion_multiply(quaternion.from_euler_angles(0, 0, 0), q90))
+
+    print("---------")
+    q90 = quaternion.from_euler_angles(0, 0, math.pi / 2.0)
+    print(quaternion.as_euler_angles(q90))
+    q180 = q90 * q90
+    print(quaternion.as_euler_angles(q180))
+    q180 /= q90
+    print(quaternion.as_euler_angles(q180))
+

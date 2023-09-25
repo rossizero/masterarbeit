@@ -25,7 +25,6 @@ class WallLayer:
 
     def get_layer_index(self):
         """
-
         :return: layer index that self has inside its assigned walllayergroup
         """
         for i, l in enumerate(self.parent.get_sorted_layers()):
@@ -106,3 +105,50 @@ class WallLayer:
         z_diff_right = np.isclose(aa, height)
 
         return x_between and y_same and z_diff_same and z_diff_right
+
+    def reduce_length(self, length: float, from_left: bool = False, from_right: bool = False) -> bool:
+        """
+        reduces the length of this layer by given length.
+        If from_left and from_right have the same value, the center stays at its old position, otherwise it will move so
+        that either the left or the right edge stays at its old position.
+        :param length: new length = self.length - length if incoming length <= length
+        :param from_left: if True, center will be moved so that the right corner stays at its prior position
+        :param from_right: if True, center will be moved so that the left corner stays at its prior position
+        :return: if operation was sucessful
+        """
+        if length >= self.length:
+            return False
+
+        # move center
+        if not from_left == from_right:
+            diff = self.length/2.0 - (self.length - length) / 2.0
+            if from_left:
+                self.translation[0] += diff
+            else:
+                self.translation[0] -= diff
+        self.length -= length
+        return True
+
+    def is_point_left_or_right(self, point: np.array):
+        """
+
+        :param point:
+        :return: True if left, False if right edge is closer
+        """
+        return np.linalg.norm(point - self.left_edge) < np.linalg.norm(point - self.right_edge)
+
+    def move_edge(self, start_point: np.array, length: float = 0):
+        """
+        Moves either the right or left edge in the direction of the center
+        :param start_point: a point we start the movement from (should lie on this layers "line" of direction)
+        :param length: how far we want to move the edge
+        :return: nothing
+        """
+        is_left = np.linalg.norm(start_point - self.left_edge) < np.linalg.norm(start_point - self.right_edge)
+        local_start_point = start_point - self.parent.get_translation()
+        local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
+        right = self.get_right_edge(True)
+        left = self.get_left_edge(True)
+        x = np.round(local_start_point - (left if is_left else right), 6)
+        length = length - x[0]
+        self.reduce_length(length, from_left=is_left, from_right=not is_left)

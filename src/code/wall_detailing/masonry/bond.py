@@ -168,7 +168,6 @@ class Bond(ABC):
         pass
 
     def apply_corner(self, layer: int = 0) -> List[Transformation]:
-        height = self.module.height
         plan = self._get_corner_plan()
 
         ret = []
@@ -177,6 +176,16 @@ class Bond(ABC):
             tf.set_mask_multiplier(0, 0, 1)
             ret.append(tf)
 
+        return ret
+
+    def get_corner_width(self, layer: int = 0, rotation: np.quaternion = np.quaternion(1, 0, 0, 0)) -> float:  # TODO yet to be tested with more complex bonds that stretched
+        plan = self._get_corner_plan()
+        ret = 0
+        for t in plan[layer % len(plan)].copy():
+            l = self.module.get_rotated_dimensions(t.get_rotation() * rotation)[0]
+            t.set_mask_multiplier(0, 0, 1)
+            l += t.get_position()[0]
+            ret = max(ret, l)
         return ret
 
     def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
