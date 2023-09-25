@@ -112,14 +112,71 @@ class Corner:
         return self.line.on_line(other.line.p1) and self.line.on_line(other.line.p2)
 
 
-class Corners:
+class Corn:
+    def __init__(self, point: np.array):
+        self.point = point
+        self.layers = set()
+
+    def __eq__(self, other: "Corn"):
+        return np.allclose(self.point, other.point)
+
+    def get_main_layer(self):
+        """
+        :return: the (or a) layer in which this corner point lies in
+        """
+        ret = None
+        for l in self.layers:
+            main = Line(l.left_edge, l.right_edge).on_line(self.point)
+            if main:
+                ret = l
+                break
+
+        # Prevents an error in which none of the wall is actually the main wall.
+        # Indicates that mistakes have been made earlier (most possibly while modeling).
+        assert ret is not None
+        return ret
+
+    def get_rotation(self) -> np.quaternion:
+        ret = np.quaternion(1, 0, 0, 0)
+        if len(self.layers) == 2:
+            # the wall we "place" the corner onto
+
+            main_layer = self.get_main_layer()
+            l1 = list(self.layers)[0]
+            l2 = list(self.layers)[1]
+
+            # mid of both walls
+            m1 = l1.center
+            m2 = l2.center
+
+            # lower coordinate of corner
+            c1 = self.point
+
+            # unit vector from corner to mid
+            wall_orientation_1 = m1 - c1
+            wall_orientation_2 = m2 - c1
+            wall_orientation_1 = wall_orientation_1 / np.linalg.norm(wall_orientation_1)
+            wall_orientation_2 = wall_orientation_2 / np.linalg.norm(wall_orientation_2)
+
+            # mid of those vectors -> the point in the corner between both walls and 45 degrees from both walls
+            mid = (wall_orientation_1 + wall_orientation_2) / 2
+
+            # normalise rotation
+            mid = quaternion.rotate_vectors(main_layer.parent.get_rotation().inverse(), mid)
+            z_rot = np.arctan2(mid[1], mid[0])
+
+            # subtract the 45 degrees from above
+            ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi/4)
+        return ret
+
+
+class Corns:
     def __init__(self):
         self.corners = []
 
-    def add_corner(self, corner: Corner):
+    def add_corner(self, corner: Corn):
         for c in self.corners:
             if c == corner:
-                c.walls.update(corner.walls)
+                c.walls.update(corner.layers)
                 return
         self.corners.append(corner)
-

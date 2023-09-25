@@ -59,6 +59,11 @@ class BrickInformation:
         height = round(zmax - zmin, 6)
         return [length, width, height]
 
+    def __eq__(self, other):
+        if type(other) == BrickInformation:
+            return other.length == self.length and other.width == self.width and other.height == self.height
+        return False
+
 
 class Brick:
     """

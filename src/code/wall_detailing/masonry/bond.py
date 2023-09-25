@@ -167,18 +167,16 @@ class Bond(ABC):
         """
         pass
 
-    def apply_corner(self, line: Line) -> List[Transformation]:
-        height = line.length()
-        num_layers = int(height / self.h)
-        leftover_layer = height % self.h
+    def apply_corner(self, layer: int = 0) -> List[Transformation]:
+        height = self.module.height
         plan = self._get_corner_plan()
+
         ret = []
-        for j in range(num_layers):
-            tmp = plan[j % len(plan)].copy()
-            for t in tmp:
-                tf = t.copy()
-                tf.set_mask_multiplier(0, 0, j)
-                ret.append(tf)
+        for t in plan[layer % len(plan)].copy():
+            tf = t.copy()
+            tf.set_mask_multiplier(0, 0, 1)
+            ret.append(tf)
+
         return ret
 
     def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:

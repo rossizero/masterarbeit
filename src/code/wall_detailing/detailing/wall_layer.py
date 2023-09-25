@@ -23,6 +23,16 @@ class WallLayer:
         self.translation = local_mid
         self.length = total_length
 
+    def get_layer_index(self):
+        """
+
+        :return: layer index that self has inside its assigned walllayergroup
+        """
+        for i, l in enumerate(self.parent.get_sorted_layers()):
+            if self in l:
+                return i
+        return None
+
     @property
     def left_edge(self):
         return self.get_left_edge()

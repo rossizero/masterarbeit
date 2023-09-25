@@ -15,7 +15,7 @@ from detailing.wall_layer_group import WallLayerGroup
 from masonry.bond import StrechedBond, GothicBond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
-from masonry.Corner import Corner, Corners
+from masonry.Corner import Corn, Corns
 
 
 class WallDetailer:
@@ -81,37 +81,31 @@ class WallDetailer:
             counter += 1
         return brick_ret
 
-    def detail_corner(self, corner: Corner, bricks: List[BrickInformation]):
+    def detail_corner(self, corner: Corn):
         brick_ret = []
-        wall = corner.get_main_wall()
-
-        # get "biggest" brick TODO maybe there is a better criteria?
-        bricks.sort(key=lambda x: x.volume(), reverse=True)
-
-        module = bricks[0]
+        layer = corner.get_main_layer()
+        module = layer.parent.module
         bond = StrechedBond(module)  # TODO must be set somewhere else
-        dimensions = np.array([wall.length, wall.width, wall.height])
-        transformations = bond.apply_corner(corner.line)
-        original_rotation = wall.get_rotation() # quaternion.from_euler_angles(0, 0, 0) # wall1.get_rotation()# quaternion.rotate_vectors(, np.array([0.0, 0.0, 1.0]))
+
+        dimensions = np.array([layer.length, module.width, module.height])
+        original_rotation = layer.parent.get_rotation()
         corner_rotation = corner.get_rotation()
 
-        for tf in transformations:
+        for tf in bond.apply_corner(layer.get_layer_index()):
             local_position = tf.get_position()  # position in wall itself
-            local_rotation = tf.get_rotation()  # quaternion_multiply(tf.get_rotation(), corner_rotation)  # rotation of the brick around itself
-            global_position = corner.line.p1 + local_position
+            local_position[2] = 0.0  # MAYDO ugly
+            local_rotation = tf.get_rotation()
 
             b = Brick(module)
             b.rotate(local_rotation)
 
-            # mid of two overlapping modules
+            # rotate around the mid of two overlapping modules
             vec = np.array([module.width / 2, module.width / 2, 0.0])
             b.rotate_around(corner_rotation, vec)
 
-            p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.line.p1)
-
-            diff = wall.get_translation() - dimensions / 2.0 - p1_rotated
+            p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.point)
+            p1_rotated[2] -= module.height
             tmp = local_position + p1_rotated - vec
-            mid = np.array([module.length/2, module.width/2, module.height/2])
 
             b.translate(tmp)
             b.rotate_around(original_rotation)
@@ -119,9 +113,8 @@ class WallDetailer:
             brick_ret.append(b)
         return brick_ret
 
-    def check_corners_new(self, wall_layer_groups: List[WallLayerGroup]) -> Corners:
-        counter = 0
-        corners = Corners()
+    def check_corners_new(self, wall_layer_groups: List[WallLayerGroup]) -> Corns:
+        corners = Corns()
 
         for i, w1 in enumerate(wall_layer_groups):
             for j in range(i+1, len(wall_layer_groups)):
@@ -138,12 +131,17 @@ class WallDetailer:
                 z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
                 degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))
                 touching = w1.is_touching(w2)
-                print(w1.name, "touching" if touching else "not touching ", w2.name, z_parallel, degree90)
-                if not (z_parallel and degree90 and touching):
+                same_wall_type = w1.module == w2.module
+
+                #print(w1.name, "touching" if touching else "not touching ", w2.name, z_parallel, degree90)
+                if not (z_parallel and degree90 and touching and same_wall_type):
                     continue
 
                 for l1 in w1.layers:
                     for l2 in w2.layers:
+                        if not l1.is_touching(l2, tolerance=w1.module.width):
+                            continue
+
                         mid1 = l1.center
                         mid2 = l2.center
 
@@ -159,10 +157,9 @@ class WallDetailer:
                             intersection_point1 = mid1 + t[0] * direction1
                             intersection_point2 = mid2 + t[1] * direction2
                             assert np.allclose(intersection_point1, intersection_point2)
-                            counter += 1
 
-                            c = Corner(intersection_point1, intersection_point2)
-                            c.walls.update([l1, l2])
+                            c = Corn(intersection_point1)
+                            c.layers.update([l1, l2])
                             corners.add_corner(c)
 
                             if np.linalg.norm(intersection_point1 - l1.left_edge) < w1.module.width:  # TODO use wall width!
@@ -181,7 +178,7 @@ class WallDetailer:
                         except AssertionError:
                             #print("intersection points are not the same for", w1.name, "and", w2.name,  "even though they are touching")
                             continue
-        print("corner counter", counter)
+        print("corner counter", len(corners.corners))
         return corners
 
     def detail_new(self):
@@ -200,11 +197,11 @@ class WallDetailer:
         cs = self.check_corners_new(wall_layer_groups)
 
         for corner in cs.corners:
-            walls = list(corner.walls)
-            if len(walls) == 2:
-                #bricks.extend(self.detail_corner(corner, self.brick_information[walls[0].ifc_wall_type]))
+            layers = list(corner.layers)
+            if len(layers) == 2:
+                bricks.extend(self.detail_corner(corner))
                 pass
-            elif len(walls) == 3:
+            elif len(layers) == 3:
                 # t-joint MAYDO combine t-joints
                 pass
             else:
@@ -212,7 +209,8 @@ class WallDetailer:
                 pass
 
         for wall in wall_layer_groups:
-            bricks.extend(self.detail_wall_new(wall))
+            pass
+            #bricks.extend(self.detail_wall_new(wall))
         return bricks
 
     @staticmethod
@@ -220,7 +218,7 @@ class WallDetailer:
         import os
         file_path = os.path.abspath(path)
         bricks_copy = bricks.copy()
-        print(len(bricks_copy))
+        print("# bricks: ", len(bricks_copy))
         shape = None
 
         if len(bricks_copy) > 0:
