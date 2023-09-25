@@ -16,7 +16,7 @@ from masonry.bond import StrechedBond, GothicBond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
-from scenarios.scenarios import SimpleCorners
+from scenarios.scenarios import SimpleCorners, FancyCorners
 
 
 class WallDetailer:
@@ -86,7 +86,7 @@ class WallDetailer:
         brick_ret = []
         main_layer = corner.get_main_layer()
         print("main", main_layer.parent.name)
-        
+
         module = main_layer.parent.module
         bond = StrechedBond(module)  # TODO must be set somewhere else
 
@@ -116,10 +116,10 @@ class WallDetailer:
 
             brick_ret.append(b)
 
+        angle = corner.get_rotation()
         for layer in corner.layers:
             # how far the corner stretches into the layer (x direction)
-            relative_rotation = layer.parent.get_rotation() / main_layer.parent.get_rotation()
-
+            relative_rotation = (main_layer.parent.get_rotation() * angle) / layer.parent.get_rotation()
             corner_length = bond.get_corner_width(layer.get_layer_index(), relative_rotation)
             layer.move_edge(corner.point, corner_length)
 

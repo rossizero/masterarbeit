@@ -121,7 +121,8 @@ class WallLayer:
 
         # move center
         if not from_left == from_right:
-            diff = self.length/2.0 - (self.length - length) / 2.0
+            diff = self.length/2.0 - (self.length - length) / 2.0  # brain lag ^^
+            diff = length / 2.0
             if from_left:
                 self.translation[0] += diff
             else:
@@ -151,9 +152,13 @@ class WallLayer:
         local_start_point = np.round(local_start_point, 6)
         right = self.get_right_edge(True)
         left = self.get_left_edge(True)
-        x = np.round(local_start_point - (left if is_left else right), 6)
-        length = corner_length
+        if is_left:
+            x = np.round(local_start_point - left, 6)
+        else:
+            x = np.round(right - local_start_point, 6)
 
+        length = corner_length - (abs(x[0]) - x[0])
+        print("l" if is_left else "r", length, x[0])
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
 
     def __lt__(self, other):

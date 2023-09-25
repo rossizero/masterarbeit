@@ -188,7 +188,7 @@ class Bond(ABC):
             t.set_mask_multiplier(0, 0, 1)
             l += t.get_position()[0]
             ret = max(ret, l)
-        return ret
+        return round(ret, 6)
 
     def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
         """

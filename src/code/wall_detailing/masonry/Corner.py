@@ -63,7 +63,7 @@ class Corn:
         li.sort()
 
         for l in li:
-            main = Line(l.left_edge, l.right_edge).on_line(self.point)
+            main = Line(l.left_edge, l.right_edge).on_line(self.point, between=True)
             if main:
                 ret = l
                 break
