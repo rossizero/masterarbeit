@@ -16,7 +16,7 @@ from masonry.bond import StrechedBond, GothicBond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
-from scenarios.scenarios import SimpleCorners, FancyCorners
+from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2
 
 
 class WallDetailer:
@@ -62,8 +62,8 @@ class WallDetailer:
             for layer in layers:
                 dimensions = np.array([layer.length, width, module.height])
 
-                fill_left = len(layer.left_connections) == 0
-                fill_right = len(layer.right_connections) == 0
+                fill_left = len(layer.left_connections) == 0 or True
+                fill_right = len(layer.right_connections) == 0 or True
                 transformations = bond.apply(*dimensions, fill_left, fill_right, counter, layer.relative_x_offset)
                 for tf in transformations:
                     local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
@@ -119,8 +119,13 @@ class WallDetailer:
         angle = corner.get_rotation()
         for layer in corner.layers:
             # how far the corner stretches into the layer (x direction)
-            relative_rotation = (main_layer.parent.get_rotation() * angle) / layer.parent.get_rotation()
-            corner_length = bond.get_corner_width(layer.get_layer_index(), relative_rotation)
+
+            relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
+
+            #print("main", layer == main_layer, relative_rotation, quaternion.as_euler_angles(relative_rotation))
+            a = relative_rotation.angle()
+            #print(a, round(math.degrees(a), 6), quaternion.from_euler_angles(0, 0, a))
+            corner_length = bond.get_corner_length(layer.get_layer_index(), quaternion.from_euler_angles(0, 0, a) * angle)
             layer.move_edge(corner.point, corner_length)
 
         return brick_ret
@@ -261,7 +266,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = SimpleCorners()
+    scenario = FancyCorners()
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
 

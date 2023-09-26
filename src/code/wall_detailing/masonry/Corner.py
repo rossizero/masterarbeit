@@ -58,20 +58,21 @@ class Corn:
         """
         :return: the (or a) layer in which this corner point lies in
         """
-        ret = None
-        li = list(self.layers)  # we want to get the same layer for layers of the same two walls
+        # we want to always get the same main layer for any set of layers of the same two walls
+        # so in case there are two layers, in which the corner point lies inside (aka the layers overlap) we
+        # would get a random main layer (depending on the order of the set) every time. By sorting them (operator has
+        # been overridden) we prevent that
+        li = list(self.layers)
         li.sort()
 
         for l in li:
             main = Line(l.left_edge, l.right_edge).on_line(self.point, between=True)
             if main:
-                ret = l
-                break
+                return l
 
         # Prevents an error in which none of the wall is actually the main wall.
         # Indicates that mistakes have been made earlier (most possibly while modeling).
-        assert ret is not None
-        return ret
+        assert False
 
     def get_rotation(self) -> np.quaternion:
         ret = np.quaternion(1, 0, 0, 0)
@@ -101,9 +102,8 @@ class Corn:
             # normalise rotation
             mid = quaternion.rotate_vectors(main_layer.parent.get_rotation().inverse(), mid)
             z_rot = np.arctan2(mid[1], mid[0])
-
             # subtract the 45 degrees from above
-            ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi/4)
+            ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi/4.0)
         return ret
 
 

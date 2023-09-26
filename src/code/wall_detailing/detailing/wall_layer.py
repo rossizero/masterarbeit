@@ -149,16 +149,17 @@ class WallLayer:
         is_left = np.linalg.norm(start_point - self.left_edge) < np.linalg.norm(start_point - self.right_edge)
         local_start_point = start_point - self.parent.get_translation()
         local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
-        local_start_point = np.round(local_start_point, 6)
+        #local_start_point = np.round(local_start_point, 6)
         right = self.get_right_edge(True)
         left = self.get_left_edge(True)
         if is_left:
-            x = np.round(local_start_point - left, 6)
+            x = local_start_point - left
         else:
-            x = np.round(right - local_start_point, 6)
+            x = right - local_start_point
 
-        length = corner_length - (abs(x[0]) - x[0])
-        print("l" if is_left else "r", length, x[0])
+        x = round(x[0], 6)
+        length = corner_length - (abs(x) - x)
+        print(self.parent.name, "l" if is_left else "r", corner_length, length)
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
 
     def __lt__(self, other):

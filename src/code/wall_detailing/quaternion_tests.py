@@ -89,4 +89,4 @@ if __name__ == "__main__":
     print(quaternion.rotate_vectors(quaternion.from_euler_angles(0, 0, -math.pi / 2.0), vec))
     print(quaternion.rotate_vectors(q90*q90, vec))
     print(quaternion.rotate_vectors(q90*quaternion.from_euler_angles(0, 0, -math.pi / 2.0), vec))
-
+    print(q90, q90.inverse(), q90.inverse() * q90, q90 * q90.inverse())

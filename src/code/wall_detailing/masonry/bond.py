@@ -178,7 +178,7 @@ class Bond(ABC):
 
         return ret
 
-    def get_corner_width(self, layer: int = 0, rotation: np.quaternion = np.quaternion(1, 0, 0, 0)) -> float:  # TODO yet to be tested with more complex bonds that stretched
+    def get_corner_length(self, layer: int = 0, rotation: np.quaternion = np.quaternion(1, 0, 0, 0)) -> float:  # TODO yet to be tested with more complex bonds that stretched
         plan = self._get_corner_plan()
         ret = 0
 
