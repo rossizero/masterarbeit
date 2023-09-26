@@ -1,4 +1,4 @@
-name: masterarbeit
+name: masterarbeit2
 channels:
   - conda-forge
   - defaults
