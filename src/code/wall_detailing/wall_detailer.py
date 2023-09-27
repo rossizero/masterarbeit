@@ -20,16 +20,44 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2
 
 
 class WallDetailer:
-    def __init__(self, walls: List[Wall], brick_information: Dict[str, List[BrickInformation]]):
+    def __init__(self, walls: List[Wall], brick_information: List[BrickInformation]):
         self.walls = walls
         self.brick_information = brick_information
+        self.brick_information.sort(key=lambda x: x.volume(), reverse=True)
+        self.module = self.brick_information[0]
+        self.bond = StrechedBond(self.module)
+
+    def detail(self):
+        bricks = []
+        wall_layer_groups = []
+
+        # convert walls to layergroups
+        for w in self.walls:
+            wall_layer_groups.append(WallLayerGroup.from_wall(w, self.module))
+
+        # combine groups if possible
+        wall_layer_groups = self.combine_layer_groups(wall_layer_groups)
+        cs = self.check_corners(wall_layer_groups)
+
+        for corner in cs.corners:
+            layers = list(corner.layers)
+            if len(layers) == 2:
+                bricks.extend(self.detail_corner(corner))
+            else:
+                # t-joint MAYDO combine t-joints
+                # crossing MAYDO combine two walls
+                pass
+
+        for wall in wall_layer_groups:
+            bricks.extend(self.detail_wall(wall))
+        return bricks
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
         """
         Combines all WallLayerGroups that touch, have the same z orientation and are at 0 / 180 degrees to each other
         or are exactly above / beyond each other
-        :param wall_layer_groups:
-        :return:
+        :param wall_layer_groups: List of WallLayerGroups we want to check for combination possibilities
+        :return: a new possibly smaller list of WallLayerGroups. Input WallLayerGroup Object will be altered.
         """
         groups = wall_layer_groups.copy()
         ret = []
@@ -48,11 +76,15 @@ class WallDetailer:
                     break
         return ret
 
-    def detail_wall_new(self, wall: WallLayerGroup):
+    def detail_wall(self, wall: WallLayerGroup) -> List[Brick]:
+        """
+        Fills a WallLayerGroup with bricks using the set bond
+        :param wall: WallLayerGroup we wan to be filled
+        :return: List of brick objects
+        """
         brick_ret = []
         original_rotation = wall.get_rotation()
         module = wall.module
-        bond = StrechedBond(module)
         width = module.width  # TODO bond width
 
         counter = 0
@@ -64,7 +96,7 @@ class WallDetailer:
 
                 fill_left = len(layer.left_connections) == 0 or True
                 fill_right = len(layer.right_connections) == 0 or True
-                transformations = bond.apply(*dimensions, fill_left, fill_right, counter, layer.relative_x_offset)
+                transformations = self.bond.apply(*dimensions, fill_left, fill_right, counter, layer.relative_x_offset)
                 for tf in transformations:
                     local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
                     local_rotation = tf.get_rotation()  # rotation of the brick around itself
@@ -82,33 +114,34 @@ class WallDetailer:
             counter += 1
         return brick_ret
 
-    def detail_corner(self, corner: Corn):
+    def detail_corner(self, corner: Corn) -> List[Brick]:
+        """
+        Fills a Corner with bricks using the set bond
+        :param corner: Corner we want to be filled
+        :return: List of brick objects
+        """
         brick_ret = []
         main_layer = corner.get_main_layer()
-        print("main", main_layer.parent.name)
 
-        module = main_layer.parent.module
-        bond = StrechedBond(module)  # TODO must be set somewhere else
-
-        dimensions = np.array([main_layer.length, module.width, module.height])
+        dimensions = np.array([main_layer.length, self.module.width, self.module.height])
         original_rotation = main_layer.parent.get_rotation()
         corner_rotation = corner.get_rotation()
         layer_index = main_layer.get_layer_index()
 
-        for tf in bond.apply_corner(layer_index):
+        for tf in self.bond.apply_corner(layer_index):
             local_position = tf.get_position()  # position in wall itself
             local_position[2] = 0.0  # MAYDO ugly
             local_rotation = tf.get_rotation()
 
-            b = Brick(module)
+            b = Brick(self.module)
             b.rotate(local_rotation)
 
             # rotate around the mid of two overlapping modules
-            vec = np.array([module.width / 2, module.width / 2, 0.0])
+            vec = np.array([self.module.width / 2, self.module.width / 2, 0.0])
             b.rotate_around(corner_rotation, vec)
 
             p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.point)
-            p1_rotated[2] -= module.height
+            p1_rotated[2] -= self.module.height
             tmp = local_position + p1_rotated - vec
 
             b.translate(tmp)
@@ -117,20 +150,17 @@ class WallDetailer:
             brick_ret.append(b)
 
         angle = corner.get_rotation()
+
         for layer in corner.layers:
-            # how far the corner stretches into the layer (x direction)
-
             relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
-
-            #print("main", layer == main_layer, relative_rotation, quaternion.as_euler_angles(relative_rotation))
-            a = relative_rotation.angle()
-            #print(a, round(math.degrees(a), 6), quaternion.from_euler_angles(0, 0, a))
-            corner_length = bond.get_corner_length(layer.get_layer_index(), quaternion.from_euler_angles(0, 0, a) * angle)
+            a = relative_rotation.angle()  # we know the represents the z-rotation difference
+            # how far the corner stretches into the layer (x direction)
+            corner_length = self.bond.get_corner_length(layer.get_layer_index(), quaternion.from_euler_angles(0, 0, a) * angle)
             layer.move_edge(corner.point, corner_length)
 
         return brick_ret
 
-    def check_corners_new(self, wall_layer_groups: List[WallLayerGroup]) -> Corns:
+    def check_corners(self, wall_layer_groups: List[WallLayerGroup]) -> Corns:
         corners = Corns()
 
         for i, w1 in enumerate(wall_layer_groups):
@@ -150,7 +180,6 @@ class WallDetailer:
                 touching = w1.is_touching(w2)
                 same_wall_type = w1.module == w2.module
 
-                #print(w1.name, "touching" if touching else "not touching ", w2.name, z_parallel, degree90)
                 if not (z_parallel and degree90 and touching and same_wall_type):
                     continue
 
@@ -195,39 +224,7 @@ class WallDetailer:
                         except AssertionError:
                             #print("intersection points are not the same for", w1.name, "and", w2.name,  "even though they are touching")
                             continue
-        print("corner counter", len(corners.corners))
         return corners
-
-    def detail_new(self):
-        bricks = []
-        wall_layer_groups = []
-
-        # convert walls to layergroups
-        for w in self.walls:
-            module = self.brick_information[w.ifc_wall_type]
-            module.sort(key=lambda x: x.volume(), reverse=True)
-            module = module[0]
-            wall_layer_groups.append(WallLayerGroup.from_wall(w, module))
-
-        # combine groups if possible
-        wall_layer_groups = self.combine_layer_groups(wall_layer_groups)
-        cs = self.check_corners_new(wall_layer_groups)
-
-        for corner in cs.corners:
-            layers = list(corner.layers)
-            if len(layers) == 2:
-                bricks.extend(self.detail_corner(corner))
-                pass
-            elif len(layers) == 3:
-                # t-joint MAYDO combine t-joints
-                pass
-            else:
-                # crossing MAYDO combine two walls
-                pass
-        for wall in wall_layer_groups:
-            pass
-            bricks.extend(self.detail_wall_new(wall))
-        return bricks
 
     @staticmethod
     def convert_to_stl(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = None):
@@ -271,6 +268,6 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(scenario.walls, brick_information)
 
     bb = []
-    bb = wall_detailer.detail_new()
+    bb = wall_detailer.detail()
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])

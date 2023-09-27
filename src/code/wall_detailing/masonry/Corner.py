@@ -1,5 +1,4 @@
 import math
-
 import numpy as np
 import quaternion
 
@@ -47,16 +46,21 @@ class Line:
 
 
 class Corn:
+    """
+    A class to store information about two layers that form a corner
+    """
     def __init__(self, point: np.array):
-        self.point = point
-        self.layers = set()
+        self.point = point  # center of the corner
+        self.layers = set()  # layers that form the corner
 
     def __eq__(self, other: "Corn"):
         return np.allclose(self.point, other.point)
 
     def get_main_layer(self):
         """
-        :return: the (or a) layer in which this corner point lies in
+        The main layer is considered to be the or one layer in which the corner point lies in.
+        Its rotation is being used for calculations.
+        :return: the main layer
         """
         # we want to always get the same main layer for any set of layers of the same two walls
         # so in case there are two layers, in which the corner point lies inside (aka the layers overlap) we
@@ -75,6 +79,10 @@ class Corn:
         assert False
 
     def get_rotation(self) -> np.quaternion:
+        """
+        How do we have to rotate the Corner Plan of a bond to lie above the axis the layers form
+        :return: rotation we have to apply to the corner plan of a bond
+        """
         ret = np.quaternion(1, 0, 0, 0)
         if len(self.layers) == 2:
             # the wall we "place" the corner onto
@@ -108,6 +116,11 @@ class Corn:
 
 
 class Corns:
+    """
+    A class that handles a list of corners.
+    If we find a corner that already exists, we simply add the layers to the existing layers that already
+    form the corner. (T- Joints or Crossings can be made possible this way)
+    """
     def __init__(self):
         self.corners = []
 

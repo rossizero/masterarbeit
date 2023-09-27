@@ -1,6 +1,8 @@
 import numpy as np
 import quaternion
 
+from typing import List
+
 
 class WallLayer:
     """
@@ -16,6 +18,12 @@ class WallLayer:
         self.right_connections: List['WallLayer'] = []
 
     def combine(self, other: 'WallLayer'):
+        """
+        Combines two wall layers to one. Only makes sense if the two layers have the same orientation,
+        module and are on the same height
+        :param other: the other wall layer that will be included into self
+        :return: nothing
+        """
         total_length = self.length + other.length
         global_mid = (self.center * self.length + other.center * other.length) / total_length
         local_mid = global_mid - self.parent.get_translation()
@@ -34,9 +42,16 @@ class WallLayer:
 
     @property
     def left_edge(self):
+        """
+        :return: the left edge of this layer in world coordinates
+        """
         return self.get_left_edge()
 
     def get_left_edge(self, relative: bool = False) -> np.array:
+        """
+        :param relative: whether we want the relative or world coordinates of the center
+        :return: coordinates of the left edge of this layer
+        """
         ret = self.translation.copy()
         ret[0] -= self.length/2.0
 
@@ -47,9 +62,16 @@ class WallLayer:
 
     @property
     def right_edge(self):
+        """
+        :return: the right edge of this layer in world coordinates
+        """
         return self.get_right_edge()
 
     def get_right_edge(self, relative: bool = False) -> np.array:
+        """
+        :param relative: whether we want the relative or world coordinates of the center
+        :return: coordinates of the right edge of this layer
+        """
         ret = self.translation.copy()
         ret[0] += self.length / 2.0
 
@@ -59,9 +81,8 @@ class WallLayer:
         return ret
 
     @property
-    def relative_x_offset(self):
+    def relative_x_offset(self) -> float:
         """
-
         :return: the difference between the lowest x coordinate of all layers of the parent and self
         """
         a = min(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
@@ -69,10 +90,17 @@ class WallLayer:
         return a - b
 
     @property
-    def center(self, relative: bool = False) -> np.array:
+    def center(self) -> np.array:
+        """
+        :return: the center of this layer in world coordinates
+        """
         return self.get_center()
 
     def get_center(self, relative: bool = False) -> np.array:
+        """
+        :param relative: whether we want the relative or world coordinates of the center
+        :return: coordinates of the center of this wall_layer
+        """
         ret = self.translation.copy()
 
         if not relative:
@@ -80,14 +108,26 @@ class WallLayer:
             ret += self.parent.get_translation()
         return ret
 
-    def is_touching(self, other: 'WallLayer', tolerance: float =1.e-8):
+    def is_touching(self, other: 'WallLayer', tolerance: float = 1.e-8) -> bool:
+        """
+        Checks if self and other edges are (nearly) touching
+        :param other: the other wall_layer
+        :param tolerance: how close the two edge points have to be
+        :return:
+        """
         a = np.allclose(self.right_edge, other.left_edge, atol=tolerance)
         b = np.allclose(self.right_edge, other.right_edge, atol=tolerance)
         c = np.allclose(self.left_edge, other.left_edge, atol=tolerance)
         d = np.allclose(self.left_edge, other.right_edge, atol=tolerance)
         return a or b or c or d
 
-    def is_above_or_below(self, other: 'WallLayer', height:float = 0.0):
+    def is_above_or_below(self, other: 'WallLayer', height: float = 0.0) -> bool:
+        """
+        Checks if self is exactly one module height above or below another layer
+        :param other: other wall_layer
+        :param height:
+        :return:
+        """
         a = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), self.left_edge)
         b = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), self.right_edge)
 
@@ -121,22 +161,12 @@ class WallLayer:
 
         # move center
         if not from_left == from_right:
-            diff = self.length/2.0 - (self.length - length) / 2.0  # brain lag ^^
-            diff = length / 2.0
             if from_left:
-                self.translation[0] += diff
+                self.translation[0] += length / 2.0
             else:
-                self.translation[0] -= diff
+                self.translation[0] -= length / 2.0
         self.length -= length
         return True
-
-    def is_point_left_or_right(self, point: np.array):
-        """
-
-        :param point:
-        :return: True if left, False if right edge is closer
-        """
-        return np.linalg.norm(point - self.left_edge) < np.linalg.norm(point - self.right_edge)
 
     def move_edge(self, start_point: np.array, length: float = 0):
         """
@@ -145,25 +175,28 @@ class WallLayer:
         :param length: how far we want to move the edge
         :return: nothing
         """
-        corner_length = length
         is_left = np.linalg.norm(start_point - self.left_edge) < np.linalg.norm(start_point - self.right_edge)
         local_start_point = start_point - self.parent.get_translation()
         local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
-        #local_start_point = np.round(local_start_point, 6)
+
         right = self.get_right_edge(True)
         left = self.get_left_edge(True)
+
         if is_left:
             x = local_start_point - left
         else:
             x = right - local_start_point
 
         x = round(x[0], 6)
-        length = corner_length - (abs(x) - x)
-        print(self.parent.name, "l" if is_left else "r", corner_length, length)
+        length -= (abs(x) - x)
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
 
     def __lt__(self, other):
+        """
+        Needed to be able to sort layers by their parents
+        :param other:
+        :return:
+        """
         if type(other) is WallLayer:
             return self.parent < other.parent
         return True
-

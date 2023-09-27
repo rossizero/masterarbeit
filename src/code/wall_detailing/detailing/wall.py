@@ -16,6 +16,9 @@ import quaternion
 
 
 class Wall:
+    """
+    A Wall that comes from an ifc file
+    """
     def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, name: str = ""):
         self.name = name
         self.ifc_wall_type = ifc_wall_type

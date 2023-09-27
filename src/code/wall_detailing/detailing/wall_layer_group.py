@@ -1,5 +1,5 @@
 import math
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import quaternion
@@ -10,7 +10,10 @@ from masonry.brick import BrickInformation
 
 
 class WallLayerGroup:
-    idd = 0
+    """
+    A class that holds all layers of a Wall with certain module being used to slice it
+    """
+    idd = 0  # needed for comparison between two / sorting of  WallLayerGroups
 
     def __init__(self, module: BrickInformation, name: str = None):
         self.module = module
@@ -21,7 +24,7 @@ class WallLayerGroup:
         self.id = WallLayerGroup.idd
         WallLayerGroup.idd += 1
 
-    def combine(self, other: 'WallLayerGroup'):
+    def combine(self, other: 'WallLayerGroup') -> bool:
         """
         :param other: the wall we try to combine with ourselfs
         :return: whether or not we actually combined anything. If we did, the incoming object is now obsolete
@@ -62,18 +65,6 @@ class WallLayerGroup:
                     self.layers.append(l)
         return to_combine and combined
 
-    @property
-    def min_height(self):
-        if len(self.layers) > 0:
-            return min([l.height for l in self.layers])
-        return None
-
-    @property
-    def max_height(self):
-        if len(self.layers) > 0:
-            return max([l.height for l in self.layers])
-        return None
-
     def get_rotation(self) -> quaternion:
         """
         returns the rotation part of this walls transformation
@@ -86,7 +77,10 @@ class WallLayerGroup:
         """
         return self.translation.copy()
 
-    def get_lowest_local_x(self):
+    def get_lowest_local_x(self) -> Optional[float]:
+        """
+        :return: the smallest local x coordinate of all of the layers
+        """
         if len(self.layers) > 0:
             lefts = min([l.get_left_edge(True)[0] for l in self.layers])
             rights = min([l.get_right_edge(True)[0] for l in self.layers])  # TODO maybe unnecessary
@@ -95,7 +89,6 @@ class WallLayerGroup:
 
     def get_sorted_layers(self) -> List[List[WallLayer]]:
         """
-
         :return: a list containing lists of layers that share the same z height sorted
         """
         self.layers.sort(key=lambda x: x.translation[2])
@@ -118,6 +111,11 @@ class WallLayerGroup:
         return ret
 
     def is_touching(self, other: 'WallLayerGroup'):
+        """
+        Check if at least one pair of layers of two WallLayerGroups are touching
+        :param other:
+        :return:
+        """
         # TODO make faster ^^
         for l1 in self.layers:
             for l2 in other.layers:
