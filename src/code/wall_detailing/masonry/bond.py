@@ -189,6 +189,27 @@ class Bond(ABC):
             ret = max(ret, l)
         return round(ret, 6)
 
+    def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0):
+        self.__reset()
+        self.__up(layer + 1)
+
+        num_bricks, leftover_left, leftover_right = self.bricks_in_layer(self.layer, length + x_offset)
+        leftover_left = length
+
+        for i in range(num_bricks):
+            tf = self.__next()
+            tf.module = self.module
+            tf.translation.offset[0] -= x_offset
+
+            if tf.get_position()[0] >= 0:
+                leftover_left = min(leftover_left, tf.get_position()[0])
+
+            # necessary because sometimes too small for the occ backend to handle
+            leftover_right = round(leftover_right, 6)
+            leftover_left = round(leftover_left, 6)
+        return leftover_left, leftover_right
+
+
     def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
         """
         Fills given dimensions with set layout plan

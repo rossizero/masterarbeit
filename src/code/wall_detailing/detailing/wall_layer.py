@@ -87,7 +87,7 @@ class WallLayer:
         """
         a = min(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
         b = self.parent.get_lowest_local_x()
-        return a - b
+        return round(a - b, 6)
 
     @property
     def center(self) -> np.array:

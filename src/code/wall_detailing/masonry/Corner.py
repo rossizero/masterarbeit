@@ -1,6 +1,11 @@
 import math
+from typing import List
+
 import numpy as np
 import quaternion
+
+from wall_detailing.detailing.wall_layer import WallLayer
+from wall_detailing.detailing.wall_layer_group import WallLayerGroup
 
 
 class Line:
@@ -52,6 +57,7 @@ class Corn:
     def __init__(self, point: np.array):
         self.point = point  # center of the corner
         self.layers = set()  # layers that form the corner
+        self.plan_offset = 0
 
     def __eq__(self, other: "Corn"):
         return np.allclose(self.point, other.point)
@@ -130,3 +136,70 @@ class Corns:
                 c.walls.update(corner.layers)
                 return
         self.corners.append(corner)
+
+
+def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
+    corners = Corns()
+
+    for i, w1 in enumerate(wall_layer_groups):
+        for j in range(i+1, len(wall_layer_groups)):
+            w2 = wall_layer_groups[j]
+
+            r1 = w1.get_rotation()
+            r2 = w2.get_rotation()
+            diff = r2 * r1.inverse()
+            angle = round(diff.angle(), 6)
+
+            # check if rotation of wall leads to parallel corners
+            z_part1 = quaternion.rotate_vectors(r1, np.array([0.0, 0.0, 1.0]))
+            z_part2 = quaternion.rotate_vectors(r2, np.array([0.0, 0.0, 1.0]))
+            z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
+            degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))
+            touching = w1.is_touching(w2)
+            same_wall_type = w1.module == w2.module
+
+            if not (z_parallel and degree90 and touching and same_wall_type):
+                continue
+
+            for l1 in w1.layers:
+                for l2 in w2.layers:
+                    if not l1.is_touching(l2, tolerance=w1.module.width):
+                        continue
+
+                    mid1 = l1.center
+                    mid2 = l2.center
+
+                    direction1 = quaternion.rotate_vectors(r1, np.array([1, 0, 0]))
+                    direction2 = quaternion.rotate_vectors(r2, np.array([1, 0, 0]))
+
+                    A = np.vstack((direction1, -direction2, [1, 1, 1])).T
+                    b_bottom = mid2 - mid1
+                    try:
+                        t = np.linalg.solve(A, b_bottom)
+
+                        # Calculate the intersection points on both lines
+                        intersection_point1 = mid1 + t[0] * direction1
+                        intersection_point2 = mid2 + t[1] * direction2
+                        assert np.allclose(intersection_point1, intersection_point2)
+
+                        c = Corn(intersection_point1)
+                        c.layers.update([l1, l2])
+                        corners.add_corner(c)
+
+                        if np.linalg.norm(intersection_point1 - l1.left_edge) < w1.module.width:  # TODO use wall width!
+                            l1.left_connections.append(l2)
+                        elif np.linalg.norm(intersection_point1 - l1.right_edge) < w1.module.width:
+                            l1.right_connections.append(l2)
+
+                        if np.linalg.norm(intersection_point1 - l2.left_edge) < w2.module.width:  # TODO use wall width!
+                            l2.left_connections.append(l1)
+                        elif np.linalg.norm(intersection_point1 - l2.right_edge) < w2.module.width:
+                            l2.right_connections.append(l1)
+
+                    except np.linalg.LinAlgError:
+                        #print("no intersection found between", w1.name, "and", w2.name,  "even though they are touching")
+                        continue
+                    except AssertionError:
+                        #print("intersection points are not the same for", w1.name, "and", w2.name,  "even though they are touching")
+                        continue
+    return corners

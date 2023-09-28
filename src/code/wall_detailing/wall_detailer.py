@@ -1,4 +1,5 @@
 import math
+from copy import deepcopy
 from typing import List, Dict, Optional
 import numpy as np
 import quaternion
@@ -18,6 +19,7 @@ from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2
+from wall_detailing.masonry import Corner
 
 
 class WallDetailer:
@@ -34,13 +36,14 @@ class WallDetailer:
             if w.ifc_wall_type not in wall_type_groups.keys():
                 wall_type_groups[w.ifc_wall_type] = WallTypeGroup(w.ifc_wall_type, self.brick_informations[w.ifc_wall_type])
             layer_group = WallLayerGroup.from_wall(w, wall_type_groups[w.ifc_wall_type].module)
-            wall_type_groups[w.ifc_wall_type].groups.append(layer_group)
+            wall_type_groups[w.ifc_wall_type].layer_groups.append(layer_group)
 
         for group in wall_type_groups.values():
             # combine layer_groups if possible
-            wall_layer_groups = self.combine_layer_groups(group.groups)
-            cs = self.check_corners(wall_layer_groups)
+            wall_layer_groups = self.combine_layer_groups(group.layer_groups)
+            cs = Corner.check_for_corners(wall_layer_groups)
             bond = group.bond
+            self.brute_force(group, cs, bond)
 
             for corner in cs.corners:
                 layers = list(corner.layers)
@@ -54,6 +57,46 @@ class WallDetailer:
             for wall in wall_layer_groups:
                 bricks.extend(self.detail_wall(wall, bond))
         return bricks
+
+    def tmp(self, corner: Corn, bond: Bond):
+        main_layer = corner.get_main_layer()
+        angle = corner.get_rotation()
+        ret = 0
+
+        for layer in corner.layers:
+            layer = deepcopy(layer)
+            relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
+            a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
+            relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
+            # how far the corner stretches into the layer (x direction)
+            corner_length = bond.get_corner_length(layer.get_layer_index(), relative_rotation)
+            layer.move_edge(corner.point, corner_length)
+            is_left = np.linalg.norm(corner.point - layer.left_edge) < np.linalg.norm(corner.point - layer.right_edge)
+            leftover_left, leftover_right = bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset)
+            if is_left:
+                leftover_left, leftover_right = leftover_right, leftover_left
+            c = leftover_left if len(layer.left_connections) > 0 else 0
+            d = leftover_right if len(layer.right_connections) > 0 else 0
+            wall = layer.parent.id
+            print(layer.parent.id, is_left, c, d, c + d)
+            ret += c + d
+        print("")
+        return ret
+
+    def brute_force(self, group: WallTypeGroup, corners: Corns, bond: Bond):
+        dic = {}
+        for corner in corners.corners:
+            walls = [layer.parent.id for layer in corner.layers]
+            key = tuple(sorted(walls))
+            if key not in dic.keys():
+                dic[key] = []
+            dic[key].append(corner)
+
+        val = 0
+        print(len(corners.corners))
+        for corner in corners.corners:
+            val += self.tmp(corner, bond)
+        print(val)
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
         """
@@ -100,7 +143,8 @@ class WallDetailer:
 
                 fill_left = len(layer.left_connections) == 0 #or True
                 fill_right = len(layer.right_connections) == 0 #or True
-                transformations = bond.apply(*dimensions, fill_left, fill_right, counter, layer.relative_x_offset)
+                transformations = bond.apply(*dimensions, fill_left, fill_right, layer.get_layer_index(), layer.relative_x_offset)
+
                 for tf in transformations:
                     local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
                     local_rotation = tf.get_rotation()  # rotation of the brick around itself
@@ -159,78 +203,13 @@ class WallDetailer:
 
         for layer in corner.layers:
             relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
-            a = relative_rotation.angle()  # we know the represents the z-rotation difference
+            a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
+            relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
             # how far the corner stretches into the layer (x direction)
-            corner_length = bond.get_corner_length(layer.get_layer_index(), quaternion.from_euler_angles(0, 0, a) * angle)
+            corner_length = bond.get_corner_length(layer.get_layer_index(), relative_rotation)
             layer.move_edge(corner.point, corner_length)
 
         return brick_ret
-
-    def check_corners(self, wall_layer_groups: List[WallLayerGroup]) -> Corns:
-        corners = Corns()
-
-        for i, w1 in enumerate(wall_layer_groups):
-            for j in range(i+1, len(wall_layer_groups)):
-                w2 = wall_layer_groups[j]
-
-                r1 = w1.get_rotation()
-                r2 = w2.get_rotation()
-                diff = r2 * r1.inverse()
-                angle = round(diff.angle(), 6)
-
-                # check if rotation of wall leads to parallel corners
-                z_part1 = quaternion.rotate_vectors(r1, np.array([0.0, 0.0, 1.0]))
-                z_part2 = quaternion.rotate_vectors(r2, np.array([0.0, 0.0, 1.0]))
-                z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
-                degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))
-                touching = w1.is_touching(w2)
-                same_wall_type = w1.module == w2.module
-
-                if not (z_parallel and degree90 and touching and same_wall_type):
-                    continue
-
-                for l1 in w1.layers:
-                    for l2 in w2.layers:
-                        if not l1.is_touching(l2, tolerance=w1.module.width):
-                            continue
-
-                        mid1 = l1.center
-                        mid2 = l2.center
-
-                        direction1 = quaternion.rotate_vectors(r1, np.array([1, 0, 0]))
-                        direction2 = quaternion.rotate_vectors(r2, np.array([1, 0, 0]))
-
-                        A = np.vstack((direction1, -direction2, [1, 1, 1])).T
-                        b_bottom = mid2 - mid1
-                        try:
-                            t = np.linalg.solve(A, b_bottom)
-
-                            # Calculate the intersection points on both lines
-                            intersection_point1 = mid1 + t[0] * direction1
-                            intersection_point2 = mid2 + t[1] * direction2
-                            assert np.allclose(intersection_point1, intersection_point2)
-
-                            c = Corn(intersection_point1)
-                            c.layers.update([l1, l2])
-                            corners.add_corner(c)
-
-                            if np.linalg.norm(intersection_point1 - l1.left_edge) < w1.module.width:  # TODO use wall width!
-                                l1.left_connections.append(l2)
-                            elif np.linalg.norm(intersection_point1 - l1.right_edge) < w1.module.width:
-                                l1.right_connections.append(l2)
-
-                            if np.linalg.norm(intersection_point1 - l2.left_edge) < w2.module.width:  # TODO use wall width!
-                                l2.left_connections.append(l1)
-                            elif np.linalg.norm(intersection_point1 - l2.right_edge) < w2.module.width:
-                                l2.right_connections.append(l1)
-
-                        except np.linalg.LinAlgError:
-                            #print("no intersection found between", w1.name, "and", w2.name,  "even though they are touching")
-                            continue
-                        except AssertionError:
-                            #print("intersection points are not the same for", w1.name, "and", w2.name,  "even though they are touching")
-                            continue
-        return corners
 
     @staticmethod
     def convert_to_stl(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = None):

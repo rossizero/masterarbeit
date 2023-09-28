@@ -84,7 +84,7 @@ class WallLayerGroup:
         if len(self.layers) > 0:
             lefts = min([l.get_left_edge(True)[0] for l in self.layers])
             rights = min([l.get_right_edge(True)[0] for l in self.layers])  # TODO maybe unnecessary
-            return min(lefts, rights)
+            return round(min(lefts, rights), 6)
         return None
 
     def get_sorted_layers(self) -> List[List[WallLayer]]:
