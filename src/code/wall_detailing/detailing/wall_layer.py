@@ -188,8 +188,9 @@ class WallLayer:
             x = right - local_start_point
 
         x = round(x[0], 6)
-        length -= (abs(x) - x)
+        length -= abs(x) - x
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
+        return length
 
     def __lt__(self, other):
         """

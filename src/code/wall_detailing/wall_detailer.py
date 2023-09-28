@@ -48,6 +48,7 @@ class WallDetailer:
             for corner in cs.corners:
                 layers = list(corner.layers)
                 if len(layers) == 2:
+                    #pass
                     bricks.extend(self.detail_corner(corner, bond))
                 else:
                     # t-joint MAYDO combine t-joints
@@ -63,22 +64,24 @@ class WallDetailer:
         angle = corner.get_rotation()
         ret = 0
 
-        for layer in corner.layers:
-            layer = deepcopy(layer)
+        for og_layer in corner.layers:
+            layer = deepcopy(og_layer)
             relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
             a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
             relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
             # how far the corner stretches into the layer (x direction)
             corner_length = bond.get_corner_length(layer.get_layer_index(), relative_rotation)
-            layer.move_edge(corner.point, corner_length)
+            rel_x_offset = layer.relative_x_offset
+            moved_dist = layer.move_edge(corner.point, corner_length)
             is_left = np.linalg.norm(corner.point - layer.left_edge) < np.linalg.norm(corner.point - layer.right_edge)
-            leftover_left, leftover_right = bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset)
-            if is_left:
-                leftover_left, leftover_right = leftover_right, leftover_left
+            leftover_left, leftover_right = bond.leftover_of_layer(layer.length, layer.get_layer_index(), rel_x_offset, layer.parent.id)
+            #leftover_left2, leftover_right2 = bond.leftover_of_layer(og_layer.length, og_layer.get_layer_index(), og_layer.relative_x_offset, og_layer.parent.id)
+
             c = leftover_left if len(layer.left_connections) > 0 else 0
             d = leftover_right if len(layer.right_connections) > 0 else 0
+
             wall = layer.parent.id
-            print(layer.parent.id, is_left, c, d, c + d)
+            print(layer.parent.id, is_left, c, d, c + d, "y: ", corner.point[2], rel_x_offset, layer.relative_x_offset, "dist", moved_dist, layer.length)
             ret += c + d
         print("")
         return ret
@@ -134,32 +137,29 @@ class WallDetailer:
         module = wall.module
         width = module.width  # TODO bond width
 
-        counter = 0
         original_translation = wall.get_translation()
 
-        for layers in wall.get_sorted_layers():
-            for layer in layers:
-                dimensions = np.array([layer.length, width, module.height])
+        for layer in wall.layers:
+            dimensions = np.array([layer.length, width, module.height])
 
-                fill_left = len(layer.left_connections) == 0 #or True
-                fill_right = len(layer.right_connections) == 0 #or True
-                transformations = bond.apply(*dimensions, fill_left, fill_right, layer.get_layer_index(), layer.relative_x_offset)
+            fill_left = len(layer.left_connections) == 0
+            fill_right = len(layer.right_connections) == 0
+            transformations = bond.apply(*dimensions, fill_left, fill_right, layer.get_layer_index(), layer.relative_x_offset)
 
-                for tf in transformations:
-                    local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
-                    local_rotation = tf.get_rotation()  # rotation of the brick around itself
+            for tf in transformations:
+                local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
+                local_rotation = tf.get_rotation()  # rotation of the brick around itself
 
-                    b = Brick(tf.module)
-                    b.rotate(local_rotation)
-                    # need to substract half of dimensions since its position coordinates are at its center
-                    center = layer.translation.copy() - dimensions / 2.0
-                    local_position += center
-                    local_position[2] = center[2] - module.height / 2.0
-                    b.translate(local_position)
-                    b.rotate_around(original_rotation)  # rotate to fit wall rotation
-                    b.translate(original_translation)  # translate to wall
-                    brick_ret.append(b)
-            counter += 1
+                b = Brick(tf.module)
+                b.rotate(local_rotation)
+                # need to substract half of dimensions since its position coordinates are at its center
+                center = layer.translation.copy() - dimensions / 2.0
+                local_position += center
+                local_position[2] = center[2] - module.height / 2.0
+                b.translate(local_position)
+                b.rotate_around(original_rotation)  # rotate to fit wall rotation
+                b.translate(original_translation)  # translate to wall
+                brick_ret.append(b)
         return brick_ret
 
     def detail_corner(self, corner: Corn, bond: Bond) -> List[Brick]:

@@ -101,7 +101,7 @@ class Bond(ABC):
         resets counters
         :return:
         """
-        self.layer = -1
+        self.layer = 0
         self.step = -1
         self.plan = self._get_plan()
 
@@ -167,7 +167,7 @@ class Bond(ABC):
         ret = []
         for t in plan[layer % len(plan)].copy():
             tf = t.copy()
-            tf.set_mask_multiplier(0, 0, 1)
+            tf.set_mask_multiplier(0, 0, layer)
             ret.append(tf)
 
         return ret
@@ -189,11 +189,11 @@ class Bond(ABC):
             ret = max(ret, l)
         return round(ret, 6)
 
-    def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0):
+    def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0, wall_id = 0):
         self.__reset()
-        self.__up(layer + 1)
+        self.__up(layer)
 
-        num_bricks, leftover_left, leftover_right = self.bricks_in_layer(self.layer, length + x_offset)
+        num_bricks, leftover_left, leftover_right = self.bricks_in_layer(layer, length + x_offset)
         leftover_left = length
 
         for i in range(num_bricks):
@@ -208,7 +208,6 @@ class Bond(ABC):
             leftover_right = round(leftover_right, 6)
             leftover_left = round(leftover_left, 6)
         return leftover_left, leftover_right
-
 
     def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
         """
@@ -230,7 +229,6 @@ class Bond(ABC):
 
         ret = []
         for j in range(num_layers):
-            self.__up()
             num_bricks, leftover_left, leftover_right = self.bricks_in_layer(self.layer, length + x_offset)
             leftover_left = length
 
@@ -262,6 +260,7 @@ class Bond(ABC):
                     tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
                 tf.set_mask_multiplier(1, 1, self.layer)
                 ret.append(tf)
+            self.__up()
         return ret
 
     def bricks_in_layer(self, layer: int, length: float) -> int:
