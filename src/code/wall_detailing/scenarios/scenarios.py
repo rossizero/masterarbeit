@@ -111,11 +111,6 @@ class SimpleCorners2(Scenario):
                        ifc_wall_type="test", name="w0")
         w1 = make_wall(10, 1, height, np.array([10.0, 5.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
                        ifc_wall_type="test", name="w1")
-<<<<<<< Updated upstream
-=======
-        w2 = make_wall(10, 1, 5, np.array([10.0, 5.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
-                       ifc_wall_type="test", name="w2")
->>>>>>> Stashed changes
         w3 = make_wall(10, 1, 5, np.array([14.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2),
                        ifc_wall_type="test", name="w3")
         w4 = make_wall(10, 1, 5, np.array([10.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
