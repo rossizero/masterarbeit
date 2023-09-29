@@ -189,7 +189,7 @@ class Bond(ABC):
             ret = max(ret, l)
         return round(ret, 6)
 
-    def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0, wall_id = 0):
+    def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0):
         self.__reset()
         self.__up(layer)
 
@@ -204,9 +204,9 @@ class Bond(ABC):
             if tf.get_position()[0] >= 0:
                 leftover_left = min(leftover_left, tf.get_position()[0])
 
-            # necessary because sometimes too small for the occ backend to handle
-            leftover_right = round(leftover_right, 6)
-            leftover_left = round(leftover_left, 6)
+        # necessary because sometimes too small for the occ backend to handle
+        leftover_right = round(leftover_right, 6)
+        leftover_left = round(leftover_left, 6)
         return leftover_left, leftover_right
 
     def apply(self, length, width, height, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
@@ -244,7 +244,9 @@ class Bond(ABC):
             # necessary because sometimes too small for the occ backend to handle
             leftover_right = round(leftover_right, 6)
             leftover_left = round(leftover_left, 6)
-
+            aa = leftover_left if fill_left else 0
+            bb = leftover_right if fill_right else 0
+            print(aa, bb, "sum", aa + bb, "x_off: ", x_offset, "len: ",  length)
             if leftover_left > 0.0 and fill_left:
                 tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
                 tf.module = BrickInformation(leftover_left, width, self.module.height)

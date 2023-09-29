@@ -8,6 +8,7 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.StlAPI import StlAPI_Writer
 
+from detailing.wall_layer import WallLayer
 from detailing.wall_layer_group import WallLayerGroup
 from detailing.wall_type_group import WallTypeGroup
 from masonry.bond import Bond
@@ -15,7 +16,7 @@ from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2
-from wall_detailing.masonry import Corner
+from masonry import Corner
 
 
 class WallDetailer:
@@ -55,35 +56,34 @@ class WallDetailer:
                 bricks.extend(self.detail_wall(wall, bond))
         return bricks
 
-    def tmp(self, corner: Corn, bond: Bond):
+    def tmp_reduce(self, corner: Corn, bond: Bond):
         main_layer = corner.get_main_layer()
         angle = corner.get_rotation()
-        ret = 0
 
-        for og_layer in corner.layers:
-            layer = deepcopy(og_layer)
+        for layer in corner.layers:
             relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
             a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
             relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
             # how far the corner stretches into the layer (x direction)
             corner_length = bond.get_corner_length(layer.get_layer_index(), relative_rotation)
-            rel_x_offset = layer.relative_x_offset
-            moved_dist = layer.move_edge(corner.point, corner_length)
-            is_left = np.linalg.norm(corner.point - layer.left_edge) < np.linalg.norm(corner.point - layer.right_edge)
-            leftover_left, leftover_right = bond.leftover_of_layer(layer.length, layer.get_layer_index(), rel_x_offset, layer.parent.id)
-            #leftover_left2, leftover_right2 = bond.leftover_of_layer(og_layer.length, og_layer.get_layer_index(), og_layer.relative_x_offset, og_layer.parent.id)
+            layer.move_edge(corner.point, corner_length)
 
-            c = leftover_left if len(layer.left_connections) > 0 else 0
-            d = leftover_right if len(layer.right_connections) > 0 else 0
+    def tmp(self, layer: WallLayer, bond: Bond):
+        ret = 0
+        leftover_left, leftover_right = bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset)
+        # necessary because sometimes too small for the occ backend to handle
+        leftover_right = round(leftover_right, 6)
+        leftover_left = round(leftover_left, 6)
 
-            wall = layer.parent.id
-            print(layer.parent.id, is_left, c, d, c + d, "y: ", corner.point[2], rel_x_offset, layer.relative_x_offset, "dist", moved_dist, layer.length)
-            ret += c + d
-        print("")
+        c = leftover_left if len(layer.left_connections) > 0 else 0
+        d = leftover_right if len(layer.right_connections) > 0 else 0
+        print(c, d, "sum", c + d, "x_off", layer.relative_x_offset, "len", layer.length)
+        ret += c + d
         return ret
 
     def brute_force(self, group: WallTypeGroup, corners: Corns, bond: Bond):
         dic = {}
+        corners = deepcopy(corners)
         for corner in corners.corners:
             walls = [layer.parent.id for layer in corner.layers]
             key = tuple(sorted(walls))
@@ -92,10 +92,17 @@ class WallDetailer:
             dic[key].append(corner)
 
         val = 0
-        print(len(corners.corners))
+        walls = set()
         for corner in corners.corners:
-            val += self.tmp(corner, bond)
-        print(val)
+            self.tmp_reduce(corner, bond)
+            for l in corner.layers:
+                walls.add(l.parent)
+
+        for wall in walls:
+            print("wall:", wall.id)
+            for layer in wall.layers:
+                val += self.tmp(layer, bond)
+        print("brute", val, "\n")
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
         """
@@ -135,6 +142,7 @@ class WallDetailer:
 
         original_translation = wall.get_translation()
 
+        print("wall: ", wall.id)
         for layer in wall.layers:
             dimensions = np.array([layer.length, width, module.height])
 

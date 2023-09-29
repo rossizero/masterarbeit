@@ -106,7 +106,7 @@ class SimpleCorners2(Scenario):
     def get_walls(self):
         an = math.pi / 2 * 1.22432
         an = 0
-        height = 0.5 * 3
+        height = 0.5 * 2
         w0 = make_wall(10, 1, height, np.array([5.5, 0.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w0")
         w1 = make_wall(10, 1, height, np.array([10.0, 5.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),

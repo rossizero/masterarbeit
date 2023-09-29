@@ -4,8 +4,8 @@ from typing import List
 import numpy as np
 import quaternion
 
-from wall_detailing.detailing.wall_layer import WallLayer
-from wall_detailing.detailing.wall_layer_group import WallLayerGroup
+from detailing.wall_layer import WallLayer
+from detailing.wall_layer_group import WallLayerGroup
 
 
 class Line:
