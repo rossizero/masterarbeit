@@ -80,7 +80,6 @@ class WallLayer:
             ret += self.parent.get_translation()
         return ret
 
-    @property
     def relative_x_offset(self) -> float:
         """
         :return: the difference between the lowest x coordinate of all layers of the parent and self

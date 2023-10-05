@@ -40,7 +40,7 @@ class WallDetailer:
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
             cs = Corner.check_for_corners(wall_layer_groups)
             bond = group.bond
-            self.brute_force(group, cs, bond)
+            self.brute_force(cs, bond)
 
             for corner in cs.corners:
                 layers = list(corner.layers)
@@ -56,7 +56,7 @@ class WallDetailer:
                 bricks.extend(self.detail_wall(wall, bond))
         return bricks
 
-    def tmp_reduce(self, corner: Corn, bond: Bond):
+    def reduce_corner_layer_length(self, corner: Corn, bond: Bond):
         main_layer = corner.get_main_layer()
         angle = corner.get_rotation()
 
@@ -65,41 +65,32 @@ class WallDetailer:
             a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
             relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
             # how far the corner stretches into the layer (x direction)
-            corner_length = bond.get_corner_length(layer.get_layer_index(), relative_rotation)
+            corner_length = bond.get_corner_length(main_layer.get_layer_index(), relative_rotation)
             layer.move_edge(corner.point, corner_length)
 
     def tmp(self, layer: WallLayer, bond: Bond):
         ret = 0
-        leftover_left, leftover_right = bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset)
-        # necessary because sometimes too small for the occ backend to handle
-        leftover_right = round(leftover_right, 6)
-        leftover_left = round(leftover_left, 6)
+        leftover_left, leftover_right, num_bricks = bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset())
 
-        c = leftover_left if len(layer.left_connections) > 0 else 0
-        d = leftover_right if len(layer.right_connections) > 0 else 0
-        print(c, d, "sum", c + d, "x_off", layer.relative_x_offset, "len", layer.length)
+        c = leftover_left if len(layer.left_connections) > 0 else 0.0
+        d = leftover_right if len(layer.right_connections) > 0 else 0.0
+        print("  ", c, d, "sum", c + d, "x_off:", layer.relative_x_offset(), "len:", layer.length, "ind", layer.get_layer_index(), bond.layer, num_bricks)
+
         ret += c + d
         return ret
 
-    def brute_force(self, group: WallTypeGroup, corners: Corns, bond: Bond):
-        dic = {}
-        corners = deepcopy(corners)
-        for corner in corners.corners:
-            walls = [layer.parent.id for layer in corner.layers]
-            key = tuple(sorted(walls))
-            if key not in dic.keys():
-                dic[key] = []
-            dic[key].append(corner)
+    def brute_force(self, corns: Corns, bond: Bond):
+        corners = deepcopy(corns)
 
         val = 0
         walls = set()
         for corner in corners.corners:
-            self.tmp_reduce(corner, bond)
+            self.reduce_corner_layer_length(corner, bond)
             for l in corner.layers:
                 walls.add(l.parent)
 
         for wall in walls:
-            print("wall:", wall.id)
+            print("wall:", wall.id, wall.get_rotation(), wall.get_translation())
             for layer in wall.layers:
                 val += self.tmp(layer, bond)
         print("brute", val, "\n")
@@ -142,13 +133,13 @@ class WallDetailer:
 
         original_translation = wall.get_translation()
 
-        print("wall: ", wall.id)
+        print("wall: ", wall.id, wall.get_rotation(), wall.get_translation())
         for layer in wall.layers:
             dimensions = np.array([layer.length, width, module.height])
 
             fill_left = len(layer.left_connections) == 0
             fill_right = len(layer.right_connections) == 0
-            transformations = bond.apply(*dimensions, fill_left, fill_right, layer.get_layer_index(), layer.relative_x_offset)
+            transformations = bond.apply_layer(layer.length, width, fill_left, fill_right, layer.get_layer_index(), layer.relative_x_offset())
 
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
@@ -175,6 +166,7 @@ class WallDetailer:
         """
         brick_ret = []
         main_layer = corner.get_main_layer()
+
         module = main_layer.parent.module
 
         dimensions = np.array([main_layer.length, module.width, module.height])
@@ -202,16 +194,7 @@ class WallDetailer:
             b.rotate_around(original_rotation)
 
             brick_ret.append(b)
-
-        angle = corner.get_rotation()
-
-        for layer in corner.layers:
-            relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
-            a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
-            relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
-            # how far the corner stretches into the layer (x direction)
-            corner_length = bond.get_corner_length(layer.get_layer_index(), relative_rotation)
-            layer.move_edge(corner.point, corner_length)
+        self.reduce_corner_layer_length(corner, bond)
 
         return brick_ret
 
