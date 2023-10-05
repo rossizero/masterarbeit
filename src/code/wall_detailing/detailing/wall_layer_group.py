@@ -22,6 +22,7 @@ class WallLayerGroup:
         self.translation = np.array([0, 0, 0])  # of wall mid
         self.name = name
         self.id = WallLayerGroup.idd
+        self.plan_offset = 0
         WallLayerGroup.idd += 1
 
     def combine(self, other: 'WallLayerGroup') -> bool:

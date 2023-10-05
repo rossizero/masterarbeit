@@ -37,7 +37,7 @@ class WallLayer:
         """
         for i, l in enumerate(self.parent.get_sorted_layers()):
             if self in l:
-                return i
+                return i + self.parent.plan_offset
         return None
 
     @property

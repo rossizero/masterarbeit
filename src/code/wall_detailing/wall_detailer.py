@@ -65,7 +65,7 @@ class WallDetailer:
             a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
             relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
             # how far the corner stretches into the layer (x direction)
-            corner_length = bond.get_corner_length(main_layer.get_layer_index(), relative_rotation)
+            corner_length = bond.get_corner_length(main_layer.get_layer_index() + corner.plan_offset, relative_rotation)
             layer.move_edge(corner.point, corner_length)
 
     def tmp(self, layer: WallLayer, bond: Bond):
@@ -80,20 +80,51 @@ class WallDetailer:
         return ret
 
     def brute_force(self, corns: Corns, bond: Bond):
-        corners = deepcopy(corns)
+        num_groups = len(corns.grouped_by_walls().keys())
+        counter = 0
+        current_min = len(corns.corners) * 2
 
-        val = 0
-        walls = set()
-        for corner in corners.corners:
-            self.reduce_corner_layer_length(corner, bond)
-            for l in corner.layers:
-                walls.add(l.parent)
+        def bin_array(num, m):
+            """Convert a positive integer num into an m-bit bit vector"""
+            return np.array(list(np.binary_repr(num).zfill(m))).astype(np.int8)
 
-        for wall in walls:
-            print("wall:", wall.id, wall.get_rotation(), wall.get_translation())
-            for layer in wall.layers:
-                val += self.tmp(layer, bond)
-        print("brute", val, "\n")
+        current_best = bin_array(counter, num_groups)
+
+        while counter < 2**num_groups:
+            val = 0
+            corners = deepcopy(corns)
+            grouped2 = corners.grouped_by_walls()
+
+            arr = bin_array(counter, num_groups)
+            counter += 1
+
+            for i, key in enumerate(grouped2.keys()):
+                for c in grouped2[key]:
+                    c.plan_offset = arr[i]
+
+            walls = set()
+            for corner in corners.corners:
+                self.reduce_corner_layer_length(corner, bond)
+                for l in corner.layers:
+                    walls.add(l.parent)
+
+            for wall in walls:
+                for layer in wall.layers:
+                    val += self.tmp(layer, bond)
+
+            if val < current_min:
+                current_min = val
+                current_best = arr.copy()
+                if val == 0:
+                    break
+            print("value", val)
+
+        print("result", current_min, current_best)
+        # set the plan_offsets of actual corners to those we found
+        grouped1 = corns.grouped_by_walls()
+        for i, key in enumerate(grouped2.keys()):
+            for c in grouped1[key]:
+                c.plan_offset = current_best[i]
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
         """
@@ -133,7 +164,6 @@ class WallDetailer:
 
         original_translation = wall.get_translation()
 
-        print("wall: ", wall.id, wall.get_rotation(), wall.get_translation())
         for layer in wall.layers:
             dimensions = np.array([layer.length, width, module.height])
 
@@ -174,7 +204,7 @@ class WallDetailer:
         corner_rotation = corner.get_rotation()
         layer_index = main_layer.get_layer_index()
 
-        for tf in bond.apply_corner(layer_index):
+        for tf in bond.apply_corner(layer_index + corner.plan_offset):
             local_position = tf.get_position()  # position in wall itself
             local_position[2] = 0.0  # MAYDO ugly
             local_rotation = tf.get_rotation()

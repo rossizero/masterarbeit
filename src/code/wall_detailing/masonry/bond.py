@@ -215,7 +215,7 @@ class Bond(ABC):
 
         c = leftover_left if not fill_left else 0.0
         d = leftover_right if not fill_right else 0.0
-        print("  ", c, d, "sum", c + d, "x_off:", x_offset, "len: ",  length, "ind", layer, self.layer, num_bricks)
+        #print("  ", c, d, "sum", c + d, "x_off:", x_offset, "len: ",  length, "ind", layer, self.layer, num_bricks)
 
         if leftover_left > 0.0 and fill_left:
             tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))

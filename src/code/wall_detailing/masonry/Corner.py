@@ -1,5 +1,5 @@
 import math
-from typing import List
+from typing import List, Dict, Tuple
 
 import numpy as np
 import quaternion
@@ -136,6 +136,16 @@ class Corns:
                 c.walls.update(corner.layers)
                 return
         self.corners.append(corner)
+
+    def grouped_by_walls(self) -> Dict[Tuple[int], List[Corn]]:
+        dic = {}
+        for corner in self.corners:
+            walls = [layer.parent.id for layer in corner.layers]
+            key = tuple(sorted(walls))
+            if key not in dic.keys():
+                dic[key] = []
+            dic[key].append(corner)
+        return dic
 
 
 def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
