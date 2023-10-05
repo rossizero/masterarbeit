@@ -79,6 +79,19 @@ class WallDetailer:
         ret += c + d
         return ret
 
+    def graph_force(self, corns: Corns, bond: Bond):
+        corners = deepcopy(corns)
+        grouped2 = corners.grouped_by_walls()
+
+        def get_corners(wall_id):
+            ret = []
+            for key in grouped2.keys():
+                if wall_id in key:
+                    ret.append(grouped2[key])
+            return ret
+
+
+
     def brute_force(self, corns: Corns, bond: Bond):
         num_groups = len(corns.grouped_by_walls().keys())
         counter = 0
