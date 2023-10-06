@@ -7,6 +7,8 @@ import quaternion
 from detailing.wall_layer import WallLayer
 from detailing.wall_layer_group import WallLayerGroup
 
+from wall_detailing.masonry.bond import Bond
+
 
 class Line:
     """
@@ -60,7 +62,9 @@ class Corn:
         self.plan_offset = 0
 
     def __eq__(self, other: "Corn"):
-        return np.allclose(self.point, other.point)
+        if type(other) is Corn:
+            return np.allclose(self.point, other.point)
+        return False
 
     def get_main_layer(self):
         """
@@ -120,6 +124,18 @@ class Corn:
             ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi/4.0)
         return ret
 
+    def reduce_corner_layer_length(self, bond: Bond):
+        main_layer = self.get_main_layer()
+        angle = self.get_rotation()
+
+        for layer in self.layers:
+            relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
+            a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
+            relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
+            # how far the corner stretches into the layer (x direction)
+            corner_length = bond.get_corner_length(main_layer.get_layer_index() + self.plan_offset, relative_rotation)
+            layer.move_edge(self.point, corner_length)
+
 
 class Corns:
     """
@@ -146,6 +162,13 @@ class Corns:
                 dic[key] = []
             dic[key].append(corner)
         return dic
+
+    @classmethod
+    def from_corner_list(cls, corners: List[Corn]):
+        ret = Corns()
+        for corner in corners:
+            ret.add_corner(corner)
+        return ret
 
 
 def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:

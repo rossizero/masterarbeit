@@ -157,6 +157,9 @@ class Bond(ABC):
         """
         pass
 
+    def get_corner_plan_repeat_step(self):
+        return len(self._get_corner_plan())
+
     def apply_corner(self, layer: int = 0) -> List[Transformation]:
         """
         :param layer: index for the layer of the corner plan we need

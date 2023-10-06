@@ -17,6 +17,7 @@ from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2
 from masonry import Corner
+from wall_detailing.detailing.solver import GraphSolver
 
 
 class WallDetailer:
@@ -40,7 +41,8 @@ class WallDetailer:
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
             cs = Corner.check_for_corners(wall_layer_groups)
             bond = group.bond
-            self.brute_force(cs, bond)
+            solver = GraphSolver(cs, bond)
+            solver.solve()
 
             for corner in cs.corners:
                 layers = list(corner.layers)
@@ -55,89 +57,6 @@ class WallDetailer:
             for wall in wall_layer_groups:
                 bricks.extend(self.detail_wall(wall, bond))
         return bricks
-
-    def reduce_corner_layer_length(self, corner: Corn, bond: Bond):
-        main_layer = corner.get_main_layer()
-        angle = corner.get_rotation()
-
-        for layer in corner.layers:
-            relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
-            a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
-            relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
-            # how far the corner stretches into the layer (x direction)
-            corner_length = bond.get_corner_length(main_layer.get_layer_index() + corner.plan_offset, relative_rotation)
-            layer.move_edge(corner.point, corner_length)
-
-    def tmp(self, layer: WallLayer, bond: Bond):
-        ret = 0
-        leftover_left, leftover_right, num_bricks = bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset())
-
-        c = leftover_left if len(layer.left_connections) > 0 else 0.0
-        d = leftover_right if len(layer.right_connections) > 0 else 0.0
-        print("  ", c, d, "sum", c + d, "x_off:", layer.relative_x_offset(), "len:", layer.length, "ind", layer.get_layer_index(), bond.layer, num_bricks)
-
-        ret += c + d
-        return ret
-
-    def graph_force(self, corns: Corns, bond: Bond):
-        corners = deepcopy(corns)
-        grouped2 = corners.grouped_by_walls()
-
-        def get_corners(wall_id):
-            ret = []
-            for key in grouped2.keys():
-                if wall_id in key:
-                    ret.append(grouped2[key])
-            return ret
-
-
-
-    def brute_force(self, corns: Corns, bond: Bond):
-        num_groups = len(corns.grouped_by_walls().keys())
-        counter = 0
-        current_min = len(corns.corners) * 2
-
-        def bin_array(num, m):
-            """Convert a positive integer num into an m-bit bit vector"""
-            return np.array(list(np.binary_repr(num).zfill(m))).astype(np.int8)
-
-        current_best = bin_array(counter, num_groups)
-
-        while counter < 2**num_groups:
-            val = 0
-            corners = deepcopy(corns)
-            grouped2 = corners.grouped_by_walls()
-
-            arr = bin_array(counter, num_groups)
-            counter += 1
-
-            for i, key in enumerate(grouped2.keys()):
-                for c in grouped2[key]:
-                    c.plan_offset = arr[i]
-
-            walls = set()
-            for corner in corners.corners:
-                self.reduce_corner_layer_length(corner, bond)
-                for l in corner.layers:
-                    walls.add(l.parent)
-
-            for wall in walls:
-                for layer in wall.layers:
-                    val += self.tmp(layer, bond)
-
-            if val < current_min:
-                current_min = val
-                current_best = arr.copy()
-                if val == 0:
-                    break
-            print("value", val)
-
-        print("result", current_min, current_best)
-        # set the plan_offsets of actual corners to those we found
-        grouped1 = corns.grouped_by_walls()
-        for i, key in enumerate(grouped2.keys()):
-            for c in grouped1[key]:
-                c.plan_offset = current_best[i]
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
         """
@@ -237,8 +156,8 @@ class WallDetailer:
             b.rotate_around(original_rotation)
 
             brick_ret.append(b)
-        self.reduce_corner_layer_length(corner, bond)
 
+        corner.reduce_corner_layer_length(bond)
         return brick_ret
 
     @staticmethod
