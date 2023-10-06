@@ -15,20 +15,18 @@ class Solver(ABC):
         self.bond = bond
         self.corners = corners
 
-    def tmp(self, layer: WallLayer, look_at_wall: WallLayerGroup = None):
-        leftover_left, leftover_right, num_bricks = self.bond.leftover_of_layer(layer.length, layer.get_layer_index(),
-                                                                                layer.relative_x_offset())
+    def tmp(self, layer: WallLayer, look_at_wall: int = -1):
+        if look_at_wall != -1:
+            if look_at_wall != layer.parent.id:
+                return 0
+
+        leftover_left, leftover_right, _ = self.bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset())
         c = leftover_left if len(layer.left_connections) > 0 else 0.0
         d = leftover_right if len(layer.right_connections) > 0 else 0.0
         # print("  ", c, d, "sum", c + d, "x_off:", layer.relative_x_offset(), "len:", layer.length, "ind", layer.get_layer_index(), self.bond.layer, num_bricks)
+        return c + d
 
-        ret = c + d
-        if look_at_wall is not None:
-            if look_at_wall.id != layer.parent.id:
-                ret = 0
-        return ret
-
-    def score(self, corners: Corns, look_at_wall: WallLayerGroup = None):
+    def score(self, corners: Corns, look_at_wall: int = -1):
         val = 0
         walls = set()
         for corner in corners.corners:
@@ -39,6 +37,7 @@ class Solver(ABC):
         for wall in walls:
             for layer in wall.layers:
                 val += self.tmp(layer, look_at_wall=look_at_wall)
+        print("score", val, "on wall", look_at_wall)
         return val
 
     @abstractmethod
@@ -91,21 +90,19 @@ class GraphSolver(Solver):
         result = 0
         val = len(cs) * 4
 
-        print("fit corner", corner, "to wall", wall_id, is_left, len(cs))
+        print("fit corner", corner, "to wall", wall_id)
 
         while corner_offset < self.bond.get_corner_plan_repeat_step():
             corners = deepcopy(cs)
             for corner in corners:
                 corner.plan_offset = corner_offset
 
-            score = self.score(Corns.from_corner_list(corners), look_at_wall=wall)
+            score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
             if score < val:
                 val = score
                 result = corner_offset
-            print(score, val, corner_offset)
 
             corner_offset += 1
-        print("result", result, val)
         for corner in cs:
             corner.plan_offset = result
         pass
@@ -126,19 +123,18 @@ class GraphSolver(Solver):
         val = len(cs) * 2
 
         wall_offset = 0
+        result = 0
         while wall_offset < self.bond.repeat_layer:
+            wall.plan_offset = wall_offset
             corners = deepcopy(cs)
-            for corner in corners:
-                for layer in corner.layers:
-                    if layer.parent.id == wall_id:
-                        w = layer.parent
-                        break
-            w.plan_offset = wall_offset
-            score = self.score(Corns.from_corner_list(corners))
+            score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
             if score < val:
                 val = score
-                wall.plan_offset = wall_offset
+                result = wall_offset
+
             wall_offset += 1
+
+        wall.plan_offset = result
 
     def solve(self):
         if len(self.corners.corners) == 0:
@@ -159,18 +155,11 @@ class GraphSolver(Solver):
             for layer in corner.layers:
                 if layer.parent.id not in dic.keys():
                     dic[layer.parent.id] = Node(layer.parent.id, layer.parent)
-                    if start is None:
-                        start = dic[layer.parent.id]
 
                 for obj in layer.right_connections:
                     dic[layer.parent.id].right.add(obj.parent.id)
                 for obj in layer.left_connections:
                     dic[layer.parent.id].left.add(obj.parent.id)
-
-        for node in dic.values():
-            if len(node.right) > 0 and len(node.left) > 0:
-                start = node
-                break
 
         # go through the graph
         visited = []
@@ -179,12 +168,12 @@ class GraphSolver(Solver):
             if n.name not in visited:
                 visited.append(n.name)
 
-                for left in n.left:
-                    if left not in visited:
-                        corn = tuple(sorted([n.name, left]))
-                        self.fit_corner_to_wall(corn, n.name)
-                        self.fit_wall_to_corner(dic[left].name, corn)
-                        fit(dic[left])
+                #for left in n.left:
+                #    if left not in visited:
+                #        corn = tuple(sorted([n.name, left]))
+                #        self.fit_corner_to_wall(corn, n.name)
+                #        self.fit_wall_to_corner(dic[left].name, corn)
+                #        fit(dic[left])
 
                 for right in n.right:
                     if right not in visited:
@@ -195,6 +184,12 @@ class GraphSolver(Solver):
 
         #corn = tuple(sorted([start.name, list(start.left)[0]]))
         #self.fit_wall_to_corner(start.name, corn)
+
+        for key in dic.keys():
+            if key == 0:
+                start = dic[key]
+                break
+
         fit(start)
         pass
 
