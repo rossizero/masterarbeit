@@ -23,7 +23,13 @@ class WallLayerGroup:
         self.name = name
         self.id = WallLayerGroup.idd
         self.plan_offset = 0
+        self.touched = False
         WallLayerGroup.idd += 1
+
+    def set_plan_offset(self, offset: int):
+        assert not self.touched
+        self.plan_offset = offset
+        self.touched = True
 
     def combine(self, other: 'WallLayerGroup') -> bool:
         """
@@ -40,7 +46,8 @@ class WallLayerGroup:
         z_part1 = quaternion.rotate_vectors(a1, np.array([0.0, 0.0, 1.0]))
         z_part2 = quaternion.rotate_vectors(a2, np.array([0.0, 0.0, 1.0]))
         z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
-        to_combine = other.module == self.module and z_parallel and (np.isclose(angle, math.pi) or np.isclose(angle, 0.0))
+        to_combine = other.module == self.module and z_parallel and (
+                    np.isclose(angle, math.pi) or np.isclose(angle, 0.0))
 
         # now lets see if there are any layers actually touching each other and combine the pairs that do
         combined = False

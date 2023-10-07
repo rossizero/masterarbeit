@@ -17,7 +17,7 @@ from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2
 from masonry import Corner
-from wall_detailing.detailing.solver import GraphSolver
+from detailing.solver import GraphSolver
 
 
 class WallDetailer:
@@ -47,7 +47,7 @@ class WallDetailer:
             for corner in cs.corners:
                 layers = list(corner.layers)
                 if len(layers) == 2:
-                    #pass
+                    pass
                     bricks.extend(self.detail_corner(corner, bond))
                 else:
                     # t-joint MAYDO combine t-joints
@@ -157,7 +157,7 @@ class WallDetailer:
 
             brick_ret.append(b)
 
-        corner.reduce_corner_layer_length(bond)
+        #corner.reduce_corner_layer_length(bond)
         return brick_ret
 
     @staticmethod

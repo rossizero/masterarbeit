@@ -4,10 +4,10 @@ from typing import List, Tuple
 
 import numpy as np
 
-from wall_detailing.detailing.wall_layer import WallLayer
-from wall_detailing.detailing.wall_layer_group import WallLayerGroup
-from wall_detailing.masonry.Corner import Corns, Corn
-from wall_detailing.masonry.bond import Bond
+from detailing.wall_layer import WallLayer
+from detailing.wall_layer_group import WallLayerGroup
+from masonry.Corner import Corns, Corn
+from masonry.bond import Bond
 
 
 class Solver(ABC):
@@ -30,14 +30,59 @@ class Solver(ABC):
         val = 0
         walls = set()
         for corner in corners.corners:
-            corner.reduce_corner_layer_length(self.bond)
+            if look_at_wall != -1:
+                for layer in corner.layers:
+                    if layer.parent.id == look_at_wall:
+                        corner.reduce_layer_length(layer, self.bond)
+            else:
+                corner.reduce_corner_layer_length(self.bond)
             for l in corner.layers:
                 walls.add(l.parent)
 
         for wall in walls:
             for layer in wall.layers:
                 val += self.tmp(layer, look_at_wall=look_at_wall)
-        print("score", val, "on wall", look_at_wall)
+        #print("score", val, "on wall", look_at_wall)
+        return val
+
+    def holes_between_corner_and_wall(self, corners: Corns, look_at_wall: int):
+        corners = deepcopy(corners)
+        current_wall_layers = []
+
+        # reduce all necessary layer lengths
+        for corner in corners.corners:
+            for layer in corner.layers:
+                if layer.parent.id == look_at_wall:
+                    corner.reduce_layer_length(layer, self.bond)
+                    current_wall_layers.append(layer)
+
+        # then count holes between given corner and wall by looking at which side the corner is relative to the wall
+        # and only use those leftover_values that actually are between the both
+        val = 0
+        for corner in corners.corners:
+            leftover_left, leftover_right = 0, 0
+            current_wall_layer = None
+            for layer in corner.layers:
+                if layer in current_wall_layers:
+                    leftover_left, leftover_right, _ = self.bond.leftover_of_layer(layer.length,
+                                                                                   layer.get_layer_index(),
+                                                                                 layer.relative_x_offset())
+                    current_wall_layer = layer
+                    break
+            assert current_wall_layer is not None
+
+            left = None
+            for layer in corner.layers:
+                if layer in current_wall_layer.left_connections:
+                    left = True
+                    break
+                elif layer in current_wall_layer.right_connections:
+                    left = False
+                    break
+            assert left is not None
+            c = leftover_left if len(current_wall_layer.left_connections) > 0 and left else 0.0
+            d = leftover_right if len(current_wall_layer.right_connections) > 0 and not left else 0.0
+            val += c + d
         return val
 
     @abstractmethod
@@ -76,6 +121,7 @@ class GraphSolver(Solver):
         return None
 
     def fit_corner_to_wall(self, corner: Tuple[int, int], wall_id: int):
+        print("fit corner", corner, "to wall", wall_id)
         wall = self.get_wall(wall_id)
 
         is_left = False
@@ -90,26 +136,32 @@ class GraphSolver(Solver):
         result = 0
         val = len(cs) * 4
 
-        print("fit corner", corner, "to wall", wall_id)
-
         while corner_offset < self.bond.get_corner_plan_repeat_step():
             corners = deepcopy(cs)
             for corner in corners:
                 corner.plan_offset = corner_offset
 
+            score2 = self.holes_between_corner_and_wall(Corns.from_corner_list(corners), wall_id)
             score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
-            if score < val:
+
+            print("-", score, score2)
+            if score <= val:
                 val = score
                 result = corner_offset
 
             corner_offset += 1
+
+        print("solution: ", result)
         for corner in cs:
-            corner.plan_offset = result
+            corner.set_plan_offset(result)
+            for layer in corner.layers:
+                if layer in wall.layers:
+                    corner.reduce_layer_length(layer, self.bond)
         pass
 
     def fit_wall_to_corner(self, wall_id: int, corner: Tuple[int, int]):
         wall = self.get_wall(wall_id)
-        print("fit wall", wall_id, "to corner", corner)
+        assert not wall.touched
 
         is_left = False
         for layer in wall.layers:
@@ -119,6 +171,7 @@ class GraphSolver(Solver):
                     break
 
         cs = self.get_all_corners_of_wall(wall_id, is_left)
+        print("fit wall", wall_id, "to corner", corner, "with", cs[0].plan_offset, len(cs))
 
         val = len(cs) * 2
 
@@ -126,15 +179,25 @@ class GraphSolver(Solver):
         result = 0
         while wall_offset < self.bond.repeat_layer:
             wall.plan_offset = wall_offset
-            corners = deepcopy(cs)
+            corners = deepcopy(cs)  # CHECKED: plan_offset also in copy!
+
+            score2 = self.holes_between_corner_and_wall(Corns.from_corner_list(corners), wall_id)
             score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
-            if score < val:
+            print("-", score, score2)
+
+            if score <= val:
                 val = score
                 result = wall_offset
 
             wall_offset += 1
 
-        wall.plan_offset = result
+        wall.set_plan_offset(result)
+
+        print("solution: ", result)
+        for corner in cs:
+            for layer in corner.layers:
+                if layer in wall.layers:
+                    corner.reduce_layer_length(layer, self.bond)
 
     def solve(self):
         if len(self.corners.corners) == 0:
@@ -149,9 +212,10 @@ class GraphSolver(Solver):
 
         # build graph and look for a start node
         dic = {}
-        start = None
 
         for corner in self.corners.corners:
+            corner.set_main_layer()
+
             for layer in corner.layers:
                 if layer.parent.id not in dic.keys():
                     dic[layer.parent.id] = Node(layer.parent.id, layer.parent)
@@ -163,35 +227,34 @@ class GraphSolver(Solver):
 
         # go through the graph
         visited = []
+        todo = []
 
         def fit(n: Node):
-            if n.name not in visited:
-                visited.append(n.name)
+            visited.append(n.name)
 
-                #for left in n.left:
-                #    if left not in visited:
-                #        corn = tuple(sorted([n.name, left]))
-                #        self.fit_corner_to_wall(corn, n.name)
-                #        self.fit_wall_to_corner(dic[left].name, corn)
-                #        fit(dic[left])
+            for left in n.left:
+                if left not in visited:
+                    corn = tuple(sorted([n.name, left]))
+                    self.fit_corner_to_wall(corn, n.name)
+                    self.fit_wall_to_corner(left, corn)
+                    todo.append(left)
 
-                for right in n.right:
-                    if right not in visited:
-                        corn = tuple(sorted([n.name, right]))
-                        self.fit_corner_to_wall(corn, n.name)
-                        self.fit_wall_to_corner(dic[right].name, corn)
-                        fit(dic[right])
+            for right in n.right:
+                if right not in visited:
+                    corn = tuple(sorted([n.name, right]))
+                    self.fit_corner_to_wall(corn, n.name)
+                    self.fit_wall_to_corner(right, corn)
+                    todo.append(right)
 
-        #corn = tuple(sorted([start.name, list(start.left)[0]]))
-        #self.fit_wall_to_corner(start.name, corn)
+        todo.append(0)
+        while len(todo) > 0:
+            for to in todo.copy():
+                todo.remove(to)
+                if to not in visited:
+                    fit(dic[to])
 
-        for key in dic.keys():
-            if key == 0:
-                start = dic[key]
-                break
-
-        fit(start)
-        pass
+        for layer in dic[0].val.layers:
+            print(layer.get_layer_index(), layer.length)
 
 
 class BruteForceSolver(Solver):

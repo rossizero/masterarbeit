@@ -7,7 +7,7 @@ import quaternion
 from detailing.wall_layer import WallLayer
 from detailing.wall_layer_group import WallLayerGroup
 
-from wall_detailing.masonry.bond import Bond
+from masonry.bond import Bond
 
 
 class Line:
@@ -60,11 +60,18 @@ class Corn:
         self.point = point  # center of the corner
         self.layers = set()  # layers that form the corner
         self.plan_offset = 0
+        self.touched = False
+        self.main_layer = None
 
     def __eq__(self, other: "Corn"):
         if type(other) is Corn:
             return np.allclose(self.point, other.point)
         return False
+
+    def set_plan_offset(self, offset: int):
+        assert not self.touched
+        self.plan_offset = offset
+        self.touched = True
 
     def get_main_layer(self):
         """
@@ -72,6 +79,9 @@ class Corn:
         Its rotation is being used for calculations.
         :return: the main layer
         """
+        if self.main_layer is not None:
+            return self.main_layer
+
         # we want to always get the same main layer for any set of layers of the same two walls
         # so in case there are two layers, in which the corner point lies inside (aka the layers overlap) we
         # would get a random main layer (depending on the order of the set) every time. By sorting them (operator has
@@ -125,16 +135,23 @@ class Corn:
         return ret
 
     def reduce_corner_layer_length(self, bond: Bond):
+        for layer in self.layers:
+            self.reduce_layer_length(layer, bond)
+
+    def reduce_layer_length(self, layer: WallLayer, bond: Bond):
+        assert layer in self.layers
         main_layer = self.get_main_layer()
         angle = self.get_rotation()
 
-        for layer in self.layers:
-            relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
-            a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
-            relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
-            # how far the corner stretches into the layer (x direction)
-            corner_length = bond.get_corner_length(main_layer.get_layer_index() + self.plan_offset, relative_rotation)
-            layer.move_edge(self.point, corner_length)
+        relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
+        a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
+        relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
+        # how far the corner stretches into the layer (x direction)
+        corner_length = bond.get_corner_length(main_layer.get_layer_index() + self.plan_offset, relative_rotation)
+        layer.move_edge(self.point, corner_length)
+
+    def set_main_layer(self):
+        self.main_layer = self.get_main_layer()
 
 
 class Corns:

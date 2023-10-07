@@ -109,9 +109,9 @@ class SimpleCorners2(Scenario):
         height = 0.5 * 2
         w0 = make_wall(10, 1, height, np.array([5.5, 0.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w0")
-        w1 = make_wall(10, 1, height, np.array([10.0, 5.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
+        w1 = make_wall(8, 1, height, np.array([9.0, 5.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
                        ifc_wall_type="test", name="w1")
-        w2 = make_wall(10, 1, height, np.array([14.5, 0.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
+        w2 = make_wall(10, 1, height, np.array([13.5, 1.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w2")
         w3 = make_wall(10, 1, height, np.array([10.0, -4.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0* math.pi),
                        ifc_wall_type="test", name="w3")

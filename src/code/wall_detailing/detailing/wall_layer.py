@@ -17,6 +17,9 @@ class WallLayer:
         self.left_connections: List['WallLayer'] = []
         self.right_connections: List['WallLayer'] = []
 
+        self.touched_left = False
+        self.touched_right = False
+
     def combine(self, other: 'WallLayer'):
         """
         Combines two wall layers to one. Only makes sense if the two layers have the same orientation,
@@ -161,8 +164,12 @@ class WallLayer:
         # move center
         if not from_left == from_right:
             if from_left:
+                assert not self.touched_left
+                self.touched_left = True
                 self.translation[0] += length / 2.0
             else:
+                assert not self.touched_right
+                self.touched_right = True
                 self.translation[0] -= length / 2.0
         self.length -= length
         return True
@@ -188,6 +195,10 @@ class WallLayer:
 
         x = round(x[0], 6)
         length -= abs(x) - x
+        #print("         reduce length by", length, "from left?", is_left)
+
+        if length < 0:
+            aaaa = 0
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
         return length
 
