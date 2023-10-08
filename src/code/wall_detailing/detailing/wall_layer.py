@@ -194,7 +194,9 @@ class WallLayer:
             x = right - local_start_point
 
         x = round(x[0], 6)
-        length -= abs(x) - x
+        length += x
+        #length -= abs(x) - x
+
         #print("         reduce length by", length, "from left?", is_left)
 
         if length < 0:

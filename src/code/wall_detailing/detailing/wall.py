@@ -15,6 +15,11 @@ from OCC.Core.gp import gp_Vec, gp_Trsf
 import quaternion
 
 
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
+
+
 class Wall:
     """
     A Wall that comes from an ifc file
@@ -242,3 +247,21 @@ class Wall:
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
         self.update_shape(shape)
+
+    @classmethod
+    def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, name=""):
+        length, width = max(length, width), min(length, width)
+        corner = gp_Pnt(-length / 2.0, -width / 2.0, -height / 2.0)
+
+        shape = BRepPrimAPI_MakeBox(corner, length, width, height).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w))
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        transformation = gp_Trsf()
+        transformation.SetTranslation(gp_Vec(*position))
+        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
+        wall = cls(shape, ifc_wall_type, name)
+        return wall
