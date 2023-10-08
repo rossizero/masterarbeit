@@ -131,8 +131,8 @@ class GraphSolver(Solver):
         return None
 
     def fit_corner_to_wall(self, corner: Tuple[int, int], wall_id: int):
-        print("fit corner", corner, "to wall", wall_id)
         wall = self.get_wall(wall_id)
+        print("fit corner", corner, "to wall", wall_id, wall.touched)
 
         is_left = False
         for layer in wall.layers:
@@ -141,7 +141,13 @@ class GraphSolver(Solver):
                     is_left = True
                     break
 
-        cs = self.get_all_corners_of_wall2(wall_id)# , is_left)
+        for layer in wall.layers:
+            if is_left:
+                assert not layer.touched_left
+            else:
+                assert not layer.touched_right
+
+        cs = self.get_all_corners_of_wall(wall_id, is_left)
         corner_offset = 0
         result = 0
         val = len(cs) * 4
@@ -171,6 +177,8 @@ class GraphSolver(Solver):
 
     def fit_wall_to_corner(self, wall_id: int, corner: Tuple[int, int]):
         wall = self.get_wall(wall_id)
+        if wall.touched:
+            return
         assert not wall.touched
 
         is_left = False
@@ -180,7 +188,7 @@ class GraphSolver(Solver):
                     is_left = True
                     break
 
-        cs = self.get_all_corners_of_wall2(wall_id)#, is_left)
+        cs = self.get_all_corners_of_wall(wall_id, is_left)
         print("fit wall", wall_id, "to corner", corner, "with", cs[0].plan_offset, len(cs))
 
         val = len(cs) * 2
@@ -189,7 +197,7 @@ class GraphSolver(Solver):
         result = 0
         while wall_offset < self.bond.repeat_layer:
             wall.plan_offset = wall_offset
-            corners = deepcopy(cs)  # CHECKED: plan_offset also in copy!
+            corners = deepcopy(cs)
 
             score2 = self.holes_between_corner_and_wall(Corns.from_corner_list(corners), wall_id)
             score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
@@ -241,19 +249,19 @@ class GraphSolver(Solver):
 
         def fit(n: Node):
             visited.append(n.name)
-            self.get_wall(n.name).plan_offset = 0
+
             for left in n.left:
                 if left not in visited:
                     corn = tuple(sorted([n.name, left]))
-                    #self.fit_corner_to_wall(corn, n.name)
-                    #self.fit_wall_to_corner(left, corn)
+                    self.fit_corner_to_wall(corn, n.name)
+                    self.fit_wall_to_corner(left, corn)
                     todo.append(left)
 
             for right in n.right:
                 if right not in visited:
                     corn = tuple(sorted([n.name, right]))
-                    #self.fit_corner_to_wall(corn, n.name)
-                    #self.fit_wall_to_corner(right, corn)
+                    self.fit_corner_to_wall(corn, n.name)
+                    self.fit_wall_to_corner(right, corn)
                     todo.append(right)
 
         todo.append(0)
@@ -262,9 +270,6 @@ class GraphSolver(Solver):
                 todo.remove(to)
                 if to not in visited:
                     fit(dic[to])
-
-        #for layer in dic[0].val.layers:
-        #    print(layer.get_layer_index(), layer.length)
 
 
 class BruteForceSolver(Solver):

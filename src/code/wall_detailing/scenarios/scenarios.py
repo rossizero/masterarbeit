@@ -83,14 +83,14 @@ class SimpleCorners2(Scenario):
     def get_walls(self):
         an = math.pi / 2 * 1.22432
         an = 0
-        height = 0.5 * 2
+        height = 0.5 * 4
         w0 = Wall.make_wall(10, 1, height, np.array([5.5, 0.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w0")
-        w1 = Wall.make_wall(8, 1, height, np.array([9.0, 5.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
+        w1 = Wall.make_wall(8, 1, height, np.array([9.0, 5.5, height/2 + 1]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
                        ifc_wall_type="test", name="w1")
         w2 = Wall.make_wall(10, 1, height, np.array([13.5, 1.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w2")
-        w3 = Wall.make_wall(10, 1, height, np.array([10.0, -4.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0* math.pi),
+        w3 = Wall.make_wall(9, 1, height, np.array([9.5, -4.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0* math.pi),
                        ifc_wall_type="test", name="w3")
 
         #w11 = make_wall(10, 1, 5, np.array([5.5, 20.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2),
@@ -104,4 +104,4 @@ class SimpleCorners2(Scenario):
         w3.rotate_around(quaternion.from_euler_angles(0, an, an))
         #w11.rotate_around(quaternion.from_euler_angles(0, an, an))
         #w22.rotate_around(quaternion.from_euler_angles(0, an, an))
-        return [w0, w1]
+        return [w0, w1, w2, w3]

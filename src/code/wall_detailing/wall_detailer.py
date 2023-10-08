@@ -101,8 +101,7 @@ class WallDetailer:
 
             fill_left = len(layer.left_connections) == 0
             fill_right = len(layer.right_connections) == 0
-            if wall.id == 0:
-                print(layer.get_layer_index(), layer.get_layer_plan_index(), "off", layer.relative_x_offset(), "parent off", layer.parent.plan_offset, "len", layer.length)
+            #print("w:", wall.id, ",", layer.get_layer_index(), layer.get_layer_plan_index(), "off", layer.relative_x_offset(), "parent off", layer.parent.plan_offset, "len", layer.length)
             transformations = bond.apply_layer(layer.length, width, fill_left, fill_right, layer.get_layer_plan_index(), layer.relative_x_offset())
 
             for tf in transformations:
@@ -138,7 +137,7 @@ class WallDetailer:
         corner_rotation = corner.get_rotation()
         layer_index = main_layer.get_layer_index()
 
-        for tf in bond.apply_corner(corner.get_corner_index()):
+        for tf in bond.apply_corner(corner.get_corner_index() + corner.plan_offset):
             local_position = tf.get_position()  # position in wall itself
             local_position[2] = 0.0  # MAYDO ugly
             local_rotation = tf.get_rotation()
@@ -159,7 +158,7 @@ class WallDetailer:
 
             brick_ret.append(b)
 
-        corner.reduce_corner_layer_length(bond)
+        #corner.reduce_corner_layer_length(bond)
         return brick_ret
 
     @staticmethod
