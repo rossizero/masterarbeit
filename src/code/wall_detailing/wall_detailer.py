@@ -1,6 +1,4 @@
-import math
-from copy import deepcopy
-from typing import List, Dict, Optional
+from typing import List, Dict
 import numpy as np
 import quaternion
 
@@ -8,7 +6,6 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.StlAPI import StlAPI_Writer
 
-from detailing.wall_layer import WallLayer
 from detailing.wall_layer_group import WallLayerGroup
 from detailing.wall_type_group import WallTypeGroup
 from masonry.bond import Bond
@@ -47,7 +44,6 @@ class WallDetailer:
             for corner in cs.corners:
                 layers = list(corner.layers)
                 if len(layers) == 2:
-                    pass
                     bricks.extend(self.detail_corner(corner, bond))
                 else:
                     # t-joint MAYDO combine t-joints
@@ -101,8 +97,13 @@ class WallDetailer:
 
             fill_left = len(layer.left_connections) == 0
             fill_right = len(layer.right_connections) == 0
-            #print("w:", wall.id, ",", layer.get_layer_index(), layer.get_layer_plan_index(), "off", layer.relative_x_offset(), "parent off", layer.parent.plan_offset, "len", layer.length)
-            transformations = bond.apply_layer(layer.length, width, fill_left, fill_right, layer.get_layer_plan_index(), layer.relative_x_offset())
+
+            transformations = bond.apply_layer(length=layer.length,
+                                               width=width,
+                                               fill_left=fill_left,
+                                               fill_right=fill_right,
+                                               layer=layer.get_layer_plan_index(),
+                                               x_offset=layer.relative_x_offset())
 
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
@@ -157,8 +158,6 @@ class WallDetailer:
             b.rotate_around(original_rotation)
 
             brick_ret.append(b)
-
-        #corner.reduce_corner_layer_length(bond)
         return brick_ret
 
     @staticmethod
@@ -198,11 +197,10 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = DoppelEck1()
+    scenario = SimpleCorners()
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
-
-    bb = []
     bb = wall_detailer.detail()
+
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
