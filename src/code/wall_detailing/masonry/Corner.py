@@ -147,11 +147,31 @@ class Corn:
         a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
         relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
         # how far the corner stretches into the layer (x direction)
-        corner_length = bond.get_corner_length(main_layer.get_layer_index() + self.plan_offset, relative_rotation)
+        corner_length = bond.get_corner_length(self.get_corner_index() + self.plan_offset, relative_rotation)
+        corner_length -= bond.module.width / 2.0
         layer.move_edge(self.point, corner_length)
 
     def set_main_layer(self):
         self.main_layer = self.get_main_layer()
+
+    def get_corner_index(self):
+        ids = [l.parent.id for l in self.layers]
+        main_layer = self.get_main_layer()
+        ids.remove(main_layer.parent.id)
+        layers = main_layer.parent.get_sorted_layers()
+
+        vals = []
+        for i, layers_in_height in enumerate(layers):
+            for layer in layers_in_height:
+                if layer in self.layers:
+                    return i
+                for l in layer.left_connections:
+                    if l.parent.id in ids:
+                        vals.append(i)
+                for l in layer.right_connections:
+                    if l.parent.id in ids:
+                        vals.append(i)
+        return min(vals)
 
 
 class Corns:

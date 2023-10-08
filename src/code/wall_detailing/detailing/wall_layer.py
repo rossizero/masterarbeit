@@ -17,8 +17,8 @@ class WallLayer:
         self.left_connections: List['WallLayer'] = []
         self.right_connections: List['WallLayer'] = []
 
-        self.touched_left = False
-        self.touched_right = False
+        self.touched_left = False  # TODO remove
+        self.touched_right = False  # TODO remove
 
     def combine(self, other: 'WallLayer'):
         """
@@ -40,8 +40,14 @@ class WallLayer:
         """
         for i, l in enumerate(self.parent.get_sorted_layers()):
             if self in l:
-                return i + self.parent.plan_offset
-        return None
+                return i
+        assert False
+
+    def get_layer_plan_index(self):
+        """
+        :return: plan index to be used for detailing this layer
+        """
+        return self.get_layer_index() + self.parent.plan_offset
 
     @property
     def left_edge(self):
@@ -195,12 +201,7 @@ class WallLayer:
 
         x = round(x[0], 6)
         length += x
-        #length -= abs(x) - x
 
-        #print("         reduce length by", length, "from left?", is_left)
-
-        if length < 0:
-            aaaa = 0
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
         return length
 

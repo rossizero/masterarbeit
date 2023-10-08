@@ -20,7 +20,7 @@ class Solver(ABC):
             if look_at_wall != layer.parent.id:
                 return 0
 
-        leftover_left, leftover_right, _ = self.bond.leftover_of_layer(layer.length, layer.get_layer_index(), layer.relative_x_offset())
+        leftover_left, leftover_right, _ = self.bond.leftover_of_layer(layer.length, layer.get_layer_plan_index(), layer.relative_x_offset())
         c = leftover_left if len(layer.left_connections) > 0 else 0.0
         d = leftover_right if len(layer.right_connections) > 0 else 0.0
         # print("  ", c, d, "sum", c + d, "x_off:", layer.relative_x_offset(), "len:", layer.length, "ind", layer.get_layer_index(), self.bond.layer, num_bricks)
@@ -65,7 +65,7 @@ class Solver(ABC):
             for layer in corner.layers:
                 if layer in current_wall_layers:
                     leftover_left, leftover_right, _ = self.bond.leftover_of_layer(layer.length,
-                                                                                   layer.get_layer_index(),
+                                                                                   layer.get_layer_plan_index(),
                                                                                  layer.relative_x_offset())
                     current_wall_layer = layer
                     break
@@ -81,7 +81,9 @@ class Solver(ABC):
                     break
             assert left is not None
             c = leftover_left if len(current_wall_layer.left_connections) > 0 and left else 0.0
+            c = leftover_left if left else 0.0
             d = leftover_right if len(current_wall_layer.right_connections) > 0 and not left else 0.0
+            d = leftover_right if not left else 0.0
             val += c + d
         return val
 
@@ -93,6 +95,14 @@ class Solver(ABC):
 class GraphSolver(Solver):
     def __init__(self, corners: Corns, bond: Bond):
         super().__init__(corners, bond)
+
+    def get_all_corners_of_wall2(self, wall_id: int):
+        groups = self.corners.grouped_by_walls()
+        ret = []
+        for key in groups.keys():
+            if wall_id in key:
+                ret.extend(groups[key])
+        return ret
 
     def get_all_corners_of_wall(self, wall_id: int, left: bool = True):
         wall = self.get_wall(wall_id)
@@ -131,7 +141,7 @@ class GraphSolver(Solver):
                     is_left = True
                     break
 
-        cs = self.get_all_corners_of_wall(wall_id, is_left)
+        cs = self.get_all_corners_of_wall2(wall_id)# , is_left)
         corner_offset = 0
         result = 0
         val = len(cs) * 4
@@ -170,7 +180,7 @@ class GraphSolver(Solver):
                     is_left = True
                     break
 
-        cs = self.get_all_corners_of_wall(wall_id, is_left)
+        cs = self.get_all_corners_of_wall2(wall_id)#, is_left)
         print("fit wall", wall_id, "to corner", corner, "with", cs[0].plan_offset, len(cs))
 
         val = len(cs) * 2
@@ -231,19 +241,19 @@ class GraphSolver(Solver):
 
         def fit(n: Node):
             visited.append(n.name)
-
+            self.get_wall(n.name).plan_offset = 0
             for left in n.left:
                 if left not in visited:
                     corn = tuple(sorted([n.name, left]))
-                    self.fit_corner_to_wall(corn, n.name)
-                    self.fit_wall_to_corner(left, corn)
+                    #self.fit_corner_to_wall(corn, n.name)
+                    #self.fit_wall_to_corner(left, corn)
                     todo.append(left)
 
             for right in n.right:
                 if right not in visited:
                     corn = tuple(sorted([n.name, right]))
-                    self.fit_corner_to_wall(corn, n.name)
-                    self.fit_wall_to_corner(right, corn)
+                    #self.fit_corner_to_wall(corn, n.name)
+                    #self.fit_wall_to_corner(right, corn)
                     todo.append(right)
 
         todo.append(0)
@@ -253,8 +263,8 @@ class GraphSolver(Solver):
                 if to not in visited:
                     fit(dic[to])
 
-        for layer in dic[0].val.layers:
-            print(layer.get_layer_index(), layer.length)
+        #for layer in dic[0].val.layers:
+        #    print(layer.get_layer_index(), layer.length)
 
 
 class BruteForceSolver(Solver):

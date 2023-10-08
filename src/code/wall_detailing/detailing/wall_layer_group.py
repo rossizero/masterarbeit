@@ -23,7 +23,7 @@ class WallLayerGroup:
         self.name = name
         self.id = WallLayerGroup.idd
         self.plan_offset = 0
-        self.touched = False
+        self.touched = False  # TODO remove
         WallLayerGroup.idd += 1
 
     def set_plan_offset(self, offset: int):
@@ -97,7 +97,7 @@ class WallLayerGroup:
 
     def get_sorted_layers(self) -> List[List[WallLayer]]:
         """
-        :return: a list containing lists of layers that share the same z height sorted
+        :return: a list containing lists of layers that share the same z height sorted by z
         """
         self.layers.sort(key=lambda x: x.translation[2])
 
@@ -161,6 +161,7 @@ class WallLayerGroup:
             translation[2] = height * 0.5 - leftover * 0.5  # TODO: Check if this is correct
             wall_layer = WallLayer(ret, length, translation=translation, height=leftover)
             ret.layers.append(wall_layer)
+
         return ret
 
     def __lt__(self, other):

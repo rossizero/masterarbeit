@@ -1,14 +1,12 @@
 import math
 import unittest
 from copy import deepcopy
-from typing import Dict
 
 import numpy as np
 import quaternion
 
 from detailing.wall import Wall
 from detailing.wall_layer_group import WallLayerGroup
-from detailing.wall_type_group import WallTypeGroup
 from masonry.brick import BrickInformation
 
 
