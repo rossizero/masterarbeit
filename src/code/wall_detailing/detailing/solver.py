@@ -142,10 +142,10 @@ class GraphSolver(Solver):
                     break
 
         for layer in wall.layers:
-            if is_left:
-                assert not layer.touched_left
-            else:
-                assert not layer.touched_right
+            if is_left and layer.touched_left:
+                return
+            elif not is_left and layer.touched_right:
+                return
 
         cs = self.get_all_corners_of_wall(wall_id, is_left)
         corner_offset = 0
@@ -161,8 +161,8 @@ class GraphSolver(Solver):
             score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
 
             print("-", score, score2)
-            if score <= val:
-                val = score
+            if score2 <= val:
+                val = score2
                 result = corner_offset
 
             corner_offset += 1
@@ -189,7 +189,7 @@ class GraphSolver(Solver):
                     break
 
         cs = self.get_all_corners_of_wall(wall_id, is_left)
-        print("fit wall", wall_id, "to corner", corner, "with", cs[0].plan_offset, len(cs))
+        print("fit wall", wall_id, "(", wall.name, ")", "to corner", corner, "with", cs[0].plan_offset, len(cs))
 
         val = len(cs) * 2
 
@@ -203,8 +203,8 @@ class GraphSolver(Solver):
             score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
             print("-", score, score2)
 
-            if score <= val:
-                val = score
+            if score2 <= val:
+                val = score2
                 result = wall_offset
 
             wall_offset += 1
