@@ -4,6 +4,8 @@ from detailing.wall_layer_group import WallLayerGroup
 from masonry.bond import StrechedBond
 from masonry.brick import BrickInformation
 
+from wall_detailing.masonry.bond import GothicBond
+
 
 class WallTypeGroup:
     def __init__(self, ifc_class: str, brick_information: List[BrickInformation]):

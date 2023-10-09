@@ -140,8 +140,7 @@ class Corn:
 
     def reduce_layer_length(self, layer: WallLayer, bond: Bond):
         assert layer in self.layers
-        if layer.parent.id == 1:
-            a = 0
+
         main_layer = self.get_main_layer()
         angle = self.get_rotation()
 

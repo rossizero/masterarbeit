@@ -45,7 +45,15 @@ class Solver(ABC):
         #print("score", val, "on wall", look_at_wall)
         return val
 
-    def holes_between_corner_and_wall(self, corners: Corns, look_at_wall: int):
+    def all_holes(self, corners: Corns):
+        val = 0
+        corners = deepcopy(corners)
+        for corner in corners.corners:
+            for layer in corner.layers:
+                val += self.holes_between_corner_and_wall(Corns.from_corner_list([corner]), look_at_wall=layer.parent.id, reduce=False)
+        return val
+
+    def holes_between_corner_and_wall(self, corners: Corns, look_at_wall: int, reduce: bool = True):
         corners = deepcopy(corners)
         current_wall_layers = []
 
@@ -53,7 +61,8 @@ class Solver(ABC):
         for corner in corners.corners:
             for layer in corner.layers:
                 if layer.parent.id == look_at_wall:
-                    corner.reduce_layer_length(layer, self.bond)
+                    if reduce:
+                        corner.reduce_layer_length(layer, self.bond)
                     current_wall_layers.append(layer)
 
         # then count holes between given corner and wall by looking at which side the corner is relative to the wall
@@ -66,7 +75,8 @@ class Solver(ABC):
                 if layer in current_wall_layers:
                     leftover_left, leftover_right, _ = self.bond.leftover_of_layer(layer.length,
                                                                                    layer.get_layer_plan_index(),
-                                                                                 layer.relative_x_offset())
+                                                                                   layer.relative_x_offset(),
+                                                                                   layer.reversed)
                     current_wall_layer = layer
                     break
             assert current_wall_layer is not None
@@ -199,6 +209,11 @@ class GraphSolver(Solver):
                     add = False
                     break
             if add:
+                for layer in corner.layers:
+                    if layer in wall.layers:
+                        if is_left and layer.touched_right:
+                            layer.reversed = True  # TODO reverse shit
+                            print(layer.length)
                 curr.append(corner)
 
         for corner in curr:
@@ -252,7 +267,6 @@ class GraphSolver(Solver):
                     is_left = True
                     break
 
-        cs = self.get_all_corners_of_wall(wall_id, is_left)
         cs = self.get_all_corners_of_wall(wall_id, is_left)
         # only value the corners that are actually between the two walls of og_corner
         curr = []
@@ -331,7 +345,6 @@ class GraphSolver(Solver):
                 if left not in visited:
                     corn = tuple(sorted([n.name, left]))
                     self.fit_corner_to_wall(corn, n.name)
-                    todo.append(left)
 
             for right in n.right:
                 if right not in visited:
@@ -342,6 +355,7 @@ class GraphSolver(Solver):
                 if left not in visited:
                     corn = tuple(sorted([n.name, left]))
                     self.fit_wall_to_corner(left, corn)
+                    todo.append(left)
 
             for right in n.right:
                 if right not in visited:
@@ -349,13 +363,14 @@ class GraphSolver(Solver):
                     self.fit_wall_to_corner(right, corn)
                     todo.append(right)
 
-        todo.append(1)
+        todo.append(0)
         while len(todo) > 0:
             for to in todo.copy():
                 todo.remove(to)
                 if to not in visited:
                     fit(dic[to])
 
+        print("score", self.all_holes(self.corners))
 
 class BruteForceSolver(Solver):
     """

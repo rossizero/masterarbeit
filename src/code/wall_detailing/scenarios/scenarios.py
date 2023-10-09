@@ -122,3 +122,27 @@ class DoppelEck1(Scenario):
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi),
                             ifc_wall_type="test", name="w3")
         return [w0, w2, w1]
+
+
+class DoppelEck2_Closed(Scenario):
+    def get_walls(self):
+        w0 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+        w1 = Wall.make_wall(3, 1, 5 * 0.5, np.array([-4.5, -2, 1.25]),
+                            quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w1")
+        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w2")
+
+        w3 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 7.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+        w4 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, -3.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w5 = Wall.make_wall(3, 1, 5 * 0.5, np.array([4.5, -2, 3.75]),
+                            quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi + math.pi / 2),
+                            ifc_wall_type = "test", name = "w2")
+        w6 = Wall.make_wall(7, 1, 5 * 0.5, np.array([4.5, 4, 1.25]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi + + math.pi / 2),
+                            ifc_wall_type="test", name="w2")
+        return [w0, w2, w3]#,   w1, w4, w5, w6]

@@ -19,6 +19,7 @@ class WallLayer:
 
         self.touched_left = False  # TODO remove
         self.touched_right = False  # TODO remove
+        self.reversed = False  # TODO remove
 
     def combine(self, other: 'WallLayer'):
         """
@@ -201,7 +202,6 @@ class WallLayer:
 
         x = round(x[0], 6)
         length += x
-
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
         return length
 

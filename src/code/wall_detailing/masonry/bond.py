@@ -192,11 +192,11 @@ class Bond(ABC):
             ret = max(ret, l)
         return round(ret, 6)
 
-    def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0):
+    def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0, reversed: bool = False):
         self.__reset()
         self.__up(layer)
 
-        num_bricks, leftover_left, leftover_right, _ = self.bricks_in_layer(layer, length, x_offset)
+        num_bricks, leftover_left, leftover_right, _ = self.bricks_in_layer(layer, length, x_offset, reversed)
         return leftover_left, leftover_right, num_bricks
 
     def apply_layer(self, length, width, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
@@ -218,7 +218,6 @@ class Bond(ABC):
 
         c = leftover_left if not fill_left else 0.0
         d = leftover_right if not fill_right else 0.0
-        #print("  ", c, d, "sum", c + d, "x_off:", x_offset, "len: ",  length, "ind", layer, self.layer, num_bricks)
 
         if leftover_left > 0.0 and fill_left:
             tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
@@ -237,11 +236,12 @@ class Bond(ABC):
             ret.append(tf)
         return ret
 
-    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0) -> int:
+    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0, reversed: bool = False) -> int:
         """
         :param layer: num of layer (0 is at floor)
         :param length: length of the wall
         :param x_offset: offset in x direction
+        :param reversed: if the bricks are supposed to be placed from right to left
         :return: number of bricks that fit into given length of the wall by following layout plan for given layer
         """
 
@@ -287,9 +287,18 @@ class Bond(ABC):
 
         # necessary because sometimes too small for the occ backend to handle
         leftover_right = round(leftover_right, 6)
+        leftover_right = length + x_offset - leftover_right
         leftover_left = round(leftover_left, 6)
 
-        return counter, leftover_left, length + x_offset - leftover_right, ret
+        if reversed:
+            leftover_right, leftover_left = leftover_left, leftover_right
+            for tf in ret:
+                brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
+                tf.translation.offset[0] = length + x_offset - tf.translation.offset[0] - brick_length
+                tf.mask_multiplier[0] *= -1
+
+        # in case we want to build the layer from right to left
+        return counter, leftover_left, leftover_right, ret
 
 
 class BlockBond(Bond):
