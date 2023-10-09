@@ -199,7 +199,7 @@ class Bond(ABC):
         num_bricks, leftover_left, leftover_right, _ = self.bricks_in_layer(layer, length, x_offset, reversed)
         return leftover_left, leftover_right, num_bricks
 
-    def apply_layer(self, length, width, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0) -> List[Transformation]:
+    def apply_layer(self, length, width, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0, reversed: bool = False) -> List[Transformation]:
         """
         Fills given dimensions with set layout plan
         :param length: length of wall we want to be filled with this masonry bond
@@ -208,10 +208,11 @@ class Bond(ABC):
         :param fill_right: if we wish to fill holes on the right with custom brick sizes
         :param layer: the index of the plan we want to use
         :param x_offset: if the layer's left edge is not at x = 0
+        :param reversed: if the bricks are supposed to be placed from right to left
         :return: a list of Transformations for each brick
         """
         ret = []
-        num_bricks, leftover_left, leftover_right, ret = self.bricks_in_layer(layer, length, x_offset)
+        num_bricks, leftover_left, leftover_right, ret = self.bricks_in_layer(layer, length, x_offset, reversed)
 
         aa = leftover_left if fill_left else 0.0
         bb = leftover_right if fill_right else 0.0
@@ -290,15 +291,17 @@ class Bond(ABC):
         leftover_right = length + x_offset - leftover_right
         leftover_left = round(leftover_left, 6)
 
+        # reverse tfs to build from left to right
         if reversed:
             leftover_right, leftover_left = leftover_left, leftover_right
+
             for tf in ret:
                 brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
-                tf.translation.offset[0] = length + x_offset - tf.translation.offset[0] - brick_length
+                tf.translation.offset[0] = length - tf.translation.offset[0] - brick_length
                 tf.mask_multiplier[0] *= -1
 
         # in case we want to build the layer from right to left
-        return counter, leftover_left, leftover_right, ret
+        return len(ret), leftover_left, leftover_right, ret
 
 
 class BlockBond(Bond):

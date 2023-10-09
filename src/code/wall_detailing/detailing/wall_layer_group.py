@@ -23,7 +23,10 @@ class WallLayerGroup:
         self.name = name
         self.id = WallLayerGroup.idd
         self.plan_offset = 0
-        self.touched = False  # TODO remove
+        self.touched = False  # TODO just for testing purposes
+
+        self.lowest_local_x = None  # TODO test maybe remove
+        self.highest_local_x = None  # TODO test maybe remove
         WallLayerGroup.idd += 1
 
     def set_plan_offset(self, offset: int):
@@ -89,11 +92,34 @@ class WallLayerGroup:
         """
         :return: the smallest local x coordinate of all of the layers
         """
+        if self.lowest_local_x is not None:
+            return self.lowest_local_x
+
         if len(self.layers) > 0:
             lefts = min([l.get_left_edge(True)[0] for l in self.layers])
             rights = min([l.get_right_edge(True)[0] for l in self.layers])  # TODO maybe unnecessary
             return round(min(lefts, rights), 6)
         return None
+
+    def get_highest_local_x(self) -> Optional[float]:
+        """
+        :return: the biggest local x coordinate of all of the layers
+        """
+        if self.highest_local_x is not None:
+            return self.highest_local_x
+
+        if len(self.layers) > 0:
+            lefts = max([l.get_left_edge(True)[0] for l in self.layers])  # TODO maybe unnecessary
+            rights = max([l.get_right_edge(True)[0] for l in self.layers])
+            return round(max(lefts, rights), 6)
+        return None
+
+
+    def set_x_offsets(self):
+        if self.lowest_local_x is None:
+            self.lowest_local_x = self.get_lowest_local_x()
+        if self.highest_local_x is None:
+            self.highest_local_x = self.get_highest_local_x()
 
     def get_sorted_layers(self) -> List[List[WallLayer]]:
         """

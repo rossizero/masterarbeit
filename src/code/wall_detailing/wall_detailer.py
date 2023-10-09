@@ -12,7 +12,8 @@ from masonry.bond import Bond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
-from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed
+from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
+    SimpleOffset
 from masonry import Corner
 from detailing.solver import GraphSolver
 
@@ -103,7 +104,8 @@ class WallDetailer:
                                                fill_left=fill_left,
                                                fill_right=fill_right,
                                                layer=layer.get_layer_plan_index(),
-                                               x_offset=layer.relative_x_offset())
+                                               x_offset=layer.relative_x_offset(),
+                                               reversed=layer.reversed)
 
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
@@ -197,7 +199,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = DoppelEck2_Closed()
+    scenario = SimpleOffset()
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()

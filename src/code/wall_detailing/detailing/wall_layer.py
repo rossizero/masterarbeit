@@ -94,9 +94,14 @@ class WallLayer:
         """
         :return: the difference between the lowest x coordinate of all layers of the parent and self
         """
-        a = min(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
-        b = self.parent.get_lowest_local_x()
-        return round(a - b, 6)
+        if self.reversed:
+            a = max(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
+            b = self.parent.get_highest_local_x()
+            return round(b - a, 6)
+        else:
+            a = min(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
+            b = self.parent.get_lowest_local_x()
+            return round(a - b, 6)
 
     @property
     def center(self) -> np.array:

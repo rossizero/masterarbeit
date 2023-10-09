@@ -4,7 +4,7 @@ from detailing.wall_layer_group import WallLayerGroup
 from masonry.bond import StrechedBond
 from masonry.brick import BrickInformation
 
-from wall_detailing.masonry.bond import GothicBond
+from masonry.bond import GothicBond
 
 
 class WallTypeGroup:
