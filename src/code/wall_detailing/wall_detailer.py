@@ -197,7 +197,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = SimpleCorners()
+    scenario = DoppelEck1()
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()

@@ -175,6 +175,11 @@ class Corn:
                         vals.append(i)
         return min(vals)
 
+    def __str__(self):
+        a = [l.parent.id for l in self.layers]
+        a = set(sorted(a))
+        return "corner: " + str(a)
+
 
 class Corns:
     """

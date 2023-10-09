@@ -104,6 +104,52 @@ class GraphSolver(Solver):
                 ret.extend(groups[key])
         return ret
 
+    def get_all_connected_corners(self, wall_id: int, left: bool = True):
+        """
+        returns all corners that are connected to given wall and those that are indirectly connected to it
+        (see scenario DoppelEck1: pipapo:  _|-  )
+        """
+        wall = self.get_wall(wall_id)
+
+        s = set()
+        s2 = set()
+        for layer in wall.layers:
+            if left:
+                for l in layer.left_connections:
+                    s.add(tuple(sorted([l.parent.id, wall_id])))
+                    s2.add(l.parent.id)
+            else:
+                for l in layer.right_connections:
+                    s.add(tuple(sorted([l.parent.id, wall_id])))
+                    s2.add(l.parent.id)
+
+        for w in s2.copy():
+            w = self.get_wall(w)
+            # find out if wall with wall_id is connected to w on the left or right
+            left = False
+            for layer in w.layers:
+                if wall_id in [l.parent.id for l in layer.left_connections]:
+                    left = True
+                    break
+
+            if left:
+                for layer in w.layers:
+                    for con in layer.left_connections:
+                        s.add(tuple(sorted([con.parent.id, w.id])))
+                        s2.add(con.parent.id)
+            else:
+                for layer in w.layers:
+                    for con in layer.right_connections:
+                        s.add(tuple(sorted([con.parent.id, w.id])))
+                        s2.add(con.parent.id)
+
+        groups = self.corners.grouped_by_walls()
+        ret = []
+        for key in s:
+            if key in groups.keys():
+                ret.extend(groups[key])
+        return ret
+
     def get_all_corners_of_wall(self, wall_id: int, left: bool = True):
         wall = self.get_wall(wall_id)
 
@@ -131,8 +177,10 @@ class GraphSolver(Solver):
         return None
 
     def fit_corner_to_wall(self, corner: Tuple[int, int], wall_id: int):
+        og_corner = corner
         wall = self.get_wall(wall_id)
-        print("fit corner", corner, "to wall", wall_id, wall.touched)
+        other = [c for c in corner if c != wall_id][0]  # MAYDO only works for simple corners (not t-joints or crossings)
+        print("fit corner", corner, "to wall", wall_id, wall.touched, other)
 
         is_left = False
         for layer in wall.layers:
@@ -141,19 +189,35 @@ class GraphSolver(Solver):
                     is_left = True
                     break
 
-        for layer in wall.layers:
-            if is_left and layer.touched_left:
-                return
-            elif not is_left and layer.touched_right:
-                return
-
         cs = self.get_all_corners_of_wall(wall_id, is_left)
+        # only value the corners that are actually between the two walls of og_corner
+        curr = []
+        for corner in cs:
+            add = True
+            for layer in corner.layers:
+                if layer.parent.id not in og_corner:
+                    add = False
+                    break
+            if add:
+                curr.append(corner)
+
+        for corner in curr:
+            for layer in corner.layers:
+                if layer.parent.id != wall_id:
+                    print(corner, layer.parent.id)
+                    if is_left and layer.touched_left:
+                        print("touched left")
+                        return
+                    elif not is_left and layer.touched_right:
+                        print("touched right")
+                        return
+
         corner_offset = 0
         result = 0
         val = len(cs) * 4
 
         while corner_offset < self.bond.get_corner_plan_repeat_step():
-            corners = deepcopy(cs)
+            corners = deepcopy(curr)
             for corner in corners:
                 corner.plan_offset = corner_offset
 
@@ -161,21 +225,21 @@ class GraphSolver(Solver):
             score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
 
             print("-", score, score2)
-            if score2 <= val:
+            if score2 < val:
                 val = score2
                 result = corner_offset
 
             corner_offset += 1
 
         print("solution: ", result)
-        for corner in cs:
+        for corner in curr:
             corner.set_plan_offset(result)
             for layer in corner.layers:
                 if layer in wall.layers:
                     corner.reduce_layer_length(layer, self.bond)
-        pass
 
     def fit_wall_to_corner(self, wall_id: int, corner: Tuple[int, int]):
+        og_corner = corner
         wall = self.get_wall(wall_id)
         if wall.touched:
             return
@@ -189,7 +253,20 @@ class GraphSolver(Solver):
                     break
 
         cs = self.get_all_corners_of_wall(wall_id, is_left)
-        print("fit wall", wall_id, "(", wall.name, ")", "to corner", corner, "with", cs[0].plan_offset, len(cs))
+        cs = self.get_all_corners_of_wall(wall_id, is_left)
+        # only value the corners that are actually between the two walls of og_corner
+        curr = []
+        for corner in cs:
+            add = True
+            for layer in corner.layers:
+                if layer.parent.id not in og_corner:
+                    add = False
+                    break
+            if add:
+                curr.append(corner)
+
+        print("fit wall", wall_id, "(", wall.name, ")", "to corner", corner, len(cs), len(curr), is_left)
+        print("offset", cs[0].plan_offset)
 
         val = len(cs) * 2
 
@@ -197,7 +274,7 @@ class GraphSolver(Solver):
         result = 0
         while wall_offset < self.bond.repeat_layer:
             wall.plan_offset = wall_offset
-            corners = deepcopy(cs)
+            corners = deepcopy(curr)
 
             score2 = self.holes_between_corner_and_wall(Corns.from_corner_list(corners), wall_id)
             score = self.score(Corns.from_corner_list(corners), look_at_wall=wall_id)
@@ -212,7 +289,7 @@ class GraphSolver(Solver):
         wall.set_plan_offset(result)
 
         print("solution: ", result)
-        for corner in cs:
+        for corner in curr:
             for layer in corner.layers:
                 if layer in wall.layers:
                     corner.reduce_layer_length(layer, self.bond)
@@ -254,17 +331,25 @@ class GraphSolver(Solver):
                 if left not in visited:
                     corn = tuple(sorted([n.name, left]))
                     self.fit_corner_to_wall(corn, n.name)
-                    self.fit_wall_to_corner(left, corn)
                     todo.append(left)
 
             for right in n.right:
                 if right not in visited:
                     corn = tuple(sorted([n.name, right]))
                     self.fit_corner_to_wall(corn, n.name)
+
+            for left in n.left:
+                if left not in visited:
+                    corn = tuple(sorted([n.name, left]))
+                    self.fit_wall_to_corner(left, corn)
+
+            for right in n.right:
+                if right not in visited:
+                    corn = tuple(sorted([n.name, right]))
                     self.fit_wall_to_corner(right, corn)
                     todo.append(right)
 
-        todo.append(0)
+        todo.append(1)
         while len(todo) > 0:
             for to in todo.copy():
                 todo.remove(to)
