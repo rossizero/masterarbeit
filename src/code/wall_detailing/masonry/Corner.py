@@ -192,7 +192,7 @@ class Corns:
     def add_corner(self, corner: Corn):
         for c in self.corners:
             if c == corner:
-                c.walls.update(corner.layers)
+                c.layers.update(corner.layers)
                 return
         self.corners.append(corner)
 
@@ -220,7 +220,6 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
     for i, w1 in enumerate(wall_layer_groups):
         for j in range(i+1, len(wall_layer_groups)):
             w2 = wall_layer_groups[j]
-
             r1 = w1.get_rotation()
             r2 = w2.get_rotation()
             diff = r2 * r1.inverse()
@@ -267,10 +266,14 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                         elif np.linalg.norm(intersection_point1 - l1.right_edge) < w1.module.width:
                             l1.right_connections.append(l2)
 
+                        assert len(set(l1.right_connections) & set(l1.left_connections)) == 0
+
                         if np.linalg.norm(intersection_point1 - l2.left_edge) < w2.module.width:  # TODO use wall width!
                             l2.left_connections.append(l1)
                         elif np.linalg.norm(intersection_point1 - l2.right_edge) < w2.module.width:
                             l2.right_connections.append(l1)
+
+                        assert len(set(l2.right_connections) & set(l2.left_connections)) == 0
 
                     except np.linalg.LinAlgError:
                         #print("no intersection found between", w1.name, "and", w2.name,  "even though they are touching")

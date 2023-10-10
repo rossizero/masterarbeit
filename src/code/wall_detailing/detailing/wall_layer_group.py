@@ -114,10 +114,10 @@ class WallLayerGroup:
             return round(max(lefts, rights), 6)
         return None
 
-
     def set_x_offsets(self):
         if self.lowest_local_x is None:
             self.lowest_local_x = self.get_lowest_local_x()
+
         if self.highest_local_x is None:
             self.highest_local_x = self.get_highest_local_x()
 

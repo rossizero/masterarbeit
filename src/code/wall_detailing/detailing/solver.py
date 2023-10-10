@@ -73,10 +73,19 @@ class Solver(ABC):
             current_wall_layer = None
             for layer in corner.layers:
                 if layer in current_wall_layers:
-                    leftover_left, leftover_right, _ = self.bond.leftover_of_layer(layer.length,
-                                                                                   layer.get_layer_plan_index(),
-                                                                                   layer.relative_x_offset(),
-                                                                                   layer.reversed)
+                    leftover_left, leftover_right, num = self.bond.leftover_of_layer(layer.length,
+                                                                                     layer.get_layer_plan_index(),
+                                                                                     layer.relative_x_offset(),
+                                                                                     layer.reversed)
+
+                    # print(leftover_left, leftover_right, num, layer.length, layer.relative_x_offset())
+                    # if no blocks have been set because the layer length is so small,
+                    # there is no actual hole in the wall (will be filled later)
+                    if num == 0:  # TODO check if right case also true
+                        pass
+                        #leftover_left = 0.0
+                        #leftover_right = 0.0
+                    # print("\t", layer.length, layer.relative_x_offset(), num)
                     current_wall_layer = layer
                     break
             assert current_wall_layer is not None
@@ -89,14 +98,9 @@ class Solver(ABC):
                 elif layer in current_wall_layer.right_connections:
                     left = False
                     break
+
             assert left is not None
-
-            if current_wall_layer.reversed:
-                pass# left = not left
-
-            c = leftover_left if len(current_wall_layer.left_connections) > 0 and left else 0.0
             c = leftover_left if left else 0.0
-            d = leftover_right if len(current_wall_layer.right_connections) > 0 and not left else 0.0
             d = leftover_right if not left else 0.0
             val += c + d
         return val
@@ -251,7 +255,7 @@ class GraphSolver(Solver):
                 if layer in wall.layers:
                     old_l = layer.length
                     corner.reduce_layer_length(layer, self.bond)
-                    print(old_l, layer.length, layer.parent.id, layer.relative_x_offset())
+                    #print(old_l, layer.length, layer.parent.id, layer.relative_x_offset())
 
     def fit_wall_to_corner(self, wall_id: int, corner: Tuple[int, int]):
         og_corner = corner
@@ -282,10 +286,12 @@ class GraphSolver(Solver):
                         layer.reversed = True
                 curr.append(corner)
 
-        print("fit wall", wall_id, "(", wall.name, ")", "to corner", corner, len(cs), len(curr), is_left)
-        print("offset", cs[0].plan_offset)
+        print("fit wall", wall_id, "(", wall.name, ")", "to", corner, len(cs), len(curr), is_left)
+        if len(curr) == 0:
+            return
+        print("offset", curr[0].plan_offset)
 
-        val = len(cs) * 2
+        val = len(cs) * 2 + 1
 
         wall_offset = 0
         result = 0
@@ -324,6 +330,9 @@ class GraphSolver(Solver):
                 self.right = set()
                 self.left = set()
 
+            def weight(self) -> int:
+                return len(self.right) + len(self.left)
+
         # build graph and look for a start node
         dic = {}
 
@@ -333,13 +342,16 @@ class GraphSolver(Solver):
             for layer in corner.layers:
                 if layer.parent.id not in dic.keys():
                     layer.parent.set_x_offsets()  # TODO maybe remove?
-
                     dic[layer.parent.id] = Node(layer.parent.id, layer.parent)
 
                 for obj in layer.right_connections:
                     dic[layer.parent.id].right.add(obj.parent.id)
+                    assert len(dic[layer.parent.id].right & dic[layer.parent.id].left) == 0
                 for obj in layer.left_connections:
                     dic[layer.parent.id].left.add(obj.parent.id)
+                    assert len(dic[layer.parent.id].right & dic[layer.parent.id].left) == 0
+
+                assert len(dic[layer.parent.id].right & dic[layer.parent.id].left) == 0
 
         # go through the graph
         visited = []
@@ -347,31 +359,40 @@ class GraphSolver(Solver):
 
         def fit(n: Node):
             visited.append(n.name)
-
+            print("---handling---", n.name)
+            print("   left corns")
             for left in n.left:
                 if left not in visited:
                     corn = tuple(sorted([n.name, left]))
                     self.fit_corner_to_wall(corn, n.name)
 
+            print("   right corns")
             for right in n.right:
                 if right not in visited:
                     corn = tuple(sorted([n.name, right]))
                     self.fit_corner_to_wall(corn, n.name)
 
+            print("   left walls")
             for left in n.left:
                 if left not in visited:
                     corn = tuple(sorted([n.name, left]))
                     self.fit_wall_to_corner(left, corn)
                     todo.append(left)
 
+            print("   right walls")
             for right in n.right:
                 if right not in visited:
                     corn = tuple(sorted([n.name, right]))
                     self.fit_wall_to_corner(right, corn)
                     todo.append(right)
 
-        todo.append(3)  # 1, 2
+        start = [n for n in dic.values()]
+        start.sort(key=lambda x: x.weight(), reverse=True)
+        start = start[0]
+        print("starting with", start.name)
+        todo.append(start.name)
         while len(todo) > 0:
+            todo.sort(key=lambda x: dic[x].weight(), reverse=True)
             for to in todo.copy():
                 todo.remove(to)
                 if to not in visited:

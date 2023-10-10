@@ -276,6 +276,9 @@ class Bond(ABC):
 
         leftover_left = length + x_offset
 
+        if counter == 1:
+            leftover_left = leftover_left  # TODO for very short walls
+
         ret = []
         for i in range(counter):
             tf = self.__next()

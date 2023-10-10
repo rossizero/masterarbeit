@@ -13,7 +13,7 @@ from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
-    SimpleOffset
+    SimpleOffset, DoppelEck3_Closed
 from masonry import Corner
 from detailing.solver import GraphSolver
 
@@ -199,10 +199,11 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = SimpleOffset()
+    scenario = DoppelEck3_Closed()
+
+    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
 
-    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])

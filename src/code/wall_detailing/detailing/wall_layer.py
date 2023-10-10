@@ -92,7 +92,8 @@ class WallLayer:
 
     def relative_x_offset(self) -> float:
         """
-        :return: the difference between the lowest x coordinate of all layers of the parent and self
+        :return: the difference between the lowest/highest (depending on self.reversed)
+         x coordinate of all layers of the parent and self
         """
         if self.reversed:
             a = max(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
