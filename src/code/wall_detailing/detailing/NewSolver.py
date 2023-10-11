@@ -51,31 +51,46 @@ class NewSolver(Solver):
         if layer.touched:
             print("not fitting layer of wall", layer.parent.id, "to", corner)
         if not layer.touched:
-            print("fit layer of wall", layer.parent.id, "to", corner)
-            wall_offset = 0
-            result = 0
-            val = 3
-            if not is_left:
-                layer.reversed = True
+            if not layer.parent.touched or False:
+                print("fit layer of wall", layer.parent.id, "to", corner)
+                wall_offset = 0
+                result = 0
+                val = 3
+                if not is_left:
+                    layer.reversed = True
 
-            while wall_offset < self.bond.repeat_layer:
-                layer.plan_offset = wall_offset
-                score2 = self.holes_between_corner_and_layer(corner, layer)
-                #print("-", score2, layer.get_layer_plan_index())
-                if score2 < val:
-                    val = score2
-                    result = wall_offset
+                while wall_offset < self.bond.repeat_layer:
+                    layer.plan_offset = wall_offset
+                    score2 = self.holes_between_corner_and_layer(corner, layer)
+                    print("-", score2, wall_offset, layer.get_layer_plan_index())
+                    if score2 < val:
+                        val = score2
+                        result = wall_offset
 
-                wall_offset += 1
+                    wall_offset += 1
 
-            #print("result", result)
-            layer.plan_offset = result
-            layer.touched = True
-            #layer.parent.set_plan_offset(result)
+                print("result", result)
+                layer.plan_offset = result
+                layer.touched = True
+                layer.parent.touched = True
+                #layer.parent.set_plan_offset(result)
+                old_l = layer.length
+                corner.reduce_layer_length(layer, self.bond)
+                print(old_l, layer.length, layer.relative_x_offset())
+            else:
+                print("set layer of wall", layer.parent.id, "to", corner, corner.plan_offset)
+                if not is_left:
+                    layer.reversed = True
+                layer.touched = True
+                bottoms = layer.bottoms
+                offset = 0
+                if bottoms is not None and len(bottoms) > 0:
+                    offset = layer.bottoms[0].plan_offset  # TODO
+                layer.plan_offset = offset
+                old_l = layer.length
+                corner.reduce_layer_length(layer, self.bond)
+                print(old_l, layer.length, layer.relative_x_offset())
 
-            #old_l = layer.length
-            corner.reduce_layer_length(layer, self.bond)
-            #print(old_l, layer.length, layer.relative_x_offset())
 
     def fit_corner_to_layer(self, corner: Corn, layer: WallLayer):
         if corner.touched:
@@ -103,11 +118,21 @@ class NewSolver(Solver):
             print("solution: ", result)
 
         corner.set_plan_offset(result)
+
         for l in corner.layers:
             corner.reduce_layer_length(l, self.bond)
 
     def solve_layer(self, complete_layer: List[Corn]):
         start = complete_layer[0]
+        for corner in complete_layer:
+            bottom = self.corners.get_bottom_corner(corner)
+            if bottom is not None:
+                print("FOUND BOTTOM LAYER!", corner, corner.plan_offset)
+                start = corner
+                start.plan_offset = bottom.plan_offset + 1
+                break
+        print("z: ", list(start.layers)[0].get_center()[2])
+        start.touched = True
         todo = [start]
         done = []
 
@@ -128,7 +153,6 @@ class NewSolver(Solver):
                         self.fit_corner_to_layer(c, layer)
                         todo.append(c)
 
-        #start.plan_offset = 0  # TODO
         while len(todo) > 0:
             for to in todo.copy():
                 todo.remove(to)

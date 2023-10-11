@@ -62,6 +62,8 @@ class Corn:
         self.plan_offset = 0
         self.touched = False
         self.main_layer = None
+        self.upon = None
+        self.below = None
 
     def __eq__(self, other: "Corn"):
         if type(other) is Corn:
@@ -148,7 +150,8 @@ class Corn:
         a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
         relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
         # how far the corner stretches into the layer (x direction)
-        corner_length = bond.get_corner_length(self.get_corner_index() + self.plan_offset, relative_rotation)
+        #corner_length = bond.get_corner_length(self.get_corner_index() + self.plan_offset, relative_rotation)
+        corner_length = bond.get_corner_length(self.plan_offset, relative_rotation)
         corner_length -= bond.module.width / 2.0
         layer.move_edge(self.point, corner_length)
 
@@ -212,6 +215,35 @@ class Corns:
         for corner in corners:
             ret.add_corner(corner)
         return ret
+
+    def get_top_corner(self, corner: Corn):
+        tops = corner.main_layer.tops
+        if tops is None or len(tops) == 0:
+            for layer in corner.layers:
+                tops = layer.tops
+                if tops is not None and len(tops) > 0:
+                    break
+
+        if tops is not None and len(tops) > 0:
+            for corner in self.corners:
+                if any(map(lambda v: v in corner.layers, tops)):
+                    return corner
+        return None
+
+    def get_bottom_corner(self, corner: Corn):
+        bottoms = corner.main_layer.bottoms
+
+        if bottoms is None or len(bottoms) == 0:
+            for layer in corner.layers:
+                tops = layer.bottoms
+                if bottoms is not None and len(bottoms) > 0:
+                    break
+
+        if bottoms is not None and len(bottoms) > 0:
+            for corner in self.corners:
+                if any(map(lambda v: v in corner.layers, bottoms)):
+                    return corner
+        return None
 
 
 def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:

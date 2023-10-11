@@ -22,7 +22,7 @@ class WallLayerGroup:
         self.translation = np.array([0, 0, 0])  # of wall mid
         self.name = name
         self.id = WallLayerGroup.idd
-        self.plan_offset = 0
+        #self.plan_offset = 0
         self.touched = False  # TODO just for testing purposes
 
         self.lowest_local_x = None  # TODO test maybe remove
@@ -36,7 +36,7 @@ class WallLayerGroup:
 
     def combine(self, other: 'WallLayerGroup') -> bool:
         """
-        :param other: the wall we try to combine with ourselfs
+        :param other: the wall we try to combine with ourself
         :return: whether or not we actually combined anything. If we did, the incoming object is now obsolete
         """
         # first lets check if the situation would allow the combination of the two walls
@@ -50,7 +50,7 @@ class WallLayerGroup:
         z_part2 = quaternion.rotate_vectors(a2, np.array([0.0, 0.0, 1.0]))
         z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
         to_combine = other.module == self.module and z_parallel and (
-                    np.isclose(angle, math.pi) or np.isclose(angle, 0.0))
+                np.isclose(angle, math.pi) or np.isclose(angle, 0.0))
 
         # now lets see if there are any layers actually touching each other and combine the pairs that do
         combined = False
@@ -143,6 +143,34 @@ class WallLayerGroup:
         if len(curr) > 0:
             ret.append(curr)
         return ret
+
+    def top_of_layer(self, layer: WallLayer) -> Optional[List[WallLayer]]:
+        """
+        :param layer: layer we need the top neighbours of
+        :return: a list of all layers in this wall that are exactly 1 layer above given layer
+        """
+        if layer not in self.layers:
+            return None
+
+        sorted_layers = self.get_sorted_layers()
+        for i, layers in enumerate(sorted_layers):
+            if layer in layers and i < len(sorted_layers) - 1:
+                return sorted_layers[i + 1]
+        return []
+
+    def bottom_of_layer(self, layer: WallLayer) -> Optional[List[WallLayer]]:
+        """
+        :param layer: layer we need the top neighbours of
+        :return: a list of all layers in this wall that are exactly 1 layer above given layer
+        """
+        if layer not in self.layers:
+            return None
+
+        sorted_layers = self.get_sorted_layers()
+        for i, layers in enumerate(sorted_layers):
+            if layer in layers and i > 0:
+                return sorted_layers[i - 1]
+        return []
 
     def is_touching(self, other: 'WallLayerGroup'):
         """

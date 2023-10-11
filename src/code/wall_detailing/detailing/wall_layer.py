@@ -14,6 +14,7 @@ class WallLayer:
         self.height = parent.module.height if height is None else height
         self.length = length
 
+        # this is for corners only
         self.left_connections: List['WallLayer'] = []
         self.right_connections: List['WallLayer'] = []
 
@@ -37,6 +38,14 @@ class WallLayer:
         self.translation = local_mid
         self.length = total_length
 
+    @property
+    def tops(self):
+        return self.parent.top_of_layer(self)
+
+    @property
+    def bottoms(self):
+        return self.parent.bottom_of_layer(self)
+
     def get_layer_index(self):
         """
         :return: layer index that self has inside its assigned walllayergroup
@@ -50,7 +59,8 @@ class WallLayer:
         """
         :return: plan index to be used for detailing this layer
         """
-        return self.get_layer_index() + self.parent.plan_offset + self.plan_offset
+        #return self.get_layer_index() + self.parent.plan_offset + self.plan_offset
+        return self.get_layer_index() + self.plan_offset
 
     @property
     def left_edge(self):

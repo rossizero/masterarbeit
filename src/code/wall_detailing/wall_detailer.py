@@ -141,7 +141,8 @@ class WallDetailer:
         corner_rotation = corner.get_rotation()
         layer_index = main_layer.get_layer_index()
 
-        for tf in bond.apply_corner(corner.get_corner_index() + corner.plan_offset):
+        #for tf in bond.apply_corner(corner.get_corner_index() + corner.plan_offset):
+        for tf in bond.apply_corner(corner.plan_offset):
             local_position = tf.get_position()  # position in wall itself
             local_position[2] = 0.0  # MAYDO ugly
             local_rotation = tf.get_rotation()
