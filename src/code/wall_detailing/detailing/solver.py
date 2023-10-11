@@ -392,7 +392,7 @@ class GraphSolver(Solver):
         print("starting with", start.name)
         todo.append(start.name)
         while len(todo) > 0:
-            todo.sort(key=lambda x: dic[x].weight(), reverse=True)
+            # todo.sort(key=lambda x: dic[x].weight(), reverse=True)
             for to in todo.copy():
                 todo.remove(to)
                 if to not in visited:
