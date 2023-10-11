@@ -53,6 +53,22 @@ class Solver(ABC):
                 val += self.holes_between_corner_and_wall(Corns.from_corner_list([corner]), look_at_wall=layer.parent.id, reduce=False)
         return val
 
+    def holes_between_corner_and_layer(self, corner: Corn, layer: WallLayer):
+        corner = deepcopy(corner)
+
+        left = False
+        for l in corner.layers:
+            if l.parent.id == layer.parent.id:
+                corner.reduce_layer_length(l, self.bond)
+                leftover_left, leftover_right, num = self.bond.leftover_of_layer(l.length,
+                                                                                 l.get_layer_plan_index(),
+                                                                                 l.relative_x_offset(),
+                                                                                 l.reversed)
+            if l.parent.id in [l2.parent.id for l2 in layer.left_connections]:
+                left = True
+
+        return leftover_left if left else leftover_right
+
     def holes_between_corner_and_wall(self, corners: Corns, look_at_wall: int, reduce: bool = True):
         corners = deepcopy(corners)
         current_wall_layers = []

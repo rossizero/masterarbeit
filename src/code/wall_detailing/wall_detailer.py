@@ -6,6 +6,7 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.StlAPI import StlAPI_Writer
 
+from detailing.NewSolver import NewSolver
 from detailing.wall_layer_group import WallLayerGroup
 from detailing.wall_type_group import WallTypeGroup
 from masonry.bond import Bond
@@ -39,7 +40,7 @@ class WallDetailer:
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
             cs = Corner.check_for_corners(wall_layer_groups)
             bond = group.bond
-            solver = GraphSolver(cs, bond)
+            solver = NewSolver(cs, bond)
             solver.solve()
 
             for corner in cs.corners:
@@ -199,7 +200,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = DoppelEck3_Closed()
+    scenario = SimpleCorners2()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
 

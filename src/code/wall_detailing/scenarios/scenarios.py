@@ -76,15 +76,18 @@ class SimpleCorners(Scenario):
 class SimpleCorners2(Scenario):
     def get_walls(self):
         an = 0
-        height = 0.5 * 4
+        height = 0.5 * 1
         w0 = Wall.make_wall(10, 1, height, np.array([5.5, 0.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w0")
-        w1 = Wall.make_wall(8, 1, height, np.array([9.0, 5.5, height/2 + 1]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
+        w1 = Wall.make_wall(8, 1, height, np.array([9.0, 5.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
                        ifc_wall_type="test", name="w1")
         w2 = Wall.make_wall(10, 1, height, np.array([13.5, 1.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w2")
         w3 = Wall.make_wall(9, 1, height, np.array([9.5, -4.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0* math.pi),
                        ifc_wall_type="test", name="w3")
+        w4 = Wall.make_wall(6, 1, height, np.array([9.5+1.5, -4.5, height / 2]),
+                            quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi),
+                            ifc_wall_type="test", name="w3")
 
         w0.rotate_around(quaternion.from_euler_angles(0, an, an))
         w1.rotate_around(quaternion.from_euler_angles(0, an, an))
