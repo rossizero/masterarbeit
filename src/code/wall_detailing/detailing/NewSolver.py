@@ -97,13 +97,19 @@ class NewSolver(Solver):
             print("not fitting", corner, "to layer of wall", layer.parent.id)
 
     def solve_layer(self, complete_layer: List[Corn]):
-        start = complete_layer[2]
+        start = complete_layer[0]
         for corner in complete_layer:
             bottom = self.corners.get_bottom_corner(corner)
             if bottom is not None:
-                corner.set_plan_offset(bottom.plan_offset + 1)
-                start = corner
-                print("FOUND BOTTOM LAYER!", corner, corner.plan_offset, bottom)
+                par = [layer.parent.id for layer in bottom.layers]
+                all_found = True
+                for layer in corner.layers:
+                    if layer.parent.id not in par:
+                        all_found = False
+                if all_found:
+                    corner.set_plan_offset(bottom.plan_offset + 1)
+                    start = corner
+                    print("FOUND BOTTOM LAYER!", corner, corner.plan_offset, bottom)
                 # break
         print("z: ", list(start.layers)[0].get_center()[2])
         start.touched = True

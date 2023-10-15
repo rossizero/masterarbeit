@@ -240,6 +240,8 @@ class Corns:
         return None
 
     def _get_corner(self, layers: List[WallLayer]) -> Optional[Corn]:
+        if len(layers) == 0:
+            return None
         for corn in self.corners:
             found = True
             for l in layers:
