@@ -1,5 +1,6 @@
+import itertools
 import math
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 
 import numpy as np
 import quaternion
@@ -140,7 +141,7 @@ class Corn:
         for layer in self.layers:
             self.reduce_layer_length(layer, bond)
 
-    def reduce_layer_length(self, layer: WallLayer, bond: Bond):
+    def reduce_layer_length(self, layer: WallLayer, bond: Bond, printt:bool = False):
         assert layer in self.layers
 
         main_layer = self.get_main_layer()
@@ -153,7 +154,9 @@ class Corn:
         #corner_length = bond.get_corner_length(self.get_corner_index() + self.plan_offset, relative_rotation)
         corner_length = bond.get_corner_length(self.plan_offset, relative_rotation)
         corner_length -= bond.module.width / 2.0
-        layer.move_edge(self.point, corner_length)
+        l = layer.move_edge(self.point, corner_length)
+        if printt:
+            print(layer, "reduced by", l)
 
     def set_main_layer(self):
         self.main_layer = self.get_main_layer()
@@ -230,19 +233,34 @@ class Corns:
                     return corner
         return None
 
-    def get_bottom_corner(self, corner: Corn):
-        bottoms = corner.main_layer.bottoms
+    def get_corner(self, layer1: WallLayer, layer2: WallLayer) -> Optional[Corn]:
+        for corn in self.corners:
+            if layer1 in corn.layers and layer2 in corn.layers:
+                return corn
+        return None
 
-        if bottoms is None or len(bottoms) == 0:
-            for layer in corner.layers:
-                tops = layer.bottoms
-                if bottoms is not None and len(bottoms) > 0:
+    def _get_corner(self, layers: List[WallLayer]) -> Optional[Corn]:
+        for corn in self.corners:
+            found = True
+            for l in layers:
+                if l not in corn.layers:
+                    found = False
                     break
+            if found:
+                return corn
+        return None
 
-        if bottoms is not None and len(bottoms) > 0:
-            for corner in self.corners:
-                if any(map(lambda v: v in corner.layers, bottoms)):
-                    return corner
+    def get_bottom_corner(self, corner: Corn):
+        l = []
+        for layer in corner.layers:
+            bottoms = layer.bottoms
+            if bottoms is not None and len(bottoms) > 0:
+                l.append(bottoms)
+
+        for entry in list(itertools.product(*l)):
+            c = self._get_corner(entry)
+            if c is not None:
+                return c
         return None
 
 

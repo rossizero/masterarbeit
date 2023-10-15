@@ -15,12 +15,6 @@ class NewSolver(Solver):
     def __init__(self, corners: Corns, bond: Bond):
         super(NewSolver, self).__init__(corners, bond)
 
-    def get_corner(self, layer1: WallLayer, layer2: WallLayer) -> Optional[Corn]:
-        for corn in self.corners.corners:
-            if layer1 in corn.layers and layer2 in corn.layers:
-                return corn
-        return None
-
     def get_complete_layer(self, corn: Corn) -> List[Corn]:
         ret = []
         todo = [corn]
@@ -32,9 +26,9 @@ class NewSolver(Solver):
                     ret.append(curr)
                     for layer1 in curr.layers:
                         for layer2 in layer1.left_connections:
-                            todo.append(self.get_corner(layer1, layer2))
+                            todo.append(self.corners.get_corner(layer1, layer2))
                         for layer2 in layer1.right_connections:
-                            todo.append(self.get_corner(layer1, layer2))
+                            todo.append(self.corners.get_corner(layer1, layer2))
         return ret
 
     def fit_layer_to_corner(self, layer: WallLayer, corner: Corn):
@@ -44,93 +38,73 @@ class NewSolver(Solver):
                 is_left = True
                 break
 
-        if (is_left and layer.touched_left) or (not is_left and layer.touched_right):
-            pass
-            #print("not fitting layer of wall", layer.parent.id, "to", corner)
-            #return
-        if layer.touched:
-            print("not fitting layer of wall", layer.parent.id, "to", corner)
-        if not layer.touched:
-            if not layer.parent.touched or False:
-                print("fit layer of wall", layer.parent.id, "to", corner)
-                wall_offset = 0
-                result = 0
-                val = 3
-                if not is_left:
-                    layer.reversed = True
+        #if not is_left:
+        #    layer.reversed = True
 
-                while wall_offset < self.bond.repeat_layer:
-                    layer.plan_offset = wall_offset
-                    score2 = self.holes_between_corner_and_layer(corner, layer)
-                    print("-", score2, wall_offset, layer.get_layer_plan_index())
-                    if score2 < val:
-                        val = score2
-                        result = wall_offset
+        # if the wall the layer lies in has already been touched, we only need to adjust the corners of the layer
+        # else we need to find out the best plan_offset for the parent to fit to the corner
+        if layer.parent.touched:
+            print("set layer of wall", layer.parent.id, "to", corner, corner.plan_offset)
+            corner.reduce_layer_length(layer, self.bond)
+        else:
+            print("fit layer of wall", layer.parent.id, "to", corner)
+            wall_offset = 0
+            result = 0
+            val = 3
+            if not is_left:
+                pass
+                #layer.parent.reversed = True
+                #print("reverse!")
 
-                    wall_offset += 1
+            while wall_offset < self.bond.repeat_layer:
+                layer.parent.plan_offset = wall_offset
+                score2 = self.holes_between_corner_and_layer(corner, layer)
+                print("-", score2, wall_offset, layer.get_layer_plan_index())
+                if score2 < val:
+                    val = score2
+                    result = wall_offset
 
-                print("result", result)
-                layer.plan_offset = result
-                layer.touched = True
-                layer.parent.touched = True
-                #layer.parent.set_plan_offset(result)
-                old_l = layer.length
-                corner.reduce_layer_length(layer, self.bond)
-                print(old_l, layer.length, layer.relative_x_offset())
-            else:
-                print("set layer of wall", layer.parent.id, "to", corner, corner.plan_offset)
-                if not is_left:
-                    layer.reversed = True
-                layer.touched = True
-                bottoms = layer.bottoms
-                offset = 0
-                if bottoms is not None and len(bottoms) > 0:
-                    offset = layer.bottoms[0].plan_offset  # TODO
-                layer.plan_offset = offset
-                old_l = layer.length
-                corner.reduce_layer_length(layer, self.bond)
-                print(old_l, layer.length, layer.relative_x_offset())
+                wall_offset += 1
 
+            print("result", result)
+
+            layer.parent.set_plan_offset(result)
+            corner.reduce_layer_length(layer, self.bond)
 
     def fit_corner_to_layer(self, corner: Corn, layer: WallLayer):
-        if corner.touched:
+        if not corner.touched:
+            print("fit", corner, "to layer of wall", layer.parent.id)
+
+            corner_offset = 0
+            result = 0
+            val = 3
+
+            while corner_offset < self.bond.get_corner_plan_repeat_step():
+                corner.plan_offset = corner_offset
+                score2 = self.holes_between_corner_and_layer(corner, layer)
+
+                if set([l.parent.id for l in corner.layers]) == {3, 2}:
+                    print("-", score2)
+                if score2 < val:
+                    val = score2
+                    result = corner_offset
+
+                corner_offset += 1
+            corner.set_plan_offset(result)
+            for l in corner.layers:
+                corner.reduce_layer_length(l, self.bond)
+        else:
             print("not fitting", corner, "to layer of wall", layer.parent.id)
-            return
-        print("fit", corner, "to layer of wall", layer.parent.id)
-
-        corner_offset = 0
-        result = 0
-        val = 3
-
-        while corner_offset < self.bond.get_corner_plan_repeat_step():
-            corner.plan_offset = corner_offset
-            score2 = self.holes_between_corner_and_layer(corner, layer)
-
-            if set([l.parent.id for l in corner.layers]) == {3, 2}:
-                print("-", score2)
-            if score2 < val:
-                val = score2
-                result = corner_offset
-
-            corner_offset += 1
-
-        if set([l.parent.id for l in corner.layers]) == {3, 2}:
-            print("solution: ", result)
-
-        corner.set_plan_offset(result)
-
-        for l in corner.layers:
-            corner.reduce_layer_length(l, self.bond)
 
     def solve_layer(self, complete_layer: List[Corn]):
-        start = complete_layer[0]
+        start = complete_layer[2]
         for corner in complete_layer:
             bottom = self.corners.get_bottom_corner(corner)
             if bottom is not None:
-                print("FOUND BOTTOM LAYER!", corner, corner.plan_offset)
+                corner.set_plan_offset(bottom.plan_offset + 1)
                 start = corner
-                start.plan_offset = bottom.plan_offset + 1
-                break
+                print("FOUND BOTTOM LAYER!", corner, corner.plan_offset, bottom)
+                # break
         print("z: ", list(start.layers)[0].get_center()[2])
         start.touched = True
         todo = [start]
@@ -143,12 +117,12 @@ class NewSolver(Solver):
                 self.fit_layer_to_corner(layer, corner)
 
                 for left in layer.left_connections:
-                    c = self.get_corner(layer, left)
+                    c = self.corners.get_corner(layer, left)
                     if c not in done:
                         self.fit_corner_to_layer(c, layer)
                         todo.append(c)
                 for right in layer.right_connections:
-                    c = self.get_corner(layer, right)
+                    c = self.corners.get_corner(layer, right)
                     if c not in done:
                         self.fit_corner_to_layer(c, layer)
                         todo.append(c)
@@ -165,7 +139,8 @@ class NewSolver(Solver):
         layers = []
         for corn in corners:
             corn.set_main_layer()
-
+            for layer in corn.layers:
+                layer.parent.set_x_offsets()
             if corn in done:
                 continue
             corners_of_layer = self.get_complete_layer(corn)

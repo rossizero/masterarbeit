@@ -22,11 +22,12 @@ class WallLayerGroup:
         self.translation = np.array([0, 0, 0])  # of wall mid
         self.name = name
         self.id = WallLayerGroup.idd
-        #self.plan_offset = 0
+        self.plan_offset = 0
         self.touched = False  # TODO just for testing purposes
 
         self.lowest_local_x = None  # TODO test maybe remove
         self.highest_local_x = None  # TODO test maybe remove
+        self.reversed = False
         WallLayerGroup.idd += 1
 
     def set_plan_offset(self, offset: int):

@@ -16,7 +16,6 @@ from masonry.Corner import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
     SimpleOffset, DoppelEck3_Closed
 from masonry import Corner
-from detailing.solver import GraphSolver
 
 
 class WallDetailer:
@@ -46,6 +45,7 @@ class WallDetailer:
             for corner in cs.corners:
                 layers = list(corner.layers)
                 if len(layers) == 2:
+                    pass
                     bricks.extend(self.detail_corner(corner, bond))
                 else:
                     # t-joint MAYDO combine t-joints
@@ -106,8 +106,7 @@ class WallDetailer:
                                                fill_right=fill_right,
                                                layer=layer.get_layer_plan_index(),
                                                x_offset=layer.relative_x_offset(),
-                                               reversed=layer.reversed)
-
+                                               reversed=layer.parent.reversed)
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
                 local_rotation = tf.get_rotation()  # rotation of the brick around itself
@@ -201,7 +200,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = SimpleCorners2()
+    scenario = SimpleCorners()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
 

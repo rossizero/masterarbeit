@@ -21,7 +21,7 @@ class WallLayer:
         self.touched_left = False  # TODO remove
         self.touched_right = False  # TODO remove
         self.reversed = False  # TODO remove
-        self.plan_offset = 0  # TODO remove
+        #self.plan_offset = 0  # TODO remove
         self.touched = False  # TODO remove
 
     def combine(self, other: 'WallLayer'):
@@ -60,7 +60,9 @@ class WallLayer:
         :return: plan index to be used for detailing this layer
         """
         #return self.get_layer_index() + self.parent.plan_offset + self.plan_offset
-        return self.get_layer_index() + self.plan_offset
+        #return self.get_layer_index() + self.plan_offset
+        #return self.plan_offset
+        return self.get_layer_index() + self.parent.plan_offset
 
     @property
     def left_edge(self):
@@ -107,7 +109,7 @@ class WallLayer:
         :return: the difference between the lowest/highest (depending on self.reversed)
          x coordinate of all layers of the parent and self
         """
-        if self.reversed:
+        if self.parent.reversed:
             a = max(self.get_left_edge(True)[0], self.get_right_edge(True)[0])
             b = self.parent.get_highest_local_x()
             return round(b - a, 6)

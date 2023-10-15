@@ -61,8 +61,8 @@ class TestWallLayer(unittest.TestCase):
         left, right, num_bricks = self.bond.leftover_of_layer(layer1.length, layer1.get_layer_plan_index(),
                                                               layer1.relative_x_offset(), reversed=layer1.reversed)
         self.assertEqual(4, num_bricks)
-        self.assertEqual(0, left)
         self.assertEqual(1, right)
+        self.assertEqual(0, left)
 
         # reduce right
         layer1 = deepcopy(layer1_og)

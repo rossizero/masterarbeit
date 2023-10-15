@@ -57,13 +57,15 @@ class FancyCorners(Scenario):
 class SimpleCorners(Scenario):
     def get_walls(self):
         an = math.pi / 2 * 1.22432
-        w1 = Wall.make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2  + math.pi),
+        an = 0
+        height = 0.5 * 1
+        w1 = Wall.make_wall(10, 1, height, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2  + math.pi),
                        ifc_wall_type="test", name="w1")
-        w2 = Wall.make_wall(10, 1, 5, np.array([10.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
+        w2 = Wall.make_wall(10, 1, height, np.array([10.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
                        ifc_wall_type="test", name="w2")
-        w3 = Wall.make_wall(10, 1, 5, np.array([14.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2),
+        w3 = Wall.make_wall(10, 1, height, np.array([14.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2),
                        ifc_wall_type="test", name="w3")
-        w4 = Wall.make_wall(10, 1, 5, np.array([10.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
+        w4 = Wall.make_wall(10, 1, height, np.array([10.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
                        ifc_wall_type="test", name="w4")
 
         w1.rotate_around(quaternion.from_euler_angles(0, an, an))
@@ -76,11 +78,11 @@ class SimpleCorners(Scenario):
 class SimpleCorners2(Scenario):
     def get_walls(self):
         an = 0
-        height = 0.5 * 1
-        height2 = 0.5 * 2
-        w0 = Wall.make_wall(10, 1, height2, np.array([5.5, 0.0, height2 * 0.5]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
+        height = 0.5 * 2
+        height2 = 0.5 * 1
+        w0 = Wall.make_wall(10, 1, height, np.array([5.5, 0.0, height * 0.5]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w0")
-        w1 = Wall.make_wall(8, 1, height2, np.array([9.0, 5.5, height2 * 0.5]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
+        w1 = Wall.make_wall(8, 1, height, np.array([9.0, 5.5, height * 0.5]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
                        ifc_wall_type="test", name="w1")
         w2 = Wall.make_wall(10, 1, height, np.array([13.5, 1.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w2")
