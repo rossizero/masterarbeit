@@ -233,3 +233,49 @@ class DoppelEck3_Closed(Scenario):
                             ifc_wall_type="test", name="w2")
         all_ = [w0, w1, w2, w3, w4, w5, w6, w7, w8]  # bug on the top layer
         return all_
+
+
+class SmallWall(Scenario):
+    def get_walls(self):
+        # normal small walls
+        w0_ = Wall.make_wall(1, 1, 5 * 0.5, np.array([-3.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0")
+
+        w0 = Wall.make_wall(2, 1, 5 * 0.5, np.array([0.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w1 = Wall.make_wall(3, 1, 5 * 0.5, np.array([4.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w2 = Wall.make_wall(4, 1, 5 * 0.5, np.array([9.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w3 = Wall.make_wall(5, 1, 5 * 0.5, np.array([15, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        # small corners
+        w00 = Wall.make_wall(2, 1, 5 * 0.5, np.array([0.0, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w10 = Wall.make_wall(3, 1, 5 * 0.5, np.array([4.0, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w20 = Wall.make_wall(4, 1, 5 * 0.5, np.array([9.0, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w30 = Wall.make_wall(5, 1, 5 * 0.5, np.array([15, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0")
+
+        w01 = Wall.make_wall(2, 1, 5 * 0.5, np.array([0.5, 6.5, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0")
+
+        w11 = Wall.make_wall(3, 1, 5 * 0.5, np.array([5.0, 7.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0")
+
+        w21 = Wall.make_wall(4, 1, 5 * 0.5, np.array([10.5, 7.5, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0")
+
+        w31 = Wall.make_wall(5, 1, 5 * 0.5, np.array([17, 8, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w0")
+        all = [w0_, w0, w1, w2, w3, w00, w10, w20, w30, w01, w11, w21, w31]
+        return all

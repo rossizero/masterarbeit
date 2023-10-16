@@ -14,7 +14,7 @@ from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.Corner import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
-    SimpleOffset, DoppelEck3_Closed
+    SimpleOffset, DoppelEck3_Closed, SmallWall
 from masonry import Corner
 
 
@@ -200,7 +200,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = FancyCorners()
+    scenario = SmallWall()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
 
