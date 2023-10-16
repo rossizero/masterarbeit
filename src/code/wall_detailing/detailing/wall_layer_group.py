@@ -116,6 +116,9 @@ class WallLayerGroup:
         return None
 
     def set_x_offsets(self):
+        """
+        "freezes" the x offsets of all layers of this wall to current values
+        """
         if self.lowest_local_x is None:
             self.lowest_local_x = self.get_lowest_local_x()
 

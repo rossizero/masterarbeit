@@ -60,11 +60,9 @@ class Corn:
     def __init__(self, point: np.array):
         self.point = point  # center of the corner
         self.layers = set()  # layers that form the corner
-        self.plan_offset = 0
+        self.plan_offset = 1
         self.touched = False
         self.main_layer = None
-        self.upon = None
-        self.below = None
 
     def __eq__(self, other: "Corn"):
         if type(other) is Corn:
@@ -138,10 +136,19 @@ class Corn:
         return ret
 
     def reduce_corner_layer_length(self, bond: Bond):
+        """
+        :param bond: bond we want to use
+        reduces the length of all layers that form the corner by the amount of length the corner takes up with given bond
+        """
         for layer in self.layers:
             self.reduce_layer_length(layer, bond)
 
-    def reduce_layer_length(self, layer: WallLayer, bond: Bond, printt:bool = False):
+    def reduce_layer_length(self, layer: WallLayer, bond: Bond):
+        """
+        :param layer: layer we want to reduce
+        :param bond: bond we want to use
+
+        """
         assert layer in self.layers
 
         main_layer = self.get_main_layer()
@@ -151,12 +158,9 @@ class Corn:
         a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
         relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
         # how far the corner stretches into the layer (x direction)
-        #corner_length = bond.get_corner_length(self.get_corner_index() + self.plan_offset, relative_rotation)
         corner_length = bond.get_corner_length(self.plan_offset, relative_rotation)
         corner_length -= bond.module.width / 2.0
-        l = layer.move_edge(self.point, corner_length)
-        if printt:
-            print(layer, "reduced by", l)
+        layer.move_edge(self.point, corner_length)
 
     def set_main_layer(self):
         self.main_layer = self.get_main_layer()
@@ -219,19 +223,7 @@ class Corns:
             ret.add_corner(corner)
         return ret
 
-    def get_top_corner(self, corner: Corn):
-        tops = corner.main_layer.tops
-        if tops is None or len(tops) == 0:
-            for layer in corner.layers:
-                tops = layer.tops
-                if tops is not None and len(tops) > 0:
-                    break
 
-        if tops is not None and len(tops) > 0:
-            for corner in self.corners:
-                if any(map(lambda v: v in corner.layers, tops)):
-                    return corner
-        return None
 
     def get_corner(self, layer1: WallLayer, layer2: WallLayer) -> Optional[Corn]:
         for corn in self.corners:
@@ -253,11 +245,32 @@ class Corns:
         return None
 
     def get_bottom_corner(self, corner: Corn):
+        """
+        :param corner: a corner
+        :return: the corner below the given corner
+        """
         l = []
         for layer in corner.layers:
             bottoms = layer.bottoms
             if bottoms is not None and len(bottoms) > 0:
                 l.append(bottoms)
+
+        for entry in list(itertools.product(*l)):
+            c = self._get_corner(entry)
+            if c is not None:
+                return c
+        return None
+
+    def get_top_corner(self, corner: Corn):
+        """
+        :param corner: a corner
+        :return: the corner above the given corner
+        """
+        l = []
+        for layer in corner.layers:
+            tops = layer.tops
+            if tops is not None and len(tops) > 0:
+                l.append(tops)
 
         for entry in list(itertools.product(*l)):
             c = self._get_corner(entry)
