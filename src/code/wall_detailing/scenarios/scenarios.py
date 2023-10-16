@@ -37,7 +37,7 @@ class FancyCorners(Scenario):
                        ifc_wall_type="test", name="w4")
         w4_ = Wall.make_wall(4, 1, 5, np.array([0.0, -4.5, 2]), quaternion.from_euler_angles(0.0, 0.0, 0),
                         ifc_wall_type="test", name="w4_")
-        w41_ = Wall.make_wall(4, 1, 5, np.array([1.5, -2.0, 3]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2),
+        w41_ = Wall.make_wall(4, 1, 5, np.array([1.5, -2.0, 4]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2),
                          ifc_wall_type="test", name="w41_")
 
         w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
@@ -53,7 +53,7 @@ class FancyCorners(Scenario):
         w41_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
         all = [w1, w2, w3, w4, w4_, w41_]
-        bug = [w1, w3, w4]
+        bug = [w3, w4, w4_, w41_]
         return bug
 
 

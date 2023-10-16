@@ -54,15 +54,18 @@ class Line:
 
 
 class Corn:
+    idd = 0
     """
     A class to store information about two layers that form a corner
     """
     def __init__(self, point: np.array):
         self.point = point  # center of the corner
         self.layers = set()  # layers that form the corner
-        self.plan_offset = 0
+        self.plan_offset = 1
         self.touched = False
         self.main_layer = None
+        self.id = Corn.idd
+        Corn.idd += 1
 
     def __eq__(self, other: "Corn"):
         if type(other) is Corn:
@@ -184,10 +187,14 @@ class Corn:
                         vals.append(i)
         return min(vals)
 
+    def get_unrotated_world_coordinates(self):
+        p = quaternion.rotate_vectors(self.main_layer.parent.get_rotation().inverse(), self.point)
+        return np.round(p, 6)
+
     def __str__(self):
         a = [l.parent.id for l in self.layers]
         a = set(sorted(a))
-        return "corner: " + str(a)
+        return "corner: " + str(a) + " " + str(self.id)
 
 
 class Corns:
@@ -216,22 +223,11 @@ class Corns:
             dic[key].append(corner)
         return dic
 
-    @classmethod
-    def from_corner_list(cls, corners: List[Corn]):
-        ret = Corns()
-        for corner in corners:
-            ret.add_corner(corner)
-        return ret
-
-
-
-    def get_corner(self, layer1: WallLayer, layer2: WallLayer) -> Optional[Corn]:
-        for corn in self.corners:
-            if layer1 in corn.layers and layer2 in corn.layers:
-                return corn
-        return None
-
-    def _get_corner(self, layers: List[WallLayer]) -> Optional[Corn]:
+    def get_corner(self, layers: List[WallLayer]) -> Optional[Corn]:
+        """
+        :param layers: a list of layers
+        :return: the corner that is formed by the given layers
+        """
         if len(layers) == 0:
             return None
         for corn in self.corners:
@@ -256,7 +252,7 @@ class Corns:
                 l.append(bottoms)
 
         for entry in list(itertools.product(*l)):
-            c = self._get_corner(entry)
+            c = self.get_corner(entry)
             if c is not None:
                 return c
         return None
@@ -273,10 +269,16 @@ class Corns:
                 l.append(tops)
 
         for entry in list(itertools.product(*l)):
-            c = self._get_corner(entry)
+            c = self.get_corner(entry)
             if c is not None:
                 return c
         return None
+
+    def get_corners_sorted_by_z(self):
+        """
+        :return: a list of corners sorted by their z coordinate
+        """
+        return sorted(self.corners, key=lambda x: x.get_unrotated_world_coordinates()[2])
 
 
 def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:

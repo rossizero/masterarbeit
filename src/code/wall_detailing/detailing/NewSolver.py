@@ -69,12 +69,12 @@ class NewSolver(Solver):
             self.fit_layer_to_corner(layer, corner)
 
             for left in layer.left_connections:
-                c = corners.get_corner(layer, left)
+                c = corners.get_corner([layer, left])
                 if c not in done:
                     self.fit_corner_to_layer(c, layer)
                     todo.append(c)
             for right in layer.right_connections:
-                c = corners.get_corner(layer, right)
+                c = corners.get_corner([layer, right])
                 if c not in done:
                     self.fit_corner_to_layer(c, layer)
                     todo.append(c)
@@ -101,10 +101,9 @@ class NewSolver(Solver):
                     corner.set_plan_offset(bottom.plan_offset + 1)
                     start = corner
                 else:
-                    print(corner, par)
+                    print("nope", corner, par)
 
         if start is None:
-            print("hhhh")
             start = complete_layer[start_index]
             ret = True
 
@@ -141,7 +140,7 @@ class NewSolver(Solver):
         done = []
         layers = []
 
-        for corn in corners.corners:
+        for corn in corners.get_corners_sorted_by_z():
             if corn not in done:
                 corners_of_layer = self.get_complete_layer(corn, corners)
                 done.extend(corners_of_layer)
@@ -166,7 +165,7 @@ class NewSolver(Solver):
                 index = 0
                 done = []
                 layers = []
-                for corn in corners.corners:
+                for corn in corners.get_corners_sorted_by_z():
                     if corn not in done:
                         corners_of_layer = self.get_complete_layer(corn, corners)
                         done.extend(corners_of_layer)
@@ -191,7 +190,7 @@ class NewSolver(Solver):
 
         corners = self.corners
         self.freeze(corners)
-        for corn in corners.corners:
+        for corn in corners.get_corners_sorted_by_z():
             if corn not in done:
                 corners_of_layer = self.get_complete_layer(corn, corners)
                 done.extend(corners_of_layer)
@@ -202,4 +201,5 @@ class NewSolver(Solver):
             if new_corner and index < len(min_config) - 1:
                 index += 1
 
+        print("holes", self.all_holes(corners))
         a = 0

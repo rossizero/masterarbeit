@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple, List
+from typing import Tuple, List, Union, Any
 from masonry.brick import BrickInformation
 
 import math
@@ -237,7 +237,7 @@ class Bond(ABC):
             ret.append(tf)
         return ret
 
-    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0, reversed: bool = False) -> int:
+    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0, reversed: bool = False) -> tuple[int, float, float, list[Transformation]]:
         """
         :param layer: num of layer (0 is at floor)
         :param length: length of the wall
@@ -261,7 +261,6 @@ class Bond(ABC):
         leftover_left = pos[0]
         leftover_right = 0
 
-        # MAYDO calculate instead of expensive "exploration"
         while pos[0] + brick_length <= length + x_offset:
             counter += 1
             leftover_right = max(leftover_right, pos[0] + brick_length)
@@ -274,10 +273,8 @@ class Bond(ABC):
 
             brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
 
-        leftover_left = length + x_offset
-
-        if counter == 1:
-            leftover_left = leftover_left  # TODO for very short walls
+        leftover_left = length
+        found = False
 
         ret = []
         for i in range(counter):
@@ -286,13 +283,16 @@ class Bond(ABC):
             tf.translation.offset[0] -= x_offset
 
             if tf.get_position()[0] >= 0:
+                found = True
                 ret.append(tf)
                 leftover_left = min(leftover_left, tf.get_position()[0])
-
         # necessary because sometimes too small for the occ backend to handle
         leftover_right = round(leftover_right, 6)
         leftover_right = length + x_offset - leftover_right
         leftover_left = round(leftover_left, 6)
+
+        if not found:
+            print(length, leftover_left, leftover_right)
 
         # reverse tfs to build from left to right
         if reversed:
@@ -363,14 +363,14 @@ class StrechedBond(Bond):
     def _get_corner_plan(self) -> List[List[Transformation]]:
         plan = []
         plan.append([
-            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
-        ])
-        plan.append([
             Transformation(
                 translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
                 rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
         ])
 
+        plan.append([
+            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+        ])
         return plan
 
 

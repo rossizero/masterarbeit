@@ -34,9 +34,9 @@ class Solver(ABC):
                     ret.append(curr)
                     for layer1 in curr.layers:
                         for layer2 in layer1.left_connections:
-                            todo.append(corners.get_corner(layer1, layer2))
+                            todo.append(corners.get_corner([layer1, layer2]))
                         for layer2 in layer1.right_connections:
-                            todo.append(corners.get_corner(layer1, layer2))
+                            todo.append(corners.get_corner([layer1, layer2]))
         return ret
 
     def all_holes(self, corners: Corns):
