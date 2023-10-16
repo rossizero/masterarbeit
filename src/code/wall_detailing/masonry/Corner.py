@@ -60,7 +60,7 @@ class Corn:
     def __init__(self, point: np.array):
         self.point = point  # center of the corner
         self.layers = set()  # layers that form the corner
-        self.plan_offset = 1
+        self.plan_offset = 0
         self.touched = False
         self.main_layer = None
 

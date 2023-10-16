@@ -31,9 +31,9 @@ class FancyCorners(Scenario):
                          ifc_wall_type="test", name="w111")
         w2 = Wall.make_wall(10, 1, 5, np.array([10.0, 4.5, 1.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
                        ifc_wall_type="test", name="w2")
-        w3 = Wall.make_wall(10, 1, 5, np.array([-5.5, 0.0, -1.0]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2),
+        w3 = Wall.make_wall(10, 1, 5, np.array([-5.5, 0.0, -1]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2),
                        ifc_wall_type="test", name="w3")
-        w4 = Wall.make_wall(10, 1, 5, np.array([0.0, -4.5, -3.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
+        w4 = Wall.make_wall(10, 1, 5, np.array([0.0, -4.5, -2]), quaternion.from_euler_angles(0.0, 0.0, 0),
                        ifc_wall_type="test", name="w4")
         w4_ = Wall.make_wall(4, 1, 5, np.array([0.0, -4.5, 2]), quaternion.from_euler_angles(0.0, 0.0, 0),
                         ifc_wall_type="test", name="w4_")
@@ -51,7 +51,10 @@ class FancyCorners(Scenario):
         w4.rotate_around(quaternion.from_euler_angles(0.3, an, an))
         w4_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
         w41_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
-        return [w1, w2, w3, w4, w4_, w41_]
+
+        all = [w1, w2, w3, w4, w4_, w41_]
+        bug = [w1, w3, w4]
+        return bug
 
 
 class SimpleCorners(Scenario):

@@ -80,7 +80,7 @@ class NewSolver(Solver):
                     todo.append(c)
         return todo
 
-    def solve_layer(self, complete_layer: List[Corn], corners: Corns, start_index: int = 1) -> bool:
+    def solve_layer(self, complete_layer: List[Corn], corners: Corns, start_index: int = 0) -> bool:
         start = None
         ret = False
 
@@ -100,8 +100,11 @@ class NewSolver(Solver):
                 if all_found:
                     corner.set_plan_offset(bottom.plan_offset + 1)
                     start = corner
+                else:
+                    print(corner, par)
 
         if start is None:
+            print("hhhh")
             start = complete_layer[start_index]
             ret = True
 
@@ -155,7 +158,7 @@ class NewSolver(Solver):
 
         if score > 0:
             print("----------------")
-            print("trying", len(list(itertools.product(*starters))), "combinations")
+            print("trying", starters, len(list(itertools.product(*starters))), "combinations")
             for config in reversed(list(itertools.product(*starters))):
                 corners = deepcopy(self.corners)
                 self.freeze(corners)
@@ -198,3 +201,5 @@ class NewSolver(Solver):
             new_corner = self.solve_layer(layer, corners, start_index=min_config[index])
             if new_corner and index < len(min_config) - 1:
                 index += 1
+
+        a = 0
