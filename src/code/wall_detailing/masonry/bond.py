@@ -292,6 +292,9 @@ class Bond(ABC):
         leftover_left = round(leftover_left, 6)
 
         if not found:
+            if leftover_left + leftover_right >= length:
+                leftover_left = length
+                leftover_right = length
             print(length, leftover_left, leftover_right)
 
         # reverse tfs to build from left to right

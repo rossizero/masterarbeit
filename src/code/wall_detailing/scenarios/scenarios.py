@@ -266,7 +266,7 @@ class SmallWall(Scenario):
         w30 = Wall.make_wall(5, 1, 5 * 0.5, np.array([15, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0")
 
-        w01 = Wall.make_wall(2, 1, 5 * 0.5, np.array([0.5, 6.5, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+        w01 = Wall.make_wall(2, 1, 5 * 0.5, np.array([0.5, 6.5, 1.75]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
                              ifc_wall_type="test", name="w0")
 
         w11 = Wall.make_wall(3, 1, 5 * 0.5, np.array([5.0, 7.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
