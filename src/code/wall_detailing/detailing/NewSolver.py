@@ -66,6 +66,12 @@ class NewSolver(Solver):
     def fit(self, corner: Corn, corners: Corns, done: List[Corn]):
         todo = []
         for layer in corner.layers:
+            if layer.parent.touched:
+                if NewSolver.debug:
+                    print("found touched layer", layer.parent.id)
+                self.fit_corner_to_layer(corner, layer)
+
+        for layer in corner.layers:
             self.fit_layer_to_corner(layer, corner)
 
             for left in layer.left_connections:
@@ -104,10 +110,11 @@ class NewSolver(Solver):
                     print("nope", corner, par)
 
         if start is None:
+            if NewSolver.debug:
+                print("start is none")
             start = complete_layer[start_index]
             ret = True
 
-        start.touched = True
         todo = [start]
         done = []
 

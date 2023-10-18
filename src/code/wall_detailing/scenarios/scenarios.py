@@ -53,8 +53,8 @@ class FancyCorners(Scenario):
         w41_.rotate_around(quaternion.from_euler_angles(0.3, an, an))
 
         all = [w1, w2, w3, w4, w4_, w41_]
-        bug = [w3, w4, w4_, w41_]
-        return bug
+        bug = [w3, w4, w4_, w41_]  # solved
+        return all
 
 
 class SimpleCorners(Scenario):
@@ -81,8 +81,8 @@ class SimpleCorners(Scenario):
 class SimpleCorners2(Scenario):
     def get_walls(self):
         an = 0
-        height = 0.5 * 1
-        height2 = 0.5 * 1
+        height = 0.5 * 4
+        height2 = 0.5 * 7
         w0 = Wall.make_wall(10, 1, height2, np.array([5.5, 0.0, height2 * 0.5]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
                        ifc_wall_type="test", name="w0")
         w1 = Wall.make_wall(8, 1, height2, np.array([9.0, 5.5, height2 * 0.5]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
