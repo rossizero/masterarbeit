@@ -135,10 +135,10 @@ class WallDetailer:
 
         module = main_layer.parent.module
 
-        dimensions = np.array([main_layer.length, module.width, module.height])
+        #dimensions = np.array([main_layer.length, module.width, module.height])
         original_rotation = main_layer.parent.get_rotation()
         corner_rotation = corner.get_rotation()
-        layer_index = main_layer.get_layer_index()
+        #layer_index = main_layer.get_layer_index()
 
         #for tf in bond.apply_corner(corner.get_corner_index() + corner.plan_offset):
         for tf in bond.apply_corner(corner.plan_offset):
@@ -146,7 +146,7 @@ class WallDetailer:
             local_position[2] = 0.0  # MAYDO ugly
             local_rotation = tf.get_rotation()
 
-            b = Brick(module)
+            b = Brick(tf.module)
             b.rotate(local_rotation)
 
             # rotate around the mid of two overlapping modules
@@ -200,7 +200,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = FancyCorners()
+    scenario = SmallWall()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
 

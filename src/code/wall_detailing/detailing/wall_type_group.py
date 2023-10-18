@@ -6,6 +6,8 @@ from masonry.brick import BrickInformation
 
 from masonry.bond import GothicBond
 
+from wall_detailing.masonry.bond import CrossBond, HeadBond, BlockBond
+
 
 class WallTypeGroup:
     def __init__(self, ifc_class: str, brick_information: List[BrickInformation]):

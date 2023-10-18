@@ -171,6 +171,7 @@ class Bond(ABC):
         for t in plan[layer % len(plan)].copy():
             tf = t.copy()
             tf.set_mask_multiplier(0, 0, layer)
+            tf.module = t.module if t.module is not None else self.module
             ret.append(tf)
 
         return ret
@@ -333,9 +334,23 @@ class BlockBond(Bond):
         ]
         return plan
 
+    def _get_corner_plan(self) -> List[List[Transformation]]:
+        plan = []
+
+        plan.append([
+            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+        ])
+
+        plan.append([
+            Transformation(
+                translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+        ])
+
+        return plan
 
 class StrechedBond(Bond):
-    def __init__(self, module: BrickInformation, offset: float = 0.5, schleppend: bool = True):
+    def __init__(self, module: BrickInformation, offset: float = 0.5, schleppend: bool = False):
         self.offset = offset
         self.schleppend = schleppend
         super(StrechedBond, self).__init__(module)
@@ -364,16 +379,19 @@ class StrechedBond(Bond):
         return plan
 
     def _get_corner_plan(self) -> List[List[Transformation]]:
-        plan = []
-        plan.append([
-            Transformation(
-                translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
-                rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
-        ])
+        if self.schleppend:
+            pass
+        else:
+            plan = []
+            plan.append([
+                Transformation(
+                    translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                    rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+            ])
 
-        plan.append([
-            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
-        ])
+            plan.append([
+                Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+            ])
         return plan
 
 
@@ -402,6 +420,15 @@ class HeadBond(Bond):
 
     def _get_corner_plan(self) -> List[List[Transformation]]:
         plan = []
+        plan.append([
+            Transformation(
+                translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+        ])
+
+        plan.append([
+            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+        ])
         return plan
 
 
@@ -487,5 +514,24 @@ class CrossBond(Bond):
         return plan
 
     def _get_corner_plan(self) -> List[List[Transformation]]:
+        l = self.w
+        w = (self.l - self.w) / 2
+        h = self.h
+        module = BrickInformation(l, w, h)
+
         plan = []
+        plan.append([
+            Transformation(
+                translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+        ])
+
+        plan.append([
+            Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+        ])
+
+        for tfs in plan:
+            for tf in tfs:
+                tf.module = module
+
         return plan
