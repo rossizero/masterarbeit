@@ -107,7 +107,8 @@ class NewSolver(Solver):
                     corner.set_plan_offset(bottom.plan_offset + 1)
                     start = corner
                 else:
-                    print("nope", corner, par)
+                    if NewSolver.debug:
+                        print("nope", corner, par)
 
         if start is None:
             if NewSolver.debug:
@@ -208,5 +209,4 @@ class NewSolver(Solver):
             if new_corner and index < len(min_config) - 1:
                 index += 1
 
-        print("holes", self.all_holes(corners))
-        a = 0
+        print("found a solution with", self.all_holes(corners), "holes", ":)" if self.all_holes(corners) == 0 else ":(")
