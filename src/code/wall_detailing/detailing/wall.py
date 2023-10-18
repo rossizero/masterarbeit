@@ -1,20 +1,15 @@
 import numpy as np
+import quaternion
 
 from OCC.Core.BRep import BRep_Tool
 from OCC.Core.BRepBndLib import brepbndlib_Add
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCC.Core.BRepGProp import brepgprop_VolumeProperties
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.GProp import GProp_GProps
 from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import TopoDS_Shape, topods
-from OCC.Core.gp import gp_Quaternion
 from quaternion.numpy_quaternion import quaternion
-from OCC.Core.gp import gp_Vec, gp_Trsf
-import quaternion
-
-
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform

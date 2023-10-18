@@ -3,6 +3,8 @@ import quaternion
 
 from typing import List
 
+from wall_detailing.die_mathe.line import Line
+
 
 class WallLayer:
     """
@@ -128,7 +130,7 @@ class WallLayer:
             ret += self.parent.get_translation()
         return ret
 
-    def is_touching(self, other: 'WallLayer', tolerance: float = 1.e-8) -> bool:
+    def is_touching_at_endpoints(self, other: 'WallLayer', tolerance: float = 1.e-8) -> bool:
         """
         Checks if self and other edges are (nearly) touching
         :param other: the other wall_layer
@@ -140,6 +142,16 @@ class WallLayer:
         c = np.allclose(self.left_edge, other.left_edge, atol=tolerance)
         d = np.allclose(self.left_edge, other.right_edge, atol=tolerance)
         return a or b or c or d
+
+    def is_touching(self, other: 'WallLayer') -> bool:
+        """
+        Checks if self and other edges are touching
+        :return: whether the lines are touching
+        """
+
+        line1 = Line(self.left_edge, self.right_edge)
+        line2 = Line(other.left_edge, other.right_edge)
+        return line1.intersection(line2) is not None
 
     def is_above_or_below(self, other: 'WallLayer', height: float = 0.0) -> bool:
         """

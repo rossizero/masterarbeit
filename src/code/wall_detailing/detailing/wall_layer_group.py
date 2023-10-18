@@ -59,7 +59,7 @@ class WallLayerGroup:
             others = other.layers.copy()
             for l1 in self.layers:
                 for l2 in others.copy():
-                    if l1.is_touching(l2):
+                    if l1.is_touching_at_endpoints(l2):
                         others.remove(l2)
                         l1.combine(l2)
                         combined = True
@@ -176,7 +176,7 @@ class WallLayerGroup:
                 return sorted_layers[i - 1]
         return []
 
-    def is_touching(self, other: 'WallLayerGroup'):
+    def is_touching_at_endpoints(self, other: 'WallLayerGroup'):
         """
         Check if at least one pair of layers of two WallLayerGroups are touching
         :param other:
@@ -186,9 +186,23 @@ class WallLayerGroup:
         for l1 in self.layers:
             for l2 in other.layers:
                 width = max(self.module.width, other.module.width)  # TODO use wall width
-                if l1.is_touching(l2, width):
+                if l1.is_touching_at_endpoints(l2, width):
                     return True
         return False
+
+    def is_touching(self, other: 'WallLayerGroup'):
+        """
+        Check if at least one pair of layers of two WallLayerGroups are touching
+        :param other:
+        :return:
+        """
+        # TODO make faster ^^
+        for l1 in self.layers:
+            for l2 in other.layers:
+                if l1.is_touching(l2):
+                    return True
+        return False
+
 
     @classmethod
     def from_wall(cls, wall: Wall, module: BrickInformation):

@@ -1,56 +1,13 @@
 import itertools
 import math
-from typing import List, Dict, Tuple, Optional
-
 import numpy as np
 import quaternion
 
 from detailing.wall_layer import WallLayer
 from detailing.wall_layer_group import WallLayerGroup
-
+from typing import List, Dict, Tuple, Optional
 from masonry.bond import Bond
-
-
-class Line:
-    """
-    A line defined by two points
-    """
-    def __init__(self, p1: np.array, p2: np.array):
-        self.p1 = p1
-        self.p2 = p2
-
-    def distance_to_line(self, point: np.array):
-        """
-        :return: distance to line
-        """
-        l = self.p2 - self.p1
-        p = point - self.p1
-        projection_distance = np.dot(p, l) / np.dot(l, l)  # squared length of l
-        projected_point = self.p1 + projection_distance * l
-        d = np.linalg.norm(point - projected_point)
-        return d
-
-    def on_line(self, point: np.array, between: bool = True):
-        """
-        :param point: the point to check
-        :param between: if the point should be between the two points of the line
-        """
-        diff12 = self.p1 - self.p2
-        diff1p = self.p1 - point
-        diffp2 = point - self.p2
-
-        a = np.linalg.norm(diff12)
-        b = np.linalg.norm(diff1p)
-        c = np.linalg.norm(diffp2)
-        between = a**2 + b**2 >= c**2 and a**2 + c**2 >= b**2 if between else True
-
-        if np.allclose(diffp2, 0) or np.allclose(diff1p, 0):
-            return True
-        d = np.linalg.norm(np.cross(diff12, diff1p)) / np.linalg.norm(diffp2)
-        return d < 1e-9 and between
-
-    def length(self):
-        return np.linalg.norm(self.p1 - self.p2)
+from die_mathe.line import Line
 
 
 class Corn:
@@ -297,55 +254,58 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
             z_part2 = quaternion.rotate_vectors(r2, np.array([0.0, 0.0, 1.0]))
             z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
             degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))
-            touching = w1.is_touching(w2)
+            #touching = w1.is_touching(w2)
             same_wall_type = w1.module == w2.module
-
-            if not (z_parallel and degree90 and touching and same_wall_type):
-                continue
+            #if not (z_parallel and degree90 and touching and same_wall_type):
+            #    continue
 
             for l1 in w1.layers:
                 for l2 in w2.layers:
-                    if not l1.is_touching(l2, tolerance=w1.module.width):
-                        continue
+                    if l1.is_touching(l2):
+                        mid1 = l1.center
+                        mid2 = l2.center
 
-                    mid1 = l1.center
-                    mid2 = l2.center
+                        direction1 = quaternion.rotate_vectors(r1, np.array([1, 0, 0]))
+                        direction2 = quaternion.rotate_vectors(r2, np.array([1, 0, 0]))
 
-                    direction1 = quaternion.rotate_vectors(r1, np.array([1, 0, 0]))
-                    direction2 = quaternion.rotate_vectors(r2, np.array([1, 0, 0]))
+                        line1 = Line(mid1, mid1 + direction1)
+                        line2 = Line(mid2, mid2 + direction2)
+                        line1 = Line(l1.left_edge, l1.right_edge)
+                        line2 = Line(l2.left_edge, l2.right_edge)
 
-                    A = np.vstack((direction1, -direction2, [1, 1, 1])).T
-                    b_bottom = mid2 - mid1
-                    try:
-                        t = np.linalg.solve(A, b_bottom)
+                        intersection = line1.intersection(line2)
 
-                        # Calculate the intersection points on both lines
-                        intersection_point1 = mid1 + t[0] * direction1
-                        intersection_point2 = mid2 + t[1] * direction2
-                        assert np.allclose(intersection_point1, intersection_point2)
+                        if intersection is None:
+                            continue
 
-                        c = Corn(intersection_point1)
-                        c.layers.update([l1, l2])
-                        corners.add_corner(c)
+                        if l1.is_touching_at_endpoints(l2, tolerance=w1.module.width) and z_parallel and degree90 and same_wall_type:
+                            c = Corn(intersection)
+                            c.layers.update([l1, l2])
+                            corners.add_corner(c)
 
-                        if np.linalg.norm(intersection_point1 - l1.left_edge) < w1.module.width:  # TODO use wall width!
-                            l1.left_connections.append(l2)
-                        elif np.linalg.norm(intersection_point1 - l1.right_edge) < w1.module.width:
-                            l1.right_connections.append(l2)
+                            if np.linalg.norm(intersection - l1.left_edge) < w1.module.width:  # TODO use wall width!
+                                l1.left_connections.append(l2)
+                            elif np.linalg.norm(intersection - l1.right_edge) < w1.module.width:
+                                l1.right_connections.append(l2)
 
-                        assert len(set(l1.right_connections) & set(l1.left_connections)) == 0
+                            assert len(set(l1.right_connections) & set(l1.left_connections)) == 0
 
-                        if np.linalg.norm(intersection_point1 - l2.left_edge) < w2.module.width:  # TODO use wall width!
-                            l2.left_connections.append(l1)
-                        elif np.linalg.norm(intersection_point1 - l2.right_edge) < w2.module.width:
-                            l2.right_connections.append(l1)
+                            if np.linalg.norm(intersection - l2.left_edge) < w2.module.width:  # TODO use wall width!
+                                l2.left_connections.append(l1)
+                            elif np.linalg.norm(intersection - l2.right_edge) < w2.module.width:
+                                l2.right_connections.append(l1)
 
-                        assert len(set(l2.right_connections) & set(l2.left_connections)) == 0
+                            assert len(set(l2.right_connections) & set(l2.left_connections)) == 0
+                        else:
+                            a = line1.on_line(intersection, between=True, tolerance=w1.module.width)
+                            b = line2.on_line(intersection, between=True, tolerance=w2.module.width)
+                            if a and b:
+                                t_joint = (np.linalg.norm(intersection - l1.left_edge) < w1.module.width
+                                           or np.linalg.norm(intersection - l1.right_edge) < w1.module.width
+                                           or np.linalg.norm(intersection - l2.left_edge) < w2.module.width
+                                            or np.linalg.norm(intersection - l2.right_edge) < w2.module.width)
+                                print("T-Joint" if t_joint else "Crossing")
 
-                    except np.linalg.LinAlgError:
-                        #print("no intersection found between", w1.name, "and", w2.name,  "even though they are touching")
-                        continue
-                    except AssertionError:
-                        #print("intersection points are not the same for", w1.name, "and", w2.name,  "even though they are touching")
-                        continue
+                            #print("crossing!", l1.parent.id, l2.parent.id, intersection)
+                            #print(line1.intersection(line2))
     return corners

@@ -6,16 +6,17 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.StlAPI import StlAPI_Writer
 
-from detailing.NewSolver import NewSolver
+from detailing.layered_solver import LayeredSolver
 from detailing.wall_layer_group import WallLayerGroup
 from detailing.wall_type_group import WallTypeGroup
 from masonry.bond import Bond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
-from masonry.Corner import Corn, Corns
+from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
-    SimpleOffset, DoppelEck3_Closed, SmallWall
-from masonry import Corner
+    SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1
+from masonry import corner_rep
+from wall_detailing import masonry
 
 
 class WallDetailer:
@@ -37,9 +38,9 @@ class WallDetailer:
         for group in wall_type_groups.values():
             # combine layer_groups if possible
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
-            cs = Corner.check_for_corners(wall_layer_groups)
+            cs = corner_rep.check_for_corners(wall_layer_groups)
             bond = group.bond
-            solver = NewSolver(cs, bond)
+            solver = LayeredSolver(cs, bond)
             solver.solve()
 
             for corner in cs.corners:
@@ -200,7 +201,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = SmallWall()
+    scenario = TJoint1()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
 

@@ -1,32 +1,28 @@
 import itertools
-from abc import ABC, abstractmethod
+
 from copy import deepcopy
-from typing import List, Tuple, Optional
-
-import numpy as np
-
+from typing import List
 from detailing.solver import Solver
 from detailing.wall_layer import WallLayer
-from detailing.wall_layer_group import WallLayerGroup
-from masonry.Corner import Corns, Corn
+from masonry.corner_rep import Corns, Corn
 from masonry.bond import Bond
 
 
-class NewSolver(Solver):
+class LayeredSolver(Solver):
     debug = False
 
     def __init__(self, corners: Corns, bond: Bond):
-        super(NewSolver, self).__init__(corners, bond)
+        super(LayeredSolver, self).__init__(corners, bond)
 
     def fit_layer_to_corner(self, layer: WallLayer, corner: Corn):
         # if the wall the layer lies in has already been touched, we only need to adjust the corners of the layer
         # else we need to find out the best plan_offset for the parent to fit to the corner
         if layer.parent.touched:
-            if NewSolver.debug:
+            if LayeredSolver.debug:
                 print("set layer of wall", layer.parent.id, "to", corner, corner.plan_offset)
             corner.reduce_layer_length(layer, self.bond)
         else:
-            if NewSolver.debug:
+            if LayeredSolver.debug:
                 print("fit layer of wall", layer.parent.id, "to", corner)
             wall_offset = 0
             result = 0
@@ -44,10 +40,10 @@ class NewSolver(Solver):
 
     def fit_corner_to_layer(self, corner: Corn, layer: WallLayer):
         if corner.touched:
-            if NewSolver.debug:
+            if LayeredSolver.debug:
                 print("not fitting", corner, "to layer of wall", layer.parent.id)
         else:
-            if NewSolver.debug:
+            if LayeredSolver.debug:
                 print("fit", corner, "to layer of wall", layer.parent.id)
             corner_offset = 0
             result = 0
@@ -67,7 +63,7 @@ class NewSolver(Solver):
         todo = []
         for layer in corner.layers:
             if layer.parent.touched:
-                if NewSolver.debug:
+                if LayeredSolver.debug:
                     print("found touched layer", layer.parent.id)
                 self.fit_corner_to_layer(corner, layer)
 
@@ -107,11 +103,11 @@ class NewSolver(Solver):
                     corner.set_plan_offset(bottom.plan_offset + 1)
                     start = corner
                 else:
-                    if NewSolver.debug:
+                    if LayeredSolver.debug:
                         print("nope", corner, par)
 
         if start is None:
-            if NewSolver.debug:
+            if LayeredSolver.debug:
                 print("start is none")
             start = complete_layer[start_index]
             ret = True

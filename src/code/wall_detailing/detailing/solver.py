@@ -1,12 +1,8 @@
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from typing import List, Tuple
-
-import numpy as np
-
+from typing import List
 from detailing.wall_layer import WallLayer
-from detailing.wall_layer_group import WallLayerGroup
-from masonry.Corner import Corns, Corn
+from masonry.corner_rep import Corns, Corn
 from masonry.bond import Bond
 
 

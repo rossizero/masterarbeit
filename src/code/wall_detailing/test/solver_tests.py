@@ -1,7 +1,7 @@
 import unittest
 
 from detailing.solver import Solver, GraphSolver
-from masonry.Corner import Corns, check_for_corners
+from masonry.corner import Corns, check_for_corners
 from masonry.bond import Bond, StrechedBond
 from detailing.wall import Wall
 from detailing.wall_layer_group import WallLayerGroup
