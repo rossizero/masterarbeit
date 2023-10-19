@@ -167,6 +167,10 @@ class Corns:
         for c in self.corners:
             if c == corner:
                 c.layers.update(corner.layers)
+                if len(c.layers) == 3:
+                    print("TJoint")
+                if len(c.layers) == 4:
+                    print("Crossing!")
                 return
         self.corners.append(corner)
 
@@ -253,6 +257,12 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
             z_part1 = quaternion.rotate_vectors(r1, np.array([0.0, 0.0, 1.0]))
             z_part2 = quaternion.rotate_vectors(r2, np.array([0.0, 0.0, 1.0]))
             z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
+
+
+            x_part1 = quaternion.rotate_vectors(r1, np.array([1.0, 0.0, 0.0]))
+            x_part2 = quaternion.rotate_vectors(r2, np.array([1.0, 0.0, 0.0]))
+            x_parallel = np.isclose(abs(np.dot(x_part1, x_part2)), 1.0)
+
             degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))
             #touching = w1.is_touching(w2)
             same_wall_type = w1.module == w2.module
@@ -262,14 +272,6 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
             for l1 in w1.layers:
                 for l2 in w2.layers:
                     if l1.is_touching(l2):
-                        mid1 = l1.center
-                        mid2 = l2.center
-
-                        direction1 = quaternion.rotate_vectors(r1, np.array([1, 0, 0]))
-                        direction2 = quaternion.rotate_vectors(r2, np.array([1, 0, 0]))
-
-                        line1 = Line(mid1, mid1 + direction1)
-                        line2 = Line(mid2, mid2 + direction2)
                         line1 = Line(l1.left_edge, l1.right_edge)
                         line2 = Line(l2.left_edge, l2.right_edge)
 
@@ -296,16 +298,16 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                                 l2.right_connections.append(l1)
 
                             assert len(set(l2.right_connections) & set(l2.left_connections)) == 0
-                        else:
+
+                        elif not x_parallel:
+                            # check if the intersection is on both lines and in between their endpoints
                             a = line1.on_line(intersection, between=True, tolerance=w1.module.width)
                             b = line2.on_line(intersection, between=True, tolerance=w2.module.width)
+
                             if a and b:
                                 t_joint = (np.linalg.norm(intersection - l1.left_edge) < w1.module.width
                                            or np.linalg.norm(intersection - l1.right_edge) < w1.module.width
                                            or np.linalg.norm(intersection - l2.left_edge) < w2.module.width
                                             or np.linalg.norm(intersection - l2.right_edge) < w2.module.width)
-                                print("T-Joint" if t_joint else "Crossing")
-
-                            #print("crossing!", l1.parent.id, l2.parent.id, intersection)
-                            #print(line1.intersection(line2))
+                                print("T-Joint" if t_joint else "Crossing", [round(i, 6) for i in intersection], x_parallel)
     return corners
