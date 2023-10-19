@@ -5,6 +5,8 @@ import quaternion
 import math
 from detailing.wall import Wall
 
+from wall_detailing.masonry.opening import Opening
+
 
 class Scenario(ABC):
     def __init__(self):
@@ -211,19 +213,24 @@ class DoppelEck2_Closed_TJoint(Scenario):
     |____1___________|
     """
     def get_walls(self):
-        w0 = Wall.make_wall(8, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w0 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0")
-        w2 = Wall.make_wall(13, 1, 10 * 0.5, np.array([-4.5, 1.0, 2.5]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
+        w0.openings.append(Opening(w0, np.array([1.0, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
+        w1 = Wall.make_wall(13, 1, 10 * 0.5, np.array([-4.5, 1.0, 2.5]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2")
         w3 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 7.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0")
+        w3.openings.append(Opening(w3, np.array([1.0, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
         w4 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, -6.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0")
-
+        w4.openings.append(Opening(w4, np.array([2, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
         w5 = Wall.make_wall(13, 1, 10 * 0.5, np.array([4.5, 0, 2.5]),
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name = "w2")
-        all_ = [w0, w2, w3, w4, w5]
+        w5.openings.append(Opening(w5, np.array([2, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
+
+        door = [w0]
+        all_ = [w0, w1, w3, w4, w5]
         return all_
 
 

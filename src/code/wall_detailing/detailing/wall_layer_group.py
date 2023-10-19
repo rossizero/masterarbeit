@@ -15,20 +15,22 @@ class WallLayerGroup:
     """
     idd = 0  # needed for comparison between two / sorting of  WallLayerGroups
 
-    def __init__(self, module: BrickInformation, name: str = None):
+    def __init__(self, module: BrickInformation):
         self.module = module
         self.layers: List[WallLayer] = []
         self.rotation = np.quaternion(1, 0, 0, 0)
         self.translation = np.array([0, 0, 0])  # of wall mid
-        self.name = name
         self.id = WallLayerGroup.idd
-        self.plan_offset = 0
-        self.touched = False  # TODO just for testing purposes
+        WallLayerGroup.idd += 1
 
+        self.plan_offset = 0
+        self.openings = []
+
+        # dynamic attributes
+        self.touched = False  # TODO just for testing purposes
         self.lowest_local_x = None  # TODO test maybe remove
         self.highest_local_x = None  # TODO test maybe remove
         self.reversed = False
-        WallLayerGroup.idd += 1
 
     def set_plan_offset(self, offset: int):
         assert not self.touched
@@ -129,7 +131,7 @@ class WallLayerGroup:
         """
         :return: a list containing lists of layers that share the same z height sorted by z
         """
-        self.layers.sort(key=lambda x: x.translation[2])
+        self.layers.copy().sort(key=lambda x: x.translation[2])
 
         ret = []
         curr = []
@@ -203,6 +205,16 @@ class WallLayerGroup:
                     return True
         return False
 
+    def apply_openings(self):
+        """
+        Divides all layers at the positions of the openings
+        """
+        for opening in self.openings:
+            for layer in self.layers.copy():
+                split = layer.apply_opening(opening)
+                if len(split) > 0:
+                    self.layers.remove(layer)
+                    self.layers.extend(split)
 
     @classmethod
     def from_wall(cls, wall: Wall, module: BrickInformation):
@@ -212,7 +224,7 @@ class WallLayerGroup:
         :param module: the module we want to apply
         :return: WallLayerGroup Object containing the incoming wall cut into layers
         """
-        ret = cls(module, wall.name)
+        ret = cls(module)
         ret.rotation = wall.get_rotation()
         ret.translation = wall.get_translation()
         length, width, height = wall.length, wall.width, wall.height
@@ -224,7 +236,8 @@ class WallLayerGroup:
         z = -height * 0.5
         for layer in range(layers):
             translation = np.array([0.0, 0.0, 0.0])
-            translation[2] = z + (layer + 1) * module.height  # z position relative to the walls center
+            # z position relative to the walls center
+            translation[2] = z + (layer + 1) * module.height - module.height / 2
             wall_layer = WallLayer(ret, length, translation=translation)
             ret.layers.append(wall_layer)
 
@@ -234,6 +247,7 @@ class WallLayerGroup:
             wall_layer = WallLayer(ret, length, translation=translation, height=leftover)
             ret.layers.append(wall_layer)
 
+        ret.openings = wall.openings.copy()
         return ret
 
     def __lt__(self, other):

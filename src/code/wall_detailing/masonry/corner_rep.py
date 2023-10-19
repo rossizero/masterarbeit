@@ -309,5 +309,5 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                                            or np.linalg.norm(intersection - l1.right_edge) < w1.module.width
                                            or np.linalg.norm(intersection - l2.left_edge) < w2.module.width
                                             or np.linalg.norm(intersection - l2.right_edge) < w2.module.width)
-                                print("T-Joint" if t_joint else "Crossing", [round(i, 6) for i in intersection], x_parallel)
+                                #print("T-Joint" if t_joint else "Crossing", [round(i, 6) for i in intersection], x_parallel)
     return corners

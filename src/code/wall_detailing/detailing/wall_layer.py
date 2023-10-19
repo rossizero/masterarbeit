@@ -226,6 +226,47 @@ class WallLayer:
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
         return length
 
+    def apply_opening(self, opening: 'Opening') -> List['WallLayer']:
+        """
+        Hmmmm
+        """
+        # does the opening lie on this layer?
+        opening_position = opening.get_position(True)
+        center = self.get_center(True)
+
+        a = center[2] >= opening_position[2] - opening.height / 2.0
+        b = center[2] <= opening_position[2] + opening.height / 2.0
+
+        min_x = self.get_left_edge(True)[0]
+        max_x = self.get_right_edge(True)[0]
+
+        # does the opening lie between the left and right edge of this layer?
+        c = max_x >= opening_position[0] + opening.length / 2.0
+        d = min_x <= opening_position[0] - opening.length / 2.0
+
+        ret = []
+        if (a and b) and (c and d):
+            point = opening.get_position(True)
+            point[2] = self.get_center(True)[2]
+            left, right = self._split(point)
+
+            left.move_edge(point, opening.length / 2.0)
+            right.move_edge(point, opening.length / 2.0)
+
+            ret.extend([left, right])
+        return ret
+
+    def _split(self, point: np.array):
+        length_left = np.linalg.norm(point - self.get_left_edge(True))
+        mid_left = self.get_left_edge(True) + np.array([length_left / 2.0, 0.0, 0.0])
+
+        length_right = self.length - length_left
+        mid_right = self.get_right_edge(True) - np.array([length_right / 2.0, 0.0, 0.0])
+
+        left = WallLayer(self.parent, length_left, mid_left)
+        right = WallLayer(self.parent, length_right, mid_right)
+        return left, right
+
     def __lt__(self, other):
         """
         Needed to be able to sort layers by their parents

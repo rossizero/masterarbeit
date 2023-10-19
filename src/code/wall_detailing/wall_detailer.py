@@ -54,6 +54,7 @@ class WallDetailer:
                     pass
 
             for wall in wall_layer_groups:
+                wall.apply_openings()
                 bricks.extend(self.detail_wall(wall, bond))
         return bricks
 
@@ -94,7 +95,6 @@ class WallDetailer:
         width = module.width  # TODO bond width
 
         original_translation = wall.get_translation()
-
         for layer in wall.layers:
             dimensions = np.array([layer.length, width, module.height])
 
@@ -108,6 +108,7 @@ class WallDetailer:
                                                layer=layer.get_layer_plan_index(),
                                                x_offset=layer.relative_x_offset(),
                                                reversed=layer.parent.reversed)
+
             for tf in transformations:
                 local_position = tf.get_position()  # position in wall itself (reference point is bottom left corner)
                 local_rotation = tf.get_rotation()  # rotation of the brick around itself
@@ -117,7 +118,7 @@ class WallDetailer:
                 # need to substract half of dimensions since its position coordinates are at its center
                 center = layer.translation.copy() - dimensions / 2.0
                 local_position += center
-                local_position[2] = center[2] - module.height / 2.0
+                local_position[2] = center[2]# - module.height / 2.0
                 b.translate(local_position)
                 b.rotate_around(original_rotation)  # rotate to fit wall rotation
                 b.translate(original_translation)  # translate to wall
@@ -155,7 +156,7 @@ class WallDetailer:
             b.rotate_around(corner_rotation, vec)
 
             p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.point)
-            p1_rotated[2] -= module.height
+            p1_rotated[2] -= module.height / 2.0
             tmp = local_position + p1_rotated - vec
 
             b.translate(tmp)
@@ -204,6 +205,7 @@ if __name__ == "__main__":
     scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
+    WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()

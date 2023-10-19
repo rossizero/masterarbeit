@@ -35,9 +35,6 @@ class Wall:
 
         self.openings = []
 
-        self.left_connections = []
-        self.right_connections = []
-
     def update_dimensions(self):
         dimensions = self._get_dimensions()
         self.length = max(dimensions[0], dimensions[1])
