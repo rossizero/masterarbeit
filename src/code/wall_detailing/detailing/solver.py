@@ -63,7 +63,9 @@ class Solver(ABC):
                                                                                  l.get_layer_plan_index(),
                                                                                  l.relative_x_offset(),
                                                                                  l.parent.reversed)
-
+                if leftover_right + leftover_left >= l.length:
+                    leftover_left = 0
+                    leftover_right = 0
             if l.parent.id in [l2.parent.id for l2 in layer.left_connections]:
                 left = True
 

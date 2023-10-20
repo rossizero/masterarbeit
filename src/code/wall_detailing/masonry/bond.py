@@ -212,16 +212,7 @@ class Bond(ABC):
         :param reversed: if the bricks are supposed to be placed from right to left
         :return: a list of Transformations for each brick
         """
-        ret = []
         num_bricks, leftover_left, leftover_right, ret = self.bricks_in_layer(layer, length, x_offset, reversed)
-
-        aa = leftover_left if fill_left else 0.0
-        bb = leftover_right if fill_right else 0.0
-
-        c = leftover_left if not fill_left else 0.0
-        d = leftover_right if not fill_right else 0.0
-        if fill_left:
-            print(leftover_left, length, x_offset)
 
         if leftover_left > 0.0 and fill_left:
             tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
@@ -263,8 +254,6 @@ class Bond(ABC):
         brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
         leftover_left = pos[0]
         leftover_right = 0
-        if length == 8.5 and x_offset == 4.5:
-            a = 0
 
         while pos[0] + brick_length <= length + x_offset:
             counter += 1
@@ -277,15 +266,12 @@ class Bond(ABC):
             pos = tf.get_position()
 
             brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
-
-        #leftover_left = length
         found = False
 
         ret = []
         for i in range(counter):
             tf = self.__next()
             tf.module = self.module
-            aa = tf.get_position()
 
             if tf.get_position()[0] >= x_offset:
                 diff = tf.get_position()[0] - x_offset
@@ -294,10 +280,7 @@ class Bond(ABC):
                     leftover_left = diff
 
                 leftover_left = min(leftover_left, diff)
-                aaa = tf.translation.offset[0]
                 tf.translation.offset[0] -= x_offset
-                aaa = tf.translation.offset[0]
-                aa = tf.get_position()
                 ret.append(tf)
         # necessary because sometimes too small for the occ backend to handle
         leftover_right = round(leftover_right, 6)
@@ -306,10 +289,14 @@ class Bond(ABC):
 
         if not found:
             # MAYBE TODO
+            print("hä")
+            leftover_right = length
+            leftover_left = length
             if leftover_left + leftover_right >= length:
                 pass
                 #leftover_left = 0
                 #leftover_right = 0
+
         # reverse tfs to build from left to right
         if reversed:
             leftover_right, leftover_left = leftover_left, leftover_right

@@ -37,6 +37,10 @@ class WallDetailer:
         for group in wall_type_groups.values():
             # combine layer_groups if possible
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
+
+            for wall in wall_layer_groups:
+                wall.apply_openings()
+
             cs = corner_rep.check_for_corners(wall_layer_groups)
             bond = group.bond
             solver = LayeredSolver(cs, bond)
@@ -53,7 +57,7 @@ class WallDetailer:
                     pass
 
             for wall in wall_layer_groups:
-                wall.apply_openings()
+                #wall.apply_openings()
                 bricks.extend(self.detail_wall(wall, bond))
         return bricks
 
@@ -201,7 +205,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = DoppelEck2_Closed_TJoint()
+    scenario = DoppelEck2_Closed()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])

@@ -248,9 +248,6 @@ class WallLayer:
             point = left.right_edge.copy()
             left.move_edge(point, opening.length / 2.0)
             right.move_edge(point, opening.length / 2.0)
-            print("left", left.relative_x_offset())
-            print("right", right.relative_x_offset())
-            print("--")
             ret.extend([left, right])
         return ret
 
@@ -263,6 +260,9 @@ class WallLayer:
 
         left = WallLayer(self.parent, length_left, mid_left)
         right = WallLayer(self.parent, length_right, mid_right)
+
+        left.left_connections = self.left_connections.copy()
+        right.left_connections = self.right_connections.copy()
         return left, right
 
     def __lt__(self, other):
