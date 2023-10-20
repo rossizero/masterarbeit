@@ -16,7 +16,6 @@ from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
     SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint
 from masonry import corner_rep
-from wall_detailing import masonry
 
 
 class WallDetailer:
@@ -95,7 +94,7 @@ class WallDetailer:
         width = module.width  # TODO bond width
 
         original_translation = wall.get_translation()
-        for layer in wall.layers:
+        for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, width, module.height])
 
             fill_left = len(layer.left_connections) == 0

@@ -6,7 +6,7 @@ from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Trsf, gp_Quaternion, gp_Vec
 
-from wall_detailing.detailing.wall import Wall
+from detailing.wall import Wall
 
 
 class Opening:
@@ -15,7 +15,7 @@ class Opening:
     """
     def __init__(self, parent: Wall, translation: np.array, rotation: quaternion, dimensions: Tuple[float, float, float]):
         self.parent = parent
-        self.translation = translation  # relative to parent
+        self.translation = translation  # relative to parents bottom left corner
         self.rotation = rotation  # relative to parent
         self.length = dimensions[0]
         self.width = dimensions[1]
@@ -23,10 +23,12 @@ class Opening:
 
     def get_position(self, relative: bool = False):
         ret = self.translation.copy()
+        ret -= np.array([self.parent.length / 2, self.parent.width / 2, self.parent.height / 2])
+        ret += np.array([self.length / 2, self.width / 2, self.height / 2])
 
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
-            ret += self.parent.get_translation()
+            ret += self.parent.get_translation() - np.array([self.parent.length/2, self.parent.width/2, self.parent.height/2])
         return ret
 
     def get_shape(self):
@@ -39,7 +41,8 @@ class Opening:
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
         transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(*self.get_position(True)))
+        relative_position = self.get_position(True)
+        transformation.SetTranslation(gp_Vec(*relative_position))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
         transformation = gp_Trsf()
@@ -50,6 +53,7 @@ class Opening:
 
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
         transformation = gp_Trsf()
-        transformation.SetTranslation(gp_Vec(*self.parent.get_translation()))
+        global_position = self.parent.get_translation()
+        transformation.SetTranslation(gp_Vec(*global_position))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
         return shape

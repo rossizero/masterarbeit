@@ -127,17 +127,20 @@ class WallLayerGroup:
         if self.highest_local_x is None:
             self.highest_local_x = self.get_highest_local_x()
 
-    def get_sorted_layers(self) -> List[List[WallLayer]]:
+    def get_sorted_layers(self, grouped: bool = True) -> List[List[WallLayer]]:
         """
         :return: a list containing lists of layers that share the same z height sorted by z
         """
-        self.layers.copy().sort(key=lambda x: x.translation[2])
+        layers = self.layers.copy()
+        layers.sort(key=lambda x: x.translation[2])
+        if not grouped:
+            return layers
 
         ret = []
         curr = []
         last_height = round(self.layers[0].translation[2], 6)
 
-        for layer in self.layers:
+        for layer in layers:
             if last_height == round(layer.translation[2], 6):
                 curr.append(layer)
                 if len(curr) > 1:

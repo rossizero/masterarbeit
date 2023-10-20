@@ -6,7 +6,7 @@ from masonry.brick import BrickInformation
 
 from masonry.bond import GothicBond
 
-from wall_detailing.masonry.bond import CrossBond, HeadBond, BlockBond
+from masonry.bond import CrossBond, HeadBond, BlockBond
 
 
 class WallTypeGroup:

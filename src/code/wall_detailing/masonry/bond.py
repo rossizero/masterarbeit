@@ -11,11 +11,11 @@ class MaskedArray:
     """
     Represents and 3D Array that can be tweaked via a multiplication-mask and an offset
     """
-    def __init__(self, value: np.array = np.array([0, 0, 0]), offset: np.array = np.array([0, 0, 0]),
+    def __init__(self, value: np.array = np.array([0.0, 0.0, 0.0]), offset: np.array = np.array([0.0, 0.0, 0.0]),
                  mask: np.array = np.array([1, 1, 1])):
-        self.value = value
+        self.value = value.astype(dtype=float)
         self.mask = mask
-        self.offset = offset
+        self.offset = offset.astype(dtype=float)
 
     def val(self, multiplier: np.array = np.array([0, 0, 0])) -> np.array:
         """
@@ -220,6 +220,8 @@ class Bond(ABC):
 
         c = leftover_left if not fill_left else 0.0
         d = leftover_right if not fill_right else 0.0
+        if fill_left:
+            print(leftover_left, length, x_offset)
 
         if leftover_left > 0.0 and fill_left:
             tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
@@ -261,6 +263,8 @@ class Bond(ABC):
         brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
         leftover_left = pos[0]
         leftover_right = 0
+        if length == 8.5 and x_offset == 4.5:
+            a = 0
 
         while pos[0] + brick_length <= length + x_offset:
             counter += 1
@@ -274,19 +278,27 @@ class Bond(ABC):
 
             brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
 
-        leftover_left = length
+        #leftover_left = length
         found = False
 
         ret = []
         for i in range(counter):
             tf = self.__next()
             tf.module = self.module
-            tf.translation.offset[0] -= x_offset
+            aa = tf.get_position()
 
-            if tf.get_position()[0] >= 0:
-                found = True
+            if tf.get_position()[0] >= x_offset:
+                diff = tf.get_position()[0] - x_offset
+                if not found:
+                    found = True
+                    leftover_left = diff
+
+                leftover_left = min(leftover_left, diff)
+                aaa = tf.translation.offset[0]
+                tf.translation.offset[0] -= x_offset
+                aaa = tf.translation.offset[0]
+                aa = tf.get_position()
                 ret.append(tf)
-                leftover_left = min(leftover_left, tf.get_position()[0])
         # necessary because sometimes too small for the occ backend to handle
         leftover_right = round(leftover_right, 6)
         leftover_right = length + x_offset - leftover_right
@@ -295,9 +307,9 @@ class Bond(ABC):
         if not found:
             # MAYBE TODO
             if leftover_left + leftover_right >= length:
-                leftover_left = length
-                leftover_right = length
-
+                pass
+                #leftover_left = 0
+                #leftover_right = 0
         # reverse tfs to build from left to right
         if reversed:
             leftover_right, leftover_left = leftover_left, leftover_right
@@ -348,6 +360,7 @@ class BlockBond(Bond):
         ])
 
         return plan
+
 
 class StrechedBond(Bond):
     def __init__(self, module: BrickInformation, offset: float = 0.5, schleppend: bool = False):

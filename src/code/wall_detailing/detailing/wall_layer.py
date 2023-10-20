@@ -3,7 +3,7 @@ import quaternion
 
 from typing import List
 
-from wall_detailing.die_mathe.line import Line
+from die_mathe.line import Line
 
 
 class WallLayer:
@@ -194,10 +194,8 @@ class WallLayer:
         # move center
         if not from_left == from_right:
             if from_left:
-                self.touched_left = True
                 self.translation[0] += length / 2.0
             else:
-                self.touched_right = True
                 self.translation[0] -= length / 2.0
         self.length -= length
         return True
@@ -246,18 +244,18 @@ class WallLayer:
 
         ret = []
         if (a and b) and (c and d):
-            point = opening.get_position(True)
-            point[2] = self.get_center(True)[2]
-            left, right = self._split(point)
-
+            left, right = self._split(opening.get_position(True)[0] - self.get_left_edge(True)[0])
+            point = left.right_edge.copy()
             left.move_edge(point, opening.length / 2.0)
             right.move_edge(point, opening.length / 2.0)
-
+            print("left", left.relative_x_offset())
+            print("right", right.relative_x_offset())
+            print("--")
             ret.extend([left, right])
         return ret
 
-    def _split(self, point: np.array):
-        length_left = np.linalg.norm(point - self.get_left_edge(True))
+    def _split(self, length: int):
+        length_left = length
         mid_left = self.get_left_edge(True) + np.array([length_left / 2.0, 0.0, 0.0])
 
         length_right = self.length - length_left

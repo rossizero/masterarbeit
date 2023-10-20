@@ -5,7 +5,7 @@ import quaternion
 import math
 from detailing.wall import Wall
 
-from wall_detailing.masonry.opening import Opening
+from masonry.opening import Opening
 
 
 class Scenario(ABC):
@@ -223,15 +223,16 @@ class DoppelEck2_Closed_TJoint(Scenario):
         w3.openings.append(Opening(w3, np.array([1.0, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
         w4 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, -6.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0")
-        w4.openings.append(Opening(w4, np.array([2, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
-        w5 = Wall.make_wall(13, 1, 10 * 0.5, np.array([4.5, 0, 2.5]),
-                            quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi + math.pi / 2),
+        w4.openings.append(Opening(w4, np.array([1, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
+        w5 = Wall.make_wall(13.0, 1, 10 * 0.5, np.array([4.5, 0, 2.5]),
+                            quaternion.from_euler_angles(0.0, 0.0, 0.0),
                             ifc_wall_type="test", name = "w2")
-        w5.openings.append(Opening(w5, np.array([2, 0.0, -0.5]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
+        w5.openings.append(Opening(w5, np.array([2.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
 
-        door = [w0]
+        door = [w5]
         all_ = [w0, w1, w3, w4, w5]
-        return all_
+        #w5.rotate_around(quaternion.from_euler_angles(0, 1.3, 1.3))
+        return door
 
 
 class DoppelEck3_Closed(Scenario):
