@@ -214,6 +214,16 @@ class Bond(ABC):
         """
         num_bricks, leftover_left, leftover_right, ret = self.bricks_in_layer(layer, length, x_offset, reversed)
 
+        # TODO
+        if leftover_left + leftover_right == length:
+            # if we only want to fill one side, but the layer only consists of leftovers
+            # -> fill the whole layer from one side TODO check if  > 2.0 possible
+            if fill_left and not fill_right:
+                leftover_left += leftover_right
+            elif fill_right and not fill_left:
+                leftover_right += leftover_left
+
+
         if leftover_left > 0.0 and fill_left:
             tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
             tf.module = BrickInformation(leftover_left, width, self.module.height)
@@ -253,7 +263,7 @@ class Bond(ABC):
 
         brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
         leftover_left = pos[0]
-        leftover_right = 0
+        leftover_right = leftover_left
 
         while pos[0] + brick_length <= length + x_offset:
             counter += 1
@@ -266,36 +276,52 @@ class Bond(ABC):
             pos = tf.get_position()
 
             brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
-        found = False
 
         ret = []
-        for i in range(counter):
-            tf = self.__next()
-            tf.module = self.module
 
-            if tf.get_position()[0] >= x_offset:
-                diff = tf.get_position()[0] - x_offset
-                if not found:
-                    found = True
-                    leftover_left = diff
+        if counter == 0:
+            print("Fall 1")
+            leftover_right = length - leftover_left
+        else:
+            found = False
+            for i in range(counter):
+                tf = self.__next()
+                tf.module = self.module
 
-                leftover_left = min(leftover_left, diff)
-                tf.translation.offset[0] -= x_offset
-                ret.append(tf)
-        # necessary because sometimes too small for the occ backend to handle
-        leftover_right = round(leftover_right, 6)
-        leftover_right = length + x_offset - leftover_right
-        leftover_left = round(leftover_left, 6)
+                if tf.get_position()[0] >= x_offset:
+                    diff = tf.get_position()[0] - x_offset
+                    if not found:
+                        found = True
+                        leftover_left = diff
 
-        if not found:
-            #leftover_right = length
-            #leftover_left = length
-            if leftover_left + leftover_right >= length:
+                    leftover_left = min(leftover_left, diff)
+                    tf.translation.offset[0] -= x_offset
+                    ret.append(tf)
+            if found:
+                # necessary because sometimes too small for the occ backend to handle
+                leftover_right = round(leftover_right - x_offset, 6)
+                leftover_right = length - leftover_right
+                leftover_left = round(leftover_left, 6)
+            if not found:
+                leftover_left = length - leftover_left
                 leftover_right = length - leftover_left
-                print(leftover_left, leftover_right)
-                pass
-                #leftover_left = 0
-                #leftover_right = 0
+                print("Fall 2")
+                #leftover_right = length
+                #leftover_left = length
+                print(length, leftover_left, leftover_right)
+                if leftover_left > length:
+                    #leftover_left = length - leftover_right
+                    print("left", length, leftover_left)
+                elif leftover_right > length:
+                    #leftover_right = length - leftover_left
+                    print("right", length, leftover_right)
+                if leftover_left + leftover_right > length:
+                    print("fjoiuejhfiur")
+                    #leftover_right = length - leftover_left
+                    #print(leftover_left, leftover_right)
+                    pass
+                    #leftover_left = 0
+                    #leftover_right = 0
 
         # reverse tfs to build from left to right
         if reversed:

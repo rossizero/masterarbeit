@@ -38,10 +38,11 @@ class WallDetailer:
             # combine layer_groups if possible
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
 
-            cs = corner_rep.check_for_corners(wall_layer_groups)
-
             for wall in wall_layer_groups:
                 wall.apply_openings()
+
+            cs = corner_rep.check_for_corners(wall_layer_groups)
+
 
             bond = group.bond
             solver = LayeredSolver(cs, bond)
@@ -99,12 +100,12 @@ class WallDetailer:
         width = module.width  # TODO bond width
 
         original_translation = wall.get_translation()
+        print("wall:", wall.id)
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, width, module.height])
 
             fill_left = len(layer.left_connections) == 0
             fill_right = len(layer.right_connections) == 0
-
             transformations = bond.apply_layer(length=layer.length,
                                                width=width,
                                                fill_left=fill_left,
@@ -119,7 +120,7 @@ class WallDetailer:
 
                 b = Brick(tf.module)
                 if tf.module.length > 2.0:
-                    print(tf.module.length)
+                    print("too big", tf.module.length)
                 b.rotate(local_rotation)
                 # need to substract half of dimensions since its position coordinates are at its center
                 center = layer.translation.copy() - dimensions / 2.0
