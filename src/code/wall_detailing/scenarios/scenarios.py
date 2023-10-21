@@ -229,7 +229,7 @@ class DoppelEck2_Closed_TJoint(Scenario):
                             ifc_wall_type="test", name = "w2")
         w5.openings.append(Opening(w5, np.array([3, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
 
-        door = [w4, w5, w3, w1]
+        door = [w4, w5, w1]
         tmp = [w0, w5]
         all_ = [w0, w1, w3, w4, w5]
         #w5.rotate_around(quaternion.from_euler_angles(0, 1.3, 1.3))

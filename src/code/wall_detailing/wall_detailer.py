@@ -100,7 +100,6 @@ class WallDetailer:
         width = module.width  # TODO bond width
 
         original_translation = wall.get_translation()
-        print("wall:", wall.id)
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, width, module.height])
 
@@ -119,8 +118,6 @@ class WallDetailer:
                 local_rotation = tf.get_rotation()  # rotation of the brick around itself
 
                 b = Brick(tf.module)
-                if tf.module.length > 2.0:
-                    print("too big", tf.module.length)
                 b.rotate(local_rotation)
                 # need to substract half of dimensions since its position coordinates are at its center
                 center = layer.translation.copy() - dimensions / 2.0
@@ -168,8 +165,8 @@ class WallDetailer:
 
             b.translate(tmp)
             b.rotate_around(original_rotation)
-
             brick_ret.append(b)
+        
         return brick_ret
 
     @staticmethod

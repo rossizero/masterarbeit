@@ -52,7 +52,7 @@ class LayeredSolver(Solver):
             while corner_offset < self.bond.get_corner_plan_repeat_step():
                 corner.plan_offset = corner_offset
                 score = self.holes_between_corner_and_layer(corner, layer)
-                if score < val:
+                if score <= val:
                     val = score
                     result = corner_offset
                 corner_offset += 1

@@ -198,6 +198,7 @@ class Bond(ABC):
         self.__up(layer)
 
         num_bricks, leftover_left, leftover_right, _ = self.bricks_in_layer(layer, length, x_offset, reversed)
+
         return leftover_left, leftover_right, num_bricks
 
     def apply_layer(self, length, width, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0, reversed: bool = False) -> List[Transformation]:
@@ -217,12 +218,15 @@ class Bond(ABC):
         # TODO
         if leftover_left + leftover_right == length:
             # if we only want to fill one side, but the layer only consists of leftovers
-            # -> fill the whole layer from one side TODO check if  > 2.0 possible
+            # -> fill the whole layer from one side
+
+
             if fill_left and not fill_right:
                 leftover_left += leftover_right
+                leftover_right = 0
             elif fill_right and not fill_left:
                 leftover_right += leftover_left
-
+                leftover_left = 0
 
         if leftover_left > 0.0 and fill_left:
             tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
@@ -280,7 +284,6 @@ class Bond(ABC):
         ret = []
 
         if counter == 0:
-            print("Fall 1")
             leftover_right = length - leftover_left
         else:
             found = False
@@ -302,26 +305,9 @@ class Bond(ABC):
                 leftover_right = round(leftover_right - x_offset, 6)
                 leftover_right = length - leftover_right
                 leftover_left = round(leftover_left, 6)
-            if not found:
+            else:
                 leftover_left = length - leftover_left
                 leftover_right = length - leftover_left
-                print("Fall 2")
-                #leftover_right = length
-                #leftover_left = length
-                print(length, leftover_left, leftover_right)
-                if leftover_left > length:
-                    #leftover_left = length - leftover_right
-                    print("left", length, leftover_left)
-                elif leftover_right > length:
-                    #leftover_right = length - leftover_left
-                    print("right", length, leftover_right)
-                if leftover_left + leftover_right > length:
-                    print("fjoiuejhfiur")
-                    #leftover_right = length - leftover_left
-                    #print(leftover_left, leftover_right)
-                    pass
-                    #leftover_left = 0
-                    #leftover_right = 0
 
         # reverse tfs to build from left to right
         if reversed:
