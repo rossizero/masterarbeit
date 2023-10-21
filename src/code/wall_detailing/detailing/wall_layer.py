@@ -235,6 +235,8 @@ class WallLayer:
         a = center[2] >= opening_position[2] - opening.height / 2.0
         b = center[2] <= opening_position[2] + opening.height / 2.0
 
+        bb = center[2] == opening_position[2] + opening.height / 2.0 + opening.lintel.height / 2.0
+
         min_x = self.get_left_edge(True)[0]
         max_x = self.get_right_edge(True)[0]
 
@@ -243,11 +245,14 @@ class WallLayer:
         d = min_x <= opening_position[0] - opening.length / 2.0
 
         ret = []
-        if (a and b) and (c and d):
+        if (a and (b or bb)) and (c and d):
             left, right = self._split(opening.get_position(True)[0] - self.get_left_edge(True)[0])
             point = left.right_edge.copy()
-            left.move_edge(point, opening.length / 2.0)
-            right.move_edge(point, opening.length / 2.0)
+            additional_length = (opening.lintel.length - opening.length) / 2.0 if bb else 0
+            if bb:
+                print("lintel!",  additional_length)
+            left.move_edge(point, opening.length / 2.0 + additional_length)
+            right.move_edge(point, opening.length / 2.0 + additional_length)
             ret.extend([left, right])
         return ret
 

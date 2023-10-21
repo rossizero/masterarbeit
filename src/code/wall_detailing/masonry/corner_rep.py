@@ -309,5 +309,15 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                                            or np.linalg.norm(intersection - l1.right_edge) < w1.module.width
                                            or np.linalg.norm(intersection - l2.left_edge) < w2.module.width
                                             or np.linalg.norm(intersection - l2.right_edge) < w2.module.width)
+                                #c = Corn(intersection)
+                                #c.layers.update([l1, l2, t_joint])
+                                #corners.add_corner(c)
                                 #print("T-Joint" if t_joint else "Crossing", [round(i, 6) for i in intersection], x_parallel)
+    # TODO
+    # for now just remove TJoints and Crossings
+    #print(len(corners.corners))
+    #for corner in corners.corners.copy():
+    #    if True in corner.layers or False in corner.layers:
+    #        corners.corners.remove(corner)
+    #print(len(corners.corners))
     return corners

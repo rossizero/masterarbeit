@@ -38,10 +38,11 @@ class WallDetailer:
             # combine layer_groups if possible
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
 
+            cs = corner_rep.check_for_corners(wall_layer_groups)
+
             for wall in wall_layer_groups:
                 wall.apply_openings()
 
-            cs = corner_rep.check_for_corners(wall_layer_groups)
             bond = group.bond
             solver = LayeredSolver(cs, bond)
             solver.solve()
@@ -117,6 +118,8 @@ class WallDetailer:
                 local_rotation = tf.get_rotation()  # rotation of the brick around itself
 
                 b = Brick(tf.module)
+                if tf.module.length > 2.0:
+                    print(tf.module.length)
                 b.rotate(local_rotation)
                 # need to substract half of dimensions since its position coordinates are at its center
                 center = layer.translation.copy() - dimensions / 2.0
@@ -205,7 +208,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = DoppelEck2_Closed()
+    scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])

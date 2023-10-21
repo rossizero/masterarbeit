@@ -7,6 +7,7 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Trsf, gp_Quaternion, gp_Vec
 
 from detailing.wall import Wall
+from masonry.brick import BrickInformation
 
 
 class Opening:
@@ -20,6 +21,7 @@ class Opening:
         self.length = dimensions[0]
         self.width = dimensions[1]
         self.height = dimensions[2]
+        self.lintel = BrickInformation(self.length + 1, 1.0, 0.5)
 
     def get_position(self, relative: bool = False):
         ret = self.translation.copy()
@@ -29,6 +31,17 @@ class Opening:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation() - np.array([self.parent.length/2, self.parent.width/2, self.parent.height/2])
+        return ret
+
+    def get_lintel_position(self, relative: bool = False):
+        ret = self.translation.copy()
+        ret -= np.array([self.parent.length / 2, self.parent.width / 2, self.parent.height / 2])
+        ret += np.array([self.length / 2, self.width / 2, self.height + self.lintel.height / 2])
+
+        if not relative:
+            ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
+            ret += self.parent.get_translation() - np.array(
+                [self.parent.length / 2, self.parent.width / 2, self.parent.height / 2])
         return ret
 
     def get_shape(self):

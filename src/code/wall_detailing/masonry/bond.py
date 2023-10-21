@@ -288,11 +288,11 @@ class Bond(ABC):
         leftover_left = round(leftover_left, 6)
 
         if not found:
-            # MAYBE TODO
-            print("hä")
-            leftover_right = length
-            leftover_left = length
+            #leftover_right = length
+            #leftover_left = length
             if leftover_left + leftover_right >= length:
+                leftover_right = length - leftover_left
+                print(leftover_left, leftover_right)
                 pass
                 #leftover_left = 0
                 #leftover_right = 0
