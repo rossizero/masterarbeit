@@ -166,7 +166,7 @@ class WallDetailer:
             b.translate(tmp)
             b.rotate_around(original_rotation)
             brick_ret.append(b)
-        
+
         return brick_ret
 
     @staticmethod

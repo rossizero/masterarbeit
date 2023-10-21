@@ -218,6 +218,7 @@ class DoppelEck2_Closed_TJoint(Scenario):
         w0.openings.append(Opening(w0, np.array([3.0, 0.0, 0]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
         w1 = Wall.make_wall(13, 1, 10 * 0.5, np.array([-4.5, 1.0, 2.5]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2")
+        w1.openings.append(Opening(w1, np.array([3, 0.0, 1.5]), quaternion.from_euler_angles(0, 0, 0), (4, 1, 2.5)))
         w3 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 7.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0")
         w3.openings.append(Opening(w3, np.array([3.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
