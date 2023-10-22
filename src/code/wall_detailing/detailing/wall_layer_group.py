@@ -6,7 +6,7 @@ import quaternion
 
 from detailing.wall import Wall
 from detailing.wall_layer import WallLayer
-from masonry.brick import BrickInformation
+from masonry.brick import BrickInformation, Brick
 
 
 class WallLayerGroup:
@@ -218,6 +218,22 @@ class WallLayerGroup:
                 if len(split) > 0:
                     self.layers.remove(layer)
                     self.layers.extend(split)
+
+    def get_opening_lintels(self) -> List['Brick']:
+        """
+        :return: all lintels of all openings in this wall
+        """
+        bricks = []
+        for opening in self.openings:
+            brick = Brick(opening.lintel)
+            brick.rotate(opening.get_rotation())
+            brick.translate(opening.get_lintel_position())
+
+            brick.rotate_around(self.get_rotation())
+            brick.translate(self.get_translation())
+            bricks.append(brick)
+
+        return bricks
 
     @classmethod
     def from_wall(cls, wall: Wall, module: BrickInformation):

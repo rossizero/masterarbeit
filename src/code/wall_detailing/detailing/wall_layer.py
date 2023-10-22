@@ -1,7 +1,7 @@
 import numpy as np
 import quaternion
 
-from typing import List
+from typing import List, Tuple
 
 from die_mathe.line import Line
 
@@ -226,38 +226,50 @@ class WallLayer:
 
     def apply_opening(self, opening: 'Opening') -> List['WallLayer']:
         """
-        Hmmmm
+        Splits a wall_layer to make space for given opening.
+        :param opening: Opening we need to make space for
+        :return: the two layers that result by splitting self into two
         """
         # does the opening lie on this layer?
         opening_position = opening.get_position(True)
         center = self.get_center(True)
 
+        # check if we are in between the y coordinates of the opening
         a = center[2] >= opening_position[2] - opening.height / 2.0
         b = center[2] <= opening_position[2] + opening.height / 2.0
 
-        bb = center[2] == opening_position[2] + opening.height / 2.0 + opening.lintel.height / 2.0
-
-        min_x = self.get_left_edge(True)[0]
-        max_x = self.get_right_edge(True)[0]
+        # check if we are above the actual opening and inside the bounds of the lintel (if one is wanted)
+        lintel = center[2] == opening_position[2] + opening.height / 2.0 + opening.lintel.height / 2.0
+        lintel = lintel and opening.lintel.height > 0.0  # do we have a lintel planned for this opening
 
         # does the opening lie between the left and right edge of this layer?
+        min_x = self.get_left_edge(True)[0]
+        max_x = self.get_right_edge(True)[0]
         c = max_x >= opening_position[0] + opening.length / 2.0
         d = min_x <= opening_position[0] - opening.length / 2.0
 
         ret = []
-        if (a and (b or bb)) and (c and d):
+        if (a and (b or lintel)) and (c and d):
+            # first, split the layers
             left, right = self._split(opening.get_position(True)[0] - self.get_left_edge(True)[0])
+
+            # calculate how far we need to move each layer away
+            length = opening.length if not lintel else opening.lintel.length
+            # use left.right_edge or right.left edge as "moving" reference point
             point = left.right_edge.copy()
-            additional_length = (opening.lintel.length - opening.length) / 2.0 if bb else 0
-            if bb:
-                print("lintel!",  additional_length)
-            left.move_edge(point, opening.length / 2.0 + additional_length)
-            right.move_edge(point, opening.length / 2.0 + additional_length)
+
+            # reduce length of both layers
+            left.move_edge(point, length / 2.0)
+            right.move_edge(point, length / 2.0)
             ret.extend([left, right])
         return ret
 
-    def _split(self, length: int):
-        length_left = length
+    def _split(self, x: int) -> Tuple['WallLayer', 'WallLayer']:
+        """
+        :param x: where on the length axis of the layer we want to cut it
+        :return: the two resulting layers
+        """
+        length_left = x
         mid_left = self.get_left_edge(True) + np.array([length_left / 2.0, 0.0, 0.0])
 
         length_right = self.length - length_left

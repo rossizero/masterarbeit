@@ -23,6 +23,9 @@ class Opening:
         self.height = dimensions[2]
         self.lintel = BrickInformation(self.length + 1, 1.0, 0.5)
 
+    def get_rotation(self):
+        return self.rotation
+
     def get_position(self, relative: bool = False):
         ret = self.translation.copy()
         ret -= np.array([self.parent.length / 2, self.parent.width / 2, self.parent.height / 2])
@@ -34,15 +37,9 @@ class Opening:
         return ret
 
     def get_lintel_position(self, relative: bool = False):
-        ret = self.translation.copy()
-        ret -= np.array([self.parent.length / 2, self.parent.width / 2, self.parent.height / 2])
-        ret += np.array([self.length / 2, self.width / 2, self.height + self.lintel.height / 2])
-
-        if not relative:
-            ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
-            ret += self.parent.get_translation() - np.array(
-                [self.parent.length / 2, self.parent.width / 2, self.parent.height / 2])
-        return ret
+        relative_position = self.get_position(True)
+        relative_position -= np.array([self.lintel.length / 2.0, self.width / 2.0, -self.height / 2.0])
+        return relative_position
 
     def get_shape(self):
         corner = gp_Pnt(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0)

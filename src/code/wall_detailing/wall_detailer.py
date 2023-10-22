@@ -43,7 +43,6 @@ class WallDetailer:
 
             cs = corner_rep.check_for_corners(wall_layer_groups)
 
-
             bond = group.bond
             solver = LayeredSolver(cs, bond)
             solver.solve()
@@ -51,7 +50,6 @@ class WallDetailer:
             for corner in cs.corners:
                 layers = list(corner.layers)
                 if len(layers) == 2:
-                    pass
                     bricks.extend(self.detail_corner(corner, bond))
                 else:
                     # t-joint MAYDO combine t-joints
@@ -59,8 +57,9 @@ class WallDetailer:
                     pass
 
             for wall in wall_layer_groups:
-                #wall.apply_openings()
+                # wall.apply_openings()
                 bricks.extend(self.detail_wall(wall, bond))
+                bricks.extend(wall.get_opening_lintels())
         return bricks
 
     def combine_layer_groups(self, wall_layer_groups: List[WallLayerGroup]) -> List[WallLayerGroup]:
@@ -137,16 +136,12 @@ class WallDetailer:
         :return: List of brick objects
         """
         brick_ret = []
+
         main_layer = corner.get_main_layer()
-
         module = main_layer.parent.module
-
-        #dimensions = np.array([main_layer.length, module.width, module.height])
         original_rotation = main_layer.parent.get_rotation()
         corner_rotation = corner.get_rotation()
-        #layer_index = main_layer.get_layer_index()
 
-        #for tf in bond.apply_corner(corner.get_corner_index() + corner.plan_offset):
         for tf in bond.apply_corner(corner.plan_offset):
             local_position = tf.get_position()  # position in wall itself
             local_position[2] = 0.0  # MAYDO ugly

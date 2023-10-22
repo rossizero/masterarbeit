@@ -42,9 +42,18 @@ class Line:
         return d < 1e-9 and between
 
     def length(self):
+        """
+        length between this lines p1 and p2
+        :return: length between this lines p1 and p2
+        """
         return np.linalg.norm(self.p1 - self.p2)
 
     def intersection(self, other: 'Line') -> Optional[np.array]:
+        """
+        Calculates the intersection of two lines
+        :param other: the other line
+        :return: Intersection between the two lines
+        """
         p1 = self.p1
         p2 = other.p1
 
@@ -62,10 +71,8 @@ class Line:
             intersection_point2 = p2 + t[1] * direction2
             assert np.allclose(intersection_point1, intersection_point2)
 
-        except np.linalg.LinAlgError:
-            # print("no intersection found between", w1.name, "and", w2.name,  "even though they are touching")
+        except np.linalg.LinAlgError:  # No solution
             return None
-        except AssertionError:
-            # print("intersection points are not the same for", w1.name, "and", w2.name,  "even though they are touching")
+        except AssertionError:  # Weird shit
             return None
         return intersection_point1
