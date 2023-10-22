@@ -1,13 +1,12 @@
-from typing import Tuple
-
-import numpy as np
-import quaternion
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Trsf, gp_Quaternion, gp_Vec
-
+from typing import Tuple
 from detailing.wall import Wall
 from masonry.brick import BrickInformation
+
+import numpy as np
+import quaternion
 
 
 class Opening:

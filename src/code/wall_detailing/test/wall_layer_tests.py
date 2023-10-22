@@ -46,8 +46,8 @@ class TestWallLayer(unittest.TestCase):
 
         self.assertEqual(layer1.length, self.length)
         self.assertEqual(layer2.length, self.length)
-        self.assertTrue(np.array_equal(layer1.translation, np.array([0, 0, 0])))
-        self.assertTrue(np.array_equal(layer2.translation, np.array([0, 0, 0.5])))
+        self.assertTrue(np.array_equal(layer1.translation, np.array([0, 0, -0.25])))
+        self.assertTrue(np.array_equal(layer2.translation, np.array([0, 0, 0.25])))
 
         self.assertTrue(np.array_equal(layer1.center, np.array([5.5, 0, 0.5])))
         self.assertTrue(np.array_equal(layer2.center, np.array([5.5, 0, 1.0])))
