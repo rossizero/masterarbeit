@@ -6,7 +6,7 @@ import quaternion
 from detailing.wall_layer import WallLayer
 from detailing.wall_layer_group import WallLayerGroup
 from typing import List, Dict, Tuple, Optional
-from masonry.bond import Bond
+from masonry.bond.abstract_bond import Bond
 from die_mathe.line import Line
 
 

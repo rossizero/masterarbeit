@@ -52,14 +52,14 @@ class TestWallLayer(unittest.TestCase):
         layer1.reduce_length(1, from_left=True, from_right=False)
         self.assertEqual(layer1.length, 9)
         left, right, num_bricks = self.bond.leftover_of_layer(layer1.length, layer1.get_layer_plan_index(),
-                                                              layer1.relative_x_offset(), reversed=layer1.reversed)
+                                                              layer1.relative_x_offset(), reversed=layer1.parent.reversed)
         self.assertEqual(4, num_bricks)
         self.assertEqual(1, left)
         self.assertEqual(0, right)
 
-        layer1.reversed = True
+        #layer1.parent.reversed = True
         left, right, num_bricks = self.bond.leftover_of_layer(layer1.length, layer1.get_layer_plan_index(),
-                                                              layer1.relative_x_offset(), reversed=layer1.reversed)
+                                                              layer1.relative_x_offset(), reversed=layer1.parent.reversed)
         self.assertEqual(4, num_bricks)
         self.assertEqual(1, right)
         self.assertEqual(0, left)
@@ -70,14 +70,14 @@ class TestWallLayer(unittest.TestCase):
         layer1.reduce_length(1, from_left=False, from_right=True)
         self.assertEqual(layer1.length, 9)
         left, right, num_bricks = self.bond.leftover_of_layer(layer1.length, layer1.get_layer_plan_index(),
-                                                              layer1.relative_x_offset(), reversed=layer1.reversed)
+                                                              layer1.relative_x_offset(), reversed=layer1.parent.reversed)
         self.assertEqual(4, num_bricks)
         self.assertEqual(0, left)
         self.assertEqual(1, right)
 
-        layer1.reversed = True
+        layer1.parent.reversed = True
         left, right, num_bricks = self.bond.leftover_of_layer(layer1.length, layer1.get_layer_plan_index(),
-                                                              layer1.relative_x_offset(), reversed=layer1.reversed)
+                                                              layer1.relative_x_offset(), reversed=layer1.parent.reversed)
         self.assertEqual(4, num_bricks)
         self.assertEqual(1, left)
         self.assertEqual(0, right)

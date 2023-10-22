@@ -9,7 +9,7 @@ from OCC.Core.StlAPI import StlAPI_Writer
 from detailing.layered_solver import LayeredSolver
 from detailing.wall_layer_group import WallLayerGroup
 from detailing.wall_type_group import WallTypeGroup
-from masonry.bond import Bond
+from masonry.bond.abstract_bond import Bond
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns

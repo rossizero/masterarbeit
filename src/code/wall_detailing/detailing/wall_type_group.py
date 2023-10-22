@@ -1,12 +1,8 @@
 from typing import List
 
 from detailing.wall_layer_group import WallLayerGroup
-from masonry.bond import StrechedBond
+from masonry.bond.streched_bond import StrechedBond
 from masonry.brick import BrickInformation
-
-from masonry.bond import GothicBond
-
-from masonry.bond import CrossBond, HeadBond, BlockBond
 
 
 class WallTypeGroup:

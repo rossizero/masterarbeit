@@ -3,7 +3,7 @@ from copy import deepcopy
 from typing import List
 from detailing.wall_layer import WallLayer
 from masonry.corner_rep import Corns, Corn
-from masonry.bond import Bond
+from masonry.bond.abstract_bond import Bond
 
 
 class Solver(ABC):
