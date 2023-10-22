@@ -59,11 +59,11 @@ class Solver(ABC):
         for l in corner.layers:
             if l.parent.id == layer.parent.id:
                 corner.reduce_layer_length(l, self.bond)
-                leftover_left, leftover_right, num = self.bond.leftover_of_layer(l.length,
-                                                                                 l.get_layer_plan_index(),
-                                                                                 l.relative_x_offset(),
-                                                                                 l.parent.reversed)
-                if num == 0 or leftover_right + leftover_left == l.length:
+                leftover_left, leftover_right, num_bricks = self.bond.leftover_of_layer(l.length,
+                                                                                        l.get_layer_plan_index(),
+                                                                                        l.relative_x_offset(),
+                                                                                        l.parent.reversed)
+                if num_bricks == 0 or leftover_right + leftover_left == l.length:
                     leftover_left = 0
                     leftover_right = 0
 

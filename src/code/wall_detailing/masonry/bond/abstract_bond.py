@@ -197,9 +197,9 @@ class Bond(ABC):
         self.__reset()
         self.__up(layer)
 
-        num_bricks, leftover_left, leftover_right, _ = self.bricks_in_layer(layer, length, x_offset, reversed)
+        bricks, leftover_left, leftover_right = self.bricks_in_layer(layer, length, x_offset, reversed)
 
-        return leftover_left, leftover_right, num_bricks
+        return leftover_left, leftover_right, len(bricks)
 
     def apply_layer(self, length, width, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0, reversed: bool = False) -> List[Transformation]:
         """
@@ -213,9 +213,8 @@ class Bond(ABC):
         :param reversed: if the bricks are supposed to be placed from right to left
         :return: a list of Transformations for each brick
         """
-        num_bricks, leftover_left, leftover_right, ret = self.bricks_in_layer(layer, length, x_offset, reversed)
+        bricks, leftover_left, leftover_right = self.bricks_in_layer(layer, length, x_offset, reversed)
 
-        # TODO
         if leftover_left + leftover_right == length:
             # if we only want to fill one side, but the layer only consists of leftovers
             # -> fill the whole layer from one side
@@ -232,7 +231,7 @@ class Bond(ABC):
             if leftover_left < width:
                 tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
             tf.set_mask_multiplier(1, 1, layer)
-            ret.append(tf)
+            bricks.append(tf)
 
         if leftover_right > 0.0 and fill_right:
             tf = Transformation(MaskedArray(value=np.array([length-leftover_right, 0, self.h]), mask=np.array([1, 0, 1])))
@@ -240,34 +239,31 @@ class Bond(ABC):
             if leftover_right < width:
                 tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
             tf.set_mask_multiplier(1, 1, layer)
-            ret.append(tf)
-        return ret
+            bricks.append(tf)
+        return bricks
 
-    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0, reversed: bool = False) -> tuple[int, float, float, list[Transformation]]:
+    def num_bricks_in_length(self, layer: int, length: float):
         """
-        :param layer: num of layer (0 is at floor)
-        :param length: length of the wall
-        :param x_offset: offset in x direction
-        :param reversed: if the bricks are supposed to be placed from right to left
-        :return: number of bricks that fit into given length of the wall by following layout plan for given layer
+        :param layer: the plan layer we look at
+        :param length: the length we want to apply the bond to
+        :return: number of bricks in length, leftover on both sides
         """
+        # get plan and starting position
+        transformations = self.plan[layer % self.repeat_layer].copy()
+        tf = transformations[0].copy()
+        tf.set_mask_multiplier(0, 0, layer)
+        pos = tf.get_position()
 
-        self.__reset()
-        self.__up(layer)
+        leftover_left = pos[0]  # leftover_left usually stays at this value
+        leftover_right = leftover_left  # leftover_right is the "x-coordinate" of the last bricks right edge
+        brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
 
         counter = 0
         multiplier = 0
 
-        transformations = self.plan[layer % self.repeat_layer].copy()
-        tf = transformations[counter].copy()
-        tf.set_mask_multiplier(multiplier, multiplier, layer)
-        pos = tf.get_position()
-
-        brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
-        leftover_left = pos[0]
-        leftover_right = leftover_left
-
-        while pos[0] + brick_length <= length + x_offset:
+        # iterate over the layerplan while increasing the multiplier
+        # until we find a brick that reaches over the given length
+        while pos[0] + brick_length <= length:
             counter += 1
             leftover_right = max(leftover_right, pos[0] + brick_length)
             leftover_left = min(leftover_left, pos[0])
@@ -278,31 +274,51 @@ class Bond(ABC):
             pos = tf.get_position()
 
             brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
+        return counter, round(leftover_left, 6), round(leftover_right, 6)
 
+    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0, reversed: bool = False) -> Tuple[List[Transformation], float, float]:
+        """
+        :param layer: index of layer plan (0 is at floor)
+        :param length: length of the wall
+        :param x_offset: offset in x direction
+        :param reversed: if the bricks are supposed to be placed from right to left
+        :return: number of bricks that fit into given length of the wall by following layout plan for given layer
+        """
+        # check how many bricks are in this layers length + it's x_offset
+        # aka we act like the layer is longer as it might be, to be able to cut out bricks correctly later
+        counter, leftover_left, leftover_right = self.num_bricks_in_length(layer, length + x_offset)
         ret = []
 
+        # if there are no whole bricks at all
         if counter == 0:
             leftover_right = length - leftover_left
+        # if there are some whole bricks in the length + x_offset
         else:
-            found = False
+            self.__reset()
+            self.__up(layer)
+
+            # now let's check if there are any bricks that have x positions greater than given x_offset
+            any_bricks = False
             for i in range(counter):
                 tf = self.__next()
                 tf.module = self.module
 
                 if tf.get_position()[0] >= x_offset:
                     diff = tf.get_position()[0] - x_offset
-                    if not found:
-                        found = True
+                    if not any_bricks:
+                        any_bricks = True
                         leftover_left = diff
 
                     leftover_left = min(leftover_left, diff)
                     tf.translation.offset[0] -= x_offset
                     ret.append(tf)
-            if found:
-                # necessary because sometimes too small for the occ backend to handle
+            # in case there are any bricks
+            if any_bricks:
+                # rounding necessary because sometimes too small for the occ backend to handle
                 leftover_right = round(leftover_right - x_offset, 6)
                 leftover_right = length - leftover_right
                 leftover_left = round(leftover_left, 6)
+            # otherwise do a slightly different calculation
             else:
                 leftover_left = length - leftover_left
                 leftover_right = length - leftover_left
@@ -317,4 +333,4 @@ class Bond(ABC):
                 tf.mask_multiplier[0] *= -1
 
         # in case we want to build the layer from right to left
-        return len(ret), leftover_left, leftover_right, ret
+        return ret, leftover_left, leftover_right
