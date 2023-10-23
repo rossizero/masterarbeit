@@ -14,7 +14,7 @@ from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
-    SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint
+    SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall
 from masonry import corner_rep
 
 
@@ -57,6 +57,7 @@ class WallDetailer:
                     pass
 
             for wall in wall_layer_groups:
+                pass
                 # wall.apply_openings()
                 bricks.extend(self.detail_wall(wall, bond))
                 bricks.extend(wall.get_opening_lintels())
@@ -201,7 +202,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = DoppelEck2_Closed_TJoint()
+    scenario = ThickWall()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])

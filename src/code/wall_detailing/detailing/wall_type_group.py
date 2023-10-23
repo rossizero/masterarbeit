@@ -3,6 +3,7 @@ from typing import List
 from detailing.wall_layer_group import WallLayerGroup
 from masonry.bond.streched_bond import StrechedBond
 from masonry.brick import BrickInformation
+from masonry.bond.head_bond import HeadBond
 
 
 class WallTypeGroup:
@@ -11,5 +12,5 @@ class WallTypeGroup:
         self.brick_information = brick_information
         self.brick_information.sort(key=lambda x: x.volume(), reverse=True)
         self.module = self.brick_information[0]
-        self.bond = StrechedBond(self.module)
+        self.bond = HeadBond(self.module)
         self.layer_groups: List[WallLayerGroup] = []

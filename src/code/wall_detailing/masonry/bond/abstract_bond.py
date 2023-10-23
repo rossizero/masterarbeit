@@ -186,10 +186,12 @@ class Bond(ABC):
         ret = 0
 
         for t in plan[layer % len(plan)].copy():
-            l = self.module.get_rotated_dimensions(t.get_rotation())
+            module = t.module if t.module is not None else self.module
+            l = module.get_rotated_dimensions(t.get_rotation())
             l = abs(quaternion.rotate_vectors(rotation, l)[0])
             t.set_mask_multiplier(0, 0, 1)
-            l += t.get_position()[0]
+            pos = quaternion.rotate_vectors(rotation, t.get_position())
+            l += pos[0]
             ret = max(ret, l)
         return round(ret, 6)
 
