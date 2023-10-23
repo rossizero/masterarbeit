@@ -280,35 +280,36 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                         if intersection is None:
                             continue
 
-                        if l1.is_touching_at_endpoints(l2, tolerance=w1.module.width) and z_parallel and degree90 and same_wall_type:
+                        width = w1.wall.width
+                        if l1.is_touching_at_endpoints(l2, tolerance=width) and z_parallel and degree90 and same_wall_type:
                             c = Corn(intersection)
                             c.layers.update([l1, l2])
                             corners.add_corner(c)
 
-                            if np.linalg.norm(intersection - l1.left_edge) < w1.module.width:  # TODO use wall width!
+                            if np.linalg.norm(intersection - l1.left_edge) < width:
                                 l1.left_connections.append(l2)
-                            elif np.linalg.norm(intersection - l1.right_edge) < w1.module.width:
+                            elif np.linalg.norm(intersection - l1.right_edge) < width:
                                 l1.right_connections.append(l2)
 
                             assert len(set(l1.right_connections) & set(l1.left_connections)) == 0
 
-                            if np.linalg.norm(intersection - l2.left_edge) < w2.module.width:  # TODO use wall width!
+                            if np.linalg.norm(intersection - l2.left_edge) < width:
                                 l2.left_connections.append(l1)
-                            elif np.linalg.norm(intersection - l2.right_edge) < w2.module.width:
+                            elif np.linalg.norm(intersection - l2.right_edge) < width:
                                 l2.right_connections.append(l1)
 
                             assert len(set(l2.right_connections) & set(l2.left_connections)) == 0
 
                         elif not x_parallel:
                             # check if the intersection is on both lines and in between their endpoints
-                            a = line1.on_line(intersection, between=True, tolerance=w1.module.width)
-                            b = line2.on_line(intersection, between=True, tolerance=w2.module.width)
+                            a = line1.on_line(intersection, between=True, tolerance=width)
+                            b = line2.on_line(intersection, between=True, tolerance=width)
 
                             if a and b:
-                                t_joint = (np.linalg.norm(intersection - l1.left_edge) < w1.module.width
-                                           or np.linalg.norm(intersection - l1.right_edge) < w1.module.width
-                                           or np.linalg.norm(intersection - l2.left_edge) < w2.module.width
-                                            or np.linalg.norm(intersection - l2.right_edge) < w2.module.width)
+                                t_joint = (np.linalg.norm(intersection - l1.left_edge) < width
+                                           or np.linalg.norm(intersection - l1.right_edge) < width
+                                           or np.linalg.norm(intersection - l2.left_edge) < width
+                                            or np.linalg.norm(intersection - l2.right_edge) < width)
                                 #c = Corn(intersection)
                                 #c.layers.update([l1, l2, t_joint])
                                 #corners.add_corner(c)

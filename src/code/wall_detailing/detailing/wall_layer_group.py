@@ -15,13 +15,14 @@ class WallLayerGroup:
     """
     idd = 0  # needed for comparison between two / sorting of  WallLayerGroups
 
-    def __init__(self, module: BrickInformation):
+    def __init__(self, module: BrickInformation, wall: Wall):
         self.module = module
         self.layers: List[WallLayer] = []
         self.rotation = np.quaternion(1, 0, 0, 0)
         self.translation = np.array([0, 0, 0])  # of wall mid
         self.id = WallLayerGroup.idd
         WallLayerGroup.idd += 1
+        self.wall = wall
 
         self.plan_offset = 0
         self.openings = []
@@ -243,7 +244,7 @@ class WallLayerGroup:
         :param module: the module we want to apply
         :return: WallLayerGroup Object containing the incoming wall cut into layers
         """
-        ret = cls(module)
+        ret = cls(module, wall)
         ret.rotation = wall.get_rotation()
         ret.translation = wall.get_translation()
         length, width, height = wall.length, wall.width, wall.height
