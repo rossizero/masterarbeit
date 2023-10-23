@@ -97,16 +97,15 @@ class WallDetailer:
         brick_ret = []
         original_rotation = wall.get_rotation()
         module = wall.module
-        width = module.width  # TODO bond width
 
         original_translation = wall.get_translation()
         for layer in wall.get_sorted_layers(grouped=False):
-            dimensions = np.array([layer.length, width, module.height])
+            dimensions = np.array([layer.length, wall.wall.width, module.height])
 
             fill_left = len(layer.left_connections) == 0
             fill_right = len(layer.right_connections) == 0
             transformations = bond.apply_layer(length=layer.length,
-                                               width=width,
+                                               width=wall.wall.width,
                                                fill_left=fill_left,
                                                fill_right=fill_right,
                                                layer=layer.get_layer_plan_index(),
@@ -142,6 +141,7 @@ class WallDetailer:
         module = main_layer.parent.module
         original_rotation = main_layer.parent.get_rotation()
         corner_rotation = corner.get_rotation()
+        width = main_layer.parent.wall.width
 
         for tf in bond.apply_corner(corner.plan_offset):
             local_position = tf.get_position()  # position in wall itself
@@ -153,11 +153,11 @@ class WallDetailer:
 
             # rotate around the mid of two overlapping modules
             vec = np.array([module.width / 2, module.width / 2, 0.0])
-            b.rotate_around(corner_rotation, vec)
+            b.rotate_around(corner_rotation, vec - tf.translation.offset)
 
             p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.point)
             p1_rotated[2] -= module.height / 2.0
-            tmp = local_position + p1_rotated - vec
+            tmp = local_position + p1_rotated - vec# - quaternion.rotate_vectors(corner_rotation, np.array([0.5, 0.5, 0]))
 
             b.translate(tmp)
             b.rotate_around(original_rotation)
@@ -203,6 +203,7 @@ class WallDetailer:
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
     scenario = ThickWall()
+    #scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])

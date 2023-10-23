@@ -188,11 +188,19 @@ class Bond(ABC):
         for t in plan[layer % len(plan)].copy():
             module = t.module if t.module is not None else self.module
             l = module.get_rotated_dimensions(t.get_rotation())
-            l = abs(quaternion.rotate_vectors(rotation, l)[0])
+            a = l
+            l = quaternion.rotate_vectors(rotation, l)
+            b = l
+            l = abs(l[0])
+            c = l
             t.set_mask_multiplier(0, 0, 1)
             pos = quaternion.rotate_vectors(rotation, t.get_position())
+            d = pos
             l += pos[0]
+            e = l
             ret = max(ret, l)
+            if round(ret, 6) == 1.0:
+                aaa = 0
         return round(ret, 6)
 
     def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0, reversed: bool = False):
