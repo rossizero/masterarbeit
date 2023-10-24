@@ -176,7 +176,7 @@ class Bond(ABC):
 
         return ret
 
-    def get_corner_length(self, layer: int = 0, rotation: np.quaternion = np.quaternion(1, 0, 0, 0)) -> float:  # TODO yet to be tested with more complex bonds that stretched
+    def get_corner_length(self, layer: int = 0, rotation: np.quaternion = np.quaternion(1, 0, 0, 0)) -> float:
         """
         :param layer: index for the layer of the corner plan we need
         :param rotation: how should the corner plan be rotated
@@ -184,23 +184,24 @@ class Bond(ABC):
         """
         plan = self._get_corner_plan()
         ret = 0
-
+        lll = []
         for t in plan[layer % len(plan)].copy():
             module = t.module if t.module is not None else self.module
             l = module.get_rotated_dimensions(t.get_rotation())
             a = l
             l = quaternion.rotate_vectors(rotation, l)
             b = l
+            #l = abs(l[0])
             l = abs(l[0])
             c = l
-            t.set_mask_multiplier(0, 0, 1)
+            t.set_mask_multiplier(1, 0, 1)
             pos = quaternion.rotate_vectors(rotation, t.get_position())
             d = pos
             l += pos[0]
             e = l
             ret = max(ret, l)
-            if round(ret, 6) == 1.0:
-                aaa = 0
+            lll.append(l)
+        #print(lll)
         return round(ret, 6)
 
     def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0, reversed: bool = False):

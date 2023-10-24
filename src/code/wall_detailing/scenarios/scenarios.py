@@ -347,13 +347,13 @@ class TJoint1(Scenario):
 class ThickWall(Scenario):
     def get_walls(self):
         width = 2
-        height = 2
-        w0 = Wall.make_wall(5, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        height = 1
+        w0 = Wall.make_wall(9, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0")
         w1 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]),
                              quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
                              ifc_wall_type="test", name="w0")
-        w2 = Wall.make_wall(5, width, height * 0.5, np.array([-3.5, 9.0, height / 4.0]),
+        w2 = Wall.make_wall(9, width, height * 0.5, np.array([-3.5, 9.0, height / 4.0]),
                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0")
         w3 = Wall.make_wall(10, width, height * 0.5, np.array([-7.0, 5.0, height / 4.0]),
@@ -361,4 +361,4 @@ class ThickWall(Scenario):
                             ifc_wall_type="test", name="w0")
         all = [w0, w1, w2, w3]
         corn =  [w2, w3]
-        return corn
+        return all

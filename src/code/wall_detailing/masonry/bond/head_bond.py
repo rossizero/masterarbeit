@@ -31,6 +31,7 @@ class HeadBond(Bond):
 
     def _get_corner_plan(self) -> List[List[Transformation]]:
         plan = []
+
         plan.append([
             Transformation(
                 translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),

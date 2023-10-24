@@ -102,8 +102,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0
-            fill_right = len(layer.right_connections) == 0
+            fill_left = len(layer.left_connections) == 0 or True
+            fill_right = len(layer.right_connections) == 0 or True
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
                                                fill_left=fill_left,

@@ -120,6 +120,7 @@ class Corn:
         # how far the corner stretches into the layer (x direction)
         corner_length = bond.get_corner_length(self.plan_offset, relative_rotation)
         corner_length -= layer.parent.wall.width / 2.0
+        print(self.point, corner_length)
         layer.move_edge(self.point, corner_length)
 
     def set_main_layer(self):
