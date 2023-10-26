@@ -57,6 +57,7 @@ class Corn:
 
         # Prevents an error in which none of the wall is actually the main wall.
         # Indicates that mistakes have been made earlier (most possibly while modeling).
+        # also make sure to call set_main_layer() before reducing the length of layers
         assert False
 
     def get_rotation(self) -> np.quaternion:
@@ -119,12 +120,15 @@ class Corn:
         relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
         # how far the corner stretches into the layer (x direction)
         corner_length = bond.get_corner_length(self.plan_offset, relative_rotation)
-        corner_length -= layer.parent.wall.width / 2.0
-        print(self.point, corner_length)
-        layer.move_edge(self.point, corner_length)
+        rot_offset = quaternion.rotate_vectors(self.get_rotation(), np.array([layer.parent.wall.width / 2.0, layer.parent.wall.width / 2.0, 0.0]))
+
+        point = self.point# - rot_offset
+        #print(np.round(point, decimals=6), self.get_rotation(), corner_length)
+        layer.move_edge(point, corner_length)
 
     def set_main_layer(self):
         self.main_layer = self.get_main_layer()
+        print(self.main_layer.parent.id)
 
     def get_corner_index(self):
         ids = [l.parent.id for l in self.layers]

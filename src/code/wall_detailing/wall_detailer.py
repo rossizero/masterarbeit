@@ -1,3 +1,4 @@
+import math
 from typing import List, Dict
 import numpy as np
 import quaternion
@@ -14,8 +15,10 @@ from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
-    SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall
+    SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners
 from masonry import corner_rep
+from wall_detailing.masonry.bond.head_bond import HeadBond
+from wall_detailing.masonry.bond.streched_bond import StrechedBond
 
 
 class WallDetailer:
@@ -152,12 +155,13 @@ class WallDetailer:
             b.rotate(local_rotation)
 
             # rotate around the mid of two overlapping modules
-            vec = np.array([module.width / 2, module.width / 2, 0.0])
-            b.rotate_around(corner_rotation, vec - tf.translation.offset)
+            b.rotate_around(corner_rotation, -tf.translation.offset)
 
-            p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), corner.point)
+            point = corner.point
+            p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), point)
             p1_rotated[2] -= module.height / 2.0
-            tmp = local_position + p1_rotated - vec# - quaternion.rotate_vectors(corner_rotation, np.array([0.5, 0.5, 0]))
+
+            tmp = local_position + p1_rotated - quaternion.rotate_vectors(corner_rotation, np.array([width / 2.0, width / 2.0, 0]))
 
             b.translate(tmp)
             b.rotate_around(original_rotation)
@@ -200,9 +204,37 @@ class WallDetailer:
             print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
 
+def cornerrrr():
+    info = BrickInformation(2, 1, 0.5)
+    bond = HeadBond(info)
+    bb = []
+    point = np.array([3, 3, 0])
+    original_rotation = quaternion.from_euler_angles(0.0, 0.0, 0.0)
+    for tf in bond.apply_corner(0):
+        local_position = tf.get_position()  # position in wall itself
+        local_position[2] = 0.0  # MAYDO ugly
+        local_rotation = tf.get_rotation()
+
+        b = Brick(tf.module)
+        b.rotate(local_rotation)
+        vec = np.array([tf.module.width / 2, tf.module.width / 2, 0.0])
+        b.rotate_around(quaternion.from_euler_angles(0, 0, 2*math.pi/2), -tf.translation.offset)#, vec)
+
+        p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), point)
+        p1_rotated[2] -= tf.module.height / 2.0
+        tmp = local_position + p1_rotated
+
+        b.translate(tmp)
+        b.rotate_around(original_rotation)
+        bb.append(b)
+        print(tf.get_position(), bond.get_corner_length(0), bond.get_corner_length(1))
+
+    WallDetailer.convert_to_stl(bb, "corner_test.stl", additional_shapes=[])
+
+
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = ThickWall()
+    scenario = ThickWallAllCorners()
     #scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
@@ -212,3 +244,4 @@ if __name__ == "__main__":
     bb = wall_detailer.detail()
 
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
+    cornerrrr()

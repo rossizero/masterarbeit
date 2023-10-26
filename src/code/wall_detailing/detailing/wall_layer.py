@@ -200,7 +200,7 @@ class WallLayer:
         self.length -= length
         return True
 
-    def move_edge(self, start_point: np.array, length: float = 0):
+    def move_edge(self, start_point: np.array, length: float = 0, off: float = 0):
         """
         Moves either the right or left edge in the direction of the center
         :param start_point: a point we start the movement from (should lie on this layers "line" of direction)
@@ -210,6 +210,7 @@ class WallLayer:
         is_left = np.linalg.norm(start_point - self.left_edge) < np.linalg.norm(start_point - self.right_edge)
         local_start_point = start_point - self.parent.get_translation()
         local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
+        local_start_point[0] += off
 
         right = self.get_right_edge(True)
         left = self.get_left_edge(True)

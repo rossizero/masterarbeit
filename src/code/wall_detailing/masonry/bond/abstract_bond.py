@@ -11,6 +11,7 @@ class MaskedArray:
     """
     Represents and 3D Array that can be tweaked via a multiplication-mask and an offset
     """
+
     def __init__(self, value: np.array = np.array([0.0, 0.0, 0.0]), offset: np.array = np.array([0.0, 0.0, 0.0]),
                  mask: np.array = np.array([1, 1, 1])):
         self.value = value.astype(dtype=float)
@@ -44,6 +45,7 @@ class Transformation:
     """
     Just stores two MaskedArrays that represent a translating and a rotating operation
     """
+
     def __init__(self, translation: MaskedArray, rotation: MaskedArray = MaskedArray(value=np.array([0, 0, 0]))):
         self.rotation = rotation
         self.translation = translation
@@ -88,6 +90,7 @@ class Bond(ABC):
     Superclass of all masonry bonds. It stores the BrickInformation called module,
     which is used when this bond is applied to sth.
     """
+
     def __init__(self, module: BrickInformation):
         self.module = module
 
@@ -184,24 +187,15 @@ class Bond(ABC):
         """
         plan = self._get_corner_plan()
         ret = 0
-        lll = []
+
         for t in plan[layer % len(plan)].copy():
             module = t.module if t.module is not None else self.module
             l = module.get_rotated_dimensions(t.get_rotation())
-            a = l
-            l = quaternion.rotate_vectors(rotation, l)
-            b = l
-            #l = abs(l[0])
-            l = abs(l[0])
-            c = l
-            t.set_mask_multiplier(1, 0, 1)
+            l = abs(quaternion.rotate_vectors(rotation, l)[0])
+            t.set_mask_multiplier(0, 0, 1)
             pos = quaternion.rotate_vectors(rotation, t.get_position())
-            d = pos
-            l += pos[0]
-            e = l
+            l += abs(pos[0])
             ret = max(ret, l)
-            lll.append(l)
-        #print(lll)
         return round(ret, 6)
 
     def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0, reversed: bool = False):
@@ -212,7 +206,8 @@ class Bond(ABC):
 
         return leftover_left, leftover_right, len(bricks)
 
-    def apply_layer(self, length, width, fill_left: bool = False, fill_right: bool = False, layer: int = 0, x_offset: float = 0.0, reversed: bool = False) -> List[Transformation]:
+    def apply_layer(self, length, width, fill_left: bool = False, fill_right: bool = False, layer: int = 0,
+                    x_offset: float = 0.0, reversed: bool = False) -> List[Transformation]:
         """
         Fills given dimensions with set layout plan
         :param length: length of wall we want to be filled with this masonry bond
@@ -245,7 +240,8 @@ class Bond(ABC):
             bricks.append(tf)
 
         if leftover_right > 0.0 and fill_right:
-            tf = Transformation(MaskedArray(value=np.array([length-leftover_right, 0, self.h]), mask=np.array([1, 0, 1])))
+            tf = Transformation(
+                MaskedArray(value=np.array([length - leftover_right, 0, self.h]), mask=np.array([1, 0, 1])))
             tf.module = BrickInformation(leftover_right, width, self.module.height)
             if leftover_right < width:
                 tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
@@ -287,7 +283,8 @@ class Bond(ABC):
             brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
         return counter, round(leftover_left, 6), round(leftover_right, 6)
 
-    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0, reversed: bool = False) -> Tuple[List[Transformation], float, float]:
+    def bricks_in_layer(self, layer: int, length: float, x_offset: float = 0.0, reversed: bool = False) -> Tuple[
+        List[Transformation], float, float]:
         """
         :param layer: index of layer plan (0 is at floor)
         :param length: length of the wall

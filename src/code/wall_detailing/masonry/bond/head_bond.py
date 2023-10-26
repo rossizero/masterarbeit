@@ -49,5 +49,4 @@ class HeadBond(Bond):
         for tfs in plan:
             for tf in tfs:
                 tf.module = BrickInformation(self.module.length * 3/4.0, self.module.width, self.module.height)
-                tf.translation.offset -= np.array([self.w/2, self.w/2, 0])
         return plan

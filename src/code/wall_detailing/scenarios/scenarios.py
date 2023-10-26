@@ -362,3 +362,38 @@ class ThickWall(Scenario):
         all = [w0, w1, w2, w3]
         corn =  [w2, w3]
         return all
+
+
+class ThickWallAllCorners(Scenario):
+    def get_walls(self):
+        width = 2
+        height = 1
+        an = 0.3
+
+        w10 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 2.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0")
+        w11 = Wall.make_wall(5, width, height * 0.5, np.array([4.0, 3.5, height / 4.0]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0")
+        w12 = Wall.make_wall(5, width, height * 0.5, np.array([-4.0, 3.5, height / 4.0]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w0")
+
+
+        w20 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, -2.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0")
+        w21 = Wall.make_wall(5, width, height * 0.5, np.array([4.0, -3.5, height / 4.0]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0")
+        w22 = Wall.make_wall(5, width, height * 0.5, np.array([-4.0, -3.5, height / 4.0]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w0")
+
+        w11.rotate_around(quaternion.from_euler_angles(0, an, an))
+        w12.rotate_around(quaternion.from_euler_angles(0, an, an))
+        w10.rotate_around(quaternion.from_euler_angles(0, an, an))
+        w21.rotate_around(quaternion.from_euler_angles(0, an, an))
+        w22.rotate_around(quaternion.from_euler_angles(0, an, an))
+        w20.rotate_around(quaternion.from_euler_angles(0, an, an))
+        all = [w11, w12, w21, w22, w10, w20]
+        return all

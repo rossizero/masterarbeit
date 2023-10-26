@@ -87,8 +87,8 @@ class Brick:
     @property
     def position(self):
         return np.array([self.shape.Location().Transformation().TranslationPart().X(),
-                         self.shape.Location().Transformation().TranslationPart().Z(),
-                         self.shape.Location().Transformation().TranslationPart().Y()])
+                         self.shape.Location().Transformation().TranslationPart().Y(),
+                         self.shape.Location().Transformation().TranslationPart().Z()])
 
     @property
     def orientation(self):
