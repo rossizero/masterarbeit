@@ -395,5 +395,5 @@ class ThickWallAllCorners(Scenario):
         w21.rotate_around(quaternion.from_euler_angles(0, an, an))
         w22.rotate_around(quaternion.from_euler_angles(0, an, an))
         w20.rotate_around(quaternion.from_euler_angles(0, an, an))
-        all = [w11, w12, w21, w22, w10, w20]
+        all = [w10, w20, w11, w12, w21, w22,]
         return all

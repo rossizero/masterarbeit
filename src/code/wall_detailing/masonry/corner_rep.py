@@ -121,9 +121,16 @@ class Corn:
         # how far the corner stretches into the layer (x direction)
         corner_length = bond.get_corner_length(self.plan_offset, relative_rotation)
         rot_offset = quaternion.rotate_vectors(self.get_rotation(), np.array([layer.parent.wall.width / 2.0, layer.parent.wall.width / 2.0, 0.0]))
+        rot_offset = quaternion.rotate_vectors(relative_rotation, rot_offset)
 
-        point = self.point# - rot_offset
-        #print(np.round(point, decimals=6), self.get_rotation(), corner_length)
+        local_start_point = self.point - layer.parent.get_translation()
+        local_start_point = quaternion.rotate_vectors(layer.parent.get_rotation().inverse(), local_start_point)
+        local_start_point -= rot_offset
+        local_start_point = quaternion.rotate_vectors(layer.parent.get_rotation(), local_start_point)
+        local_start_point = local_start_point + layer.parent.get_translation()
+        point = local_start_point
+
+        print(np.round(point, decimals=6), np.round(self.point, decimals=6), np.linalg.norm(point - self.point))
         layer.move_edge(point, corner_length)
 
     def set_main_layer(self):
