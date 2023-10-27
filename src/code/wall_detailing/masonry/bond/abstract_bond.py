@@ -221,7 +221,7 @@ class Bond(ABC):
         """
         bricks, leftover_left, leftover_right = self.bricks_in_layer(layer, length, x_offset, reversed)
 
-        if leftover_left + leftover_right == length:
+        if leftover_left + leftover_right <= length:
             # if we only want to fill one side, but the layer only consists of leftovers
             # -> fill the whole layer from one side
             if fill_left and not fill_right:
@@ -266,7 +266,6 @@ class Bond(ABC):
         brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
 
         counter = 0
-        multiplier = 0
 
         # iterate over the layerplan while increasing the multiplier
         # until we find a brick that reaches over the given length

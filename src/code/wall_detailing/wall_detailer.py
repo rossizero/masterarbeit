@@ -105,8 +105,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 or True
-            fill_right = len(layer.right_connections) == 0 or True
+            fill_left = len(layer.left_connections) == 0
+            fill_right = len(layer.right_connections) == 0
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
                                                fill_left=fill_left,
@@ -204,37 +204,9 @@ class WallDetailer:
             print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
 
-def cornerrrr():
-    info = BrickInformation(2, 1, 0.5)
-    bond = HeadBond(info)
-    bb = []
-    point = np.array([3, 3, 0])
-    original_rotation = quaternion.from_euler_angles(0.0, 0.0, 0.0)
-    for tf in bond.apply_corner(0):
-        local_position = tf.get_position()  # position in wall itself
-        local_position[2] = 0.0  # MAYDO ugly
-        local_rotation = tf.get_rotation()
-
-        b = Brick(tf.module)
-        b.rotate(local_rotation)
-        vec = np.array([tf.module.width / 2, tf.module.width / 2, 0.0])
-        b.rotate_around(quaternion.from_euler_angles(0, 0, 2*math.pi/2), -tf.translation.offset)#, vec)
-
-        p1_rotated = quaternion.rotate_vectors(original_rotation.inverse(), point)
-        p1_rotated[2] -= tf.module.height / 2.0
-        tmp = local_position + p1_rotated
-
-        b.translate(tmp)
-        b.rotate_around(original_rotation)
-        bb.append(b)
-        print(tf.get_position(), bond.get_corner_length(0), bond.get_corner_length(1))
-
-    WallDetailer.convert_to_stl(bb, "corner_test.stl", additional_shapes=[])
-
-
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = ThickWallAllCorners()
+    scenario = ThickWall()
     #scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
@@ -244,4 +216,3 @@ if __name__ == "__main__":
     bb = wall_detailer.detail()
 
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
-    cornerrrr()
