@@ -60,16 +60,13 @@ class Corn:
         # also make sure to call set_main_layer() before reducing the length of layers
         assert False
 
-    def get_rotation(self) -> np.quaternion:
+    def _get_corner_direction(self) -> np.array:
         """
-        How do we have to rotate the Corner Plan of a bond to lie above the axis the layers form
-        :return: rotation we have to apply to the corner plan of a bond
+        :return: vector that points in the direction of the corners inside
         """
-        ret = np.quaternion(1, 0, 0, 0)
         if len(self.layers) == 2:
             # the wall we "place" the corner onto
 
-            main_layer = self.get_main_layer()
             l1 = list(self.layers)[0]
             l2 = list(self.layers)[1]
 
@@ -87,7 +84,24 @@ class Corn:
             wall_orientation_2 = wall_orientation_2 / np.linalg.norm(wall_orientation_2)
 
             # mid of those vectors -> the point in the corner between both walls and 45 degrees from both walls
-            mid = (wall_orientation_1 + wall_orientation_2) / 2
+            mid = wall_orientation_1 + wall_orientation_2
+
+            return mid
+        return np.array([0, 0, 0])
+
+    def get_rotation(self) -> np.quaternion:
+        """
+        How do we have to rotate the Corner Plan of a bond to lie above the axis the layers form
+        :return: rotation we have to apply to the corner plan of a bond
+        """
+        ret = np.quaternion(1, 0, 0, 0)
+        if len(self.layers) == 2:
+            # the wall we "place" the corner onto
+
+            main_layer = self.get_main_layer()
+
+            # mid of those vectors -> the point in the corner between both walls and 45 degrees from both walls
+            mid = self._get_corner_direction()
 
             # normalise rotation
             mid = quaternion.rotate_vectors(main_layer.parent.get_rotation().inverse(), mid)
@@ -108,7 +122,6 @@ class Corn:
         """
         :param layer: layer we want to reduce
         :param bond: bond we want to use
-
         """
         assert layer in self.layers
 
@@ -116,19 +129,24 @@ class Corn:
         angle = self.get_rotation()
 
         relative_rotation = (layer.parent.get_rotation() * main_layer.parent.get_rotation().inverse())
-        a = relative_rotation.angle()  # we know the relative_rotation represents the z-rotation difference
+        a = relative_rotation.angle()
+
+        # we know the relative_rotation represents the z-rotation difference
         relative_rotation = quaternion.from_euler_angles(0, 0, a) * angle
+
         # how far the corner stretches into the layer (x direction)
         corner_length = bond.get_corner_length(self.plan_offset, relative_rotation)
-        rot_offset = quaternion.rotate_vectors(self.get_rotation(), np.array([layer.parent.wall.width / 2.0, layer.parent.wall.width / 2.0, 0.0]))
 
-        point = self.point# - rot_offset
-        #print(np.round(point, decimals=6), self.get_rotation(), corner_length)
-        layer.move_edge(point, corner_length)
+        # calculate the outer corner point
+        mid = self._get_corner_direction()
+        width = layer.parent.wall.width / 2.0
+        outer_corner_point = self.point - np.array([width, width, 1]) * mid
+
+        # finally reduce the length of the layer starting from outer_corner_point and going corner_length into the layer
+        layer.move_edge(outer_corner_point, corner_length)
 
     def set_main_layer(self):
         self.main_layer = self.get_main_layer()
-        print(self.main_layer.parent.id)
 
     def get_corner_index(self):
         ids = [l.parent.id for l in self.layers]
