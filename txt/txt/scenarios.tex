@@ -92,6 +92,11 @@ Stattdessen schneidet man diese erst zurecht, wenn sich dann eher mittig im Wand
 Zwar wird dies im Fall von Legosteinen nie auftreten, aber es ist übersichtlicher das Problem in dem vorliegenden eingeschränkten Szenario zu beschreiben.
 Zusätzlich müssen Regeln in den Planungsalgorithmus eingeführt werden, die diverse Mauerwerksverbände (vorgestellt in Kapitel \ref{basics}) erzwingen zu können, um damit die Stabilität und gleichmäßige Kraftverteilung innerhalb einer Wand zu gewährleisten und sich ebenfalls möglichst nah an der Realität des Mauerbaus zu bewegen.
 
+Einschränkungen:
+ * Alle Wände verwenden ein Ziegelset, in welchem alle Ziegel die gleiche Höhe haben
+ * Alle Wände verwenden den selben Mauerwerksverband
+ * Alle anderen sich berührenden Wäände stehen in einem 90 Grad Winkel zueinander
+
 \subsubsection{Problemstellung}
 \label{scenarios:scenario1:problem}
 Bevor für das Modell ein passender Bauplan entwickelt werden kann, muss das sogenannte \textit{Wall Detailing} (vgl. Kapitel \ref{basics:wall-detailing}) stattfinden.
@@ -99,7 +104,7 @@ Darunter versteht man das Berechnen einer Bausteinkombination, die eine Wand mö
 Dabei bedeutet "möglichst gut", dass die Proportionen der Bausteinkombination möglichst den der Ursprungswand entsprechen und keine nicht gewollten Lücken entstehen.
 In diesem Szenario wird durch Auflegen des Rasters des LEGO Systems schon während des Modelliervorgangs sichergestellt, dass das resultierende Modell mit Legosteinen baubar ist.
 Darum ist das Ziel des \textit{Wall Detailing} Schrittes in diesem Szenario, jede Wand lückenlos mit Bausteinen zu füllen.
-Zusätzlich existieren folgende Einschränkungen und Eigenschaften, die für das Ergebnis dieses Schrittes gelten sollen.
+Zusätzlich existieren folgende Einschränkungen und Eigenschaften, die für das Ergebnis dieses Szenarios gelten sollen.
 
 \paragraph{Überbindemaß}
 Obwohl in dem vorliegenden Modell ausschließlich Einsteinmauerwerke vorgesehen sind, gilt es die in Kapitel \ref{basics:Mauerwerksverband} erläuterte Regel zum Überbindemaß von Bausteinen zu beachten.

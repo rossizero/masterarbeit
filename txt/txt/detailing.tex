@@ -1,0 +1,29 @@
+\section{Detailing}
+Stark an das andere Paper angelehntes Vorgehen.
+Schrittweiser Ansatz.
+
+\subsection{Konvertieren des IFC zu BREP}
+Blabla das geht ja einfach.
+
+\subsection{Überprüfen der modellierten Wände}
+\subsubsection{Kombinieren}
+Schau für jede der gefundenen Wände, ob diese mit anderen zu einer Einheit verbunden werden können, wenn ja verbinde sie.
+Dies passiert schichtweise.
+Schwierigkeiten: Kleine Wand auf großer Wand (x\_offset), Mehrere Layer auf der selben Höhe
+\subsubsection{Beziehungen finden}
+Durchlaufe alle Wandstücke und schau, ob diese andere berühren.
+Dadurch können Ecken, T-Kreuzungen und Kreuzungen gefunden werden.
+Schwierigkeiten: Verschiedenste Arten solche Ecken und Kreuzungen zu modellieren 
+
+\subsection{Lösen der Beziehungen}
+Je nach gewählten Verband müssen z.B. Ecken (deren Baupläne im vornherein definiert wurden) so angeordnet werden, dass die dazwischenliegenden Wandstücke lückenlos eingefüllt werden können.
+Dafür muss ein sogenannter "plan\_offset" für jede Wand und jede Ecke gefunden werden. Dieser gibt an, an welchem Index der Bauplandefinition das Wandstück (von unten) beginnen muss, um insgesamt einen einheitlichen Wandkörper ohne Lücken zu bilden.
+Voraussetzung dafür ist natürlich ein passender Eckplan zu dem gewählten Verband. 
+
+Schwierigkeiten: Eckpläne insgesamt, Ecken ragen in die sie bildenden Wände hinein. Diese müssen dementsprechend verkleinert werden.
+
+\subsection{Anwenden der Lösung}
+Ablaufen aller Ecken und Wände und einsetzen der Ziegel gemäß den gefundenen Lösungen.
+
+\subsection{Export}
+Abhängigkeitsgraph und Ontologie für Regelwerk

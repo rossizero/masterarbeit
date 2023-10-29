@@ -221,14 +221,72 @@ Für das planmäßige Überbindemaß \(l_{ ol }\) gilt für übliche Mauersteine
 Zudem wird darin die Mindestwanddicke für tragendes Mauerwerk, "sofern aus Gründen der Standsicherheit, der Bauphysik oder des Brandschutzes nicht größere Dicken erforderlich sind" \cite{Bemessun72:online}, auf  \(t_{ min } = 115 mm\) festgelegt \cite{DIN_EN_1996_1_1}.
 Dies ist, wie in Abbildung \ref{fig:Steinformate} zu sehen, exakt die Breite der kleinsten Ziegelformate NF und DF.
 
-Man unterscheidet zwei Arten von Mauerwerk: dem Einsteinmauerwerk und dem Verbandsmauerwerk.
+Man unterscheidet zwei Arten von Mauerwerk: das Einsteinmauerwerk und das Verbandsmauerwerk.
 Wie schon dem Namen zu entnehmen, handelt es sich beim Einsteinmauerwerk und ein Mauerwerk, bei welchem die Wanddicke der Steindicke entspricht.
 Hier muss das Überbindemaß lediglich über die Wandlängsrichtung eingehalten werden.
 Bei Verbandsmauerwerk gilt dies zusätzlich für die Wandquerrichtung. \cite{05maurer1:online}
 
-TODO Abbildungen von verschiedenen Verbänden
-TODO Ecklösungen
-TODO Rund Wände, keine 90 Grad Ecken
+\begin{figure}[h!]
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/blockverband.png}
+    \caption{Blockverband.}
+    \label{fig:basics:blockverband}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/kreuzverband.png}
+    \caption{Kreuzverband.}
+    \label{fig:basics:kreuzverband}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/läuferverband025_mittig.png}
+    \caption{Mittlerer Läuferverband \textit{(Versatz: 1/4 der Steinlänge).}}
+    \label{fig:basics:läuferverband_mittig}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/läuferverband033_schleppend.png}
+    \caption{Schleppender Läuferverband \textit{(Versatz: 1/3 der Steinlänge).}}
+    \label{fig:basics:läuferverband_schleppend}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/kopfverband.png}
+    \caption{Kopf/Binderverband.}
+    \label{fig:basics:läuferverband_mittig}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/gotischerverband.png}
+    \caption{Gotischer Verband.}
+    \label{fig:basics:läuferverband_schleppend}
+  \end{subfigure}
+  \label{fig:verbände}
+  \caption{Typische Mauerwerksverbände.}
+\end{figure}
+
+Treffen zwei oder mehrere Wandstücke aufeinander, so gilt es diese miteinander zu verzahnen.
+Dabei muss nach wie vor das Überbindemaß eingehalten werden.
+Es treten verschiedene Fälle ein: TODO Bilder!
+\paragraph{Ecken}
+Zwei Wandenden stehen im rechten Winkel zueinander und bilden so eine Ecke.
+\paragraph{Kreuzungen}
+Zwei Wandenden treffen von beiden Seiten einer dritten Wand an der selben Stelle aufeinander und bilden zusammen eine Kreuzung.
+Dabei ist es möglich, dass die aufeinandertreffenden Wände jeweils unterschiedliche Dicken aufweisen.
+\paragraph{T-Kreuzungen}
+Ein Wandende steht senkrecht auf einer anderen Wand und bildet damit eine T-Kreuzung.
+Auch hier kann es vorkommen, dass die beiden Wandstücke unterschiedliche Dicken haben.
+Sowohl bei Kreuzungen als auch T-Kreuzungen kann auf das aufwendige Verahnen verzichtet und stattdessen die sogenannte Stumpfstoßtechnik angewandt werden.
+Dabei werden Stahlanker zwischen der Wand und den darauf treffenden "stumpfen" Wandenden verwendet, um die beiden Wände sicher miteinander zu verbinden.
+\paragraph{Wandenden}
+Eine Wandende steht frei im Raum, ohne ein anderes Wandstück zu berühren. 
+Dafür muss der verwendete Mauerwerksverband zu einem geraden Abschluss gebracht werden.
+Öffnungen innerhalb eines Wandstücks können in der selben Art behandelt werden, da der vorherrschende Verband in den betroffenen Schichten gerade unterbrochen werden muss.
+Über Öffnungen für Fenster und Türen wird ein sogenannter Sturz gelegt, welcher ebenfalls in den der Wand zugrunde liegenden Mauerwerksverband eingebunden werden muss.
+
+Die Lösungen für die oben geannten Situationen variieren je nach angestrebten Mauerwerksverband und der verwendeten Modulgröße stark.
+Gleichzeitig beeinflussen unterschiedliche Ecklösungen die Art in der ein Wandende gemauert werden muss.
+TODO Bild von ecklösung und kreuzung für läuferverband und einem größerem verband:
+% https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-4-einsteinmauerwerk-eckloesungen/
+% https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-5-verbandsmauerwerk-eckloesungen/
+% https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-7-mauern-von-stoessen-und-kreuzungen/
 
 %https://baulexikon.beuth.de/MAUERWERKSVERBAND.HTM
 %https://www.bauprofessor.de/mauerwerksverband/
@@ -238,6 +296,8 @@ anstoßendes Wandstück: der bereich an dem zwei wandsegmente aneinanderstoßen 
 Verzahnung: aus https://baulexikon.beuth.de/VERZAHNUNG.HTM : Verzahnung, im Mauerwerksbau übliche Technik, beim Herstellen einer Wand eine Verbindungsstelle für eine später zu errichtende und in die bereits bestehende einzubindende Wand den Verbandsregeln entsprechend vorzubereiten. Es gibt Lochverzah- nung, stehende und liegende Verzahnung. Nur die letztgenannte Verzahnungsart gilt nach DIN 1053-1 als ausreichende Verbindung zwischen tragenden und aussteifenden Mauerwerkswänden
 Überbindemaß ist wichtig um Mauerwerksverbände zu bewerten
 %https://www.mauerwerksbau-lehre.de/vorlesungen/1-grundlagen-und-baustoffe-des-mauerwerksbaus/13-wandkonstruktionen/132-mauerwerksverband-und-ueberbindemass
+
+TODO Rund Wände, keine 90 Grad Ecken
 
 \subsection{BRep}
 \label{basics:brep}
