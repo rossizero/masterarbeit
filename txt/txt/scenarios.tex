@@ -1,4 +1,4 @@
-\section{Fallstudien}\label{scenarios}
+\chapter{Fallstudien}\label{scenarios}
 \begin{comment}
 subsection{Fallstudie Rossi Notes}
 
@@ -45,7 +45,7 @@ Dabei soll das Gebäude Elemente wie Fenster und Türen enthalten, um dem Proble
 Das Errechnen eines Bauplans ausgehend von einem 3D Modell eines Gebäudes soll für beliebig beschaffene Bausteine möglich sein, welche zuvor definiert werden.
 \end{comment}
 
-\subsection{Planung und Bauplandeduktion eines LEGO Gebäudes mit Einsteinmauerwerk}
+\section{Planung und Bauplandeduktion eines LEGO Gebäudes mit Einsteinmauerwerk}
 Ziel dieses Szenarios ist es, aus dem in Abbildung \ref{fig:Scenario1 Screenshot} dargestellten 3D Modell ein Bauplan zu generieren.
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.44\columnwidth}
@@ -97,7 +97,7 @@ Einschränkungen:
  * Alle Wände verwenden den selben Mauerwerksverband
  * Alle anderen sich berührenden Wäände stehen in einem 90 Grad Winkel zueinander
 
-\subsubsection{Problemstellung}
+\subsection{Problemstellung}
 \label{scenarios:scenario1:problem}
 Bevor für das Modell ein passender Bauplan entwickelt werden kann, muss das sogenannte \textit{Wall Detailing} (vgl. Kapitel \ref{basics:wall-detailing}) stattfinden.
 Darunter versteht man das Berechnen einer Bausteinkombination, die eine Wand möglichst gut abbildet.
@@ -136,18 +136,18 @@ Deadlock, Überhang etc. (TODO)
 Das Vorgehen in seiner Arbeit soll für dieses Szenario evaluiert und gegebenenfalls angepasst werden.
 
 
-\subsection{Planung und Bauplandeduktion eines Lego Gebäudes mit Verbandsmauerwerk}
+\section{Planung und Bauplandeduktion eines Lego Gebäudes mit Verbandsmauerwerk}
 Kein Einsteinmauerwerk -> dicke Wände, die mit Läufern und Bindern erstellt werden müssen.
 Eckfälle sehr komplex (siehe Basics)
 
-\subsection{Szenario mit veränderbaren Bausteintypen}
+\section{Szenario mit veränderbaren Bausteintypen}
 Wie können wir die Bausteine veränderbar machen, sprich die Bearbeitungsmöglichkeiten während des Baus (schneiden eines Ziegels) miteinbeziehen in unser Bausteinformat.
 Erstmal das schneiden nur parallel zu den ebenen eines rechteckigen ziegelsteins betrachten, denn bei "schrägen" schnitten entstehen neue komplexe Formen..
 Wie generiert man daraus dann Baupläne -> riesiges aber cooles Optimierungsproblem!
 Vlt geht das richtung constraint programming? Sprich den Bauplan als Lösung für ein beschränktes Problem ansehen.
 Total viele Fragen, keine Ahnung wo zu beginnen aber klingt cool
 
-\subsection{Sternchenaufgabe: Szenario mit "runden" Wänden und arbiträren (nicht rechteckige) Bausteinformen / schräge schnitte}
+\section{Sternchenaufgabe: Szenario mit "runden" Wänden und arbiträren (nicht rechteckige) Bausteinformen / schräge schnitte}
 Was machen wir wenn die Wand nicht perfekt mit den vorgegebenen Bausteintypen gebaut werden kann (Beispiel ein runder Turm)
 Bausteinverbindungen (wie Mörtel) betrachten und als \textit{Verbindungselement} in das Bausteinformat mit aufnehmen? Wie kann man diesen so einschränken, dass nur physisch machbares ausgrechnet wird.
 Was wenn die Bausteine arbiträre Formen haben und nur in sehr komplexen Mustern eine "dichte" Wand ergeben -> tiling Probleme.

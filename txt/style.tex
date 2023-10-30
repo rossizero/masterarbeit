@@ -1,0 +1,79 @@
+%%%%%%%%%%%%%%%%%%%%%
+% xspace und deutsche Anführungszeichen
+%%%%%%%%%%%%%%%%%%%%%
+\xspaceaddexceptions{\grqq}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Überschriften formatieren
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\titleformat{\chapter}[display]
+      {\sffamily\bfseries\Large}
+      {\filright\MakeUppercase{\chaptertitlename} \Huge\thechapter}
+      {1ex}
+      {\titlerule\vspace{1ex}\filleft}
+      [\vspace{1ex}\titlerule]
+\titleformat*{\section}{\sffamily\bfseries\Large}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Kommandos und Umgebungen
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newenvironment{abstract}%
+{\thispagestyle{empty}\cleardoublepage 
+ \null \begin{center}%
+ \textbf{\sffamily \Large \abstractname} \end{center}\vspace*{3cm}}%
+{\vfill \null }
+
+\newcommand{\thetitle}{Titel fehlt}
+\newcommand{\Titel}[1]{\renewcommand{\thetitle}{#1\xspace}}
+
+\newcommand{\matrikelnummer}{Matrikelnummer fehlt}
+\newcommand{\Matrikelnummer}[1]{\renewcommand{\matrikelnummer}{#1\xspace}}
+
+\newcommand{\authorname}{Autor fehlt}
+\newcommand{\Autor}[1]{\renewcommand{\authorname}{#1\xspace}}
+
+\newcommand{\studiengang}{Studiengang fehlt}
+\newcommand{\Studiengang}[1]{\renewcommand{\studiengang}{#1\xspace}}
+
+\newcommand{\thesistype}{Typ der Arbeit fehlt}
+\newcommand{\Arbeitstyp}[1]{\renewcommand{\thesistype}{#1\xspace}}
+
+\newcommand{\gutachtereins}{Erstgutachter fehlt}
+\newcommand{\Erstgutachter}[1]{\renewcommand{\gutachtereins}{#1\xspace}}
+
+\newcommand{\gutachterzwei}{Zweitgutachter fehlt}
+\newcommand{\Zweitgutachter}[1]{\renewcommand{\gutachterzwei}{#1\xspace}}
+
+\newcommand{\abgabedatum}{Abgabedatum fehlt}
+\newcommand{\Abgabe}[1]{\renewcommand{\abgabedatum}{#1\xspace}}
+
+\newcommand{\betreuer}{Betreuer fehlt}
+\newcommand{\Betreuer}[1]{\renewcommand{\betreuer}{#1\xspace}}
+
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolor},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{emph={%  
+    as, True, False%
+    },emphstyle={\color{magenta}}%
+}%
+ 
+\lstset{style=mystyle}

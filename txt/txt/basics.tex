@@ -1,25 +1,25 @@
-\section{Grundlagen} \label{basics}
+\chapter{Grundlagen} \label{basics}
 Wie bereits oben erwähnt, wird für diese Arbeit ein geeignetes Speicherformat für 3D Modelle von Gebäuden benötigt.
 Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} vollständig digital abbilden zu können. 
-Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in dem Modell zu integrieren auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
+Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in das Modell zu integrieren auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
 Da diese oft von verschiedenen Experten vieler Fachbereiche (etwa aus den Bereichen der Architektur, des Bauwesens oder der Statik) stammen, muss das Format sehr flexibel und im besten Fall auch zeitgleich bearbeitbar sein.
 Dafür werden seit 2000 die \textit{Industry Foundation Classes} (IFC) von buildingsmart entwickelt, deren Anwendung im internationalen Bauwesen mittlerweile weit verbreitet ist \cite{Industry61:online}.
 
 
-\subsection{Industry Foundation Classes}
+\section{Industry Foundation Classes}
 \label{basics:ifc}
 %Kurze Einleitung was IFC ist
 In der Spezifikation des Standards selbst, wird dieser wie folgt beschrieben:
 "Die Industry Foundation Classes (IFC) sind ein offener internationaler Standard für Daten des Building Information Model (BIM), welche zwischen Softwareanwendungen ausgetauscht, gemeinsam genutzt und von den verschiedenen Akteuren der Bauindustrie und des Gebäudemanagements verwendet werden. 
 Der Standard enthält Definitionen für Daten, die für die Lebenszyklen von Gebäude- und Infrastrukturarbeiten erforderlich sind. 
 Die bis jetzt in die IFC aufgenommenen Infrastrukturtypen umfassen Brücken, Straßen, Eisenbahnen, Wasserstraßen und Hafenanlagen" (aus dem Englischen) \cite{IFCScope:online}. 
-Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739 \cite{ISOISO1694:online} registriert.
+Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739\cite{ISOISO1694:online} registriert.
 Da die IFC aber nach wie vor kontinuierlich weiterentwickelt werden, wird in dieser Arbeit die derzeit neueste Version verwendet.
 Diese ist die IFC Spezifikation 4.3.1.0 \cite{IFC4310Spezification:online}.
 Das verbreitetste Austauschformat für IFC ist das Step Physical File Format, welches im ISO 10303 Teil 21 registriert ist \cite{ISO_Step:online}.
 Zudem gibt es speicherreduziertere Formate wie ifcZip oder für Menschen lesbarere Formate wie ifcXML \cite{Industry93:online} \cite{IFCForma28:online}.
 
-\subsubsection{IFC 4.3.1.0 Aufbau}
+\subsection{IFC 4.3.1.0 Aufbau}
 Im Grunde definieren die \textit{Industry Foundation Classes} eine Vielzahl an Klassen, die in einer komplexen Hierarchie angeordnet den Grundstock des Datenmodells bilden.
 Diese sind anfangs abstrakte Konzepte, die sich mit zunehmender Tiefe in der Hierarche konkretisieren.
 
@@ -42,18 +42,18 @@ In Abbildung \ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
     \label{fig:IFC_Relationships}
 \end{figure}
 
-\subsubsection{IfcPropertySets und IfcQuantitySets}
+\subsection{IfcPropertySets und IfcQuantitySets}
 Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zb. auch eine präzisere Kosten- und Zeitschätzung für den Bau ermöglicht \cite{Industry93:online}. 
 Dies kann mithilfe der IfcPropertySets und der IfcQuantitySets umgesetzt werden blablabla. %TODO
 %TODO diagramm, beispiel Properties und Quantities
 
-\subsubsection{Positionierung von IFCProducts}
+\subsection{Positionierung von IFCProducts}
 %https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/concepts/Product_Shape/Product_Placement/Product_Local_Placement/content.html
 TODO: Positionierung ist anscheinend bisschen verschachtelt
 Blablabla so können aus einem IFC Projekt alle relevanten Klassen mit den für diese Arbeit erforderlichen Eigenschaften extrahiert werden.
 
 
-\subsubsection{IfcOpeningElement}
+\subsection{IfcOpeningElement}
 \label{basic:IfcOpeningElement}
 Wie funktionieren Löcher in z.B. IfcWall? -> IfcOpeningElement.
 Am Beispiel eines Fensters erklären. In dessen Doku steht dass Windows auf ein IfcOpeningElement verweisen, welches ein Stück Wand wegmacht und z.b. durch das Fenster aufgefüllt wird.
@@ -65,17 +65,17 @@ ifcopeningelement um lücken in wände zu machen.
 "The opening element stands for opening, recess or chase, all reflecting voids. It represents a void within any element that has physical manifestation. Openings can be inserted into walls, slabs, beams, columns, or other elements." Auszug aus Doku. und This also includes IfcOpeningElements, the mechanism used to extract openings for windows and doors, typically from walls. %https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-construct-new-geometry/
 %https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcDoor.htm
 
-\subsection{IFC for Blender}
-\subsubsection{Blender}
+\section{IFC for Blender}
+\subsection{Blender}
 Blender ist eines der beliebtesten Open Source Programme zur Modellierung von 3D Modellen und Animationen \cite{blendero56:online}.
 Aufgrund dessen existieren auch eine Vielzahl an freien Erweiterungen bzw. Plugins - unter anderem auch eine Integration von IFC Projekten.
 
-\subsubsection{blenderbim}
+\subsection{blenderbim}
 Neben kommerziellen Produkten wie etwa revit von autodesk \cite{RevitSof26:online} zur Modellierung von IFC Modellen, gibt es auch für Blender ein freies Plugin, um IFC Modelle zu erstellen \cite{BlenderB43:online}.
 Dieses Plugin ermöglicht es neben dem bloßen Designen des Gebäudes in kurzer Zeit z.B. detailierte Zeichnungen verschiedener Perspektiven herauszuarbeiten, die z.B. von Bauingeneuren verwendet werden können, um einzelne Stockwerke oder Verkabelungen zu planen.
 Blenderbim selbst kapselt unter anderem die Open Source Python Bibliothek \textit{IfcOpenShell}, sodass diese in der Blender Laufzeitumgebung zur Verfügung steht \cite{IFCOpenShell:online}.
 
-\subsubsection{IfcOpenShell}
+\subsection{IfcOpenShell}
 \begin{lstlisting}[language=Python, caption=Beispielprogrammcode um bestimmte Daten aus einem IFC File zu laden und daraus ein Mesh zu generieren]
 import ifcopenshell
 from ifcopenshell import geom
@@ -129,7 +129,7 @@ conda install -c anaconda pyqt
 the ABS models to solve floor layout problems
 constraint solver / programming
 
-\subsection{Building Information Modeling}
+\section{Building Information Modeling}
 Ein weiterer Punkt, der für die Verwendung von IFC spricht ist das sogenannte \textit{Building Information Modeling} (BIM) \cite{Building41:online}.
 Ein Definitionsvorschlag lautet wie folgt: "BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen" (Übersetzt aus dem Englischen) \cite{Microsof51:online}.
 Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
@@ -149,14 +149,14 @@ Hier unterstützt BIM, indem sämtliche Teile der Installationen in einem Gebäu
 Dies wurde allerdings "angesichts der Realität der Handwerker und Gebäudenutzer für völlig unrealisitsch und auch etwas over-engineered" eingestuft.
 Trotzdem sei "BIM [...] das große Ding in der Bauwelt und der einzige echte Standard".
 
-\subsection{brick schema}
+\section{brick schema}
 ChatGPT "While IFC is primarily focused on representing building information for interoperability between software applications, BrickSchema focuses on providing a standardized and semantically rich representation of building systems and their components. In practice, BrickSchema can be used in conjunction with IFC to enhance the semantic representation and analysis of building data, particularly when it comes to systems-level information.
 
 By using IFC as a foundation for representing the overall building information and combining it with the more detailed and specialized semantic representation offered by BrickSchema, it becomes possible to achieve a comprehensive and interoperable representation of building information that can support various use cases, including energy modeling, fault detection and diagnosis, and optimization of building performance."
 %https://brickschema.org/
 %https://github.com/BrickSchema/Brick
 
-\subsection{opensourcebim}
+\section{opensourcebim}
 Während es vorwiegend kommerzielle Produkte gibt, die Unternehmen das Arbeiten mit BIM ermöglichen, exisitiert auch hier eine Open Source Bewegung.
 Darin enthalten sind 70 Repositories, unter anderem ein BIM-Server inklusive diverser Clients für Endanwender und Werkzeuge, um einfacher mit den IFC Files zu agieren \cite{Theopens96:online}.
 Ein kurzer Test hat gezeigt, dass die in Blender modellierte IFC Files tatsächlich über einen "Anzeige-Client", der mit einer BIM-Server verbunden ist, angezeigt werden können.
@@ -167,7 +167,7 @@ Wie auch Blender untertützt BIM-Server das Einbinden von eigenen Plugins, sodas
 Die Plugins werden in Java geschrieben.
 Der Server bietet aber auch eine REST Schnittstelle an, um Clients in anderen Sprachen anzubinden.
 
-\subsection{LEGO}
+\section{LEGO}
 Ein 1x1 LEGO Stein hat eine  quadratische Grundfläche von \(7.8mm\) x \(7.8mm\).
 Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2mm\).
 Daraus ergibt sich ein Rastermaß von \(8mm\) x  \(8mm\).
@@ -184,7 +184,7 @@ Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet w
     \label{fig:Lego 2x4 Brick}
 \end{figure}
 
-\subsection{Mauerwerksbau}
+\section{Mauerwerksbau}
 Der Mauerwerksbau ist eine Art des Massivbaus, bei welchem Natur- oder Formsteine aufgeschichtet werden, um Wände beziehungsweise Mauern zu errichten.
 Eine derart gebaute Wand besteht demnach aus Steinen und den dazwischen entstehenden Fugen.
 Mörtel ist dabei nicht zwangsläufig notwendig.
@@ -212,7 +212,7 @@ Dabei sieht die Norm ein Fugenmaß von \(1 cm\) für Stoßfugen (vertikal) und \
 Für Systeme, die eine schmalere oder keine Fuge benötigen, werden entsprechend größere Steine hergestellt, um der Maßordnung zu entsprechen.
 Mithilfe des Systems ist man zusätzlich in der Lage Türen und Fenster an die daraus entstehenden Öffnungen anzupassen und vermeidet zeitaufwendiges, nachträgliches Anpassen.
 
-\subsubsection{Mauerwerksverband}
+\subsection{Mauerwerksverband}
 \label{basics:Mauerwerksverband}
 Als Mauerwerksverband bezeichnet man bestimmte, gleichmäßige Anordnungen von Mauersteinen, um einen homogenen Mauerwerkskörper zu erreichen \cite{Mauerwer39:online}.
 Damit kann eine gleichmäßige Kraftverteilung innerhalb der Mauer gewährleistet werden.
@@ -299,9 +299,9 @@ Verzahnung: aus https://baulexikon.beuth.de/VERZAHNUNG.HTM : Verzahnung, im Maue
 
 TODO Rund Wände, keine 90 Grad Ecken
 
-\subsection{BRep}
+\section{BRep}
 \label{basics:brep}
-\subsection{Definitionen}
-\subsubsection{Bausteintyp}
-\subsubsection{Baustein}
-\subsubsection{Wand}
+\section{Definitionen}
+\subsection{Bausteintyp}
+\subsection{Baustein}
+\subsection{Wand}

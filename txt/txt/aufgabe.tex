@@ -1,13 +1,13 @@
-\section{Aufgabenstellung}
+\chapter{Aufgabenstellung}
 Nachfolgend werden in chronologischer Reihenfolge alle notwendigen Teilaufgaben aufgezeigt, die gelöst werden müssen, um ein Gebäude zu planen, welches anschließend von Robotern gebaut werden kann.
 
-\subsection{Modellierung des 3D Modells}
+\section{Modellierung des 3D Modells}
 Es muss ein Weg gefunden werden, dem Nutzer das Modellieren von Teilstücken eines Gebäudes zu erleichtern, sodass er keine einzelnen Bauteile in dem Editor verwenden muss, sondern Konglomerate (wie etwa eine Wand oder ein Fenster) zur Verfügung hat, welche als Ganzes bewegt oder verformt werden können.
 Dabei dürfen aber Informationen über die eigentlich zugrundeliegenden Bauteile (z.B. Ziegel) entweder nicht verloren gehen und implizit vorgegeben sein (z.B. durch das aufzwingen eines Rasters, welches dem Formfaktor der Bauteile entspricht, sodass etwa eine Wand nicht in beliebig kleinen Schritten vergrößert werden kann, sondern immer nur einen Längensprung um die Länge des kleinsten zugrundeliegenden Ziegel macht) oder das Programm versucht, das Gebäude nach beenden des Designprozesses möglichst gut mithilfe des vorgegebenen Sets an Bauteilen abzubilden. Das führt aber dazu einen möglichst guten Kompromiss finden zu müssen, was durch ein Raster von vornherein vermieden werden kann.
 
 Fragestellung: Wie kann das Modellieren eines Gebäudes für Nutzer vereinfacht werden ohne wichtige Informationen zu verlieren?
 
-\subsection{Finden eines geeigneten Dateiformats}
+\section{Finden eines geeigneten Dateiformats}
 Wie breits vorweg genommen, muss es möglich sein aus dem Gebäudemodell eine Menge an Bauteilen von vorgegebenem Typen zu berechnen, die das Gebäude komplett (oder möglichst gut) abbildet.
 Das geht entweder, indem man diese Menge während dem Designprozess impliziert vorliegen hat, da alle größeren Teilstücke (wie etwa eine Wand) schon mithilfe der zugrunde liegenden Bauteile definiert wurden oder durch das einmalige Konvertieren eines von den Bauteilen völlig losgelösten 3D Modells in eben jene Menge an Bauteilen.
 Im ersten Fall fällt das Konvertieren weg und der Nutzer arbeitet immer direkt auf dem Datenformat, welches anschließend in späteren Schritten verwendet wird.
@@ -21,7 +21,7 @@ Dieser Standard wird im weiteren Verlauf dieses Expos\'{e}s vorgestellt.
 
 Fragestellung: Das Gebäude im Hintergrund immer als Menge von definierten Bauteilen oder als gängiges 3D Modell speichern, welches irgendwann in Bauteile überführt werden muss?
 
-\subsection{Finden eines geeigneten Bauplans für Roboterschwärme}
+\section{Finden eines geeigneten Bauplans für Roboterschwärme}
 Um dem Umfang und die Komplexität diesen Schrittes zu erfassen, wurde Ludwigs Dissertation gelesen \cite{Naegele2021}.
 Diese beschäftigt sich mit dem Finden geeigneter Baupläne für beliebige Produkte mit Einbeziehung diverser (etwa geometrischer) Einschränkungen der Einzelteile oder der Monatageroboter.
 Mit einem solchen Verfahren kann die derzeit teure Individualisierung von Produkten kosteneffizient ermöglicht werden, da sämtliche Produktionsschritte automatisch herausgefunden werden und damit Zeit sowohl in der Planung, als auch beim Einlernen der Montageroboter gespart werden kann.
@@ -44,6 +44,6 @@ Dafür muss die Suchoperation in Teilen angepasst werden.
 
 Fragestellung: Wie wird aus dem Bauteilplan ein für Roboterschwärme abarbeitbarer Plan zur Erstellung des Gebäudes?
 
-\subsection{Format zur Beschreibung der Bauteile aus welchen Wände bestehen}
+\section{Format zur Beschreibung der Bauteile aus welchen Wände bestehen}
 Wie beschreibt man Bauteile, sodass neben der geometrischen Struktur z.B. auch die Berarbeitungsmöglichkeiten (wie etwa das Zerschneiden eines Ziegels) angegeben/eingeschränkt werden können.
 Wie verwendet man diese Informationen, um Wände, die aus einem solchen Baustein errichtet werden sollen schon vorab im 3D Editor in die darin vorgegebenen Einschränlungen zu pressen (z.B. Legosteine sollten nicht zerschnitten werden -> es gibt also einen Stein, welcher als kleinste Größenänderung für die Wand gelten muss. Die Wand wird quasi in ein Grid gepresst. Wie sieht das aber aus, wenn es sich nicht um so einfache geometrische Körper handelt? -> sau rechenaufwendig?)
