@@ -54,7 +54,7 @@ Blablabla so können aus einem IFC Projekt alle relevanten Klassen mit den für 
 
 
 \subsection{IfcOpeningElement}
-\label{basic:IfcOpeningElement}
+\label{basics:IfcOpeningElement}
 Wie funktionieren Löcher in z.B. IfcWall? -> IfcOpeningElement.
 Am Beispiel eines Fensters erklären. In dessen Doku steht dass Windows auf ein IfcOpeningElement verweisen, welches ein Stück Wand wegmacht und z.b. durch das Fenster aufgefüllt wird.
 %(https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcWindow.htm) 
@@ -75,7 +75,7 @@ Neben kommerziellen Produkten wie etwa revit von autodesk \cite{RevitSof26:onlin
 Dieses Plugin ermöglicht es neben dem bloßen Designen des Gebäudes in kurzer Zeit z.B. detailierte Zeichnungen verschiedener Perspektiven herauszuarbeiten, die z.B. von Bauingeneuren verwendet werden können, um einzelne Stockwerke oder Verkabelungen zu planen.
 Blenderbim selbst kapselt unter anderem die Open Source Python Bibliothek \textit{IfcOpenShell}, sodass diese in der Blender Laufzeitumgebung zur Verfügung steht \cite{IFCOpenShell:online}.
 
-\subsection{IfcOpenShell}
+\subsection{IfcOpenShell} \label{basics:ifcopenshell}
 \begin{lstlisting}[language=Python, caption=Beispielprogrammcode um bestimmte Daten aus einem IFC File zu laden und daraus ein Mesh zu generieren]
 import ifcopenshell
 from ifcopenshell import geom
@@ -130,8 +130,8 @@ the ABS models to solve floor layout problems
 constraint solver / programming
 
 \section{Building Information Modeling}
-Ein weiterer Punkt, der für die Verwendung von IFC spricht ist das sogenannte \textit{Building Information Modeling} (BIM) \cite{Building41:online}.
-Ein Definitionsvorschlag lautet wie folgt: "BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen" (Übersetzt aus dem Englischen) \cite{Microsof51:online}.
+Ein weiterer Punkt, der für die Verwendung von IFC spricht ist das sogenannte \textit{Building Information Modeling} (BIM)\cite{Building41:online}.
+Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Übersetzt aus dem Englischen)\cite{Microsof51:online}.
 Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
 BIM kommt in all diesen Phasen zum Tragen und erleichtert diese Prozesse durch Anbieten einer einheitlichen Schnittstelle für alle am Infrastrukturbau und -management beteiligten Personen.
 Zusätzlich ermöglicht BIM eine exakte Dokumentation des Geschehens in sämtlichen Phasen des Bauwerks, was unter anderem zu einer  genaueren Zeit- und Kostenplanung führt.
@@ -139,27 +139,27 @@ Auch Verantwortlichkeiten sind Teil von BIM, was zu einer erhöhten Produktivit�
 Um nun das Zusammenarbeiten der unterschiedlichen Fachbereiche zu erleichtern, gibt es sogennante BIM-Server auf welchen mehrere Arbeitende synchron an einem Projekt arbeiten können, während sie jeweils die für ihren Aufgabenbereich passende Ansicht vor sich haben.
 BIM-Server unterstützen zusätzlich eine Versionierung des Fortschritts an einem Projekt.
 
-In einem Gespräch mit einem Ingeneur aus dem Bereich "Energysystemtechnik" kam zur Sprache, dass viele Bereiche von BIM noch nicht ganz Einzug in Deutschland gefunden haben.
-Eben jene "Kollaboration über einen BIM-Server mit Änderungsmanagement etc. [sei] (noch) nicht üblich, da noch nicht alle Beteiligten dazu in der Lage sind. Vor allem Bauherren, Architekten und Baufirmen können es nicht".
-Weiter sei "auch unklar, wer für falsche Angaben haftet und wer die Konsistenz aller Daten gewährleistet".
-Auf der anderen Seite sei "das im BIM festegelegte Datenformat IFC das Maß der Dinge und auch bei uns so in Verwendung".
-Auch das Einpflegen "ergänzende[r] Bauteilinformationen (z.B. zu Gewicht, Dämmwert, Recyclebarkeit, CO2 Fußabdruck, etc." finden Einsatz und sind Teil seines Alltags.
+In einem Gespräch mit einem Ingeneur aus dem Bereich \glqq{}Energysystemtechnik\grqq{} kam zur Sprache, dass viele Bereiche von BIM noch nicht ganz Einzug in Deutschland gefunden haben.
+Eben jene \glqq{}Kollaboration über einen BIM-Server mit Änderungsmanagement etc. [sei] (noch) nicht üblich, da noch nicht alle Beteiligten dazu in der Lage sind. Vor allem Bauherren, Architekten und Baufirmen können es nicht\grqq{}.
+Weiter sei \glqq{}auch unklar, wer für falsche Angaben haftet und wer die Konsistenz aller Daten gewährleistet\grqq{}.
+Auf der anderen Seite sei \glqq{}das im BIM festegelegte Datenformat IFC das Maß der Dinge und auch bei uns so in Verwendung\grqq{}.
+Auch das Einpflegen \glqq{}ergänzende[r] Bauteilinformationen (z.B. zu Gewicht, Dämmwert, Recyclebarkeit, CO2 Fußabdruck, etc.)\grqq{} finden Einsatz und sind Teil seines Alltags.
 Für ihn wichtig ist ebenfalls der Betrieb des Gebäudes.
 Hier unterstützt BIM, indem sämtliche Teile der Installationen in einem Gebäude, wie z.B Fensterdichtungen, Kabel, Rohre, Sicherungen oder eine Umwälzpumpe individuelle Teilenummern zugewiesen bekommen, hinter welchen alle Daten wie etwa Hersteller, Bestellnummern, Lebensdauer, Wartungshistorie oder Entsorgungsnachweise vermerkt sind.
-Dies wurde allerdings "angesichts der Realität der Handwerker und Gebäudenutzer für völlig unrealisitsch und auch etwas over-engineered" eingestuft.
-Trotzdem sei "BIM [...] das große Ding in der Bauwelt und der einzige echte Standard".
+Dies wurde allerdings \glqq{}angesichts der Realität der Handwerker und Gebäudenutzer für völlig unrealisitsch und auch etwas over-engineered\grqq{} eingestuft.
+Trotzdem sei \glqq{}BIM [\ldots] das große Ding in der Bauwelt und der einzige echte Standard\grqq{}.
 
 \section{brick schema}
-ChatGPT "While IFC is primarily focused on representing building information for interoperability between software applications, BrickSchema focuses on providing a standardized and semantically rich representation of building systems and their components. In practice, BrickSchema can be used in conjunction with IFC to enhance the semantic representation and analysis of building data, particularly when it comes to systems-level information.
+ChatGPT \glqq{}While IFC is primarily focused on representing building information for interoperability between software applications, BrickSchema focuses on providing a standardized and semantically rich representation of building systems and their components. In practice, BrickSchema can be used in conjunction with IFC to enhance the semantic representation and analysis of building data, particularly when it comes to systems-level information.
 
-By using IFC as a foundation for representing the overall building information and combining it with the more detailed and specialized semantic representation offered by BrickSchema, it becomes possible to achieve a comprehensive and interoperable representation of building information that can support various use cases, including energy modeling, fault detection and diagnosis, and optimization of building performance."
+By using IFC as a foundation for representing the overall building information and combining it with the more detailed and specialized semantic representation offered by BrickSchema, it becomes possible to achieve a comprehensive and interoperable representation of building information that can support various use cases, including energy modeling, fault detection and diagnosis, and optimization of building performance.\grqq{}
 %https://brickschema.org/
 %https://github.com/BrickSchema/Brick
 
 \section{opensourcebim}
 Während es vorwiegend kommerzielle Produkte gibt, die Unternehmen das Arbeiten mit BIM ermöglichen, exisitiert auch hier eine Open Source Bewegung.
-Darin enthalten sind 70 Repositories, unter anderem ein BIM-Server inklusive diverser Clients für Endanwender und Werkzeuge, um einfacher mit den IFC Files zu agieren \cite{Theopens96:online}.
-Ein kurzer Test hat gezeigt, dass die in Blender modellierte IFC Files tatsächlich über einen "Anzeige-Client", der mit einer BIM-Server verbunden ist, angezeigt werden können.
+Darin enthalten sind 70 Repositories, unter anderem ein BIM-Server inklusive diverser Clients für Endanwender und Werkzeuge, um einfacher mit den IFC Files zu agieren\cite{Theopens96:online}.
+Ein kurzer Test hat gezeigt, dass die in Blender modellierte IFC Files tatsächlich über einen \glqq{}Anzeige-Client\grqq{}, der mit einer BIM-Server verbunden ist, angezeigt werden können.
 Obwohl die Verwendung des BIM-Servers für diese Arbeit nicht notwendig ist, besteht die Option diesen künftig mit in den Workflow zu integrieren, da damit auch das simultante Arbeiten an einem IFC File möglich ist, was in Blender nur teilweise und mit dem Einsatz von Plugins ermöglicht wird.
 Dabei ist fraglich, ob diese Plugins dann ebenfalls die IFC Erweiterung unterstützen.
 Das stellt einen Praxisbezug zum aktuell verwendeten Stand dieser Technologien her, was in der oftmals konzeptionellen Natur der Forschung nicht immer der Fall ist.
@@ -195,7 +195,7 @@ Die eine ist das sogenannte \textit{Baunennmaß}, mit dem die tatsächliche Grö
 Die andere das \textit{Baurichtmaß}, das sich aus Baunennmaß und dem Fugenmaß zusammensetzt.
 Baurichtmaße sind gemäß dem oktametrischen Maßsystem immer ein Vielfaches von \(12,5 cm\) (das entspricht \(1/8 m\)) und mindestens \(6.25cm\).
 Dies gilt sowohl für die Breite als auch die Höhe der Steine.
-Das System ist in der DIN 4172 Maßordnung im Hochbau geregelt und ist das fest definierte Grundmaß für das Bauwesen in Europa \cite{DIN417224} .
+Das System ist in der DIN 4172 Maßordnung im Hochbau geregelt und ist das fest definierte Grundmaß für das Bauwesen in Europa\cite{DIN417224}.
 
 \begin{figure}[ht]
     \centering
