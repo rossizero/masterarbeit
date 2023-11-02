@@ -1,7 +1,7 @@
 import numpy as np
 import quaternion
 
-from OCC.Core.BRepBndLib import brepbndlib_Add
+from OCC.Core.BRepBndLib import brepbndlib_Add, brepbndlib
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
@@ -48,7 +48,7 @@ class BrickInformation:
 
         # create a boundingbox around the shape
         bounding_box = Bnd_Box()
-        brepbndlib_Add(shape, bounding_box)
+        brepbndlib.Add(shape, bounding_box)
 
         # Get the minimum and maximum coordinates of the bounding box
         xmin, ymin, zmin, xmax, ymax, zmax = bounding_box.Get()

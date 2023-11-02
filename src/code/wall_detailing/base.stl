@@ -183,28 +183,16 @@ solid
  endfacet
  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
-     vertex -6.000000e+00  8.000000e+00  2.500000e+00
+     vertex -8.000000e+00  8.000000e+00  2.500000e+00
      vertex -8.000000e+00  2.000000e+00  2.500000e+00
      vertex -6.000000e+00  2.000000e+00  2.500000e+00
-=======
-     vertex -8.000000e+00  8.000000e+00  5.000000e-01
-     vertex -8.000000e+00  2.000000e+00  5.000000e-01
-     vertex -6.000000e+00  2.000000e+00  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
  facet normal -0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
      vertex -8.000000e+00  8.000000e+00  2.500000e+00
-     vertex -8.000000e+00  2.000000e+00  2.500000e+00
+     vertex -6.000000e+00  2.000000e+00  2.500000e+00
      vertex -6.000000e+00  8.000000e+00  2.500000e+00
-=======
-     vertex -8.000000e+00  8.000000e+00  5.000000e-01
-     vertex -6.000000e+00  2.000000e+00  5.000000e-01
-     vertex -6.000000e+00  8.000000e+00  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
  facet normal  0.000000e+00  1.000000e+00  0.000000e+00
@@ -363,28 +351,16 @@ solid
  endfacet
  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
-     vertex -1.000000e+00  8.000000e+00  2.500000e+00
+     vertex -1.000000e+00  1.000000e+01  2.500000e+00
      vertex -6.000000e+00  1.000000e+01  2.500000e+00
      vertex -6.000000e+00  8.000000e+00  2.500000e+00
-=======
-     vertex -1.000000e+00  1.000000e+01  5.000000e-01
-     vertex -6.000000e+00  1.000000e+01  5.000000e-01
-     vertex -6.000000e+00  8.000000e+00  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
      vertex -1.000000e+00  1.000000e+01  2.500000e+00
-     vertex -6.000000e+00  1.000000e+01  2.500000e+00
+     vertex -6.000000e+00  8.000000e+00  2.500000e+00
      vertex -1.000000e+00  8.000000e+00  2.500000e+00
-=======
-     vertex -1.000000e+00  1.000000e+01  5.000000e-01
-     vertex -6.000000e+00  8.000000e+00  5.000000e-01
-     vertex -1.000000e+00  8.000000e+00  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
@@ -403,28 +379,16 @@ solid
  endfacet
  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
+     vertex  1.000000e+00  2.000000e+00  2.500000e+00
      vertex -1.000000e+00  2.000000e+00  2.500000e+00
      vertex -1.000000e+00  0.000000e+00  2.500000e+00
-     vertex  1.000000e+00  0.000000e+00  2.500000e+00
-=======
-     vertex  1.000000e+00  2.000000e+00  5.000000e-01
-     vertex -1.000000e+00  2.000000e+00  5.000000e-01
-     vertex -1.000000e+00  0.000000e+00  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
      vertex  1.000000e+00  2.000000e+00  2.500000e+00
-     vertex -1.000000e+00  2.000000e+00  2.500000e+00
+     vertex -1.000000e+00  0.000000e+00  2.500000e+00
      vertex  1.000000e+00  0.000000e+00  2.500000e+00
-=======
-     vertex  1.000000e+00  2.000000e+00  5.000000e-01
-     vertex -1.000000e+00  0.000000e+00  5.000000e-01
-     vertex  1.000000e+00  0.000000e+00  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
  facet normal  1.000000e+00  0.000000e+00  0.000000e+00
@@ -471,28 +435,16 @@ solid
  endfacet
  facet normal  0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
+     vertex -1.000000e+00  1.000000e+01  2.500000e+00
      vertex -1.000000e+00  8.000000e+00  2.500000e+00
      vertex  1.000000e+00  8.000000e+00  2.500000e+00
-     vertex  1.000000e+00  1.000000e+01  2.500000e+00
-=======
-     vertex -1.000000e+00  1.000000e+01  5.000000e-01
-     vertex -1.000000e+00  8.000000e+00  5.000000e-01
-     vertex  1.000000e+00  8.000000e+00  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
  facet normal -0.000000e+00  0.000000e+00  1.000000e+00
    outer loop
-<<<<<<< Updated upstream
      vertex -1.000000e+00  1.000000e+01  2.500000e+00
-     vertex -1.000000e+00  8.000000e+00  2.500000e+00
+     vertex  1.000000e+00  8.000000e+00  2.500000e+00
      vertex  1.000000e+00  1.000000e+01  2.500000e+00
-=======
-     vertex -1.000000e+00  1.000000e+01  5.000000e-01
-     vertex  1.000000e+00  8.000000e+00  5.000000e-01
-     vertex  1.000000e+00  1.000000e+01  5.000000e-01
->>>>>>> Stashed changes
    endloop
  endfacet
 endsolid
