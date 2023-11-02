@@ -6,4 +6,5 @@
  conda install -c ifcopenshell -c conda-forge ifcopenshell
  conda install -c conda-forge quaternion
  conda install -c anaconda numpy
+ conda install -c conda-forge owlready2
 ```
