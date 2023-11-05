@@ -25,9 +25,9 @@ TODO Satz zum Code, Code iscubic
 \subsubsection{Anwenden des Moduls}
 Mit dem zu jedem Wandstück festgelegten Modul werden nun alle Wandstücke in Schichten aufgeteilt.
 Deren Höhe entspricht im Normalfall der Höhe des jeweilgen Moduls.
-Dies erleichtert es im Anschluss Berechnungen an Wandstücken durchzuführen und Beziehungen zwischen ihnen zu finden.
 Lediglich die oberste Schicht kann durch falsch modellierte Wandstücke eine niedrigere Schichthöhe aufweisen.
 Dies ist der Fall, wenn die Gesamthöhe des Wandstücks nicht exakt einem Vielfachen der Höhe des Moduls entspricht und ein nicht aufzuteilender Rest existiert.
+Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstücken durchzuführen und Beziehungen zwischen ihnen zu finden.
 
 \subsubsection{Kombinieren passender Wandstücke}
 Eine solche Beziehung stellen etwa Wandstücke dar, die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Objekte realisiert wurden, eigentlich aber eine Einheit darstellen.
@@ -35,7 +35,8 @@ Daher werden in diesem Schritt alle Wandstücke miteinander verglichen und event
 Um zwei Wandstücke zu kombinieren müssen folgende Eigenschaften gelten:
 * Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden. -> Dies verhindert das Kombinieren unterschiedlich dicker Wände
 * Die lokalen Z-Achsen beider Wandstücke sind parallel. -> Dies verhindert das Kombinieren ungleich rotierter Wandstücke
-* Sie stehen auf der selben Höhe oder versetz um ein Vielfaches der gemeinsamen Modulhöhe.
+* Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
+* Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel.
 * Mindestens eine Schicht des einen Wandstücks berührt oder überlappt eine des anderen.
 
 TODO: Bilder und Erklärung der verschiedenen Fälle
@@ -50,6 +51,14 @@ Durch das Einbeziehen des \textit{x\_offset} können derartige Situationen jedoc
 Auch dies ist der Abbildung TODO zu entnehmen.
 
 \subsubsection{Beziehungen finden}
+Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
+Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar.
+Es werden wie oben wiederum nur die Wandstücke miteinander verglichen, die mit dem selben Wandtyp annotiert wurden und das gleiche Modul verwenden.
+Diese Beziehungen ähneln sich stark und besitzen demnach einige geteilten Eigenschaften:
+* Die lokalen Z-Achsen beider Wandstücke sind parallel.
+* Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
+* Mindestens eines der beiden Wandstücke endet auf einem anderen, sodass mindestens eine Schicht das andere Wandstück direkt berührt.
+Außerdem 
 Durchlaufe alle Wandstücke und schau, ob diese andere berühren.
 Dadurch können Ecken, T-Kreuzungen und Kreuzungen gefunden werden.
 Schwierigkeiten: Verschiedenste Arten solche Ecken und Kreuzungen zu modellieren 
