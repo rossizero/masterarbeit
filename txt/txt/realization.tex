@@ -18,7 +18,7 @@ TODO Sätze zum Code, Code TODO kleines Klassendiagram von Wall/WallLayerGroup u
 
 \subsection{Überprüfen der modellierten Wände}
 \subsubsection{Filtern}
-Da sich diese Arbeit vorerst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen zunächst alle zuvor extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
+Da sich diese Arbeit vorerst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen zunächst alle zuvor aus dem IFC Modell extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
 Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgenden Schritte weitergegeben werden.
 TODO Satz zum Code, Code iscubic
 
@@ -41,11 +41,11 @@ Um zwei Wandstücke zu kombinieren müssen folgende Eigenschaften gelten:
 
 TODO: Bilder und Erklärung der verschiedenen Fälle
 Steht ein Wandstück in X-Richtung versetzt auf einem anderem, so ist es notwendig diesen Versatz während dem nachfolgenden Detailing zu berücksichtigen.
-Ignoriert man diesen Versatz kann dies zu den in Abbildung TODO gezeigten Fehlern führen.
+Ignoriert man diesen Versatz kann das zu den in Abbildung TODO gezeigten Fehlern führen.
 Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert durch die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes und der lokalen X-Koordinate der zu betrachtenden Schicht.
-Der daraus resultierende Wert wird später dazu verwendet den anzuwendenden Mauerwerksverband an erst an der passenden Stelle zu beginnen.
-Dadurch erzielt man einen einheitlichen Verband über das gesamte Wandstück und verhindert den in Abbildung TODO Fehlerfall.
-Eine weitere Eigenschaft, die aus dem Kombinieren zweier Wandstücke entstehen kann, ist das vorhandensein unterbrochender Schichten beziehungsweise mehrerer Schichten auf einer Höhe innerhalb eines Wandstückes.
+Der daraus resultierende Wert wird später dazu verwendet den anzuwendenden Mauerwerksverband erst an der passenden Stelle zu beginnen.
+Dadurch erzielt man einen einheitlichen Verband über das gesamte Wandstück und verhindert den in Abbildung TODO gezeigten Fehlerfall.
+Eine weitere Eigenschaft, die aus dem Kombinieren mehrerer Wandstücke entstehen kann, ist das vorhandensein unterbrochender Schichten beziehungsweise mehrerer Schichten auf einer Höhe innerhalb eines Wandstückes.
 Dies ist ebenfalls in Abbildung TODO dargestellt.
 Durch das Einbeziehen des \textit{x\_offset} können derartige Situationen jedoch ebenfalls gelöst werden, da für jedes Teilstück einer Schicht ein eigener \textit{x\_offset} berechnet wird.
 Auch dies ist der Abbildung TODO zu entnehmen.
