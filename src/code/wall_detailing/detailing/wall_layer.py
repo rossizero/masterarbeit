@@ -143,6 +143,16 @@ class WallLayer:
         d = np.allclose(self.left_edge, other.right_edge, atol=tolerance)
         return a or b or c or d
 
+    def is_overlapping(self, other: 'WallLayer'):
+        l1 = Line(self.left_edge, self.right_edge)
+        l2 = Line(other.left_edge, other.right_edge)
+        a = l1.on_line(other.left_edge, between=True)
+        b = l1.on_line(other.right_edge, between=True)
+
+        c = l2.on_line(self.left_edge, between=True)
+        d = l2.on_line(self.right_edge, between=True)
+        return (a or b) and (c or d)
+
     def is_touching(self, other: 'WallLayer') -> bool:
         """
         Checks if self and other edges are touching

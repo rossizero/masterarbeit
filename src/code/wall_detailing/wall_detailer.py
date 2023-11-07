@@ -15,7 +15,8 @@ from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
-    SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners
+    SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners, \
+    OverlappingWalls
 from masonry import corner_rep
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
@@ -206,7 +207,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = ThickWall()
+    scenario = OverlappingWalls()
     #scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])

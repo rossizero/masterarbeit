@@ -1,5 +1,5 @@
 import math
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import numpy as np
 import quaternion
@@ -128,7 +128,7 @@ class WallLayerGroup:
         if self.highest_local_x is None:
             self.highest_local_x = self.get_highest_local_x()
 
-    def get_sorted_layers(self, grouped: bool = True) -> List[List[WallLayer]]:
+    def get_sorted_layers(self, grouped: bool = True) -> List[Union[WallLayer, List[WallLayer]]]:
         """
         :return: a list containing lists of layers that share the same z height sorted by z
         """
