@@ -18,7 +18,7 @@ TODO Sätze zum Code, Code TODO kleines Klassendiagram von Wall/WallLayerGroup u
 
 \subsection{Überprüfen der modellierten Wände}
 \subsubsection{Filtern}
-Da sich diese Arbeit vorerst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen zunächst alle zuvor aus dem IFC Modell extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
+Da sich diese Arbeit zunächst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen zunächst alle zuvor aus dem IFC Modell extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
 Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgenden Schritte weitergegeben werden.
 TODO Satz zum Code, Code iscubic
 
@@ -52,16 +52,19 @@ Auch dies ist der Abbildung TODO zu entnehmen.
 
 \subsubsection{Beziehungen finden}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
-Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar.
-Es werden wie oben wiederum nur die Wandstücke miteinander verglichen, die mit dem selben Wandtyp annotiert wurden und das gleiche Modul verwenden.
+Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe \ref{basics:Mauerwerksverband}).
+Es werden wie oben nur die Wandstücke miteinander verglichen, die mit dem selben Wandtyp annotiert wurden und das gleiche Modul verwenden.
 Diese Beziehungen ähneln sich stark und besitzen demnach einige geteilten Eigenschaften:
 * Die lokalen Z-Achsen beider Wandstücke sind parallel.
 * Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
 * Mindestens eines der beiden Wandstücke endet auf einem anderen, sodass mindestens eine Schicht das andere Wandstück direkt berührt.
-Außerdem 
-Durchlaufe alle Wandstücke und schau, ob diese andere berühren.
-Dadurch können Ecken, T-Kreuzungen und Kreuzungen gefunden werden.
-Schwierigkeiten: Verschiedenste Arten solche Ecken und Kreuzungen zu modellieren 
+Sind diese Eigenschaften erfüllt, werden für jede durch die einzelnen Schichten der Wandstücke vorgegebene Höhe Schnittpunkte zwischen den beiden Wandstücken errechnet.
+Im Falle einer einfachen Ecke oder einer T-Kreuzung, existiert nur ein einzelnes Paar an Wandstücken, deren Schichten sich in jedem Höhenschritt des Moduls im Mittelpunkt der Ecke schneiden.
+Der Unterschied ist lediglich die Stelle des Schnittpunkts relativ zu den beiden Wandstücken.
+Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als Wandbreite/2 an einer der beiden Außenkanten handelt es sich um eine Ecke.
+Falls der Schnittpunkt bei einem der beiden Wandstücke allerdings mindestens Wandbreite/2 innerhalb des Wandstücks liegt, so handelt es sich um eine T-Kreuzung.
+
+TODO Bilder
 
 \subsection{Lösen der Beziehungen}
 Je nach gewählten Verband müssen z.B. Ecken (deren Baupläne im vornherein definiert wurden) so angeordnet werden, dass die dazwischenliegenden Wandstücke lückenlos eingefüllt werden können.
