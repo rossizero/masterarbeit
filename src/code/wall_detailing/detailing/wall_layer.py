@@ -31,8 +31,28 @@ class WallLayer:
         global_mid = (self.center * self.length + other.center * other.length) / total_length
         local_mid = global_mid - self.parent.get_translation()
         local_mid = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_mid)
+
+        if self.is_overlapping(other):
+            a1 = self.get_left_edge(relative=True)
+            b1 = self.get_right_edge(relative=True)
+
+            a2 = other.get_left_edge(relative=False)
+            a2 -= self.parent.get_translation()
+            a2 = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), a2)
+
+            b2 = other.get_right_edge(relative=False)
+            b2 -= self.parent.get_translation()
+            b2 = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), b2)
+            total_length = max(a1[0], b1[0], a2[0], b2[0]) - min(a1[0], b1[0], a2[0], b2[0])
+
+            left = a1 if a1[0] < a2[0] else a2
+            local_mid = left.copy()
+            local_mid[0] += total_length / 2.0
+
         self.translation = local_mid
         self.length = total_length
+
+
 
     @property
     def tops(self):
@@ -130,7 +150,7 @@ class WallLayer:
             ret += self.parent.get_translation()
         return ret
 
-    def is_touching_at_endpoints(self, other: 'WallLayer', tolerance: float = 1.e-8) -> bool:
+    def is_touching_at_endpoints(self, other: 'WallLayer', tolerance: float = 1e-8) -> bool:
         """
         Checks if self and other edges are (nearly) touching
         :param other: the other wall_layer
@@ -141,9 +161,16 @@ class WallLayer:
         b = np.allclose(self.right_edge, other.right_edge, atol=tolerance)
         c = np.allclose(self.left_edge, other.left_edge, atol=tolerance)
         d = np.allclose(self.left_edge, other.right_edge, atol=tolerance)
+
         return a or b or c or d
 
     def is_overlapping(self, other: 'WallLayer'):
+        """
+        Checks if self and other edges are overlapping in a useful way aka.
+        the layers are parallel and not just cutting through each other
+        :param other: the other wall_layer
+        :return: whether the lines are overlapping
+        """
         l1 = Line(self.left_edge, self.right_edge)
         l2 = Line(other.left_edge, other.right_edge)
         a = l1.on_line(other.left_edge, between=True)
@@ -176,7 +203,7 @@ class WallLayer:
         c = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), other.left_edge)
         d = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), other.right_edge)
 
-        x_between = a[0] <= c[0] <= b[0] or c[0] <= a[0] <= d[0] or a[0] <= d[0] <= b[0] or c[0] <= b[0] <= d[0]
+        x_between = a[0] < c[0] < b[0] or c[0] < a[0] < d[0] or a[0] < d[0] < b[0] or c[0] < b[0] < d[0]
         y_same = np.allclose(a[1], [b[1], c[1], d[1]])
 
         aa = abs(a[2] - c[2])

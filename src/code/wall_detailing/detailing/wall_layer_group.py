@@ -62,7 +62,7 @@ class WallLayerGroup:
             others = other.layers.copy()
             for l1 in self.layers:
                 for l2 in others.copy():
-                    if l1.is_touching_at_endpoints(l2):
+                    if l1.is_touching_at_endpoints(l2) or l1.is_overlapping(l2):
                         others.remove(l2)
                         l1.combine(l2)
                         combined = True

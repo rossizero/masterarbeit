@@ -20,6 +20,7 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Win
 from masonry import corner_rep
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
+from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 
 
 class WallDetailer:
@@ -40,7 +41,9 @@ class WallDetailer:
 
         for group in wall_type_groups.values():
             # combine layer_groups if possible
+            wall_num = len(group.layer_groups)
             wall_layer_groups = self.combine_layer_groups(group.layer_groups)
+            print("combined", wall_num, "walls to", len(wall_layer_groups), "walls")
 
             for wall in wall_layer_groups:
                 wall.apply_openings()
@@ -207,7 +210,7 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
-    scenario = OverlappingWalls()
+    scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
