@@ -33,11 +33,26 @@ Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstüc
 Eine solche Beziehung stellen etwa Wandstücke dar, die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Objekte realisiert wurden, eigentlich aber eine Einheit darstellen.
 Daher werden in diesem Schritt alle Wandstücke miteinander verglichen und eventuell kombiniert, sodass jeweils ein gefundes Paar durch ein einzelnes Wandstück representiert wird.
 Um zwei Wandstücke zu kombinieren müssen folgende Eigenschaften gelten:
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}[b]{0.9\columnwidth}
+      \includegraphics[width=\columnwidth]{fig/Real_Combination_Base.png}
+      \caption{Eingabe eines Modells mit 6 Wänden.}
+      \label{fig:basics:blockverband}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.9\columnwidth}
+      \includegraphics[width=\columnwidth]{fig/Real_Combination_Output.png}
+      \caption{Ergebnis mit 71 Ziegeln.}
+      \label{fig:basics:kreuzverband}
+    \end{subfigure}
+    \label{fig:real:combination_example}
+    \caption{Beispiel mit einigen kombinierbaren Wänden.}
+\end{figure}
 
 \begin{enumerate}
     \item Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden. 
     Dies verhindert vor allem das Kombinieren unterschiedlich dicker Wände.
-    \item\label{z_parallel} Die lokalen Z-Achsen beider Wandstücke sind parallel. 
+    \item\label{real:z_parallel} Die lokalen Z-Achsen beider Wandstücke sind parallel. 
     Dies verhindert das Kombinieren unpassend rotierter Wandstücke.
     Die Überprüfung der Parallelität der Z-Achsen beider Wandstücke wird wie folgt durchgeführt:
 
@@ -48,7 +63,7 @@ Um zwei Wandstücke zu kombinieren müssen folgende Eigenschaften gelten:
     \(\vec{v}_{z^1} = q_1 * v_z * q_1^{-1}\) und 
     \(\vec{v}_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Vektoren\grqq{} dieser Rotationen dar.
     Ist nun \(|\vec{v}_{z^1} \cdot \vec{v}_{z^2}| = 1\) gegeben, so sind die lokalen Z-Achsen der Wandstücke gleich oder um exakt 180\degree{} verdreht und damit Parallelität gegeben.
-    \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der X-Achse, ersetzt werden muss.
+    \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{real:z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der X-Achse, ersetzt werden muss.
     \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
     \item Mindestens eine Schicht des einen Wandstücks berührt oder überlappt eine des anderen.
 \end{enumerate}
