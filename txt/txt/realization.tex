@@ -38,12 +38,12 @@ Um zwei Wandstücke zu kombinieren müssen folgende Eigenschaften gelten:
     \begin{subfigure}[b]{0.9\columnwidth}
       \includegraphics[width=\columnwidth]{fig/Real_Combination_Base.png}
       \caption{Eingabe eines Modells mit 6 Wänden.}
-      \label{fig:basics:blockverband}
+      \label{fig:real:combination_example_base}
     \end{subfigure}
     \begin{subfigure}[b]{0.9\columnwidth}
       \includegraphics[width=\columnwidth]{fig/Real_Combination_Output.png}
       \caption{Ergebnis mit 71 Ziegeln.}
-      \label{fig:basics:kreuzverband}
+      \label{fig:real:kreuzcombination_example_solution}
     \end{subfigure}
     \label{fig:real:combination_example}
     \caption{Beispiel mit einigen kombinierbaren Wänden.}
@@ -62,13 +62,23 @@ Um zwei Wandstücke zu kombinieren müssen folgende Eigenschaften gelten:
     Außerdem seien \(q_1\) und \(q_2\) die beiden Rotationen der Wandstücke. Dann stellen 
     \(\vec{v}_{z^1} = q_1 * v_z * q_1^{-1}\) und 
     \(\vec{v}_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Vektoren\grqq{} dieser Rotationen dar.
-    Ist nun \(|\vec{v}_{z^1} \cdot \vec{v}_{z^2}| = 1\) gegeben, so sind die lokalen Z-Achsen der Wandstücke gleich oder um exakt 180\degree{} verdreht und damit Parallelität gegeben.
+    Ist nun \(|\vec{v}_{z^1} \cdot \vec{v}_{z^2}| = 1\) gegeben, so sind die lokalen Z-Achsen der Wandstücke gleich oder um exakt 180\degree{} verdreht und damit Parallelität erfüllt.
     \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{real:z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der X-Achse, ersetzt werden muss.
     \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
-    \item Mindestens eine Schicht des einen Wandstücks berührt oder überlappt eine des anderen.
+    \item\label{real:schichten} Mindestens eine Schicht des einen Wandstücks berührt, überlappt oder befindet sich exakt eine Modulöhe ober- oder unterhalb einer Schicht des anderen Wandstücks.
 \end{enumerate}
 
-TODO: Bilder und Erklärung der verschiedenen Fälle
+In Abbildung~\ref{fig:real:combination_example_base} treten verschiedene Fälle von Wandstücken auf, die miteinander kombiniert werden müssen.
+TODO: Bild Nummerieren
+Fall Überlappung und komplette Überlappung
+Fall Übereinander (TODO, modell nochmal anpassen...)
+Fall Nebeneinader
+Fall unten rechts -> kein Fall
+Während dem Kombinieren von zwei Wänden, wird ein Wandstück schichtweise in das andere überführt.
+Dabei werden alle Schichten paarweise miteinader verglichen, um diejenigen Paare zu finden, die die Eigenschaften aus Punkt~\ref{real:schichten} erfüllen.
+Ein solches Paar wird dann wie folgt miteinander verschmolzen:
+TODO erklärung Code
+
 Steht ein Wandstück in X-Richtung versetzt auf einem anderem, so ist es notwendig diesen Versatz während dem nachfolgenden Detailing zu berücksichtigen.
 Ignoriert man diesen Versatz kann das zu den in Abbildung TODO gezeigten Fehlern führen.
 Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert durch die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes und der lokalen X-Koordinate der zu betrachtenden Schicht.
