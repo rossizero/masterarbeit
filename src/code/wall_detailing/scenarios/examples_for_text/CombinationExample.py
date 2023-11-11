@@ -27,10 +27,10 @@ class CombinationExampleForText(Scenario):
                              quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w3")
 
-        w4 = Wall.make_wall(7, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0 + 3.5]),
+        w4 = Wall.make_wall(7, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0 + 4.0]),
                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w4")
-        w4_Same = Wall.make_wall(7, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0 + 3.5]),
+        w4_Same = Wall.make_wall(7, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0 + 4.0]),
                                  quaternion.from_euler_angles(0, 0, 0 * math.pi),
                                  ifc_wall_type="test", name="w4_same")
         return [w0, w1, w2, w3, w4, w4_Same]
