@@ -55,17 +55,17 @@ Um zwei Wandstücke zu sinvoll kombinieren zu könne, müssen folgende Eigenscha
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Base_labeled.png}
-  \caption{Eingabe eines Modells mit 6 Wänden des selben Typs, deren Mittelpunkte alle auf einer Ebene liegen.}
+  \caption{Eingabe eines Modells mit 7 Wänden des selben Typs, deren Mittelpunkte alle auf einer Ebene liegen.}
   \label{fig:real:combination_example_base}
 \end{figure}
 
 In Abbildung~\ref{fig:real:combination_example_base} treten verschiedene Konstellationen von Wandstücken auf, die miteinander kombiniert werden müssen.
 Das aus Wandstück 1 und 2 gebildete Paar erfüllt alle oben genannten Eigenschaften und weist eine Teil-Überlappung auf.
 Somit müssen beide Wandstücke miteinader kombiniert werden.
-Den obersten Bereich füllen sowohl Wandstück 5 als auch Wandstück 6 auf, sodass dort eine komplette Überlappung vorliegt.
+Den obersten Bereich füllen sowohl Wandstück 5 als auch Wandstück 6, sodass dort eine komplette Überlappung vorliegt.
 Auch diese beiden Wandstücke werden kombiniert, wobei dabei im Prinzip einfach eines verworfen wird.
-Zusätzlich muss dieser Bereich mit Wandstück 2 kombiniert werden, da die beiden Bereiche sich an Ober- und Unterkante berühren.
-Einen weiteren Fall stellen seitliche nicht überlappende Berührungen dar, wie sie zwischen Wandstück 2 und 3 zu sehen ist.
+Zusätzlich muss dieser Bereich, wie auch Wandstück 7, mit Wandstück 2 kombiniert werden, da die beiden Paare sich an Ober- und Unterkante berühren.
+Einen weiteren Fall stellen seitliche, nicht überlappende Berührungen dar, wie sie zwischen Wandstück 2 und 3 zu sehen ist.
 Auch für dieses Paar sind alle Voraussetzungen zur Fusion erfüllt.
 Lediglich Wandstück 4 muss nicht mit dem Rest vereint werden, da dafür kein Paar existiert, das die obrigen Eigenschaften erfüllt.
 Anhand von Abbildung~\ref{fig:real:combination_example_solution_xoffset} kann man erkennen, dass Wandstück 4 im weiteren Verlauf des Detailings tatsächlich unabhängig betrachtet werden kann. 
@@ -85,19 +85,21 @@ TODO erklärung Code
 \begin{figure}[hb!]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Output_No_XOffsetpng.png}
-  \caption{Ergebnis mit ignorierteM \textit{x\_offset}.}
+  \caption{Ergebnis mit ignoriertem \textit{x\_offset}.}
   \label{fig:real:combination_example_solution_no_xoffset}
 \end{figure}
 
 Steht ein Wandstück in X-Richtung versetzt auf einem anderem, so ist es notwendig diesen Versatz während dem nachfolgenden Detailing zu berücksichtigen.
-Ignoriert man dies, kann das zu den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlern innerhalb des Mauerwerksverbands und damit ebenfalls zu Verletzungen des vorgeschriebenen Überbindemaßes führen (siehe Abschnitt~\ref*{basics:Mauerwerksverband}).
+Ignoriert man dies, kann das zu den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlern (zum Beispiel zwischen Wandstück 2 und 7) innerhalb des Mauerwerksverbands und damit ebenfalls zu Verletzungen des vorgeschriebenen Überbindemaßes führen (siehe Abschnitt~\ref*{basics:Mauerwerksverband}).
 Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert durch die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes und der lokalen X-Koordinate der zu betrachtenden Schicht.
 Der daraus resultierende Wert wird später dazu verwendet den anzuwendenden Mauerwerksverband erst an der passenden Stelle zu beginnen.
 Dadurch erzielt man einen einheitlichen Verband über das gesamte Wandstück und verhindert den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlerfall.
-Eine weitere Eigenschaft, die aus dem Kombinieren mehrerer Wandstücke entstehen kann, ist das vorhandensein unterbrochender Schichten beziehungsweise mehrerer Schichten auf einer Höhe innerhalb eines Wandstückes.
+Eine weitere Eigenschaft, die aus dem Kombinieren mehrerer Wandstücke entstehen kann, ist das vorhandensein unterbrochender Schichten oder, anders ausgedrückt, mehrerer Schichten auf einer Höhe innerhalb des resultierenden Wandstückes.
+Dies ist ebenfalls in Abbildung~\ref{fig:real:combination_example_base} zu sehen. 
+Zwischen drei Schichten des Bereichs der Wandstücke 5 und 6 und des Wandstücks 7 ist eine Lücke.
 Durch das Einbeziehen des \textit{x\_offset} können derartige Situationen jedoch ebenfalls gelöst werden, da für jedes Teilstück einer Schicht ein eigener \textit{x\_offset} berechnet wird.
 
-Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglichen Wandstücke aus dem Modell in Abbildung~\ref{fig:real:combination_example_base} von 6 auf 2.
+Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglichen Wandstücke aus dem Modell in Abbildung~\ref{fig:real:combination_example_base} von 7 auf 2.
 
 \subsubsection{Beziehungen finden}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
