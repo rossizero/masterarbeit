@@ -42,10 +42,13 @@ Um zwei Wandstücke zu sinvoll kombinieren zu könne, müssen folgende Eigenscha
     Die Überprüfung der Parallelität der Z-Achsen beider Wandstücke wird wie folgt durchgeführt:
 
     Sei \(\vec{v}_z = {[0, 0, 1]}^T\)
-    die Z-Achse und \(v_z = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
+    die Z-Achse und \(v_z = (v_w, v_x, v_y, v_z) = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
     Außerdem seien \(q_1\) und \(q_2\) die beiden Rotationen der Wandstücke. Dann stellen 
-    \(\vec{v}_{z^1} = q_1 * v_z * q_1^{-1}\) und 
-    \(\vec{v}_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Vektoren\grqq{} dieser Rotationen dar.
+    \(v_{z^1} = q_1 * v_z * q_1^{-1}\) und 
+    \(v_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Anteile\grqq{} dieser Rotationen dar.
+    Daraus ergeben sich die \glqq{}Z-Vektoren\grqq{} wie folgt: 
+    \(\vec{v}_{z^1} = {[v_{z^1_x}, v_{z^1_y}, v_{z^1_z}]}^T\) und
+    \(\vec{v}_{z^2} = {[v_{z^2_x}, v_{z^2_y}, v_{z^2_z}]}^T\).
     Ist nun \(|\vec{v}_{z^1} \cdot \vec{v}_{z^2}| = 1\) gegeben, so sind die lokalen Z-Achsen der Wandstücke gleich oder um exakt 180\degree{} verdreht und damit Parallelität erfüllt.
     \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{real:z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der X-Achse, ersetzt werden muss.
     \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
