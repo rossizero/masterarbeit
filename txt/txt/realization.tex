@@ -97,7 +97,7 @@ Ein solches Paar wird dann wie folgt miteinander verschmolzen:
     total_length = max_x - min_x
 
     # calculate the center of the resulting layer
-    left = a1 if a1[0] < a2[0] else a2
+    left = min([a1, a2, b1, b2], key=lambda x: x[0])
     local_center = left.copy()
     local_center[0] += total_length / 2.0
 

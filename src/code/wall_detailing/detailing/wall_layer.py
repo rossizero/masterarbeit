@@ -45,7 +45,7 @@ class WallLayer:
             b2 = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), b2)
             total_length = max(a1[0], b1[0], a2[0], b2[0]) - min(a1[0], b1[0], a2[0], b2[0])
 
-            left = a1 if a1[0] < a2[0] else a2
+            left = min([a1, a2, b1, b2], key=lambda x: x[0])
             local_mid = left.copy()
             local_mid[0] += total_length / 2.0
 
