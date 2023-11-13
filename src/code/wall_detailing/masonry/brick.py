@@ -1,3 +1,4 @@
+import json
 import math
 from enum import Enum, unique
 from typing import List
@@ -5,7 +6,7 @@ from typing import List
 import numpy as np
 import quaternion
 
-from OCC.Core.BRepBndLib import brepbndlib_Add, brepbndlib
+from OCC.Core.BRepBndLib import brepbndlib
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
@@ -309,6 +310,9 @@ class Brick:
         relative_point = quaternion.rotate_vectors(self.orientation.inverse(), relative_point)
         return self.__brick_information.is_inside(relative_point)
 
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+
 
 def calculate_neighborhood(bricks: List[Brick], grid: np.array):
     """
@@ -323,8 +327,7 @@ def calculate_neighborhood(bricks: List[Brick], grid: np.array):
                 for pos in neighbor_positions[neighbor_key]:
                     if other.is_inside(pos):
                         opp = Neighbor.opposite(neighbor_key)
-                        
+
                         brick.neighbors[neighbor_key].add(other)
                         other.neighbors[opp].add(brick)
         s += len(brick.all_neighbors)
-    print("neighbours: ", s)

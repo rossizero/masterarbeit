@@ -209,6 +209,18 @@ class WallDetailer:
             stl_export = StlAPI_Writer()
             print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
+    def export_bricks_to_json(self, bricks: [Brick], path: str):
+        """
+        Exports the bricks to a json file
+        """
+        import json
+
+        bricks_dict = {}
+        for b in bricks:
+            bricks_dict[b.id] = b.toJSON()
+        with open(path, 'w') as outfile:
+            json.dump(bricks_dict, outfile, indent=4)
+
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
@@ -222,5 +234,5 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
-
+    wall_detailer.export_bricks_to_json(bb, "output.json")
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
