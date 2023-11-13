@@ -233,7 +233,7 @@ class Bond(ABC):
 
         if leftover_left > 0.0 and fill_left:
             tf = Transformation(MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([1, 0, 1])))
-            tf.module = BrickInformation(leftover_left, width, self.module.height)
+            tf.module = BrickInformation(leftover_left, width, self.module.height, self.module.grid)
             if leftover_left < width:
                 tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
             tf.set_mask_multiplier(1, 1, layer)
@@ -242,7 +242,7 @@ class Bond(ABC):
         if leftover_right > 0.0 and fill_right:
             tf = Transformation(
                 MaskedArray(value=np.array([length - leftover_right, 0, self.h]), mask=np.array([1, 0, 1])))
-            tf.module = BrickInformation(leftover_right, width, self.module.height)
+            tf.module = BrickInformation(leftover_right, width, self.module.height, self.module.grid)
             if leftover_right < width:
                 tf.rotation = MaskedArray(offset=np.array([0, 0, math.pi / 2]))
             tf.set_mask_multiplier(1, 1, layer)

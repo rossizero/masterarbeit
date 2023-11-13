@@ -32,6 +32,7 @@ class WallLayer:
         local_mid = global_mid - self.parent.get_translation()
         local_mid = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_mid)
 
+        # if not just touching but overlapping
         if self.is_overlapping(other):
             a1 = self.get_left_edge(relative=True)
             b1 = self.get_right_edge(relative=True)
@@ -49,8 +50,8 @@ class WallLayer:
             local_mid = left.copy()
             local_mid[0] += total_length / 2.0
 
-        self.translation = local_mid
-        self.length = total_length
+        self.translation = np.round(local_mid, decimals=6)
+        self.length = np.round(total_length, 6)
 
 
 
