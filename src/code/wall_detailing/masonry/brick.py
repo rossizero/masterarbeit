@@ -1,5 +1,5 @@
 import math
-from enum import Enum
+from enum import Enum, unique
 from typing import List
 
 import numpy as np
@@ -12,13 +12,26 @@ from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 from OCC.Core.Bnd import Bnd_Box
 
 
-class Neighbor(Enum):
+@unique
+class Neighbor(str, Enum):
     LEFT = "left"
     RIGHT = "right"
     FRONT = "front"
     BACK = "back"
     TOP = "top"
     BOTTOM = "bottom"
+
+    @staticmethod
+    def opposite(neighbor: 'Neighbor'):
+        tmp = {
+            Neighbor.LEFT: Neighbor.RIGHT,
+            Neighbor.RIGHT: Neighbor.LEFT,
+            Neighbor.FRONT: Neighbor.BACK,
+            Neighbor.BACK: Neighbor.FRONT,
+            Neighbor.TOP: Neighbor.BOTTOM,
+            Neighbor.BOTTOM: Neighbor.TOP
+        }
+        return tmp[neighbor]
 
 
 class BrickInformation:
@@ -297,21 +310,21 @@ class Brick:
         return self.__brick_information.is_inside(relative_point)
 
 
-def calculate_neighbourhood(bricks: List[Brick], grid: np.array):
+def calculate_neighborhood(bricks: List[Brick], grid: np.array):
     """
     calculates all neighbours of each brick using the given grid as step size
     """
     s = 0
-    for brick in bricks:
+    for i, brick in enumerate(bricks):
         neighbor_positions = brick.get_neighbour_positions(grid)
 
-        for other in bricks:
-            if brick == other:
-                continue
-
+        for other in bricks[i + 1:]:
             for neighbor_key in neighbor_positions.keys():
                 for pos in neighbor_positions[neighbor_key]:
                     if other.is_inside(pos):
+                        opp = Neighbor.opposite(neighbor_key)
+                        
                         brick.neighbors[neighbor_key].add(other)
+                        other.neighbors[opp].add(brick)
         s += len(brick.all_neighbors)
-    print("sum", s)
+    print("neighbours: ", s)

@@ -221,6 +221,6 @@ if __name__ == "__main__":
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
-    brick.calculate_neighbourhood(bb, grid=np.array([1, 1, 0.5]))
+    brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
 
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
