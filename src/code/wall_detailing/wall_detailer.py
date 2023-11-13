@@ -18,6 +18,7 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Win
     SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners, \
     OverlappingWalls
 from masonry import corner_rep
+from wall_detailing.masonry import brick
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
@@ -137,7 +138,7 @@ class WallDetailer:
 
     def detail_corner(self, corner: Corn, bond: Bond) -> List[Brick]:
         """
-        Fills a Corner with bricks using the set bond
+        Fills a Corner with bricks using the given bond
         :param corner: Corner we want to be filled
         :param bond: Bond we want to use
         :return: List of brick objects
@@ -209,7 +210,8 @@ class WallDetailer:
 
 
 if __name__ == "__main__":
-    brick_information = {"test": [BrickInformation(2, 1, 0.5), BrickInformation(1, 0.5, 0.5)]}
+    brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
+                                  BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
     scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
 
@@ -218,5 +220,6 @@ if __name__ == "__main__":
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
+    #brick.calculate_neighbourhood(bb, grid=np.array([1, 1, 0.5]))
 
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])

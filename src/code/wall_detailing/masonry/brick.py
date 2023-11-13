@@ -1,3 +1,6 @@
+import math
+from typing import List
+
 import numpy as np
 import quaternion
 
@@ -12,13 +15,16 @@ class BrickInformation:
     """
     This class stores simple information about a brick:
     width, length and height where:
-     length describes the scale along the x axis and length >= width
-     width describes the scale along the y axis and width <= length
+     length describes the scale along the x-axis and length >= width,
+     width describes the scale along the y-axis and width <= length,
      height describes the scale along the z axis
+    grid: rastermaß
     """
-    def __init__(self, length, width, height):
+
+    def __init__(self, length, width, height, grid=np.array):
         self.length, self.width = max(length, width), min(length, width)
         self.height = height
+        self.grid = grid
 
     def volume(self):
         """
@@ -60,7 +66,7 @@ class BrickInformation:
         return [length, width, height]
 
     def __eq__(self, other):
-        if type(other) == BrickInformation:
+        if other is BrickInformation:
             return other.length == self.length and other.width == self.width and other.height == self.height
         return False
 
@@ -73,6 +79,7 @@ class Brick:
     position is the translation of the brick
     global rotation is the rotation around the origin after translation happened
     """
+
     def __init__(self, brick_information: BrickInformation):
         self.__brick_information = brick_information
         self.length = self.__brick_information.length
@@ -81,17 +88,19 @@ class Brick:
 
         self.offset = 0.0325
 
-        self.shape = BRepPrimAPI_MakeBox(gp_Pnt(self.offset, self.offset, self.offset), self.length - self.offset * 2, self.width - self.offset * 2,
-                                    self.height - self.offset * 2).Shape()
+        self.shape = BRepPrimAPI_MakeBox(gp_Pnt(self.offset, self.offset, self.offset),
+                                         self.length - self.offset * 2,
+                                         self.width - self.offset * 2,
+                                         self.height - self.offset * 2).Shape()
 
     @property
-    def position(self):
+    def position(self) -> np.array:
         return np.array([self.shape.Location().Transformation().TranslationPart().X(),
                          self.shape.Location().Transformation().TranslationPart().Y(),
                          self.shape.Location().Transformation().TranslationPart().Z()])
 
     @property
-    def orientation(self):
+    def orientation(self) -> np.quaternion:
         return np.quaternion(self.shape.Location().Transformation().GetRotation().W(),
                              self.shape.Location().Transformation().GetRotation().X(),
                              self.shape.Location().Transformation().GetRotation().Y(),
@@ -183,3 +192,80 @@ class Brick:
     is the same as:
         b.rotate_around(corner.get_rotation(), vec)
     """
+
+    def get_neighbour_positions(self, grid: np.array):
+        pos = self.position + grid / 2.0  # bottom front left corner + half of grid size
+
+        l = math.floor(self.length / grid[0])
+        w = math.floor(self.width / grid[1])
+        h = math.floor(self.height / grid[2])
+
+        right_v = quaternion.rotate_vectors(self.orientation, np.array([1, 0, 0]))  # x dir
+        back_v = quaternion.rotate_vectors(self.orientation, np.array([0, 1, 0]))  # y dir
+        top_v = quaternion.rotate_vectors(self.orientation, np.array([0, 0, 1]))  # z dir
+
+        ret = []
+
+        for i in range(l):
+            front_face = pos.copy() + back_v * grid[1]  # one step in front of bricks y
+            back_face = pos.copy() - back_v * grid[1] * w  # all steps behind bricks y
+            bottom_face = pos.copy() - top_v * grid[2]  # one step below bricks z
+            top_face = pos.copy() + top_v * grid[2] * h  # all steps above bricks z
+
+            front_face += right_v * i * grid[0]  # move in x dir
+            back_face += right_v * i * grid[0]  # move in x dir
+            bottom_face += right_v * i * grid[0]  # move in x dir
+            top_face += right_v * i * grid[0]  # move in x dir
+
+            for j in range(h):
+                p1 = front_face.copy() + top_v * grid[2] * j  # move in z dir
+                p2 = back_face.copy() + top_v * grid[2] * j  # move in z dir
+                ret.append(p1)
+                ret.append(p2)
+
+            for j in range(w):
+                p1 = bottom_face.copy() - back_v * grid[1] * j  # move in y dir
+                p2 = top_face.copy() - back_v * grid[1] * j  # move in y dir
+                ret.append(p1)
+                ret.append(p2)
+
+        for i in range(w):
+            left_face = pos.copy() - right_v * grid[0]  # one step left of bricks x
+            right_face = pos.copy() + right_v * grid[0] * l  # all steps right of bricks x
+
+            for j in range(h):
+                p1 = left_face.copy() + top_v * grid[2] * j  # move in z dir
+                p2 = right_face.copy() + top_v * grid[2] * j  # move in z dir
+                ret.append(p1)
+                ret.append(p2)
+
+        return ret
+
+    def is_inside(self, position: np.array):
+        """
+        :param position: position to check
+        :return: true if the given position is inside the brick
+        """
+        relative_point = position - self.position
+        relative_point = quaternion.rotate_vectors(self.orientation.inverse(), relative_point)
+
+        return (0 <= relative_point[0] <= self.length and
+                0 <= relative_point[1] <= self.width and
+                0 <= relative_point[2] <= self.height)
+
+
+def calculate_neighbourhood(bricks: List[Brick], grid: np.array):
+    """
+    calculates all neighbours of each brick using the given grid as step size
+    """
+    for brick in bricks:
+        neighbor_positions = brick.get_neighbour_positions(grid)
+
+        for other in bricks:
+            if brick == other:
+                continue
+
+            for pos in neighbor_positions:
+                if other.is_inside(pos):
+                    pass
+                    # brick.neighbours.append(other)
