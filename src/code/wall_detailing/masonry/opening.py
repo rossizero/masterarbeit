@@ -20,7 +20,7 @@ class Opening:
         self.length = dimensions[0]
         self.width = dimensions[1]
         self.height = dimensions[2]
-        self.lintel = BrickInformation(self.length + 1, 1.0, 0.5)
+        self.lintel = BrickInformation(self.length + 1, 1.0, 0.5, [1, 1, 0.5])
 
     def get_rotation(self):
         return self.rotation

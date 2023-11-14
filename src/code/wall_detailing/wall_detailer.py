@@ -18,6 +18,7 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Win
     SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners, \
     OverlappingWalls
 from masonry import corner_rep
+from wall_detailing.export.BrickExporter import BrickExporter
 from wall_detailing.masonry import brick
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
@@ -209,24 +210,12 @@ class WallDetailer:
             stl_export = StlAPI_Writer()
             print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
 
-    def export_bricks_to_json(self, bricks: [Brick], path: str):
-        """
-        Exports the bricks to a json file
-        """
-        import json
-
-        bricks_dict = {}
-        for b in bricks:
-            bricks_dict[b.id] = b.toJSON()
-        with open(path, 'w') as outfile:
-            json.dump(bricks_dict, outfile, indent=4)
-
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
     scenario = CombinationExampleForText()
-    #scenario = DoppelEck2_Closed_TJoint()
+    scenario = DoppelEck2_Closed_TJoint()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
@@ -234,5 +223,5 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
-    wall_detailer.export_bricks_to_json(bb, "output.json")
+    BrickExporter(bb).export_to_json("output_house.json")
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])

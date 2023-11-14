@@ -118,6 +118,7 @@ class Brick:
         self.length = self.__brick_information.length
         self.width = self.__brick_information.width
         self.height = self.__brick_information.height
+        self.id = None
 
         self.offset = 0.0325
 
@@ -309,9 +310,6 @@ class Brick:
         relative_point = position - self.position
         relative_point = quaternion.rotate_vectors(self.orientation.inverse(), relative_point)
         return self.__brick_information.is_inside(relative_point)
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 
 def calculate_neighborhood(bricks: List[Brick], grid: np.array):
