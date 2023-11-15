@@ -1,1 +1,35 @@
 \chapter{Konzept}
+In diesem Kapitel werden \dots
+
+\section{Modellierung}
+Im Normalfall sind beim Planungsprozess eines Gebäudes oder anderer Infrastruktur eine Vielzahl an Experten aus unterschiedlichen Disziplinen beteiligt.
+Ein Ziel dieser Arbeit ist es allerdings eine intuitive Konstruktionsplanung zu ermöglichen, sodass eine Einzelperson mit relativ geringer Einlern- und Modellierungszeit in der Lage ist ein Gebäude zu entwerfen.
+Dieser Entwurf muss dennoch alle notwendigen Informationen für die anschließende Bauplandeduktion enthalten, ohne dass das Einpflegen dieser Daten viel Fachwissen voraussetzt.
+
+Oftmals lässt sich die Komplexität einer Sache oder eines Vorgehens durch die Vorgabe von Einschränkungen reduzieren.
+Dabei ist es allerdings wichtig diese Einschränkungen so zu wählen, dass die damit erzielten Ergebnisse dennoch von Nutzen sind.
+Im Fall von Gebäude- oder besser Gebilde-Konstruktionen existieren bereits einige Beispiele, die durch Einschränkungen so stark vereinfacht werden, dass sogar Kinder damit umgehen können.
+Das wohl bekannteste ist das Lego System (siehe Kapitel~\ref{basics:lego}).
+Neben dessen nützlichen Steckverbindungen, die es ermöglichen ohne Anwenden von Klebstoff oder Schrauben Steine aneinander zu befestigen, ist für diese Arbeit das dadurch vorgegebene Raster ein interessantes Konzept zur Vereinfachung der Modellierung von Gebäuden.
+In Kapitel~\ref{basics: Mauerwerksbau} wurden auch schon die Begriffe \textit{Baunennmaß} und des \textit{Baurichtmaß} eingeführt und das oktametrischen Maßsystem vorgestellt.
+Dies entspricht im Prinzip ebenfalls einem Raster, das aber in Realität durch die Möglichkeit des Zerschneidens von Bausteinen nicht zwingend eingehalten werden muss.
+Da das Vorgeben eines Rasters, dem sowohl die zu verwendenden Bausteine, als auch (im Fall des Lego Systems) deren Platzierung folgen müssen eine Einschränkung darstellt, die im Einklang mit der Intiution vieler Menschen steht, wurde dies in das Modellierungskonzept dieser Arbeit integriert.
+Das Vorgeben eines einzigen, fest definierten Rasters stellt allerdings eine zu große Einschränkung dar, weshalb das Definieren verschiedener Rastergrößen möglich sein muss.
+So können sowohl Modelle, die genau dem Lego System oder dem oktametrischen Maßsystem entsprechen, erstellt werden, als auch beliebig Andere.
+
+Die Modellierungsumgebung kann mithilfe der Rasterinformationen eines Objektes für dessen korrekte Platzierung, Skalierung und Rotierung sorgen, indem eine solche Transformation auf die nächstliegende Größenordnung des Rasters gerundet wird.
+Im Beispiel eines Rasters von \([1.0m, 1.0m, 1.0m]\) würde demnach ein auf \([0.9m, -0.7m, 0.1m]\) zu translatierendes Objekt an die Position \([1.0m, -1.0m, 0.0m]\) versetzt werden.
+Da aber gewünschte valide Rotationen nicht aus einem derart vorgegebenen Raster interpretierbar sind, kann diese zusätzliche Information mithilfe eines kleinstmöglichen Winkelschritts angegeben werden.
+In den Modellen der Fallstudien aus Kapitel~\ref{scenarios} werden zum Beispiel ausschließlich Rotationen eines Vielfachen von 90\degree{} verwendet, was neben den Rastern ebenfalls hinterlegt wurde.
+Damit kann die Modellierungsumgebung auch den Rotationen durch Runden eine Art Raster aufzwingen.
+
+TODO Definition Wandstück, Wandtyp
+Dann vlt Ecken und so ansprechen (?)
+Öffnungen ansprechen (vlt mit kleinem Diagramm?)
+
+\section{Wall Detailing}
+Cut and Paste Definition Wall Detailing
+blabla
+
+\section{Regelbasierte Bauplangenerierung}
+blabla
