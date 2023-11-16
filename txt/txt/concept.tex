@@ -53,7 +53,9 @@ Diese stellen wichtige Elemente bei der Planung von Gebäuden dar.
 Nur so ist es möglich abgeschlossene und aneinanderhängende Räume zu erstellen.
 Eine weitere, nicht ganz so offensichtliche Beziehung besteht zwischen zwei Wandstücken, die in Verlängerung zueinander stehen, also gemeinsam einen größeren Wandbereich abdecken.
 Diese Beziehung wird nachfolgend \textit{Brigitte} genannt.
-Es werden nun für jede dieser vier Beziehungen Eigenschaften aufgezeigt anhander derer man diese in einer Menge an Wandstücken finden und unterscheiden kann.
+Bei allen vier Beziehungen handelt es sich Sonderfällle, für welche sich der Mauerwerksverband nicht ohne weiteres anwenden lässt, sondern teilweise explizit vorgegebene Legepläne angewandt werden müssen.
+Darum ist es notwendig diese Bereiche ausfindig zu machen und voneinander unterscheiden zu können.
+Es werden nun für jede dieser Beziehungen Eigenschaften aufgezeigt anhand derer man diese in einer Menge an Wandstücken erkennen kann.
 
 \begin{figure}[ht]
     \centering
@@ -64,7 +66,7 @@ Es werden nun für jede dieser vier Beziehungen Eigenschaften aufgezeigt anhande
 
 \paragraph*{Brigitten}\label{concept:combination_properties} sind alle Wandstücke,  die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Wandstücke realisiert wurden, eigentlich aber eine Einheit darstellen. 
 Es ist notwendig alle Wandstücke zu identifizieren, die einen zusammenhängenden Wandbereich bilden, um den gewählten Mauerwerksverband korrekt über alle Wandstücke hinweg anzuwenden.
-Andernfalls würde jedes Wandstück den Mauerwerksverband unabhängig seiner Nachbarn neu beginnen und dadurch sehr wahrscheinlich fälschlicherweise unterbrechen.
+Andernfalls würde jedes Wandstück den Mauerwerksverband unabhängig seiner Nachbarn neu beginnen und ihn dadurch zwischen Wandstückübergängen häufig fälschlicherweise unterbrechen.
 Ein umfangreiches Beispiel ist in Abbildung~\ref*{fig:concept:combination_example_base} dargestellt.
 Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf folgende Eigenschaften getestet werden:
 
@@ -89,11 +91,29 @@ Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf f
     \item\label{concept:schichten} Es liegt eine Berührung oder gar eine Überlappung vor.
 \end{enumerate}
 
-Insgesamt bilden in dem Beispiel in Abbildung~\ref*{fig:concept:combination_example_base} demnach alle Wandstücke exklusive Wandstück Nummer 4 eine Einheit, die alle Punkte erfüllt.
+Insgesamt bilden in dem Beispiel in Abbildung~\ref{fig:concept:combination_example_base} demnach alle Wandstücke mit Ausnahme von Wandstück Nummer 4 eine Einheit, die alle obigen Eigenschaften erfüllt.
 Dies sind in der Tat all die Wandstücke, die den Start des gewählten Mauerwerksverbands ihren Nachbarn anpassen müssen, sodass sich der Verband gleichmäßig über alle Wandstücke erstreckt.
 
 
-\paragraph*{Ecken} 
+\paragraph*{Ecken}
+Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen (wie etwa dem in Abschnitt~\ref{basics:Mauerwerksverband} genannten Überbindemaß) einzuhalten.
+Deswegen existieren für jeden Mauerwerksverband eigene spezielle Eck- und Kreuzungslegepläne, die an diesen Stellen eingefügt werden müssen.
+Es werden wie oben nur diejenigen Wandstücke miteinander verglichen, die mit dem selben Wandtyp annotiert wurden und das gleiche Modul verwenden.
+Da die drei Beziehungen sich stark ähneln, besitzen sie einige geteilte Eigenschaften:
+\begin{enumerate}
+    \item Die lokalen Z-Achsen beider Wandstücke sind parallel. Das Vorgehen zur Überprüfung ist dasselbe wie in Abschnitt~\ref{real:combination}.
+    \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
+    \item Mindestens eines der beiden Wandstücke endet auf einem anderen, sodass mindestens eine Schicht das andere Wandstück direkt berührt.
+\end{enumerate}
+Sind diese Eigenschaften erfüllt, werden für jede durch die einzelnen Schichten der Wandstücke vorgegebene Höhe Schnittpunkte zwischen den beiden Wandstücken errechnet.
+Im Falle einer einfachen Ecke oder einer T-Kreuzung, existiert nur ein einzelnes Paar an Wandstücken, deren Schichten sich in jedem Höhenschritt des Moduls im Mittelpunkt der Ecke schneiden.
+Der Unterschied ist lediglich die Stelle des Schnittpunkts relativ zu den beiden Wandstücken.
+Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als Wandbreite/2 an einer der beiden Außenkanten handelt es sich um eine Ecke.
+Falls der Schnittpunkt bei einem der beiden Wandstücke allerdings mindestens Wandbreite/2 innerhalb des Wandstücks liegt, so handelt es sich um eine T-Kreuzung.
+Werden für zwei unterschiedliche Paare die selben Schnittpunkte errechnet, so kann es sich entweder um eine mit drei Wandstücken modellierte T-Kreuzung oder X-Kreuzung handeln.
+Teilen sich zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetzungen für eine eine X-Kreuzung gegeben.
+Liegt der Schnittpunkt des Wandstück-Paares mindesten Wandbreite/2 innerhalb beider Wandstücke, so handelt es sich um eine X-Kreuzung - modelliert aus zwei sich schneidenden Wandstücken. 
+TODO Bilder
 
 \paragraph*{T-Kreuzungen} 
 
