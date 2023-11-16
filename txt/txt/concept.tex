@@ -40,7 +40,7 @@ Dadurch ist es möglich, verschiedene Arten von Wänden innerhalb eines Gebäude
 Diese Informationen werden später dafür verwendet, die durch das Wandstück abgesteckten Dimensionen sinnvoll mit Bausteinen zu füllen.
 
 
-\subsection*{Definition Mauerwerksverband}
+\subsection*{Definition Mauerwerksverband}\label{concept:mauerwerksverband}
 
 
 \subsection*{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
@@ -51,8 +51,8 @@ Zur Modellierung von Gebäuden sind vor allem folgende Beziehungen unabdingbar:
 \textit{Ecken}, \textit{T-Kreuzungen} und \textit{X-Kreuzungen}.
 Diese stellen wichtige Elemente bei der Planung von Gebäuden dar. 
 Nur so ist es möglich abgeschlossene und aneinanderhängende Räume zu erstellen.
-Eine weitere, nicht ganz so offensichtliche Beziehung besteht zwischen zwei Wandstücken, die in Verlängerung zueinander stehen, also gemeinsam einen größeren Wandbereich abdecken.
-Diese Beziehung wird nachfolgend \textit{Brigitte} genannt.
+Eine weitere, nicht ganz offensichtliche Beziehung besteht zwischen zwei Wandstücken, die in Verlängerung zueinander stehen, also gemeinsam einen größeren Wandbereich abdecken.
+Diese Beziehung wird nachfolgend \textit{Wandstückverbund} genannt.
 Bei allen vier Beziehungen handelt es sich Sonderfällle, für welche sich der Mauerwerksverband nicht ohne weiteres anwenden lässt, sondern teilweise explizit vorgegebene Legepläne angewandt werden müssen.
 Darum ist es notwendig diese Bereiche ausfindig zu machen und voneinander unterscheiden zu können.
 Es werden nun für jede dieser Beziehungen Eigenschaften aufgezeigt anhand derer man diese in einer Menge an Wandstücken erkennen kann.
@@ -64,7 +64,7 @@ Es werden nun für jede dieser Beziehungen Eigenschaften aufgezeigt anhand derer
     \label{fig:concept:combination_example_base}
 \end{figure}
 
-\paragraph*{Brigitten}\label{concept:combination_properties} sind alle Wandstücke,  die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Wandstücke realisiert wurden, eigentlich aber eine Einheit darstellen. 
+\paragraph*{Wandstückverbände}\label{concept:combination_properties} sind alle Wandstücke,  die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Wandstücke realisiert wurden, eigentlich aber eine Einheit darstellen. 
 Es ist notwendig alle Wandstücke zu identifizieren, die einen zusammenhängenden Wandbereich bilden, um den gewählten Mauerwerksverband korrekt über alle Wandstücke hinweg anzuwenden.
 Andernfalls würde jedes Wandstück den Mauerwerksverband unabhängig seiner Nachbarn neu beginnen und ihn dadurch zwischen Wandstückübergängen häufig fälschlicherweise unterbrechen.
 Ein umfangreiches Beispiel ist in Abbildung~\ref*{fig:concept:combination_example_base} dargestellt.
@@ -95,29 +95,34 @@ Insgesamt bilden in dem Beispiel in Abbildung~\ref{fig:concept:combination_examp
 Dies sind in der Tat all die Wandstücke, die den Start des gewählten Mauerwerksverbands ihren Nachbarn anpassen müssen, sodass sich der Verband gleichmäßig über alle Wandstücke erstreckt.
 
 
-\paragraph*{Ecken}
-Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen (wie etwa dem in Abschnitt~\ref{basics:Mauerwerksverband} genannten Überbindemaß) einzuhalten.
-Deswegen existieren für jeden Mauerwerksverband eigene spezielle Eck- und Kreuzungslegepläne, die an diesen Stellen eingefügt werden müssen.
-Es werden wie oben nur diejenigen Wandstücke miteinander verglichen, die mit dem selben Wandtyp annotiert wurden und das gleiche Modul verwenden.
-Da die drei Beziehungen sich stark ähneln, besitzen sie einige geteilte Eigenschaften:
+\paragraph*{Ecken, T-Kreuzungen und X-Kreuzungen}
+Wie schon zu Beginn dieses Abschnitts vorweggenommen, existieren für jeden Mauerwerksverband und je nach verwendetem Modul eigene Lösungen für Eck- und Kreuzungslegepläne, an welchen sich Maurer orientieren.
+Ein paar Beispiele hierfür wurden schon in Kapitel~\ref{basics:mauerwerk_eckloesung} gegeben.
+Der Grund dafür ist die Komplexität in diesen Bereichen die vorgeschriebenen Normen (wie etwa dem in Abschnitt~\ref{basics:Mauerwerksverband} genannten Überbindemaß) einzuhalten.
+Diese speziellen Pläne werden dann an den notwendigen Stellen angewandt - meistens bevor ein dazwischenliegender gerader Wandabschnitt mit Bausteinen aufgefüllt wird.
+Es liegt deshalb nahe, die Eck- und Kreuzungslegepläne zur Beschreibung des Mauerwerksverbands hinzuzufügen, wie es schon im Abschnitt~\ref{Eck- und Kreuzungslegepläne} definiert wurde.
+Durch das vorangegangene Kombinieren mehrerer Wandstücke zu einer Einheit, können nachfolgend Wandstücke auch das Ergebnis solcher Kombinationen sein.
+Da sich Ecken, T-Kreuzungen und X-Kreuzungen stark ähneln, besitzen sie einige geteilte Eigenschaften:
 \begin{enumerate}
-    \item Die lokalen Z-Achsen beider Wandstücke sind parallel. Das Vorgehen zur Überprüfung ist dasselbe wie in Abschnitt~\ref{real:combination}.
+    \item\label{concept:tmp1} Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden.
+    \item Die lokalen Z-Achsen beider Wandstücke sind parallel. Das Vorgehen zur Überprüfung ist dasselbe wie in Abschnitt~\ref{concept:combination_properties}.
     \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
-    \item Mindestens eines der beiden Wandstücke endet auf einem anderen, sodass mindestens eine Schicht das andere Wandstück direkt berührt.
+    \item\label{concept:tmp4} Mindestens eines der beiden Wandstücke endet auf einem anderen.
 \end{enumerate}
-Sind diese Eigenschaften erfüllt, werden für jede durch die einzelnen Schichten der Wandstücke vorgegebene Höhe Schnittpunkte zwischen den beiden Wandstücken errechnet.
-Im Falle einer einfachen Ecke oder einer T-Kreuzung, existiert nur ein einzelnes Paar an Wandstücken, deren Schichten sich in jedem Höhenschritt des Moduls im Mittelpunkt der Ecke schneiden.
+Sind diese Eigenschaften erfüllt, werden die Schnittpunkte der Richtungsvektoren entlang der lokalen X-Achsen beider Wandstücke errechnet.
+Im Falle einer einfachen Ecke oder einer T-Kreuzung, existiert nur ein einzelnes Paar an Wandstücken, die sich im Mittelpunkt der Ecke oder der T-Kreuzung schneiden.
 Der Unterschied ist lediglich die Stelle des Schnittpunkts relativ zu den beiden Wandstücken.
-Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als Wandbreite/2 an einer der beiden Außenkanten handelt es sich um eine Ecke.
-Falls der Schnittpunkt bei einem der beiden Wandstücke allerdings mindestens Wandbreite/2 innerhalb des Wandstücks liegt, so handelt es sich um eine T-Kreuzung.
+Sei \(w_1\) die Breite von einem und \(w_2\) die des anderen Wandstücks, so gilt nach Punkt~\ref{concept:tmp1} \(w_1 = w_2\).
+Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als \(\frac{w_1}{2}\) entlang der lokalen X-Achse an einer der beiden Außenkanten handelt es sich um eine Ecke, da beide Wandstücke an diesem Punkt enden.
+Falls der Schnittpunkt bei einem der beiden Wandstücke allerdings mindestens  \(\frac{w_1}{2}\) innerhalb des Wandstücks liegt, so handelt es sich um eine T-Kreuzung.
+Ein Wandstück steht also auf einem Anderen.
 Werden für zwei unterschiedliche Paare die selben Schnittpunkte errechnet, so kann es sich entweder um eine mit drei Wandstücken modellierte T-Kreuzung oder X-Kreuzung handeln.
-Teilen sich zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetzungen für eine eine X-Kreuzung gegeben.
-Liegt der Schnittpunkt des Wandstück-Paares mindesten Wandbreite/2 innerhalb beider Wandstücke, so handelt es sich um eine X-Kreuzung - modelliert aus zwei sich schneidenden Wandstücken. 
-TODO Bilder
+Treffen sich an dem Schnittpunkt zwei Ecken, ergibt sich daraus eine T-Kreuzung.
+Teilen sich aber zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetzungen für eine eine X-Kreuzung gegeben.
+Einen Sonderfall für Punkt~\ref{concept:tmp4} stellt eine X-Kreuzung dar - modelliert aus zwei sich schneidenden Wandstücken.
+Hier liegt der Schnittpunkt des Wandstück-Paares mindestens \(\frac{w_1}{2}\) innerhalb beider Wandstücke und keines der Wandstücke endet auf dem Anderen.
 
-\paragraph*{T-Kreuzungen} 
-
-\paragraph*{X-Kreuzungen}
+TODO Bilder, vor allem um zu erklären, dass durch das kombinieren viele Fälle wegfallen, da dabei zwei wandstücke kombiniert wurden.
 
 \subsection*{Öffnungen}
 Öffnungen ansprechen (vlt mit kleinem Diagramm?)
