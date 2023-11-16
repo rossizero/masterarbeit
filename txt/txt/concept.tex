@@ -27,23 +27,87 @@ Damit kann die Modellierungsumgebung auch den Rotationen von Objekten durch Rund
 
 \subsection*{Wandstück}
 Auch die schiere Menge verschiedener Bestandteile eines Hause ist für eine Einzelperson ohne Vorkenntnisse nicht überblickbar.
-Da das Ziel dieser Arbeit das Generieren von Legeplänen für Bausteine innerhalb der Wände eines Gebäudes darstellt, lässt sich diese Menge aber auf zwei wesentliche Objekttypen reduzieren:
+Da das Ziel dieser Arbeit das automatische Generieren von Legeplänen für Bausteine innerhalb der Wände eines Gebäudes darstellt, lässt sich diese Menge vorerst auf zwei wesentliche Objekttypen reduzieren:
 Wände und Öffnungen in Wänden.
 Öffnungen werden zum Beispiel für Fenster oder Türen benötigt.
 Da eine Wand im Prinzip ein arbiträrer geometrischer Körper sein kann, dies abzubilden aber wieder die Komplexität der Modellierung steigert, wird deren Form auf einen beliebig skalierten Quader beschränkt.
-Ein solcher Quader wird nachfolgend auch als Wandstück bezeichnet.
-Dieses besitzt demnach eine Länge, eine Breite und eine Höhe.
-Außerdem eine Rotation und eine Translation im Raum.
-Während Länge und Höhe dem Raster entsprechend beliebig gewählt werden können, so ergibt sich die Breite aus dem gewählten Bausteinformat (auch als \textit{Modul} bezeichnet) und dem geplanten Mauerwerksverband (siehe Kapitel~\ref{basics:mauerwerk}).
-Der Verband und das Modul können jedem Wandstück als sogenannter Wandtyp zugewiesen werden.
-Dadurch ist es möglich, verschiedene Arten von Wänden in einem Gebäudemodell zu verwenden.
+Ein solcher Quader wird nachfolgend auch als \textit{Wandstück} bezeichnet.
+Ein solches Wandstück besitzt demnach auch die Eigenschaften eines Quaders: eine Skalierung, eine Rotation um seinen eigenen Mittelpunkt und eine Translation im Raum.
+Nachfolgend werden die Begriffe Länge, Breite und Höhe zur einfachen Unterscheidung von einer Skalierung in X, Y und Z Richtung verwendet.
+Während Länge und Höhe dem Raster entsprechend beliebig gewählt werden können, ergibt sich die Breite aus dem gewählten Bausteinformat (auch als \textit{Modul} bezeichnet) und dem geplanten Mauerwerksverband (siehe Kapitel~\ref{basics:mauerwerk}).
+Der Verband und das Modul können jedem Wandstück als sogenannter \textit{Wandtyp} zugewiesen werden.
+Dadurch ist es möglich, verschiedene Arten von Wänden innerhalb eines Gebäudemodells zu verwenden.
+Diese Informationen werden später dafür verwendet, die durch das Wandstück abgesteckten Dimensionen sinnvoll mit Bausteinen zu füllen.
 
-Dann vlt Ecken und so ansprechen (?)
+
+\subsection*{Definition Mauerwerksverband}
+
+
+\subsection*{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
+In dieser Arbeit stehen Wandstücke zueinander in einer Beziehung, sobald sie sich berühren oder schneiden.
+Diese Beziehungen sind relevant, um die gewählten Mauerwerksverbände ordnungsgemäß über mehrere voneinander abhängige Wandstücke anzuwenden, ohne dass es zu Verletzungen von Vorschriften und Normen wie etwa dem Überbindemaß aus Kapitel~\ref{basics:Mauerwerksverband} kommt.
+Wie bereits in Abschnitt~\ref{scenarios:scenario1:problem} und~\ref{basics:Mauerwerksverband} angesprochen, treten verschiedene Arten von Beziehungen auf, die für das nachfolgende \glqq{}Wall Detailing\grqq{} zu unterscheiden sind.
+Zur Modellierung von Gebäuden sind vor allem folgende Beziehungen unabdingbar:
+\textit{Ecken}, \textit{T-Kreuzungen} und \textit{X-Kreuzungen}.
+Diese stellen wichtige Elemente bei der Planung von Gebäuden dar. 
+Nur so ist es möglich abgeschlossene und aneinanderhängende Räume zu erstellen.
+Eine weitere, nicht ganz so offensichtliche Beziehung besteht zwischen zwei Wandstücken, die in Verlängerung zueinander stehen, also gemeinsam einen größeren Wandbereich abdecken.
+Diese Beziehung wird nachfolgend \textit{Brigitte} genannt.
+Es werden nun für jede dieser vier Beziehungen Eigenschaften aufgezeigt anhander derer man diese in einer Menge an Wandstücken finden und unterscheiden kann.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Base_labeled.png}
+    \caption{Modell einer Wand, die durch 7 einzelne Wandstücke des selben Typs gebildet wird, deren Mittelpunkte alle auf einer Ebene liegen.}
+    \label{fig:concept:combination_example_base}
+\end{figure}
+
+\paragraph*{Brigitten}\label{concept:combination_properties} sind alle Wandstücke,  die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Wandstücke realisiert wurden, eigentlich aber eine Einheit darstellen. 
+Es ist notwendig alle Wandstücke zu identifizieren, die einen zusammenhängenden Wandbereich bilden, um den gewählten Mauerwerksverband korrekt über alle Wandstücke hinweg anzuwenden.
+Andernfalls würde jedes Wandstück den Mauerwerksverband unabhängig seiner Nachbarn neu beginnen und dadurch sehr wahrscheinlich fälschlicherweise unterbrechen.
+Ein umfangreiches Beispiel ist in Abbildung~\ref*{fig:concept:combination_example_base} dargestellt.
+Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf folgende Eigenschaften getestet werden:
+
+\begin{enumerate}
+    \item Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden. 
+    Dies verhindert vor allem das Kombinieren unterschiedlich dicker Wände.
+    \item\label{real:z_parallel} Die lokalen Z-Achsen beider Wandstücke sind parallel. 
+    Dies verhindert das Kombinieren unpassend rotierter Wandstücke.
+    Die Überprüfung der Parallelität der Z-Achsen beider Wandstücke wird wie folgt durchgeführt:
+
+    Sei \(\vec{v}_z = {[0, 0, 1]}^T\)
+    die Z-Achse und \(v_z = (v_w, v_x, v_y, v_z) = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
+    Außerdem seien \(q_1\) und \(q_2\) die beiden Rotationen der Wandstücke. Dann stellen 
+    \(v_{z^1} = q_1 * v_z * q_1^{-1}\) und 
+    \(v_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Anteile\grqq{} dieser Rotationen dar.
+    Daraus ergeben sich die \glqq{}Z-Vektoren\grqq{} wie folgt: 
+    \(\vec{v}_{z^1} = {[v_{z^1_x}, v_{z^1_y}, v_{z^1_z}]}^T\) und
+    \(\vec{v}_{z^2} = {[v_{z^2_x}, v_{z^2_y}, v_{z^2_z}]}^T\).
+    Ist nun \(|\vec{v}_{z^1} \cdot \vec{v}_{z^2}| = 1\) gegeben, so sind die lokalen Z-Achsen der Wandstücke gleich oder um exakt 180\degree{} verdreht und damit Parallelität erfüllt.
+    \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{real:z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der X-Achse, ersetzt werden muss.
+    \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
+    \item\label{concept:schichten} Es liegt eine Berührung oder gar eine Überlappung vor.
+\end{enumerate}
+
+Insgesamt bilden in dem Beispiel in Abbildung~\ref*{fig:concept:combination_example_base} demnach alle Wandstücke exklusive Wandstück Nummer 4 eine Einheit, die alle Punkte erfüllt.
+Dies sind in der Tat all die Wandstücke, die den Start des gewählten Mauerwerksverbands ihren Nachbarn anpassen müssen, sodass sich der Verband gleichmäßig über alle Wandstücke erstreckt.
+
+
+\paragraph*{Ecken} 
+
+\paragraph*{T-Kreuzungen} 
+
+\paragraph*{X-Kreuzungen}
+
+\subsection*{Öffnungen}
 Öffnungen ansprechen (vlt mit kleinem Diagramm?)
 
+
+TODO Konzept hinter MaskedTransform und so erklkären
 \section{Wall Detailing}
-Cut and Paste Definition Wall Detailing
-blabla
+\label{concept:wall_detailing}
+Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang ein als geometrischer Körper definiertes Wandstück in ein konkretes Mauerwerk zu überführen, bezeichnet.
+
 
 \section{Regelbasierte Bauplangenerierung}
 blabla

@@ -3,7 +3,7 @@
 Blenderplugin, IFCWallTypes Module die das Raster vorgeben etc.
 
 \section{Wall Detailing}
-Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang ein als geometrischer Körper definiertes Wandstück in ein konkretes Mauerwerk zu überführen, bezeichnet.
+In Abschnitt~\ref{concept:wall_detailing} wurde das Wall Detailing als der Vorgang, ein als geometrischer Körper definiertes Wandstück in ein konkretes Mauerwerk zu überführen, bezeichnet.
 Innerhalb des IFC Standards werden einige mathematische/geometrische Repräsentationen der sogennanten \textit{IFCWall} unterstützt, um neben einfachen Boxen auch komplexere Formen abbilden zu können.
 Beispielsweise ist es möglich in das Modell eines Hauses zunehmend dünner werdende Wandstücke, kurvige Wandstücke oder Wandstücke, welche nur durch ein arbiträres Vieleck beschrieben werden können zu integrieren.
 Allerdings ist es für die Fallstudien dieser Arbeit zunächst ausreichend lediglich Wandstücke, welche als einfacher geometrischer Quader vorliegen, zu beachten.
@@ -31,39 +31,17 @@ Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstüc
 
 \subsubsection{Kombinieren passender Wandstücke}
 \label{real:combination}
-Eine solche Beziehung stellen etwa Wandstücke dar, die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Objekte realisiert wurden, eigentlich aber eine Einheit darstellen.
+Eine solche Beziehung stellen Wände dar, die, wie bereits in Kapitel~\ref{concept:relations_wandtuecke} definiert, durch mehrere einzelne Objekte modelliert wurden, eigentlich aber eine Einheit bilden.
 Daher werden in diesem Schritt alle Wandstücke miteinander verglichen und eventuell kombiniert, sodass jeweils ein gefundes Paar durch ein einzelnes Wandstück representiert wird.
-Um zwei Wandstücke zu sinvoll kombinieren zu könne, müssen folgende Eigenschaften gelten:
+Um zwei Wandstücke zu sinvoll kombinieren zu können, müssen die Eigenschaften aus Kapitel~\ref{concept:combination_properties} gelten.
+Allerdings kann Punkt~\ref{concept:schichten}, welcher Berührung oder Überlappung voraussetzt mittlerweile wie folgt verschärft werden:
 
 \begin{enumerate}
-    \item Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden. 
-    Dies verhindert vor allem das Kombinieren unterschiedlich dicker Wände.
-    \item\label{real:z_parallel} Die lokalen Z-Achsen beider Wandstücke sind parallel. 
-    Dies verhindert das Kombinieren unpassend rotierter Wandstücke.
-    Die Überprüfung der Parallelität der Z-Achsen beider Wandstücke wird wie folgt durchgeführt:
-
-    Sei \(\vec{v}_z = {[0, 0, 1]}^T\)
-    die Z-Achse und \(v_z = (v_w, v_x, v_y, v_z) = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
-    Außerdem seien \(q_1\) und \(q_2\) die beiden Rotationen der Wandstücke. Dann stellen 
-    \(v_{z^1} = q_1 * v_z * q_1^{-1}\) und 
-    \(v_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Anteile\grqq{} dieser Rotationen dar.
-    Daraus ergeben sich die \glqq{}Z-Vektoren\grqq{} wie folgt: 
-    \(\vec{v}_{z^1} = {[v_{z^1_x}, v_{z^1_y}, v_{z^1_z}]}^T\) und
-    \(\vec{v}_{z^2} = {[v_{z^2_x}, v_{z^2_y}, v_{z^2_z}]}^T\).
-    Ist nun \(|\vec{v}_{z^1} \cdot \vec{v}_{z^2}| = 1\) gegeben, so sind die lokalen Z-Achsen der Wandstücke gleich oder um exakt 180\degree{} verdreht und damit Parallelität erfüllt.
-    \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{real:z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der X-Achse, ersetzt werden muss.
-    \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
-    \item\label{real:schichten} Mindestens eine Schicht des einen Wandstücks berührt, überlappt oder befindet sich exakt eine Modulöhe ober- oder unterhalb einer Schicht des anderen Wandstücks.
+\setcounter{enumi}{4}
+\item\label{real:schichten} Mindestens eine Schicht des einen Wandstücks berührt, überlappt oder befindet sich exakt eine Modulöhe ober- oder unterhalb einer Schicht des anderen Wandstücks.
 \end{enumerate}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Base_labeled.png}
-  \caption{Eingabe eines Modells mit 7 Wänden des selben Typs, deren Mittelpunkte alle auf einer Ebene liegen.}
-  \label{fig:real:combination_example_base}
-\end{figure}
-
-In Abbildung~\ref{fig:real:combination_example_base} treten verschiedene Konstellationen von Wandstücken auf, die miteinander kombiniert werden müssen.
+In Abbildung~\ref{fig:concept:combination_example_base} treten verschiedene Konstellationen von Wandstücken auf, die miteinander kombiniert werden müssen.
 Das aus Wandstück 1 und 2 gebildete Paar erfüllt alle oben genannten Eigenschaften und weist eine Teil-Überlappung auf.
 Somit müssen beide Wandstücke miteinader kombiniert werden.
 Den obersten Bereich füllen sowohl Wandstück 5 als auch Wandstück 6, sodass dort eine komplette Überlappung vorliegt.
@@ -78,7 +56,7 @@ Während dem Kombinieren von zwei Wänden, wird ein Wandstück schichtweise in d
 Dabei werden alle Schichten paarweise miteinader verglichen, um diejenigen Paare zu finden, die die Eigenschaften aus Punkt~\ref{real:schichten} erfüllen.
 Ein solches Paar wird dann wie folgt miteinander verschmolzen:
 
-\begin{lstlisting}[language=Python, caption=Pseudocode zur Vereinigung zweier sich berührender oder überlappender Schichten von zwei nach den Voraussetzungen aus Abschnitt~\ref{real:combination} kombinierbaren Wandstücken.]
+\begin{lstlisting}[language=Python, caption=Pseudocode zur Vereinigung zweier sich berührender oder überlappender Schichten von zwei nach den Voraussetzungen aus Abschnitt~\ref{concept:combination_properties} kombinierbaren Wandstücken.]
   def combine(layer1, layer2):
     # get the local positions of both edges of layer1 as 3D array
     left_edge1 = layer1.get_left_edge(relative=True)
