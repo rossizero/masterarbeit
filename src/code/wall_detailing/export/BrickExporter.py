@@ -39,9 +39,9 @@ class BrickExporter:
         """
         Exports the bricks to a json file
         """
-        ret = []
+        ret = {}
         for b in self.bricks:
-            ret.append(BrickExportInformation(b))
+            ret[b.id] = BrickExportInformation(b)
 
         with open(path, 'w') as outfile:
             json.dump(ret, outfile, default=lambda o: o.__dict__, sort_keys=True, indent=4)
