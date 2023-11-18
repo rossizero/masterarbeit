@@ -41,7 +41,7 @@ Diese Informationen werden später dafür verwendet, die durch das Wandstück ab
 
 
 \subsection*{Definition Mauerwerksverband}\label{concept:mauerwerksverband}
-
+TODO Konzept hinter MaskedTransform und so erklkären
 
 \subsection*{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
 In dieser Arbeit stehen Wandstücke zueinander in einer Beziehung, sobald sie sich berühren oder schneiden.
@@ -78,7 +78,7 @@ Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf f
     Die Überprüfung der Parallelität der Z-Achsen beider Wandstücke wird wie folgt durchgeführt:
 
     Sei \(\vec{v}_z = {[0, 0, 1]}^T\)
-    die Z-Achse und \(v_z = (v_w, v_x, v_y, v_z) = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
+    eine Z-Achse und \(v_z = (v_w, v_x, v_y, v_z) = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
     Außerdem seien \(q_1\) und \(q_2\) die beiden Rotationen der Wandstücke. Dann stellen 
     \(v_{z^1} = q_1 * v_z * q_1^{-1}\) und 
     \(v_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Anteile\grqq{} dieser Rotationen dar.
@@ -92,16 +92,16 @@ Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf f
 \end{enumerate}
 
 Insgesamt bilden in dem Beispiel in Abbildung~\ref{fig:concept:combination_example_base} demnach alle Wandstücke mit Ausnahme von Wandstück Nummer 4 eine Einheit, die alle obigen Eigenschaften erfüllt.
-Dies sind in der Tat all die Wandstücke, die den Start des gewählten Mauerwerksverbands ihren Nachbarn anpassen müssen, sodass sich der Verband gleichmäßig über alle Wandstücke erstreckt.
+Dies sind in der Tat all die Wandstücke, die den Start des gewählten Mauerwerksverbands ihren Nachbarn entsprechend anpassen müssen, sodass sich der Verband gleichmäßig über alle Wandstücke erstreckt.
 
 
 \paragraph*{Ecken, T-Kreuzungen und X-Kreuzungen}
 Wie schon zu Beginn dieses Abschnitts vorweggenommen, existieren für jeden Mauerwerksverband und je nach verwendetem Modul eigene Varianten für Eck- und Kreuzungslegepläne, an welchen sich Maurer orientieren.
-Ein paar Beispiele hierfür wurden schon in Kapitel~\ref{basics:mauerwerk_eckloesung} gegeben.
+Einige Beispiele hierfür wurden schon in Kapitel~\ref{basics:mauerwerk_eckloesung} gegeben.
 Der Grund dafür ist die Komplexität in diesen Bereichen die vorgeschriebenen Normen (wie etwa dem in Abschnitt~\ref{basics:Mauerwerksverband} genannten Überbindemaß) einzuhalten.
 Diese speziellen Pläne werden dann an den notwendigen Stellen angewandt - meistens bevor ein dazwischenliegender gerader Wandabschnitt mit Bausteinen aufgefüllt wird.
 Es liegt deshalb nahe, die Eck- und Kreuzungslegepläne zur Beschreibung des Mauerwerksverbands hinzuzufügen, wie es schon im Abschnitt~\ref{Eck- und Kreuzungslegepläne} definiert wurde.
-Durch das vorangegangene Kombinieren mehrerer Wandstücke zu einer Einheit, können nachfolgend Wandstücke auch das Ergebnis solcher Kombinationen sein.
+Durch das vorangegangene Kombinieren mehrerer Wandstücke zu einer Einheit, können nachfolgend Wandstücke auch das Ergebnis solcher Kombinationen sein, aber aufgrund deren Parallelität wie ein einzelnes behandelt werden.
 Da sich Ecken, T-Kreuzungen und X-Kreuzungen stark ähneln, besitzen sie einige geteilte Eigenschaften:
 \begin{enumerate}
     \item\label{concept:tmp1} Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden.
@@ -109,6 +109,28 @@ Da sich Ecken, T-Kreuzungen und X-Kreuzungen stark ähneln, besitzen sie einige 
     \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
     \item\label{concept:tmp4} Mindestens eines der beiden Wandstücke endet auf einem anderen.
 \end{enumerate}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/ecken_variationen.png}
+    \caption{Draufsicht auf Varianten der Modellierung einer Ecke.}
+    \label{fig:concept:ecken_variationen}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/t_joint_variationen.png}
+    \caption{Draufsicht auf Varianten der Modellierung einer T-Kreuzung.}
+    \label{fig:concept:t_joint_variationen}
+\end{figure}
+
+\begin{figure}[hb]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/x_joint_variationen.png}
+    \caption{Draufsicht auf Varianten der Modellierung einer X-Kreuzung.}
+    \label{fig:concept:x_joint_variationen}
+\end{figure}
+
 Sind diese Eigenschaften erfüllt, werden die Schnittpunkte der Richtungsvektoren entlang der lokalen X-Achsen beider Wandstücke errechnet.
 Im Falle einer einfachen Ecke oder einer T-Kreuzung, existiert nur ein einzelnes Paar an Wandstücken, die sich im Mittelpunkt der Ecke oder der T-Kreuzung schneiden.
 Der Unterschied ist lediglich die Stelle des Schnittpunkts relativ zu den beiden Wandstücken.
@@ -116,19 +138,19 @@ Sei \(w_1\) die Breite von einem und \(w_2\) die des anderen Wandstücks, so gil
 Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als \(\frac{w_1}{2}\) entlang der lokalen X-Achse an einer der beiden Außenkanten handelt es sich um eine Ecke, da beide Wandstücke an diesem Punkt enden.
 Falls der Schnittpunkt bei einem der beiden Wandstücke allerdings mindestens  \(\frac{w_1}{2}\) innerhalb des Wandstücks liegt, so handelt es sich um eine T-Kreuzung.
 Ein Wandstück steht also auf einem Anderen.
+Dies ist in den Abbildungen~\ref{fig:concept:ecken_variationen} und~\ref{fig:concept:t_joint_variationen} zu sehen. 
 Werden für zwei unterschiedliche Paare die selben Schnittpunkte errechnet, so kann es sich entweder um eine mit drei Wandstücken modellierte T-Kreuzung oder X-Kreuzung handeln.
-Treffen sich an dem Schnittpunkt zwei Ecken, ergibt sich daraus eine T-Kreuzung.
-Teilen sich aber zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetzungen für eine eine X-Kreuzung gegeben.
+Treffen sich an dem Schnittpunkt zwei Ecken, ergibt sich daraus eine T-Kreuzung (siehe Fall 2 in Abbildung~\ref{fig:concept:t_joint_variationen}).
+Teilen sich aber zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetzungen für eine eine X-Kreuzung gegeben (siehe Fall 1 in Abbildung~\ref{fig:concept:x_joint_variationen}).
 Einen Sonderfall für Punkt~\ref{concept:tmp4} stellt eine X-Kreuzung dar - modelliert aus zwei sich schneidenden Wandstücken.
+Dieser Fall ist in Abbildung~\ref{fig:concept:x_joint_variationen} mit der Variante Nummer 3 dargestellt.
 Hier liegt der Schnittpunkt des Wandstück-Paares mindestens \(\frac{w_1}{2}\) innerhalb beider Wandstücke und keines der Wandstücke endet auf dem Anderen.
-
-TODO Bilder, vor allem um zu erklären, dass durch das kombinieren viele Fälle wegfallen, da dabei zwei wandstücke kombiniert wurden.
+Durch das vorhergehende Kombinieren von Wandstücken werden die Fälle 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} und 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} eliminiert, denn dabei erfüllen jeweils zwei Wandstücke alle Eigenschaften, um nach Abschnitt~\ref{concept:combination_properties} zu einer Einheit verschmolzen zu werden.
+So entsteht aus Fall 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} der Fall Nummer 1 und Fall Nummer 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} wird ebenfalls zu Fall 1.
 
 \subsection*{Öffnungen}
 Öffnungen ansprechen (vlt mit kleinem Diagramm?)
 
-
-TODO Konzept hinter MaskedTransform und so erklkären
 \section{Wall Detailing}
 \label{concept:wall_detailing}
 Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang ein als geometrischer Körper definiertes Wandstück in ein konkretes Mauerwerk zu überführen, bezeichnet.
