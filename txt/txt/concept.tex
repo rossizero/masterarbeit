@@ -41,7 +41,16 @@ Diese Informationen werden später dafür verwendet, die durch das Wandstück ab
 
 
 \subsection*{Definition Mauerwerksverband}\label{concept:mauerwerksverband}
-TODO Konzept hinter MaskedTransform und so erklkären
+In Kapitel~\ref{basics:Mauerwerksverband} wurden bereits einige verschiedene Mauerwerksverbände behandelt.
+Um dem Wall Detailing Verfahren diese und beliebig andere Verbände in einer interpretierbaren Weise zur Verfügung stellen zu können, wird dafür eine mathematische Notation benötigt.
+Bei genauer Betrachtung handelt es sich bei den meisten Mauerwerksverbänden um ein sich wiederholendes Muster.
+Dabei wiederholen sich sowohl die Bausteintransformationen innerhalb einer Schicht des Verbandes, als auch die Schichten selbst.
+Daher sind folgende Informationen zur Beschreibung eines Mauerwerksverbands notwendig:
+\begin{enumerate}
+    \item Anzahl der verschiedenen Schichten, bis diese sich wiederholen.
+    \item Für jede Schicht die Anzahl verschiedener Bausteintransformationen, bis diese sich wiederholen.
+    \item Einen rotierenden sowie einen translativen Versatz für jede einzigartige Bausteintransformation innerhalb einer Schicht.
+\end{enumerate}
 
 \subsection*{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
 In dieser Arbeit stehen Wandstücke zueinander in einer Beziehung, sobald sie sich berühren oder schneiden.
@@ -149,7 +158,16 @@ Durch das vorhergehende Kombinieren von Wandstücken werden die Fälle 3 aus Abb
 So entsteht aus Fall 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} der Fall Nummer 1 und Fall Nummer 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} wird ebenfalls zu Fall 1.
 
 \subsection*{Öffnungen}
-Öffnungen ansprechen (vlt mit kleinem Diagramm?)
+Neben Wänden sind Öffnungen ein integraler Bestandteil bei der Planung von Gebäuden.
+Öffnungen sind Bereiche an welchen das Mauerwerk unterbrochen wird, um Lücken zu schaffen, in die später zum Beispiel Fenster oder Türen eingesetzt werden können.
+Da eine Öffnung nicht ohne eine Wand existieren kann, liegt es nahe die dazugehörigen Informationen in der Wand zu hinterlegen, die von der Öffnung betroffen ist.
+Eine Öffnung kann ebenfalls als quaderförmiger Körper angesehen werden, der einen Bereich innerhalb eines Wandstücks definiert, an dem später keine Bausteine gelegt werden dürfen.
+In dieser Arbeit besitzt dieser Quader die selbe Orientierung wie das dazugehörige Wandstück und schneidet zunächst immer durch die gesamte Breite der Wand.
+Daher sind nur Position, Länge und Höhe des Quaders von Bedeutung für das Wall Detailing.
+Da es allerdings üblich ist einen sogenannten Sturz über der eigentlichen Öffnung eines Fenster oder einer Tür anzubringen, muss auch für dieses Objekt Platz im Wandstück geschaffen werden. 
+Der Sturz ist etwas länger als die Länge der Öffnung und liegt an beiden Seiten auf dem Mauerwerk auf, um den Bausteinen darüber eine stabile Grundlage zu bieten.
+So bleibt die Tragfähigkeit der Wand trotz Öffnungen bestehen.
+
 
 \section{Wall Detailing}
 \label{concept:wall_detailing}
