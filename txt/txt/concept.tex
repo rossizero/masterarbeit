@@ -44,13 +44,35 @@ Diese Informationen werden später dafür verwendet, die durch das Wandstück ab
 In Kapitel~\ref{basics:Mauerwerksverband} wurden bereits einige verschiedene Mauerwerksverbände behandelt.
 Um dem Wall Detailing Verfahren diese und beliebig andere Verbände in einer interpretierbaren Weise zur Verfügung stellen zu können, wird dafür eine mathematische Notation benötigt.
 Bei genauer Betrachtung handelt es sich bei den meisten Mauerwerksverbänden um ein sich wiederholendes Muster.
-Dabei wiederholen sich sowohl die Bausteintransformationen innerhalb einer Schicht des Verbandes, als auch die Schichten selbst.
+Dabei wiederholen sich sowohl die Bausteintransformationen innerhalb einer Schicht des Verbandes, als auch dessen Schichten selbst.
 Daher sind folgende Informationen zur Beschreibung eines Mauerwerksverbands notwendig:
+
 \begin{enumerate}
-    \item Anzahl der verschiedenen Schichten, bis diese sich wiederholen.
-    \item Für jede Schicht die Anzahl verschiedener Bausteintransformationen, bis diese sich wiederholen.
-    \item Einen rotierenden sowie einen translativen Versatz für jede einzigartige Bausteintransformation innerhalb einer Schicht.
+    \item eine Menge einzigartiger Schichten, bis diese sich (mit einem Versatz) wiederholen.
+    \item Für jede Schicht eine Menge verschiedener Bausteintransformationen, bis diese sich (ebenfalls mit einem Versatz) wiederholen.
 \end{enumerate}
+
+So kann ein Mauerwerksverband als Menge von Schichten, die wiederum aus einer Menge von Bausteintransformationen bestehen, verstanden werden.
+Diese Schichten besitzen jeweils einen festgelegten darunter liegenden Vorgänger sowie einen darüber liegenden Nachfolger.
+Das bedeutet, die Reihenfolge in der Schichten eines Mauerwerksverbands auftreten, darf nicht verändert werden.
+Leicht zu sehen ist dies am Beispiel eines Kreuzverbandes, der durch Veränderung der Reihenfolge seiner Schichten, seine typische kreuzartige Form verlieren würde.
+
+Eine Bausteintransformationen wird in dieser Arbeit als Tupel mit folgendem Inhalt definiert:
+
+\begin{enumerate}
+    \item Eine skalierbare Position \(\vec{p} = {[x, y, z]}^T\).
+    \item Eine skalierbare Rotation \(r = (w, x, y, z)\).
+    \item Einen festen translativen Versatz \(\vec{p}_o = {[x, y, z]}^T\).
+    \item Einen festen rotierenden Versatz \(r_o = (w, x, y, z)\).
+\end{enumerate}
+
+Skalierbar bedeutet in diesem Fall, dass die Werte von beispielsweise der Position eines Bausteins in Abhängigkeit eines veränderbaren Faktors stehen.
+Zur endgültigen Platzierung eines Bausteins anhand einer Bausteintransformationen aus einer Schicht eines Mauerwerksverbands wird lediglich noch ein Faktor benötigt, der angibt, die wievielte Wiederholung der Menge an Bausteintransformationen einer Schicht gerade Anwendung findet.
+Sei \(B_1 = (\vec{p}, r, \vec{p}_o, r_o) = ({[l, 0, 0]}^T, (0, 0, 0, 0), {[0, 0, 0]}^T, (1, 0, 0, 0))\) eine Bausteintransformationen, \(M = (l, b, h) = (2, 1, 0.5)\) ein Modul und \(r\) ein Skalar,
+dann ergibt sich die Position \(P\) eines Bausteins zur Wiederholung \(r = 1\) wie folgt: \(P = \vec{p}_o + r * \vec{p} = {[0, 0, 0]}^T + 1 * {[2, 0, 0]}^T = {[2, 0, 0]}^T\).
+Im nächsten Wiederholungsschritt mit \(r = 2\) ergibt dies eine Position \(P = {[4, 0, 0]}^T\).
+Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (1, 0, 0, 0))\) und je einer Schicht gebildet aus den Mengen \(\{B_1\}\) bzw. \(\{B_2\}\) erhält man eine komplette Beschreibung für einen Läuferverband mit einem Versatz von 50\% der Steinlänge.
+
 
 \subsection*{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
 In dieser Arbeit stehen Wandstücke zueinander in einer Beziehung, sobald sie sich berühren oder schneiden.
