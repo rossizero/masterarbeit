@@ -39,7 +39,6 @@ Der Verband und das Modul können jedem Wandstück als sogenannter \textit{Wandt
 Dadurch ist es möglich, verschiedene Arten von Wänden innerhalb eines Gebäudemodells zu verwenden.
 Diese Informationen werden später dafür verwendet, die durch das Wandstück abgesteckten Dimensionen sinnvoll mit Bausteinen zu füllen.
 
-
 \subsection*{Mauerwerksverband}\label{concept:mauerwerksverband}
 In Kapitel~\ref{basics:Mauerwerksverband} wurden bereits einige verschiedene Mauerwerksverbände behandelt.
 Um dem Wall Detailing Verfahren diese und beliebig andere Verbände in einer interpretierbaren Weise zur Verfügung stellen zu können, wird dafür eine mathematische Notation benötigt.
@@ -52,8 +51,8 @@ Daher sind folgende Informationen zur Beschreibung eines Mauerwerksverbands notw
     \item Für jede Schicht eine Menge verschiedener Bausteintransformationen, bis diese sich (ebenfalls mit einem Versatz) wiederholen.
 \end{enumerate}
 
-So kann ein Mauerwerksverband als Menge von Schichten, die wiederum aus einer Menge von Bausteintransformationen bestehen, verstanden werden.
-Diese Schichten besitzen jeweils einen festgelegten darunter liegenden Vorgänger sowie einen darüber liegenden Nachfolger.
+Ein Mauerwerksverband kann damit als Menge von Schichten verstanden werden, die sich wiederum aus einer Menge von Bausteintransformationen zusammensetzen.
+Diese Schichten besitzen jeweils einen festgelegten, darunter liegenden Vorgänger sowie einen darüber liegenden Nachfolger.
 Das bedeutet, die Reihenfolge in der Schichten eines Mauerwerksverbands auftreten, darf nicht verändert werden.
 Leicht zu sehen ist dies am Beispiel eines Kreuzverbandes, der durch Veränderung der Reihenfolge seiner Schichten, seine typische kreuzartige Form verlieren würde.
 
@@ -61,18 +60,31 @@ Eine Bausteintransformationen wird in dieser Arbeit als Tupel mit folgendem Inha
 
 \begin{enumerate}
     \item Eine skalierbare Position \(\vec{p} = {[x, y, z]}^T\).
-    \item Eine skalierbare Rotation \(r = (w, x, y, z)\).
+    \item Eine skalierbare Rotation \(r = (x, y, z)\) angegeben in Euler-Winkeln.
     \item Einen festen translativen Versatz \(\vec{p}_o = {[x, y, z]}^T\).
-    \item Einen festen rotierenden Versatz \(r_o = (w, x, y, z)\).
+    \item Einen festen rotierenden Versatz \(r_o = (x, y, z)\) ebenfalls in Euler-Winkeln.
 \end{enumerate}
 
 Skalierbar bedeutet in diesem Fall, dass die Werte von beispielsweise der Position eines Bausteins in Abhängigkeit eines veränderbaren Faktors stehen.
-Zur endgültigen Platzierung eines Bausteins anhand einer Bausteintransformationen aus einer Schicht eines Mauerwerksverbands wird lediglich noch ein Faktor benötigt, der angibt, die wievielte Wiederholung der Menge an Bausteintransformationen einer Schicht gerade Anwendung findet.
-Sei \(B_1 = (\vec{p}, r, \vec{p}_o, r_o) = ({[l, 0, 0]}^T, (0, 0, 0, 0), {[0, 0, 0]}^T, (1, 0, 0, 0))\) eine Bausteintransformationen, \(M = (l, b, h) = (2, 1, 0.5)\) ein Modul und \(r\in\mathbb{N}\) ein Skalar,
-dann ergibt sich die Position \(P\) eines Bausteins zur Wiederholung \(r = 1\) wie folgt: \(P = \vec{p}_o + r * \vec{p} = {[0, 0, 0]}^T + 1 * {[2, 0, 0]}^T = {[2, 0, 0]}^T\).
-Im nächsten Wiederholungsschritt mit \(r = 2\) ergibt dies eine Position \(P = {[4, 0, 0]}^T\).
-Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (1, 0, 0, 0))\) und je einer Schicht gebildet aus den Mengen \(\{B_1\}\) bzw. \(\{B_2\}\) erhält man eine komplette Beschreibung für einen Läuferverband mit einem Versatz von 50\% der Steinlänge.
+Zur endgültigen Platzierung eines Bausteins anhand einer Bausteintransformation aus einer Schicht eines Mauerwerksverbands wird lediglich noch ein Faktor benötigt, der angibt, die wievielte Wiederholung der Menge an Bausteintransformationen einer Schicht gerade Anwendung findet.
+Sei \(B_1 = (\vec{p}, r, \vec{p}_o, r_o) = ({[l, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, 0))\) eine Bausteintransformationen, \(M = (l, b, h) = (2, 1, 1)\) ein Modul und \(c\in\mathbb{N}\) ein Skalar,
+dann ergibt sich die Position \(P\) eines Bausteins zur Wiederholung \(c = 1\) wie folgt: \(P = \vec{p}_o + c * \vec{p} = {[0, 0, 0]}^T + 1 * {[2, 0, 0]}^T = {[2, 0, 0]}^T\).
+Im nächsten Wiederholungsschritt mit \(c = 2\) ergibt dies eine Position \(P = {[4, 0, 0]}^T\).
+Da die Rotationen als Euler-Winkel vorliegen, kann diese in ähnlicher Weise berechnet werden.
+Sie beschreibt die Rotation um den Mittelpunkt des Bausteins.
+In den meisten Fällen ist \(r\) allerdings gleich \((0, 0, 0)\) und \(r_o\) entweder ebenfalls \((0, 0, 0)\) oder \((0, 0, \frac{\pi}{2})\).
+Letzteres entspricht einer festen Rotation um 90\degree{} um die Z-Achse des Bausteins, unabhängig des Wiederholungsschritts \(r\).
 
+\begin{figure}[hb!]
+    \centering
+    \includegraphics[width=0.7\columnwidth]{fig/concept_Mauerwerksverband.png}
+    \caption{Der Läuferverband mit einem Versatz von 50\%.}
+    \label{fig:concept:concept_Mauerwerksverband}
+\end{figure}
+
+Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (0, 0, 0))\) und je einer Schicht gebildet aus den Mengen \(\{B_1\}\) bzw. \(\{B_2\}\) erhält man bereits eine komplette Beschreibung für den Läuferverband mit einem Versatz von 50\% der Steinlänge.
+Dieses Beispiel ist in Abbildung~\ref{fig:concept:concept_Mauerwerksverband} schematisch dargestellt.
+Aber auch andere, komplexere Verbände können in dieser Form abgebildet und so dem nachfolgenden Wall Detailing in abstrahierter Weise übergeben werden.
 
 \subsection*{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
 In dieser Arbeit stehen Wandstücke zueinander in einer Beziehung, sobald sie sich berühren oder schneiden.
