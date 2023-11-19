@@ -7,7 +7,6 @@ In Abschnitt~\ref{concept:wall_detailing} wurde das Wall Detailing als der Vorga
 Innerhalb des IFC Standards werden einige mathematische/geometrische Repräsentationen der sogennanten \textit{IFCWall} unterstützt, um neben einfachen Boxen auch komplexere Formen abbilden zu können.
 Beispielsweise ist es möglich in das Modell eines Hauses zunehmend dünner werdende Wandstücke, kurvige Wandstücke oder Wandstücke, welche nur durch ein arbiträres Vieleck beschrieben werden können zu integrieren.
 Allerdings ist es für die Fallstudien dieser Arbeit zunächst ausreichend lediglich Wandstücke, welche als einfacher geometrischer Quader vorliegen, zu beachten.
-Das nachfolgende schrittweise Vorgehen weist aufgrund des annähernd gleichen Ergebnisses zwangsläufig Ähnlichkeiten zu dem von Usmanov et al. auf \cite{Usmanov2021}.
 
 \subsection{Konvertieren des IFC zu BREP}
 Den ersten Schritt stellt das Extrahieren aller notwendigen Daten aus dem vorliegenden IFC Modell dar.
@@ -52,7 +51,7 @@ Auch für dieses Paar sind alle Voraussetzungen zur Fusion erfüllt.
 Lediglich Wandstück 4 muss nicht mit dem Rest vereint werden, da dafür kein Paar existiert, das die obrigen Eigenschaften erfüllt.
 Anhand von Abbildung~\ref{fig:real:combination_example_solution_xoffset} kann man erkennen, dass Wandstück 4 im weiteren Verlauf des Detailings tatsächlich unabhängig betrachtet werden kann. 
 
-Während dem Kombinieren von zwei Wänden, wird ein Wandstück schichtweise in das andere überführt.
+Während dem Kombinieren von zwei Wänden, wird ein Wandstück schichtweise in das Andere überführt.
 Dabei werden alle Schichten paarweise miteinader verglichen, um diejenigen Paare zu finden, die die Eigenschaften aus Punkt~\ref{real:schichten} erfüllen.
 Ein solches Paar wird dann wie folgt miteinander verschmolzen:
 
@@ -62,7 +61,7 @@ Ein solches Paar wird dann wie folgt miteinander verschmolzen:
     left_edge1 = layer1.get_left_edge(relative=True)
     right_edge1 = layer1.get_right_edge(relative=True)
 
-    # get the position of both edge of layer 2 relative to the coordinate systsem of layer1 as 3D array
+    # get the position of both edges of layer 2 relative to the coordinate systsem of layer1 as 3D array
     left_edge2 = layer2.get_left_edge(relative=False)
     left_edge2 = layer1.relative_position_of(left_edge2)
 
@@ -75,7 +74,7 @@ Ein solches Paar wird dann wie folgt miteinander verschmolzen:
     total_length = max_x - min_x
 
     # calculate the center of the resulting layer
-    left = min([a1, a2, b1, b2], key=lambda x: x[0])
+    left = min([left_edge1, right_edge1, left_edge2, bright_edge22], key=lambda x: x[0])
     local_center = left.copy()
     local_center[0] += total_length / 2.0
 

@@ -86,6 +86,13 @@ Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (0, 0, 0))\) und
 Dieses Beispiel ist in Abbildung~\ref{fig:concept:concept_Mauerwerksverband} schematisch dargestellt.
 Aber auch andere, komplexere Verbände können in dieser Form abgebildet und so dem nachfolgenden Wall Detailing in abstrahierter Weise übergeben werden.
 
+Die speziellen Legepläne zur korrekten Auflösung von kritischen Bereichen wie zum Beispiel Ecken können ebenfalls in dieser Form für jeden Mauerwerksverband angegeben werden.
+Für das vorangegangene Beispiel sähe der Eckplan wie folgt aus:
+Eine Nulltransformation \(E_1 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, 0))\) in der ersten Schicht und eine Bausteintransformationen 
+\(E_2 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, \frac{\pi}{2}))\) mit einer festen 90\degree{} Rotation um die Z-Achse in der Zweiten.
+Der einzige Unterschied zwischen dem Plan eines Mauerwerksverbands für gerade Wände und dessen Spezialplänen ist deren Anwendung.
+Während aus dem Eckplan später für jede Schicht nur ein Baustein pro hinterlegter Bausteintransformation erzeugt werden muss, können beliebig lange gerade Wandabschnitte mithilfe des oben angesprochenen Wiederholungsschritts mit Bausteinen aufgefüllt werden.
+
 \subsection*{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
 In dieser Arbeit stehen Wandstücke zueinander in einer Beziehung, sobald sie sich berühren oder schneiden.
 Diese Beziehungen sind relevant, um die gewählten Mauerwerksverbände ordnungsgemäß über mehrere voneinander abhängige Wandstücke anzuwenden, ohne dass es zu Verletzungen von Vorschriften und Normen wie etwa dem Überbindemaß aus Kapitel~\ref{basics:Mauerwerksverband} kommt.
@@ -137,8 +144,7 @@ Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf f
 Insgesamt bilden in dem Beispiel in Abbildung~\ref{fig:concept:combination_example_base} demnach alle Wandstücke mit Ausnahme von Wandstück Nummer 4 eine Einheit, die alle obigen Eigenschaften erfüllt.
 Dies sind in der Tat all die Wandstücke, die den Start des gewählten Mauerwerksverbands ihren Nachbarn entsprechend anpassen müssen, sodass sich der Verband gleichmäßig über alle Wandstücke erstreckt.
 
-
-\paragraph*{Ecken, T-Kreuzungen und X-Kreuzungen}
+\paragraph*{Ecken, T-Kreuzungen und X-Kreuzungen}\label{concept:corner_etc_properties}
 Wie schon zu Beginn dieses Abschnitts vorweggenommen, existieren für jeden Mauerwerksverband und je nach verwendetem Modul eigene Varianten für Eck- und Kreuzungslegepläne, an welchen sich Maurer orientieren.
 Einige Beispiele hierfür wurden schon in Kapitel~\ref{basics:mauerwerk_eckloesung} gegeben.
 Der Grund dafür ist die Komplexität in diesen Bereichen die vorgeschriebenen Normen (wie etwa dem in Abschnitt~\ref{basics:Mauerwerksverband} genannten Überbindemaß) einzuhalten.
@@ -189,7 +195,14 @@ Einen Sonderfall für Punkt~\ref{concept:tmp4} stellt eine X-Kreuzung dar - mode
 Dieser Fall ist in Abbildung~\ref{fig:concept:x_joint_variationen} mit der Variante Nummer 3 dargestellt.
 Hier liegt der Schnittpunkt des Wandstück-Paares mindestens \(\frac{w_1}{2}\) innerhalb beider Wandstücke und keines der Wandstücke endet auf dem Anderen.
 Durch das vorhergehende Kombinieren von Wandstücken werden die Fälle 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} und 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} eliminiert, denn dabei erfüllen jeweils zwei Wandstücke alle Eigenschaften, um nach Abschnitt~\ref{concept:combination_properties} zu einer Einheit verschmolzen zu werden.
-So entsteht aus Fall 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} der Fall Nummer 1 und Fall Nummer 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} wird ebenfalls zu Fall 1.
+So entsteht aus Fall 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} der Fall Nummer 1 und auch Fall Nummer 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} wird zu deren 1. Fall.
+
+\paragraph*{Lösen von Beziehungen}
+Durch Ecken, T- und X-Kreuzungen werden ansonsten unabhängige Wandstücke miteinander verkettet.
+Das kann zu Situationen führen, in welchen das einfache Anwenden eines Mauerwerksverbands Lücken in manchen Wandstücken hinterlässt.
+Folgendes Beispiel soll helfen diese Problematik zu veranschaulichen.
+
+TODO Beispiel, bessere Erklärung
 
 \subsection*{Öffnungen}
 Neben Wänden sind Öffnungen ein integraler Bestandteil bei der Planung von Gebäuden.
@@ -200,13 +213,26 @@ In dieser Arbeit besitzt dieser Quader die selbe Orientierung wie das dazugehör
 Daher sind nur Position, Länge und Höhe des Quaders von Bedeutung für das Wall Detailing.
 Da es allerdings üblich ist einen sogenannten Sturz über der eigentlichen Öffnung eines Fenster oder einer Tür anzubringen, muss auch für dieses Objekt Platz im Wandstück geschaffen werden. 
 Der Sturz ist etwas länger als die Länge der Öffnung und liegt an beiden Seiten auf dem Mauerwerk auf, um den Bausteinen darüber eine stabile Grundlage zu bieten.
-So bleibt die Tragfähigkeit der Wand trotz Öffnungen bestehen.
+So bleibt die Stabilität der Wand trotz Öffnungen erhalten.
 
 
 \section{Wall Detailing}
 \label{concept:wall_detailing}
-Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang ein als geometrischer Körper definiertes Wandstück in ein konkretes Mauerwerk zu überführen, bezeichnet.
+Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang bezeichnet ein als geometrischer Körper definiertes Wandstück in ein konkretes Mauerwerk zu überführen.
+Dieser Vorgang wendet die zuvor behandelten Konzepte an, um Lösungen für beliebig komplexe Gebäudemodelle zu errechnen.
+Als Lösung sollen nur diejenigen Bausteinmengen gelten, die sämtliche von Wandstücken abgedeckten Bereiche lückenlos mit Bausteinen füllen, während gleichzeitig die gewünschten Mauerwerksverbände eingehalten werden.
+Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzung zwangsläufig Ähnlichkeiten zu dem von Usmanov et al. auf, das bereits in Kapitel~\ref{related:digital_plan_of_brickwork_layout} zusammengefasst wurde.
 
+\begin{enumerate}
+    \item Extrahieren relevanter Informationen wie Geometrie und Typ-Annotationen aus dem vorgegebenen Gebäudemodell. Dabei interessieren in erster Linie Wände und deren Öffnungen sowie gewünschte Mauerwerksverbände (siehe Abschnitt~\ref{concept:mauerwerksverband}).
+    \item Anwenden des vorgegebenen Moduls für jedes gefundene Wandstück. Das führt zu einer schichtweisen Repräsentation jedes Wandstücks.
+    \item Finden und Kombinieren von Wandstückverbänden nach Abschnitt~\ref{concept:combination_properties}.
+    \item Finden und Lösen von anderen Beziehungen wie Ecken T- und X-Kreuzungen nach Abschnitt~\ref{concept:corner_etc_properties}.
+    \item Schichtweises Anwenden der Öffnungen jedes Wandstücks.
+    \item Schichtweises Anwenden der den Wandstücken zugewiesenen Mauerwerksverbände.
+    \item Finden von Nachbarschaftsbeziehungen zwischen Bausteinen.
+    \item Konvertieren in das für die nachfolgende Bauplangenerierung notwendige Format.
+\end{enumerate}
 
 \section{Regelbasierte Bauplangenerierung}
 blabla
