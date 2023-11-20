@@ -291,11 +291,12 @@ Dieser kann wie folgt erstellt werden:
     \item Stößt man dabei auf einen schon existierenden Knoten, so bricht man diesen Pfad an der Stelle ab. Dieser Fall tritt zum Beispiel auf, wenn in dem Modell ein abgeschlossener Raum exisitiert.
 \end{enumerate}
 
-Nun kann das Modell mithilfe des Graphen einfach durchlaufen werden und ausgehend von den Startindex des Eckplans eines Knotens, die Indezes von dessen Nachbarn in passender Weise gewählt werden.
+Nun kann das Modell mithilfe des Graphen einfach durchlaufen werden und ausgehend von den Startindex des Eckplans eines Knotens, die Indizes von dessen Nachbarn in passender Weise gewählt werden.
 Dies wiederholt man für alle Nachbarn des derzeitigen Knotens, im nächsten Schritt für deren Nachbarn, solange bis alle Knoten einen Startindex zugewiesen bekommen haben.
 In ungünstigen Situationen hängt das Finden einer passenden Lösung von dem Startknoten ab.
 Dies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph exisitieren.
 Wird für den gewählten Startknoten mithilfe des Verfahrens keine zulässige Lösung gefunden, so muss ein anderer Startknoten ausprobiert werden.
+Findet man für keinen Startknoten eine valide Lösung, so exisitiert für das Modell und den Modulen der gewünschten Mauerwerksverbände keine lückenlose Bausteinkonfiguration.
 
 \subsection{Öffnungen}
 Neben Wänden sind Öffnungen ein integraler Bestandteil bei der Planung von Gebäuden.
