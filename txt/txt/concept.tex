@@ -88,6 +88,24 @@ Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (0, 0, 0))\) und
 Dieses Beispiel ist in Abbildung~\ref{fig:concept:concept_Mauerwerksverband} schematisch dargestellt.
 Aber auch andere, komplexere Verbände können in dieser Form abgebildet und so dem nachfolgenden Wall Detailing in abstrahierter Weise übergeben werden.
 
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.3\columnwidth}
+      \includegraphics[width=\columnwidth]{fig/concept_streched_bond_corner.png}
+      \caption{Erst \(E_1\), dann \(E_2\).}
+      \label{fig:concept:concept_streched_bond_corner}
+    \end{subfigure}
+    \hfil
+    \begin{subfigure}[b]{0.3\columnwidth}
+      \includegraphics[width=\columnwidth]{fig/concept_streched_bond_corner_inverse.png}
+      \caption{Erst \(E_2\), dann \(E_1\).}
+      \label{fig:concept:concept_streched_bond_corner_inverse}
+    \end{subfigure}
+    \hfil
+  \caption{Eckpläne für den Läuferverband mit einem Versatz von 50\%.}
+  \label{fig:concept:corner_bond}
+\end{figure}
+
 Die speziellen Legepläne zur korrekten Auflösung von kritischen Bereichen wie zum Beispiel Ecken können ebenfalls in dieser Form für jeden Mauerwerksverband angegeben werden.
 Für das vorangegangene Beispiel sähe der Eckplan wie folgt aus:
 Eine Nulltransformation \(E_1 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, 0))\) in der ersten Schicht und eine Bausteintransformationen 
@@ -202,9 +220,82 @@ So entsteht aus Fall 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} der F
 \subsection{Lösen von Beziehungen}
 Durch Ecken, T- und X-Kreuzungen werden ansonsten unabhängige Wandstücke miteinander verkettet.
 Das kann zu Situationen führen, in welchen das einfache Anwenden eines Mauerwerksverbands Lücken in manchen Wandstücken hinterlässt.
-Folgendes Beispiel soll helfen diese Problematik zu veranschaulichen.
+Das Beispiel in Abbildung~\ref{fig:concept:loesen_von_beziehungen1} soll helfen diese Problematik zu veranschaulichen.
+Zu sehen ist eine Konstellation von 4 Wandstücken, die in einer Kette durch 3 Ecken miteinander verbunden sind.
+Das anzuwendende Modul hat die Dimensionen \([2, 1, 0.5]\). 
+Die Höhe des Moduls ist für dieses Problem allerdings irrelevant, weshalb die folgenden Skizzen ausschließlich die Draufsicht auf die Situationen zeigen.
+Wie in Kapitel~\ref{concept:mauerwerksverband} am Beispiel des Läuferverbands gezeigt, gibt es mehrere Möglichkeiten einem Eckplan zu folgen.
+Solange die Reihenfolge weiterhin eingehalten wird, kann mit jeder Schicht des Eckplans begonnen werden einen Eckbereich aufzufüllen.
+Das führt in dem Beispiel aufgrund des zwei-schichtigen Eckplans des Läuferverbands dazu, dass für jede der 3 Ecken zwei mögliche Startschichten existieren.
+Dies resultiert demnach in insgesamt 8 unterschiedlichen Varianten, von welchen allerdings nicht alle zielführend sind.
+In Abbildung~\ref{fig:concept:loesen_von_beziehungen2} ist eine Variante dargestellt, die Lücken in der Wand hinterlassen würde.
+Das zunächst naheliegend wirkende Füllen der Löcher durch kleinere Bausteine ist nicht zulässig, da damit das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) verletzt wäre.
+Darum ist es notwendig eine Kombination an Startschichten über alle miteinander verbundenen Eckbereiche zu finden, die es ermöglicht die verbleibenden geraden Wandstücke im Anschluss durch einfaches Anwenden des Läuferverbands aufzufüllen, ohne dass Lücken entstehen.
 
-TODO Beispiel, bessere Erklärung
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.4\columnwidth]{fig/concept lösung von beziehungen1.png}
+    \caption{Draufsicht auf eine Verkettung von 4 Wandstücken durch 3 dazwischenliegende Ecken.}
+    \label{fig:concept:loesen_von_beziehungen1}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.4\columnwidth]{fig/concept lösung von beziehungen2.png}
+    \caption{Draufsicht auf eine unzulässige Lösung der Eckplankonfiguration.}
+    \label{fig:concept:loesen_von_beziehungen2}
+\end{figure}
+
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}[b]{0.4\columnwidth}
+      \includegraphics[width=\columnwidth]{fig/concept lösung von beziehungen3.png}
+      \caption{Eine zulässige Lösung.}
+      \label{fig:concept:loesen_von_beziehungen3}
+    \end{subfigure}
+    \hfil
+    \begin{subfigure}[b]{0.4\columnwidth}
+      \includegraphics[width=\columnwidth]{fig/concept lösung von beziehungen4.png}
+      \caption{Die darüberliegende Schicht.}
+      \label{fig:concept:loesen_von_beziehungen4}
+    \end{subfigure}
+  \caption{Eine mögliche Lösung und die durch die Eckpläne entstehende zweite Lösung für die darüber liegende Schicht.}
+  \label{fig:concept:loesen_von_beziehungen3und4}
+\end{figure}
+
+Ein Verfahren, welches für das vorliegende Beispiel des halbversetzten Läuferverbands, dessen sehr einfachen Eckplans und dem durch seine praktische Form gewählten Moduls Lösungen findet, löst nicht zwangsläufig auch eine beliebig andere Situation.
+Ebenfalls führt das Miteinbeziehen der 3. Dimension, also der Höhe der beteiligten Wandstücke, zu einer Explosion verschiedenster Eck-Konstellationen.
+Zieht man etwa das Beispiel aus Abbildung~\ref{fig:concept:combination_example_base} heran und erweitert es durch Einfügen weiterer Wandstücke um Ecken an den Außenkanten von Bereich 1, 3, 4, 5+6 und 7, an welchen beliebig weitere verkettete Wandstücke in sich geschlossene Kreise bilden, so können sogar nicht lösbare Fälle auftreten.
+Durch die Anzahl der Schichten des Eckplans eines Mauerwerksverbands und die Anzahl der miteinander verketteten Wandstücke baut sich schnell ein großer Lösungsraum auf.
+Aufgrund der Einschränkung eine mögliche Lösung lediglich mit zulässig oder unzulässig bewerten zu können, sind herkömmliche Optimierungsverfahren nicht in der Lage das Problem zu lösen.
+Diese benötigen meistens eine sogenannte \textit{Fitness Funktion}, welche die Güte der derzeitigen Lösung angibt und dem Optimierungsverfahren sozusagen eine Richtung weist, in der ein lokales Minimum oder Maximum dieser Funktion zu erwarten ist.
+Wählt man die \textit{Fitness Funktion} sinnvoll, kann damit ein kontinuierlicher Lösungsraum effizient nach einer passablen Lösung durchsucht werden.
+In dem vorliegenden Fall gibt es allerdings, wenn überhaupt, nur einige wenige zulässige Lösungen, die an den Startindizes der Pläne der jeweilgen Eckbereiche gekoppelt sind.
+Diese Startindizes weisen aber nicht dieselben Eigenschaften auf, wie kontinuierliche Parameter, die durch kleine Veränderungen eine etwas bessere oder schlechtere Lösung erzeugen.
+Das Ändern eines Startindex einer einzelnen Ecke kann zwar eine Lösung mit einer reduzierten Anzahl an Lücken liefern, gibt aber deswegen keine Richtung vor in der man noch bessere Lösungen erwarten kann.
+Außerdem ist auch eine Lösung mit einer einzigen Lücke nicht zulässig, da dies die Stabilität eines Wandstücks stark beeinflussen könnte.
+
+Darum bleibt zunächst nur das Durchprobieren sämtlicher Konfigurationen bis eine zulässige gefunden wurde.
+Allerdings fällt schnell auf, das das Wählen eines einzigen Startindex für eine Ecke, alle direkt und indirekt damit verketteten anderen Ecken beinflusst.
+Wählt man in dem obigen Beispiel in Abbildung~\ref{fig:concept:loesen_von_beziehungen3} etwa die untere Ecke aus und legt deren Startindex auf die abgebildete Situation fest, so verbleibt ohnehin nur noch eine zulässige Konfiguration für die darüber liegende Ecke.
+Andernfalls befände man sich in der Situation aus Abbildung~\ref{fig:concept:loesen_von_beziehungen2}, welche keine zulässige Lösung darstellt.
+Setzt man nun den Eckplanindex für diese Ecke ebenfalls fest, zwingt man deren zweiten Nachbarn zwangsläufig in die abgebildete Situation, da der zweite Fall wieder zu einer unzulässigen Lösung führen würde.
+Da sich an einem Wandstück übereinander mehrere Ecken befinden können, bildet sich damit ein Abhängigkeitsgraph zwischen allen miteinander verketteten Wandstücken.
+Dieser kann wie folgt erstellt werden:
+
+\begin{enumerate}
+    \item Wähle eine Startecke und finde alle darüber- und darunterliegenden Ecken, die durch Festlegen eines Index einer Ecke in einer dieser Schichten direkt davon betroffen sind. Dies stellt den ersten Knoten des Abhängigkeitsgraphen dar.
+    \item Finde alle Nachbarn aller zuvor gefunden Ecken.
+    \item Wiederhole für jeden Nachbarn das Vorgehen aus dem ersten Schritt. Daraus resultieren die nächsten Knoten, welche mit dem Vorgängerknoten verbunden werden.
+    \item Stößt man dabei auf einen schon existierenden Knoten, so bricht man diesen Pfad an der Stelle ab. Dieser Fall tritt zum Beispiel auf, wenn in dem Modell ein abgeschlossener Raum exisitiert.
+\end{enumerate}
+
+Nun kann das Modell mithilfe des Graphen einfach durchlaufen werden und ausgehend von den Startindex des Eckplans eines Knotens, die Indezes von dessen Nachbarn in passender Weise gewählt werden.
+Dies wiederholt man für alle Nachbarn des derzeitigen Knotens, im nächsten Schritt für deren Nachbarn, solange bis alle Knoten einen Startindex zugewiesen bekommen haben.
+In ungünstigen Situationen hängt das Finden einer passenden Lösung von dem Startknoten ab.
+Dies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph exisitieren.
+Wird für den gewählten Startknoten mithilfe des Verfahrens keine zulässige Lösung gefunden, so muss ein anderer Startknoten ausprobiert werden.
 
 \subsection{Öffnungen}
 Neben Wänden sind Öffnungen ein integraler Bestandteil bei der Planung von Gebäuden.
@@ -239,13 +330,13 @@ Häufig ist dies nur möglich, indem man für manche Bausteine die Länge des ve
 In Abbildung~\ref{fig:concept:lauferverband_ending} werden für den Läuferverband Bausteine mit halber Modullänge und für den Kreuzverband in der Abbildung daneben zwei angepasste Versionen des Moduls benötigt:
 Erneut ein Bausteinformat mit halber Modullänge um die Läuferverbandschichten des Kreuzverbands abzuschließen und ein Bausteinformat, dessen Länge sich aus der halben Modulbreite bildet und für den Abschluss der Kopfverbandschichten notwendig ist.
 Aber nicht nur an Wandenden muss ein Mauerwerksverband mit einer geraden Kante abgeschlossen werden.
-Auch an den zuvor angesprochen Öffnungen ist dies für die durch die Öffnung geteilten Schichten erforderlich.
+Auch an den zuvor angesprochen Öffnungen ist dies für die Schichten erforderlich, die durch die Öffnung geteilt werden.
 Für den Fall, dass das vollständige Detailing eines Modells das Anpassen des gewünschten Moduls notwendig macht, muss diese Information neben den errechneten Transformationen der Bausteine ebenfalls in das Ergebnis integriert werden.
 Somit erhält jeder Baustein aus diesem Grund zusätzlich eine Beschreibung über dessen Dimensionen.
 
 \section{Wall Detailing}
 \label{concept:wall_detailing}
-Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang bezeichnet ein als geometrischer Körper definiertes Wandstück in ein konkretes Mauerwerk zu überführen.
+Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang bezeichnet ein als geometrischer Körper definiertes Wandstück in konkretes Mauerwerk zu überführen.
 Dieser Vorgang wendet die zuvor behandelten Konzepte an, um Lösungen für beliebig komplexe Gebäudemodelle zu errechnen.
 Als Lösung sollen nur diejenigen Bausteinmengen gelten, die sämtliche von Wandstücken abgedeckten Bereiche lückenlos mit Bausteinen füllen, während gleichzeitig die gewünschten Mauerwerksverbände eingehalten werden.
 Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzung zwangsläufig Ähnlichkeiten zu dem von Usmanov et al. auf, das bereits in Kapitel~\ref{related:digital_plan_of_brickwork_layout} zusammengefasst wurde.
@@ -258,8 +349,8 @@ Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzun
     \item Schichtweises Anwenden der Öffnungen jedes Wandstücks.
     \item Schichtweises Anwenden der den Wandstücken zugewiesenen Mauerwerksverbände. Dazu gehören sowohl die besonderen Bereiche aus Punkt~\ref{concept:wall_detailing_tmp1}, als auch gerade Wandabschnitte und allein stehende Wandenden.
     \item Finden von Nachbarschaftsbeziehungen zwischen Bausteinen.
-    \item Konvertieren in das für die nachfolgende Bauplangenerierung notwendige Format.
+    \item Konvertieren in das für die nachfolgende Bauplandeduktion notwendige Format.
 \end{enumerate}
 
-\section{Regelbasierte Bauplangenerierung}
+\section{Regelbasierte Bauplandeduktion}
 blabla
