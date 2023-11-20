@@ -9,7 +9,7 @@ from wall_detailing.masonry.brick import Brick, Neighbor
 class BrickExportInformation:
     def __init__(self, brick: Brick):
         self.shape = [brick.length, brick.width, brick.height]
-        self.position = brick.position.tolist()
+        self.position = brick.center().tolist()
         self.rotation = quaternion.as_float_array(brick.orientation).tolist()
         self.neighbors = {}
         self.depends_on = []

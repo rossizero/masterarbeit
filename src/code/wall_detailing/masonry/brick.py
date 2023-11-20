@@ -162,6 +162,13 @@ class Brick:
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
         return self
 
+    def center(self):
+        """
+        :return: center of the brick in global coordinates
+        """
+        mid = self._bottom_left_corner_offset()
+        return self.position - mid
+
     def _bottom_left_corner_offset(self):
         """
         see get_rotated_dimensions

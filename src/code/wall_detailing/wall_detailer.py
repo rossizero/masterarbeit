@@ -113,8 +113,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 and False
-            fill_right = len(layer.right_connections) == 0 and False
+            fill_left = len(layer.left_connections) == 0
+            fill_right = len(layer.right_connections) == 0
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -217,8 +217,8 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
     scenario = CombinationExampleForText()
-    scenario = DoppelEck2_Closed_TJoint()
-    scenario = SimpleCorner()
+    #scenario = DoppelEck2_Closed_TJoint()
+    #scenario = SimpleCorner()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
@@ -226,5 +226,5 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
-    BrickExporter(bb).export_to_json("output_house.json")
+    BrickExporter(bb).export_to_json("output.json")
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
