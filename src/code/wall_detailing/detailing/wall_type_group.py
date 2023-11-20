@@ -5,6 +5,8 @@ from masonry.bond.streched_bond import StrechedBond
 from masonry.brick import BrickInformation
 from masonry.bond.head_bond import HeadBond
 
+from wall_detailing.masonry.bond.cross_bond import CrossBond
+
 
 class WallTypeGroup:
     def __init__(self, ifc_class: str, brick_information: List[BrickInformation]):
@@ -13,5 +15,5 @@ class WallTypeGroup:
         self.brick_information.sort(key=lambda x: x.volume(), reverse=True)
         self.module = self.brick_information[0]
         self.bond = StrechedBond(self.module)
-        #self.bond = HeadBond(self.module)
+        self.bond = CrossBond(self.module)
         self.layer_groups: List[WallLayerGroup] = []

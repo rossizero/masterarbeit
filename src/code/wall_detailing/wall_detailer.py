@@ -23,6 +23,7 @@ from wall_detailing.masonry import brick
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
+from scenarios.examples_for_text.Single_Wall_Endings import Single_Wall_Slim, Single_Wall_Thick
 
 
 class WallDetailer:
@@ -216,6 +217,7 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
     scenario = CombinationExampleForText()
     scenario = DoppelEck2_Closed_TJoint()
+    scenario = Single_Wall_Thick()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
