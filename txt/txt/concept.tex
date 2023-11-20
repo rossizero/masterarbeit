@@ -110,6 +110,7 @@ Die speziellen Legepläne zur korrekten Auflösung von kritischen Bereichen wie 
 Für das vorangegangene Beispiel sähe der Eckplan wie folgt aus:
 Eine Nulltransformation \(E_1 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, 0))\) in der ersten Schicht und eine Bausteintransformationen 
 \(E_2 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, \frac{\pi}{2}))\) mit einer festen 90\degree{} Rotation um die Z-Achse in der Zweiten.
+Dieser Eckplan ist in Abbildung~\ref{fig:concept:corner_bond} zu sehen.
 Der einzige Unterschied zwischen dem Plan eines Mauerwerksverbands für gerade Wände und dessen Spezialplänen ist deren Anwendung.
 Während aus dem Eckplan später für jede Schicht nur ein Baustein pro hinterlegter Bausteintransformation erzeugt werden muss, können beliebig lange gerade Wandabschnitte mithilfe des oben angesprochenen Wiederholungsschritts mit Bausteinen aufgefüllt werden.
 
@@ -291,7 +292,7 @@ Dieser kann wie folgt erstellt werden:
     \item Stößt man dabei auf einen schon existierenden Knoten, so bricht man diesen Pfad an der Stelle ab. Dieser Fall tritt zum Beispiel auf, wenn in dem Modell ein abgeschlossener Raum exisitiert.
 \end{enumerate}
 
-Nun kann das Modell mithilfe des Graphen einfach durchlaufen werden und ausgehend von den Startindex des Eckplans eines Knotens, die Indizes von dessen Nachbarn in passender Weise gewählt werden.
+Nun kann das Modell mithilfe des Graphen einfach ähnlich einer Breitensuche durchlaufen und ausgehend von den Startindex des Eckplans eines Knotens die Indizes von dessen Nachbarn in passender Weise gewählt werden.
 Dies wiederholt man für alle Nachbarn des derzeitigen Knotens, im nächsten Schritt für deren Nachbarn, solange bis alle Knoten einen Startindex zugewiesen bekommen haben.
 In ungünstigen Situationen hängt das Finden einer passenden Lösung von dem Startknoten ab.
 Dies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph exisitieren.
