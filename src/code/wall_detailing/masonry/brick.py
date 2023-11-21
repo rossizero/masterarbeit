@@ -166,8 +166,8 @@ class Brick:
         """
         :return: center of the brick in global coordinates
         """
-        mid = self._bottom_left_corner_offset()
-        return self.position - mid
+        mid = quaternion.rotate_vectors(self.orientation, np.array([self.length / 2.0, self.width / 2.0, self.height / 2.0]))
+        return self.position + mid
 
     def _bottom_left_corner_offset(self):
         """
