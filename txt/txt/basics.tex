@@ -42,7 +42,7 @@ In Abbildung \ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
     \label{fig:IFC_Relationships}
 \end{figure}
 
-\subsection{IfcPropertySets und IfcQuantitySets}
+\subsection{IfcPropertySets und IfcQuantitySets}\label{basics:ifc_properties}
 Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zb. auch eine präzisere Kosten- und Zeitschätzung für den Bau ermöglicht \cite{Industry93:online}. 
 Dies kann mithilfe der IfcPropertySets und der IfcQuantitySets umgesetzt werden blablabla. %TODO
 %TODO diagramm, beispiel Properties und Quantities
@@ -65,7 +65,7 @@ ifcopeningelement um lücken in wände zu machen.
 "The opening element stands for opening, recess or chase, all reflecting voids. It represents a void within any element that has physical manifestation. Openings can be inserted into walls, slabs, beams, columns, or other elements." Auszug aus Doku. und This also includes IfcOpeningElements, the mechanism used to extract openings for windows and doors, typically from walls. %https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-construct-new-geometry/
 %https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcDoor.htm
 
-\section{IFC for Blender}
+\section{IFC for Blender}\label{basics:blender}
 \subsection{Blender}
 Blender ist eines der beliebtesten Open Source Programme zur Modellierung von 3D Modellen und Animationen \cite{blendero56:online}.
 Aufgrund dessen existieren auch eine Vielzahl an freien Erweiterungen bzw. Plugins - unter anderem auch eine Integration von IFC Projekten.
@@ -129,7 +129,7 @@ conda install -c anaconda pyqt
 the ABS models to solve floor layout problems
 constraint solver / programming
 
-\section{Building Information Modeling}
+\section{Building Information Modeling}\label{basics:bim}
 Ein weiterer Punkt, der für die Verwendung von IFC spricht ist das sogenannte \textit{Building Information Modeling} (BIM)\cite{Building41:online}.
 Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Übersetzt aus dem Englischen)\cite{Microsof51:online}.
 Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
