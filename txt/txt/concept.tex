@@ -354,9 +354,16 @@ Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzun
     \item Konvertieren in das für die nachfolgende Bauplandeduktion notwendige Format.
 \end{enumerate}
 
-Das Ergebnis dieser Schritte ist eine Menge aus Bausteinen.
-Durch die Berechnungen in Schrit~\ref{concept:wall_detailing_tmp2} werden bereits die grundlegensten Beziehungen zwischen den Bausteinen hergestellt.
-
+Das Ergebnis dieser Schritte ist eine Menge aus Bausteinen, nachfolgend auch als \textit{Konstruktionsplan} bezeichnet.
+Durch die Berechnungen in Schritt~\ref{concept:wall_detailing_tmp2} werden bereits die grundlegensten Beziehungen zwischen den Bausteinen hergestellt.
+Eine Aussage darüber in welcher Reihenfolge die Bausteine gesetzt werden müssen, um das geplante Gebäude unter Berücksichtigung etwaiger physikalischer oder anderer Einschränkungen zu errichten, wird allerdings noch nicht getroffen.
+Dazu müssen Schritt für Schritt Teilmengen aus der Gesamtmenge an Bausteinen extrahiert werden, die nur diejenigen Bausteine beinhalten, die in einer bestimmten Situation gelegt werden können.
+Welche das sind, soll anhand vorgebener Regeln ausgewertet werden können.
+Diese Regeln können dafür verwedet werden bestimmte Voraussetzungen an einen Baustein zu setzen, um zum Beispiel das Ablegen eines Bausteins zu verhindern, unter dem sich weder fester Boden, noch ausreichend andere Bausteine befinden.
+Denn setzt man einen Baustein mitten in der Luft ab, so fällt er in der echten Welt aufgrund der auf ihn einwirkenden Gravitation zu Boden.
+Außerdem weisen unterschiedliche Bausteinarten und Umgebungen, in die man das Gebäude mithilfe des zuvor errechneten Konstruktionsplans errichten möchte, womöglich unterschiedliche Einschränkungen auf.
+So ist es notwendig je nach Situation voneinander abweichende Regelsets auf dem Konstruktionsplan anzuwenden zu können.
+Die Möglichkeit der nachträglichen Definition dieser Regeln, verhindert auch die Notwendigkeit den Konstruktionsplan für sich unterscheidene Situationen neu berechnen zu müssen.
 
 \section{Regelbasierte Bauplandeduktion}
-blabla
+Ontologien bieten verschiedene Werkzeuge an, mithilfe derer auf streng definierten Objekttypen und deren Relationen zueinander konkrete Instanzen gruppiert und gefiltert werden können.
