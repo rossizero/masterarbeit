@@ -218,7 +218,7 @@ Hier liegt der Schnittpunkt des Wandstück-Paares mindestens \(\frac{w_1}{2}\) i
 Durch das vorhergehende Kombinieren von Wandstücken werden die Fälle 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} und 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} eliminiert, denn dabei erfüllen jeweils zwei Wandstücke alle Eigenschaften, um nach Abschnitt~\ref{concept:combination_properties} zu einer Einheit verschmolzen zu werden.
 So entsteht aus Fall 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} der Fall Nummer 1 und auch Fall Nummer 2 aus Abbildung~\ref{fig:concept:x_joint_variationen} wird zu deren 1. Fall.
 
-\subsection{Lösen von Beziehungen}
+\subsection{Lösen von Beziehungen}\label{concept:solving_beziehungen}
 Durch Ecken, T- und X-Kreuzungen werden ansonsten unabhängige Wandstücke miteinander verkettet.
 Das kann zu Situationen führen, in welchen das einfache Anwenden eines Mauerwerksverbands Lücken in manchen Wandstücken hinterlässt.
 Das Beispiel in Abbildung~\ref{fig:concept:loesen_von_beziehungen1} soll helfen diese Problematik zu veranschaulichen.
@@ -344,15 +344,19 @@ Als Lösung sollen nur diejenigen Bausteinmengen gelten, die sämtliche von Wand
 Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzung zwangsläufig Ähnlichkeiten zu dem von Usmanov et al. auf, das bereits in Kapitel~\ref{related:digital_plan_of_brickwork_layout} zusammengefasst wurde.
 
 \begin{enumerate}
-    \item Extrahieren relevanter Informationen wie Geometrie und Typ-Annotationen aus dem vorgegebenen Gebäudemodell. Dabei interessieren in erster Linie Wände und deren Öffnungen sowie gewünschte Mauerwerksverbände (siehe Abschnitt~\ref{concept:mauerwerksverband}).
-    \item Anwenden des vorgegebenen Moduls für jedes gefundene Wandstück. Das führt zu einer schichtweisen Repräsentation jedes Wandstücks.
+    \item Extrahieren relevanter Informationen wie Geometrie und Typ-Annotationen aus dem vorgegebenen Gebäudemodell. Dabei interessieren in erster Linie Wände und deren Öffnungen sowie gewünschte Module und Mauerwerksverbände (siehe Abschnitt~\ref{concept:mauerwerksverband}).
+    \item Anwenden des vorgegebenen Moduls für jedes gefundene Wandstück. Das führt zu einer schichtweisen Repräsentation jedes Wandstücks. Dies erleichtert es später Operationen an und zwischen mehreren Wandstücken durchzuführen.
     \item Finden und Kombinieren von Wandstückverbänden nach Abschnitt~\ref{concept:combination_properties}.
-    \item\label{concept:wall_detailing_tmp1} Finden und Lösen von anderen Beziehungen wie Ecken T- und X-Kreuzungen nach Abschnitt~\ref{concept:corner_etc_properties}.
-    \item Schichtweises Anwenden der Öffnungen jedes Wandstücks.
+    \item\label{concept:wall_detailing_tmp1} Finden und Lösen von anderen Beziehungen wie Ecken T- und X-Kreuzungen nach Abschnitt~\ref{concept:corner_etc_properties} (Finden) und Abschnitt~\ref{concept:solving_beziehungen} (Lösen).
+    \item Schichtweises Anwenden der Öffnungen jedes Wandstücks. Dabei werden alle betroffenen Schichten in passender Weise geteilt und deren Länge reduziert.
     \item Schichtweises Anwenden der den Wandstücken zugewiesenen Mauerwerksverbände. Dazu gehören sowohl die besonderen Bereiche aus Punkt~\ref{concept:wall_detailing_tmp1}, als auch gerade Wandabschnitte und allein stehende Wandenden.
-    \item Finden von Nachbarschaftsbeziehungen zwischen Bausteinen.
+    \item\label{concept:wall_detailing_tmp2} Finden von (direkten) Nachbarschaftsbeziehungen zwischen Bausteinen.
     \item Konvertieren in das für die nachfolgende Bauplandeduktion notwendige Format.
 \end{enumerate}
+
+Das Ergebnis dieser Schritte ist eine Menge aus Bausteinen.
+Durch die Berechnungen in Schrit~\ref{concept:wall_detailing_tmp2} werden bereits die grundlegensten Beziehungen zwischen den Bausteinen hergestellt.
+
 
 \section{Regelbasierte Bauplandeduktion}
 blabla

@@ -16,7 +16,7 @@ from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
     SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners, \
-    OverlappingWalls
+    OverlappingWalls, LucaScenario
 from masonry import corner_rep
 from wall_detailing.export.BrickExporter import BrickExporter
 from wall_detailing.masonry import brick
@@ -25,6 +25,7 @@ from wall_detailing.masonry.bond.streched_bond import StrechedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
+import owlready2 as owl
 
 
 class WallDetailer:
@@ -218,7 +219,7 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
     scenario = CombinationExampleForText()
     scenario = DoppelEck2_Closed_TJoint()
-    #scenario = SimpleCorner()
+    scenario = LucaScenario()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])

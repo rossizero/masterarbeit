@@ -417,3 +417,24 @@ class ThickWallAllCorners(Scenario):
         w20.rotate_around(quaternion.from_euler_angles(0, an, an))
         all = [w10, w20, w11, w12, w21, w22]
         return all
+
+
+class LucaScenario(Scenario):
+    def get_walls(self):
+        width = 1
+        height = 20
+        an = 0.3
+
+        w1 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0")
+        w2 = Wall.make_wall(10, width, height * 0.5, np.array([4.5, 0.5, height / 4.0]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0")
+        w3 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, -4.0, height / 4.0]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0")
+        w4 = Wall.make_wall(10, width, height * 0.5, np.array([-4.5, 0.5, height / 4.0]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0")
+        all = [w1, w2, w3, w4]
+        return all
