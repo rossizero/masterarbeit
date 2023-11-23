@@ -19,13 +19,13 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Win
     OverlappingWalls, LucaScenario
 from masonry import corner_rep
 from wall_detailing.export.BrickExporter import BrickExporter
+from wall_detailing.export.BrickToOntologie import BrickToOntology
 from wall_detailing.masonry import brick
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
-import owlready2 as owl
 
 
 class WallDetailer:
@@ -219,7 +219,7 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
     scenario = CombinationExampleForText()
     scenario = DoppelEck2_Closed_TJoint()
-    scenario = LucaScenario()
+    scenario = Single_Wall_Slim()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
@@ -228,4 +228,5 @@ if __name__ == "__main__":
     bb = wall_detailer.detail()
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
     BrickExporter(bb).export_to_json("output.json")
+    BrickToOntology(bb)
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
