@@ -43,9 +43,11 @@ class BrickToOntology:
             b.hasRightNeighbor = [dic[obj.id][1] for obj in local_brick.neighbors[Neighbor.RIGHT]]
             b.hasFrontNeighbor = [dic[obj.id][1] for obj in local_brick.neighbors[Neighbor.FRONT]]
             b.hasBackNeighbor = [dic[obj.id][1] for obj in local_brick.neighbors[Neighbor.BACK]]
-            b.hasBeenSet = False
+            b.placed = False
             b.dependsOn = [empty]#, dic[1][1]]
+            b.dependsOn.extend(b.hasBottomNeighbor)
             building.hasBrick.append(b)
+            close_world(b, Properties=[self.onto.dependsOn])
 
         with self.onto:
             pass
