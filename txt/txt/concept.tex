@@ -4,9 +4,9 @@ Hier ist allerdings anzumerken, dass dies nur ein Platzhalter ist und mithilfe d
 Ab jetzt sind wir aber alle mal wieder seriös.
 
 \section{Modellierung}
-Im Normalfall sind beim Planungsprozess eines Gebäudes oder anderer Infrastruktur eine Vielzahl an Experten aus unterschiedlichen Disziplinen beteiligt.
+Für gewöhnlich sind beim Planungsprozess eines Gebäudes oder anderer Infrastruktur eine Vielzahl an Experten aus unterschiedlichen Disziplinen beteiligt.
 Ein Ziel dieser Arbeit ist es allerdings eine intuitive Konstruktionsplanung zu ermöglichen, sodass eine Einzelperson mit relativ geringer Einlern- und Modellierungszeit in der Lage ist ein Gebäude zu entwerfen.
-Dieser Entwurf muss dennoch alle notwendigen Informationen für die anschließende Bauplandeduktion enthalten, ohne dass das Einpflegen dieser Daten viel Fachwissen voraussetzt.
+Dieser Entwurf muss dennoch alle notwendigen Informationen für die anschließende Bauplandeduktion enthalten, ohne dass das Einpflegen dieser Daten spezielles Fachwissen voraussetzt.
 
 Oftmals lässt sich die Komplexität einer Sache oder eines Vorgehens durch die Vorgabe von Einschränkungen reduzieren.
 Dabei ist es allerdings wichtig diese Einschränkungen so zu wählen, dass die damit erzielten Ergebnisse nach wie vor von Nutzen sind.
@@ -17,7 +17,7 @@ Das wohl bekannteste ist das Lego System (siehe Kapitel~\ref{basics:lego}).
 Neben dessen nützlichen Steckverbindungen, die es ermöglichen ohne Anwenden von Klebstoff oder Schrauben Steine aneinander zu befestigen, ist für diese Arbeit das dadurch vorgegebene Raster ein interessantes Konzept zur Vereinfachung der Modellierung von Gebäuden.
 In Kapitel~\ref{basics: Mauerwerksbau} wurden auch schon die Begriffe \textit{Baunennmaß} und des \textit{Baurichtmaß} eingeführt und das oktametrischen Maßsystem vorgestellt.
 Dies entspricht im Prinzip ebenfalls einem Raster, das aber in Realität durch die Möglichkeit des Zerschneidens von Bausteinen nicht zwingend eingehalten werden muss.
-Da das Vorgeben eines Rasters, dem sowohl die Größen der zu verwendenden Bausteine, als auch (im Fall des Lego Systems) deren Platzierung folgen müssen, eine Einschränkung darstellt, die im Einklang mit der Intiution vieler Menschen steht, wurde dies in das Modellierungskonzept dieser Arbeit integriert.
+Da das Vorgeben eines Rasters, dem sowohl die Größen der zu verwendenden Bausteine, als auch (im Fall des Lego Systems) deren Platzierung folgen müssen, eine Einschränkung darstellt, die im Einklang mit der Intuition vieler Menschen steht, wurde dies in das Modellierungskonzept dieser Arbeit integriert.
 Das Vorgeben eines einzigen, fest definierten Rasters stellt allerdings eine zu große Einschränkung dar, weshalb das Definieren verschiedener Rastergrößen möglich sein muss.
 So können Modelle erstellt werden, die sowohl genau dem Lego System oder dem oktametrischen Maßsystem entsprechen, als auch beliebig anderen Rastern.
 
@@ -266,7 +266,7 @@ Darum ist es notwendig eine Kombination an Startschichten über alle miteinander
 \end{figure}
 
 Ein Verfahren, welches für das vorliegende Beispiel des halbversetzten Läuferverbands, dessen sehr einfachen Eckplans und dem durch seine praktische Form gewählten Moduls Lösungen findet, löst nicht zwangsläufig auch eine beliebig andere Situation.
-Ebenfalls führt das Miteinbeziehen der 3. Dimension, also der Höhe der beteiligten Wandstücke, zu einer Explosion verschiedenster Eck-Konstellationen.
+Ebenfalls führt das Miteinbeziehen der 3. Dimension, also der Höhe der beteiligten Wandstücke, zu einer erheblichen Vervielfachung möglicher Eck-Konstellationen.
 Zieht man etwa das Beispiel aus Abbildung~\ref{fig:concept:combination_example_base} heran und erweitert es durch Einfügen weiterer Wandstücke um Ecken an den Außenkanten von Bereich 1, 3, 4, 5+6 und 7, an welchen beliebig weitere verkettete Wandstücke in sich geschlossene Kreise bilden, so können sogar nicht lösbare Fälle auftreten.
 Durch die Anzahl der Schichten des Eckplans eines Mauerwerksverbands und die Anzahl der miteinander verketteten Wandstücke baut sich schnell ein großer Lösungsraum auf.
 Aufgrund der Einschränkung eine mögliche Lösung lediglich mit zulässig oder unzulässig bewerten zu können, sind herkömmliche Optimierungsverfahren nicht in der Lage das Problem zu lösen.
@@ -277,7 +277,7 @@ Diese Startindizes weisen aber nicht dieselben Eigenschaften auf, wie kontinuier
 Das Ändern eines Startindex einer einzelnen Ecke kann zwar eine Lösung mit einer reduzierten Anzahl an Lücken liefern, gibt aber deswegen keine Richtung vor in der man noch bessere Lösungen erwarten kann.
 Außerdem ist auch eine Lösung mit einer einzigen Lücke nicht zulässig, da dies die Stabilität eines Wandstücks stark beeinflussen könnte.
 
-Darum bleibt zunächst nur das Durchprobieren sämtlicher Konfigurationen bis eine zulässige gefunden wurde.
+Darum bleibt zunächst nur die Brute-Force-Methode (auch als Exhautionsmethode bekannt), also das Berechnen sämtlicher Konfigurationen bis eine zulässige gefunden wurde.
 Allerdings fällt schnell auf, das das Wählen eines einzigen Startindex für eine Ecke, alle direkt und indirekt damit verketteten anderen Ecken beinflusst.
 Wählt man in dem obigen Beispiel in Abbildung~\ref{fig:concept:loesen_von_beziehungen3} etwa die untere Ecke aus und legt deren Startindex auf die abgebildete Situation fest, so verbleibt ohnehin nur noch eine zulässige Konfiguration für die darüber liegende Ecke.
 Andernfalls befände man sich in der Situation aus Abbildung~\ref{fig:concept:loesen_von_beziehungen2}, welche keine zulässige Lösung darstellt.
@@ -297,7 +297,7 @@ Dies wiederholt man für alle Nachbarn des derzeitigen Knotens, im nächsten Sch
 In ungünstigen Situationen hängt das Finden einer passenden Lösung von dem Startknoten ab.
 Dies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph exisitieren.
 Wird für den gewählten Startknoten mithilfe des Verfahrens keine zulässige Lösung gefunden, so muss ein anderer Startknoten ausprobiert werden.
-Findet man für keinen Startknoten eine valide Lösung, so exisitiert für das Modell und den Modulen der gewünschten Mauerwerksverbände keine lückenlose Bausteinkonfiguration.
+Findet man für keinen Startknoten eine valide Lösung, so exisitiert für das Modell und den Modulen der gewünschten Mauerwerksverbände keine naheliegende, lückenlose Bausteinkonfiguration.
 
 \subsection{Öffnungen}
 Neben Wänden sind Öffnungen ein integraler Bestandteil bei der Planung von Gebäuden.

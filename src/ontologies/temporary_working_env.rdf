@@ -5,7 +5,8 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#">
     <owl:Ontology rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction"/>
     
 
@@ -165,6 +166,7 @@
     <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick">
+        <owl:equivalentClass rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
         <rdfs:subClassOf>
             <owl:Restriction>
@@ -224,6 +226,7 @@
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
     </owl:Class>
     
 
@@ -242,6 +245,8 @@
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
         <owl:disjointWith rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick"/>
     </owl:Class>
     
@@ -261,6 +266,8 @@
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
     </owl:Class>
     
 
@@ -293,9 +300,30 @@
             </owl:Restriction>
         </rdf:type>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasID>
     </owl:NamedIndividual>
@@ -306,6 +334,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -323,7 +352,25 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
         <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
@@ -337,6 +384,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -354,6 +402,23 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
@@ -366,6 +431,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -381,6 +447,19 @@
         </rdf:type>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</hasID>
@@ -392,6 +471,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -409,7 +489,28 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</hasID>
     </owl:NamedIndividual>
@@ -420,6 +521,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -437,6 +539,28 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">14</hasID>
@@ -448,6 +572,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -463,6 +588,24 @@
         </rdf:type>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
+        <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</hasID>
     </owl:NamedIndividual>
@@ -486,9 +629,31 @@
             </owl:Restriction>
         </rdf:type>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasID>
     </owl:NamedIndividual>
@@ -512,8 +677,26 @@
             </owl:Restriction>
         </rdf:type>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
+        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasID>
     </owl:NamedIndividual>
     
@@ -541,10 +724,28 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
         <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasID>
     </owl:NamedIndividual>
     
@@ -554,6 +755,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -571,6 +773,23 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
@@ -583,6 +802,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -598,6 +818,19 @@
         </rdf:type>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasID>
@@ -609,6 +842,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -626,9 +860,24 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
+        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasID>
     </owl:NamedIndividual>
@@ -639,6 +888,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -656,9 +906,27 @@
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasID>
     </owl:NamedIndividual>
@@ -669,6 +937,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
         <rdf:type>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
@@ -684,7 +953,20 @@
         </rdf:type>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
         <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasBottomNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
+        <hasNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
         <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
+        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
         <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
         <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</hasID>
     </owl:NamedIndividual>
@@ -718,6 +1000,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick"/>
+        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
     </owl:NamedIndividual>
 </rdf:RDF>
 

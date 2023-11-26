@@ -54,7 +54,7 @@ class BrickToOntology:
             #rule = Imp(1)
             #rule.set_as_rule("""Brick(?b), hasBottomNeighbor(?b, ?n) -> dependsOn(?b, ?n)""")
             #rule.set_as_rule("""Brick(?b) -> hasBeenSet(?b, false)""")
-            #sync_reasoner_pellet()#infer_property_values=True, infer_data_property_values=True)
+            sync_reasoner_pellet(infer_property_values=True, infer_data_property_values=True)
             #print(str(rule))
 
         print("all", self.onto.Brick.instances())
