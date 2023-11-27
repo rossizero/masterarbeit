@@ -24,6 +24,8 @@ class BrickToOntology:
         # set ids
         idd = 1
         dic = {}
+        self.world = World()
+
         for b in bricks:
             brick = self.onto.ConcreteBrick("brick_" + str(idd))
             #brick.is_a.append(self.onto.ConcreteBrick)
@@ -83,14 +85,15 @@ class BrickToOntology:
             def swrl():
                 pass
                 #rule = Imp(1)
-                #rule.set_as_rule("""hasBottomNeighbor(?b, ?n) -> dependsOn(?b, ?n)""")
+                #rule.set_as_rule("""ConcreteBrick(?b), hasBottomNeighbor(?b, ?n) -> dependsOn(?b, ?n)""")
                 #sync_reasoner_hermit(self.onto, infer_property_values=True)
 
             for b in self.onto.ConcreteBrick.instances():
                 if b != empty:
+                    pass
                     close_world(b, Properties=[self.onto.dependsOn])
 
-            sync_reasoner_pellet(infer_property_values=True, infer_data_property_values=True)
+            sync_reasoner_pellet(self.world, infer_property_values=True, infer_data_property_values=True)
             one = dic[7][1]
             print(one.get_properties())
 

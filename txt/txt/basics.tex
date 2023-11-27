@@ -1,23 +1,24 @@
-\chapter{Grundlagen} \label{basics}
-Wie bereits oben erwähnt, wird für diese Arbeit ein geeignetes Speicherformat für 3D Modelle von Gebäuden benötigt.
-Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} vollständig digital abbilden zu können. 
-Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in das Modell zu integrieren auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
-Da diese oft von verschiedenen Experten vieler Fachbereiche (etwa aus den Bereichen der Architektur, des Bauwesens oder der Statik) stammen, muss das Format sehr flexibel und im besten Fall auch zeitgleich bearbeitbar sein.
-Dafür werden seit 2000 die \textit{Industry Foundation Classes} (IFC) von buildingsmart entwickelt, deren Anwendung im internationalen Bauwesen mittlerweile weit verbreitet ist \cite{Industry61:online}.
+\chapter{Grundlagen}
+\label{basics}
+Zunächst wird für diese Arbeit ein geeignetes Speicherformat für 3D Modelle von Gebäuden benötigt.
+Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} möglichstvollständig digital abbilden zu können. 
+Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in das Modell zu integrieren, auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
+Da diese Informationen oft von Experten verschiedener Fachbereiche (etwa aus den Bereichen der Architektur, des Bauwesens oder der Statik) stammen, muss das Format sehr flexibel und im besten Fall auch zeitgleich bearbeitbar sein.
+Dafür werden seit dem Jahr 2000 die \textit{Industry Foundation Classes} (IFC) von buildingsmart entwickelt, deren Anwendung im internationalen Bauwesen mittlerweile weit verbreitet ist~\cite{Industry61:online}.
 
 
 \section{Industry Foundation Classes}
 \label{basics:ifc}
 %Kurze Einleitung was IFC ist
 In der Spezifikation des Standards selbst, wird dieser wie folgt beschrieben:
-"Die Industry Foundation Classes (IFC) sind ein offener internationaler Standard für Daten des Building Information Model (BIM), welche zwischen Softwareanwendungen ausgetauscht, gemeinsam genutzt und von den verschiedenen Akteuren der Bauindustrie und des Gebäudemanagements verwendet werden. 
+\glqq{}Die Industry Foundation Classes (IFC) sind ein offener internationaler Standard für Daten des Building Information Model (BIM), welche zwischen Softwareanwendungen ausgetauscht, gemeinsam genutzt und von den verschiedenen Akteuren der Bauindustrie und des Gebäudemanagements verwendet werden. 
 Der Standard enthält Definitionen für Daten, die für die Lebenszyklen von Gebäude- und Infrastrukturarbeiten erforderlich sind. 
-Die bis jetzt in die IFC aufgenommenen Infrastrukturtypen umfassen Brücken, Straßen, Eisenbahnen, Wasserstraßen und Hafenanlagen" (aus dem Englischen) \cite{IFCScope:online}. 
-Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739\cite{ISOISO1694:online} registriert.
+Die bis jetzt in die IFC aufgenommenen Infrastrukturtypen umfassen Brücken, Straßen, Eisenbahnen, Wasserstraßen und Hafenanlagen\grqq{} (aus dem Englischen)~\cite{IFCScope:online}. 
+Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739 registriert (siehe~\cite{ISOISO1694:online}).
 Da die IFC aber nach wie vor kontinuierlich weiterentwickelt werden, wird in dieser Arbeit die derzeit neueste Version verwendet.
-Diese ist die IFC Spezifikation 4.3.1.0 \cite{IFC4310Spezification:online}.
-Das verbreitetste Austauschformat für IFC ist das Step Physical File Format, welches im ISO 10303 Teil 21 registriert ist \cite{ISO_Step:online}.
-Zudem gibt es speicherreduziertere Formate wie ifcZip oder für Menschen lesbarere Formate wie ifcXML \cite{Industry93:online} \cite{IFCForma28:online}.
+Diese ist die IFC Spezifikation 4.3.1.0~\cite{IFC4310Spezification:online}.
+Das verbreitetste Austauschformat für IFC ist das Step Physical File Format, welches im ISO 10303 Teil 21 registriert ist~\cite{ISO_Step:online}.
+Zudem gibt es speicherreduziertere Formate wie ifcZip oder für Menschen lesbarere Formate wie ifcXML~\cite{Industry93:online}\cite{IFCForma28:online}.
 
 \subsection{IFC 4.3.1.0 Aufbau}
 Im Grunde definieren die \textit{Industry Foundation Classes} eine Vielzahl an Klassen, die in einer komplexen Hierarchie angeordnet den Grundstock des Datenmodells bilden.
@@ -31,14 +32,14 @@ Diese sind anfangs abstrakte Konzepte, die sich mit zunehmender Tiefe in der Hie
 \end{figure}
 
 Da sich diese Arbeit zum größten Teil mit aus Wänden bestehenden Gebäuden befasst, wird nachfolgend die Klasse \textit{IfcWall} wiederholt als Beispiel herangezogen.
-Der für diese Klasse relevante Ausschnitt aus der Klassenhierarchie ist in Abbildung \ref{fig:IfcWall_Hierarchie} dargestellt.
+Der für diese Klasse relevante Ausschnitt aus der Klassenhierarchie ist in Abbildung~\ref{fig:IfcWall_Hierarchie} dargestellt.
 Objekte werden von dem Standard in Relation zueinander gestellt, um komplexere Zusammenhänge darzustellen.
-In Abbildung \ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen einem Objekt des Types \textit{IfcWall}, des Stockerwerks, welches diese Wand referenziert und wiederum selbst Teil eines \textit{IfcBuildings} ist, bis hin zur obersten Komponente eines Ifc Projektes, dem gleichnamigen \textit{IfcProject}.
+In Abbildung~\ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen einem Objekt des Types \textit{IfcWall}, des Stockerwerks, welches diese Wand referenziert und wiederum selbst Teil eines \textit{IfcBuildings} ist, bis hin zur obersten Komponente eines Ifc Projektes, dem gleichnamigen \textit{IfcProject}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\columnwidth]{fig/IFC_Relationships_300.drawio.png}
-    \caption{Relation der IfcWall und einem IfcProjekt}
+    \caption{Relation der IfcWall und einem \textit{IfcProject}}
     \label{fig:IFC_Relationships}
 \end{figure}
 
@@ -242,25 +243,25 @@ Bei Verbandsmauerwerk gilt dies zusätzlich für die Wandquerrichtung. \cite{05m
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/läuferverband025_mittig.png}
-    \caption{Mittlerer Läuferverband \textit{(Versatz: 1/4 der Steinlänge).}}
-    \label{fig:basics:läuferverband_mittig}
+    \caption{Mittlerer Läuferverband \textit{(1/4 Versatz).}}
+    \label{fig:basics:laeuferverband_mittig}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/läuferverband033_schleppend.png}
-    \caption{Schleppender Läuferverband \textit{(Versatz: 1/3 der Steinlänge).}}
-    \label{fig:basics:läuferverband_schleppend}
+    \caption{Schleppender Läuferverband \textit{(1/3 Versatz).}}
+    \label{fig:basics:laeuferverband_schleppend}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/kopfverband.png}
     \caption{Kopf/Binderverband.}
-    \label{fig:basics:läuferverband_mittig}
+    \label{fig:basics:binderverband}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/gotischerverband.png}
     \caption{Gotischer Verband.}
-    \label{fig:basics:läuferverband_schleppend}
+    \label{fig:basics:gotischer_verband}
   \end{subfigure}
-  \label{fig:verbände}
+  \label{fig:verbaende}
   \caption{Typische Mauerwerksverbände.}
 \end{figure}
 

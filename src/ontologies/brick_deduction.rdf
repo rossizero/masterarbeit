@@ -221,8 +221,8 @@
                 <owl:intersectionOf rdf:parseType="Collection">
                     <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                        <owl:allValuesFrom rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick"/>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet"/>
+                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
