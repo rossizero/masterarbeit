@@ -1,730 +1,543 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#"
-     xml:base="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction"
-     xmlns:owl="http://www.w3.org/2002/07/owl#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:xml="http://www.w3.org/XML/1998/namespace"
-     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-    <owl:Ontology rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction"/>
-    
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction"
+         xmlns="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#">
 
+<owl:Ontology rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction"/>
 
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Object Properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
+<owl:ObjectProperty rdf:about="#dependsOn">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+  <rdfs:domain rdf:resource="#ConcreteBrick"/>
+  <rdfs:range rdf:resource="#ConcreteBrick"/>
+</owl:ObjectProperty>
 
-    
+<owl:ObjectProperty rdf:about="#hasBackNeighbor">
+  <rdfs:subPropertyOf rdf:resource="#hasNeighbor"/>
+  <owl:inverseOf rdf:resource="#hasFrontNeighbor"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+</owl:ObjectProperty>
 
+<owl:ObjectProperty rdf:about="#hasNeighbor">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  <rdfs:domain rdf:resource="#Brick"/>
+  <rdfs:range rdf:resource="#Brick"/>
+</owl:ObjectProperty>
 
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn -->
+<owl:ObjectProperty rdf:about="#hasFrontNeighbor">
+  <rdfs:subPropertyOf rdf:resource="#hasNeighbor"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+</owl:ObjectProperty>
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-    </owl:ObjectProperty>
-    
+<owl:ObjectProperty rdf:about="#hasBottomNeighbor">
+  <rdfs:subPropertyOf rdf:resource="#hasNeighbor"/>
+  <owl:inverseOf rdf:resource="#hasTopNeighbor"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+</owl:ObjectProperty>
 
+<owl:ObjectProperty rdf:about="#hasTopNeighbor">
+  <rdfs:subPropertyOf rdf:resource="#hasNeighbor"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+</owl:ObjectProperty>
 
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBackNeighbor -->
+<owl:ObjectProperty rdf:about="#hasBrick">
+  <owl:inverseOf rdf:resource="#isPartOf"/>
+  <rdfs:domain rdf:resource="#Building"/>
+  <rdfs:range rdf:resource="#Brick"/>
+</owl:ObjectProperty>
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBackNeighbor">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <owl:inverseOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasFrontNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-    </owl:ObjectProperty>
-    
+<owl:ObjectProperty rdf:about="#isPartOf">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+</owl:ObjectProperty>
 
+<owl:ObjectProperty rdf:about="#hasLeftNeighbor">
+  <rdfs:subPropertyOf rdf:resource="#hasNeighbor"/>
+  <owl:inverseOf rdf:resource="#hasRightNeighbor"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+</owl:ObjectProperty>
 
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBottomNeighbor -->
+<owl:ObjectProperty rdf:about="#hasRightNeighbor">
+  <rdfs:subPropertyOf rdf:resource="#hasNeighbor"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+</owl:ObjectProperty>
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBottomNeighbor">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <owl:inverseOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasTopNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-    </owl:ObjectProperty>
-    
+<owl:DatatypeProperty rdf:about="#hasBeenSet">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Brick"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+</owl:DatatypeProperty>
 
+<owl:DatatypeProperty rdf:about="#hasID">
+  <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+  <rdfs:domain rdf:resource="#Brick"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+</owl:DatatypeProperty>
 
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBrick -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBrick">
-        <owl:inverseOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#isPartOf"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Building"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasFrontNeighbor -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasFrontNeighbor">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasLeftNeighbor -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasLeftNeighbor">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <owl:inverseOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRightNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRightNeighbor -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRightNeighbor">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasTopNeighbor -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasTopNeighbor">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#isPartOf -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#isPartOf">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Data properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasID -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasID">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Classes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick">
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#isPartOf"/>
-                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Building"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <owl:disjointWith rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Building"/>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Building -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Building">
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick">
-        <owl:equivalentClass>
+<owl:Class rdf:about="#ConcreteBrick">
+  <owl:equivalentClass>
+    <owl:Class>
+      <owl:intersectionOf rdf:parseType="Collection">
+        <rdf:Description rdf:about="#Brick"/>
+        <owl:Restriction>
+          <owl:onProperty rdf:resource="#dependsOn"/>
+          <owl:allValuesFrom>
             <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                        <owl:allValuesFrom>
-                            <owl:Class>
-                                <owl:unionOf rdf:parseType="Collection">
-                                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
-                                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick"/>
-                                </owl:unionOf>
-                            </owl:Class>
-                        </owl:allValuesFrom>
-                    </owl:Restriction>
-                </owl:intersectionOf>
+              <owl:unionOf rdf:parseType="Collection">
+                <rdf:Description rdf:about="#PlaceableBrick"/>
+                <rdf:Description rdf:about="#PlacedBrick"/>
+              </owl:unionOf>
             </owl:Class>
-        </owl:equivalentClass>
+          </owl:allValuesFrom>
+        </owl:Restriction>
+      </owl:intersectionOf>
     </owl:Class>
-    
+  </owl:equivalentClass>
+</owl:Class>
 
+<owl:Class rdf:about="#Building">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+</owl:Class>
 
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NextBrick -->
+<owl:Class rdf:about="#Brick">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  <rdfs:subClassOf>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#isPartOf"/>
+      <owl:someValuesFrom rdf:resource="#Building"/>
+    </owl:Restriction>
+  </rdfs:subClassOf>
+  <owl:disjointWith rdf:resource="#Building"/>
+</owl:Class>
 
-    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NextBrick">
-        <owl:equivalentClass>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet"/>
-                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</owl:hasValue>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </owl:equivalentClass>
+<owl:Class rdf:about="#PlaceableBrick">
+  <owl:equivalentClass>
+    <owl:Class>
+      <owl:intersectionOf rdf:parseType="Collection">
+        <rdf:Description rdf:about="#ConcreteBrick"/>
+        <owl:Restriction>
+          <owl:onProperty rdf:resource="#hasBeenSet"/>
+          <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</owl:hasValue>
+        </owl:Restriction>
+      </owl:intersectionOf>
     </owl:Class>
-    
+  </owl:equivalentClass>
+  <owl:disjointWith rdf:resource="#PlacedBrick"/>
+</owl:Class>
 
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick">
-        <owl:equivalentClass>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet"/>
-                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</owl:hasValue>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </owl:equivalentClass>
-        <owl:disjointWith rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick"/>
+<owl:Class rdf:about="#PlacedBrick">
+  <owl:equivalentClass>
+    <owl:Class>
+      <owl:intersectionOf rdf:parseType="Collection">
+        <rdf:Description rdf:about="#ConcreteBrick"/>
+        <owl:Restriction>
+          <owl:onProperty rdf:resource="#hasBeenSet"/>
+          <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:hasValue>
+        </owl:Restriction>
+      </owl:intersectionOf>
     </owl:Class>
-    
+  </owl:equivalentClass>
+</owl:Class>
 
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick">
-        <owl:equivalentClass>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet"/>
-                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:hasValue>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </owl:equivalentClass>
+<owl:Class rdf:about="#NextBrick">
+  <owl:equivalentClass>
+    <owl:Class>
+      <owl:intersectionOf rdf:parseType="Collection">
+        <rdf:Description rdf:about="#PlaceableBrick"/>
+        <owl:Restriction>
+          <owl:onProperty rdf:resource="#dependsOn"/>
+          <owl:allValuesFrom rdf:resource="#PlacedBrick"/>
+        </owl:Restriction>
+      </owl:intersectionOf>
     </owl:Class>
-    
+  </owl:equivalentClass>
+</owl:Class>
+
+<owl:NamedIndividual rdf:about="#brick_1">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_4"/>
+  <hasTopNeighbor rdf:resource="#brick_6"/>
+  <hasRightNeighbor rdf:resource="#brick_2"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_2">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_4"/>
+  <hasTopNeighbor rdf:resource="#brick_5"/>
+  <hasRightNeighbor rdf:resource="#brick_3"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_3">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_5"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_4">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_7"/>
+  <hasTopNeighbor rdf:resource="#brick_8"/>
+  <hasLeftNeighbor rdf:resource="#brick_6"/>
+  <hasRightNeighbor rdf:resource="#brick_5"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_1"/>
+  <dependsOn rdf:resource="#brick_2"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_1"/>
+            <rdf:Description rdf:about="#brick_2"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_5">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_8"/>
+  <hasTopNeighbor rdf:resource="#brick_9"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_2"/>
+  <dependsOn rdf:resource="#brick_3"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_3"/>
+            <rdf:Description rdf:about="#brick_2"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_6">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_7"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_1"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_1"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_7">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
+  <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasRightNeighbor rdf:resource="#brick_8"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_4"/>
+  <dependsOn rdf:resource="#brick_6"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_4"/>
+            <rdf:Description rdf:about="#brick_6"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_8">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasRightNeighbor rdf:resource="#brick_9"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_4"/>
+  <dependsOn rdf:resource="#brick_5"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_4"/>
+            <rdf:Description rdf:about="#brick_5"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_9">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_5"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_5"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_10">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasLeftNeighbor rdf:resource="#brick_12"/>
+  <hasRightNeighbor rdf:resource="#brick_11"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_7"/>
+  <dependsOn rdf:resource="#brick_8"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_8"/>
+            <rdf:Description rdf:about="#brick_7"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_11">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_8"/>
+  <dependsOn rdf:resource="#brick_9"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_8"/>
+            <rdf:Description rdf:about="#brick_9"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_12">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_7"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_7"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_13">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasRightNeighbor rdf:resource="#brick_14"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_12"/>
+  <dependsOn rdf:resource="#brick_10"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_10"/>
+            <rdf:Description rdf:about="#brick_12"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_14">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <hasRightNeighbor rdf:resource="#brick_15"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_10"/>
+  <dependsOn rdf:resource="#brick_11"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_11"/>
+            <rdf:Description rdf:about="#brick_10"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">14</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_15">
+  <rdf:type rdf:resource="#ConcreteBrick"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_11"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_11"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#building_1">
+  <rdf:type rdf:resource="#Building"/>
+  <hasBrick rdf:resource="#brick_1"/>
+  <hasBrick rdf:resource="#brick_2"/>
+  <hasBrick rdf:resource="#brick_3"/>
+  <hasBrick rdf:resource="#brick_4"/>
+  <hasBrick rdf:resource="#brick_5"/>
+  <hasBrick rdf:resource="#brick_6"/>
+  <hasBrick rdf:resource="#brick_7"/>
+  <hasBrick rdf:resource="#brick_8"/>
+  <hasBrick rdf:resource="#brick_9"/>
+  <hasBrick rdf:resource="#brick_10"/>
+  <hasBrick rdf:resource="#brick_11"/>
+  <hasBrick rdf:resource="#brick_12"/>
+  <hasBrick rdf:resource="#brick_13"/>
+  <hasBrick rdf:resource="#brick_14"/>
+  <hasBrick rdf:resource="#brick_15"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#empty_brick">
+  <rdf:type rdf:resource="#PlacedBrick"/>
+</owl:NamedIndividual>
 
 
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Individuals
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">14</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasLeftNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasRightNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdf:type>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:oneOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-                            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-                        </owl:oneOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdf:type>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-        <dependsOn rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick"/>
-        <hasTopNeighbor rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-        <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
-        <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</hasID>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#building_1 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#building_1">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Building"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_1"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_10"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_11"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_12"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_13"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_14"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_15"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_2"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_3"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_4"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_5"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_6"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_7"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_8"/>
-        <hasBrick rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#brick_9"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#empty_brick">
-        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlacedBrick"/>
-    </owl:NamedIndividual>
 </rdf:RDF>
-
-
-
-<!-- Generated by the OWL API (version 4.5.26.2023-07-17T20:34:13Z) https://github.com/owlcs/owlapi -->
-
