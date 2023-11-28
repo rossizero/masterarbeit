@@ -5,7 +5,8 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:brick_deduction="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#">
     <owl:Ontology rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction"/>
     
 
@@ -21,12 +22,22 @@
     
 
 
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#applyObjectPropertyTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#applyObjectPropertyTo">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ObjectPropertyHolderElement"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOn">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NamedBrick"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NamedBrick"/>
     </owl:ObjectProperty>
     
 
@@ -104,6 +115,16 @@
     
 
 
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRule -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRule">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Ruleset"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasTopNeighbor -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasTopNeighbor">
@@ -133,6 +154,23 @@
     
 
 
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#cardinality -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#cardinality">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#exactly -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#exactly">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#cardinality"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet">
@@ -148,8 +186,40 @@
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasID">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NamedBrick"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#holdPropertyByName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#holdPropertyByName">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PropertyHolderElement"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#max -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#max">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#cardinality"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#min -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#min">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#cardinality"/>
     </owl:DatatypeProperty>
     
 
@@ -162,6 +232,29 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ApplyObjectPropertyRule -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ApplyObjectPropertyRule">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#applyObjectPropertyTo"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PropertyHolderElement"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#cardinality"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">0</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#CardinalityRule"/>
+    </owl:Class>
     
 
 
@@ -188,9 +281,39 @@
     
 
 
-    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick -->
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#CardinalityRule -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick">
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#CardinalityRule">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#applyObjectPropertyTo"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">0</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PropertyHolderElement"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#cardinality"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#DataPropertyHolderElement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#DataPropertyHolderElement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PropertyHolderElement"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NamedBrick -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NamedBrick">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
@@ -231,13 +354,21 @@
     
 
 
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ObjectPropertyHolderElement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ObjectPropertyHolderElement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PropertyHolderElement"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PlaceableBrick">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NamedBrick"/>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet"/>
                         <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</owl:hasValue>
@@ -256,7 +387,7 @@
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ConcreteBrick"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#NamedBrick"/>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBeenSet"/>
                         <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:hasValue>
@@ -265,6 +396,133 @@
             </owl:Class>
         </owl:equivalentClass>
     </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PropertyHolderElement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#PropertyHolderElement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleElement"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#holdPropertyByName"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#holdPropertyByName"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleElement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleElement"/>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Ruleset -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Ruleset">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRule"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#DependsOnlyOnBottomRuleSet -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#DependsOnlyOnBottomRuleSet">
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Ruleset"/>
+        <brick_deduction:hasRule rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleDependsOnBottomNeighbors"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleDependsOnBottomNeighbors -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleDependsOnBottomNeighbors">
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ApplyObjectPropertyRule"/>
+        <brick_deduction:applyObjectPropertyTo rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOnObjectPropertyHolder"/>
+        <brick_deduction:holdPropertyByName>hasBottomNeighbors</brick_deduction:holdPropertyByName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleMax5BottomNeighbors -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleMax5BottomNeighbors">
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#CardinalityRule"/>
+        <brick_deduction:holdPropertyByName>hasBottomNeighbor</brick_deduction:holdPropertyByName>
+        <brick_deduction:max rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5</brick_deduction:max>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOnObjectPropertyHolder -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOnObjectPropertyHolder">
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#DataPropertyHolderElement"/>
+        <brick_deduction:holdPropertyByName>dependsOn</brick_deduction:holdPropertyByName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBottomNeighborObjectPropertyHolder -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBottomNeighborObjectPropertyHolder">
+        <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#DataPropertyHolderElement"/>
+        <brick_deduction:holdPropertyByName>hasBottomNeighbor</brick_deduction:holdPropertyByName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Brick"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Building"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Rule"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleElement"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#Ruleset"/>
+        </owl:members>
+    </rdf:Description>
 </rdf:RDF>
 
 

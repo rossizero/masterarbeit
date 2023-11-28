@@ -7,10 +7,36 @@ from wall_detailing.masonry.brick import Brick, Neighbor
 # TODO                       Brick and dependsOn some PlacedBrick and not(dependsOn some PlaceableBrick)
 
 
+class RuleSet:
+    def __init__(self):
+        self.rules = []
+
+    def add_rule(self, rule):
+        self.rules.append(rule)
+
+
+class Rule:
+    """
+    PropertyA(BrickA, BrickB) partOf PropertyB(BrickA, BrickB) = For each BrickA that has PropertyA, it will have PropertyB applied for a BrickB too
+    PropertyA(BrickA) max/min number = BrickA can only have max/min number of PropertyA to be placeable
+    """
+    def __init__(self, name, rule):
+        self.name = name
+        self.rule = rule
+        self.apply()
+
+    def apply(self):
+        if "ApplyObjectPropertyRule" in self.rule.is_a:
+            print("I am an object property rule")
+        elif "CardinalityRule" in self.rule.is_a:
+            print("I am an cardinality rule")
+
+
 class BrickToOntology:
     def __init__(self, bricks: List[Brick]):
         self.original_file = "file:///home/rosrunner/Desktop/repos/masterarbeit/src/ontologies/brick_deduction.rdf"
         self.working_file = "/home/rosrunner/Desktop/repos/masterarbeit/src/ontologies/temporary_working_env.rdf"
+        self.rule_file = "/home/rosrunner/Desktop/repos/masterarbeit/src/ontologies/brick_deduction.rdf"
 
         if os.name == 'nt':  # windows
             owlready2.JAVA_EXE = "C:\\Program Files\\Java\\jre-1.8\\bin\\java.exe"
@@ -19,6 +45,17 @@ class BrickToOntology:
 
         self.bricks = bricks
         self.onto = get_ontology(self.original_file).load()
+        self.rules = get_ontology(self.rule_file).load()
+
+        rules = []
+        for ruleset in self.rules.Ruleset.instances():
+            rs = RuleSet()
+            for rule in ruleset.hasRule:
+                r = Rule(rule.name, rule)
+                print(rule.is_a)
+                rs.add_rule(r)
+            rules.append(rs)
+
         print(list(self.onto.classes()))
 
         # set ids
@@ -27,7 +64,7 @@ class BrickToOntology:
         self.world = World()
 
         for b in bricks:
-            brick = self.onto.ConcreteBrick("brick_" + str(idd))
+            brick = self.onto.NamedBrick("brick_" + str(idd))
             #brick.is_a.append(self.onto.ConcreteBrick)
             brick.hasID = [idd]
             b.id = idd
@@ -37,7 +74,7 @@ class BrickToOntology:
         building = self.onto.Building("building_1")
         empty = self.onto.PlacedBrick("empty_brick")
         empty.dependsOn = []
-        for b in self.onto.ConcreteBrick.instances():
+        for b in self.onto.NamedBrick.instances():
             if b == empty:
                 continue
             local_brick = dic[b.hasID[0]][0]
@@ -53,9 +90,6 @@ class BrickToOntology:
             building.hasBrick.append(b)
 
         #sync_reasoner_pellet(self.onto, infer_property_values=True)
-
-
-
 
         with self.onto:
             def sparql():
@@ -88,12 +122,12 @@ class BrickToOntology:
                 #rule.set_as_rule("""ConcreteBrick(?b), hasBottomNeighbor(?b, ?n) -> dependsOn(?b, ?n)""")
                 #sync_reasoner_hermit(self.onto, infer_property_values=True)
 
-            for b in self.onto.ConcreteBrick.instances():
+            for b in self.onto.NamedBrick.instances():
                 if b != empty:
                     pass
                     close_world(b, Properties=[self.onto.dependsOn])
 
-            sync_reasoner_pellet(self.world, infer_property_values=True, infer_data_property_values=True)
+            sync_reasoner_pellet(infer_property_values=True, infer_data_property_values=True)
             one = dic[7][1]
             print(one.get_properties())
 
@@ -101,7 +135,7 @@ class BrickToOntology:
                                             PREFIX b: <http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#>
                                             SELECT ?brick
                                             WHERE { 
-                                                ?brick a b:ConcreteBrick .
+                                                ?brick a b:NamedBrick .
                                                 ?brick b:hasBottomNeighbor ?top .
                                             }
                                         """))
