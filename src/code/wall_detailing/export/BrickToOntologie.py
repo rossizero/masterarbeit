@@ -8,8 +8,9 @@ from wall_detailing.masonry.brick import Brick, Neighbor
 
 
 class RuleSet:
-    def __init__(self):
+    def __init__(self, ontology: Ontology):
         self.rules = []
+        self.onto = ontology
 
     def add_rule(self, rule):
         self.rules.append(rule)
@@ -23,13 +24,38 @@ class Rule:
     def __init__(self, name, rule):
         self.name = name
         self.rule = rule
-        self.apply()
 
-    def apply(self):
-        if "ApplyObjectPropertyRule" in self.rule.is_a:
-            print("I am an object property rule")
-        elif "CardinalityRule" in self.rule.is_a:
-            print("I am an cardinality rule")
+        self.effectedPropertyName = None
+
+    def apply(self, ontology: Ontology):
+        if ontology.holdPropertyByName in self.rule.get_properties():
+            prop = ontology.holdPropertyByName[self.rule]
+            self.effectedPropertyName = prop[0]
+
+        if ontology.ApplyObjectPropertyRule in self.rule.is_a:
+            if ontology.applyObjectPropertyTo not in self.rule.get_properties():
+                return None
+
+            prop = ontology.applyObjectPropertyTo[self.rule]
+
+            if len(prop) == 0:
+                return None
+
+            holder = prop[0]
+            if ontology.holdPropertyByName not in holder.get_properties():
+                return None
+
+            property2 = ontology.holdPropertyByName[holder][0]
+            print(self.effectedPropertyName, "applyObjectPropertyTo", property2)
+
+            for brick in ontology.NamedBrick.instances():
+                if ontology[self.effectedPropertyName] in brick.get_properties():
+                    for neighbor in ontology[self.effectedPropertyName][brick]:
+                        ontology[property2][brick].append(neighbor)
+        elif ontology.CardinalityRule in self.rule.is_a:
+            print("I am a cardinality rule")
+        else:
+            print("I am a " + self.namespace + "." + self.name + " rule")
 
 
 class BrickToOntology:
@@ -45,18 +71,15 @@ class BrickToOntology:
 
         self.bricks = bricks
         self.onto = get_ontology(self.original_file).load()
-        self.rules = get_ontology(self.rule_file).load()
+        self.namespace = self.onto.get_namespace(self.original_file).name
 
         rules = []
-        for ruleset in self.rules.Ruleset.instances():
-            rs = RuleSet()
+        for ruleset in self.onto.Ruleset.instances():
+            rs = RuleSet(self.onto)
             for rule in ruleset.hasRule:
                 r = Rule(rule.name, rule)
-                print(rule.is_a)
                 rs.add_rule(r)
             rules.append(rs)
-
-        print(list(self.onto.classes()))
 
         # set ids
         idd = 1
@@ -85,8 +108,7 @@ class BrickToOntology:
             b.hasFrontNeighbor = [dic[obj.id][1] for obj in local_brick.neighbors[Neighbor.FRONT]]
             b.hasBackNeighbor = [dic[obj.id][1] for obj in local_brick.neighbors[Neighbor.BACK]]
             b.hasBeenSet = False
-            b.dependsOn = [empty]
-            b.dependsOn.extend(b.hasBottomNeighbor)
+            #b.dependsOn = [empty]
             building.hasBrick.append(b)
 
         #sync_reasoner_pellet(self.onto, infer_property_values=True)
@@ -122,6 +144,10 @@ class BrickToOntology:
                 #rule.set_as_rule("""ConcreteBrick(?b), hasBottomNeighbor(?b, ?n) -> dependsOn(?b, ?n)""")
                 #sync_reasoner_hermit(self.onto, infer_property_values=True)
 
+            for ruleset in rules:
+                for rule in ruleset.rules:
+                    rule.apply(self.onto)
+
             for b in self.onto.NamedBrick.instances():
                 if b != empty:
                     pass
@@ -130,6 +156,8 @@ class BrickToOntology:
             sync_reasoner_pellet(infer_property_values=True, infer_data_property_values=True)
             one = dic[7][1]
             print(one.get_properties())
+
+
 
         tmp = list(self.onto.world.sparql("""
                                             PREFIX b: <http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#>

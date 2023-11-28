@@ -472,7 +472,7 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#RuleDependsOnBottomNeighbors">
         <rdf:type rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#ApplyObjectPropertyRule"/>
         <brick_deduction:applyObjectPropertyTo rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#dependsOnObjectPropertyHolder"/>
-        <brick_deduction:holdPropertyByName>hasBottomNeighbors</brick_deduction:holdPropertyByName>
+        <brick_deduction:holdPropertyByName>hasBottomNeighbor</brick_deduction:holdPropertyByName>
     </owl:NamedIndividual>
     
 

@@ -294,7 +294,7 @@
 <owl:NamedIndividual rdf:about="#RuleDependsOnBottomNeighbors">
   <rdf:type rdf:resource="#ApplyObjectPropertyRule"/>
   <applyObjectPropertyTo rdf:resource="#dependsOnObjectPropertyHolder"/>
-  <holdPropertyByName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasBottomNeighbors</holdPropertyByName>
+  <holdPropertyByName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasBottomNeighbor</holdPropertyByName>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#dependsOnObjectPropertyHolder">
@@ -320,17 +320,10 @@
   <hasTopNeighbor rdf:resource="#brick_4"/>
   <hasTopNeighbor rdf:resource="#brick_6"/>
   <hasRightNeighbor rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
-      <owl:allValuesFrom>
-        <owl:Class>
-          <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-          </owl:oneOf>
-        </owl:Class>
-      </owl:allValuesFrom>
+      <owl:allValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
     </owl:Restriction>
   </rdf:type>
   <rdf:type rdf:resource="#NextBrick"/>
@@ -358,17 +351,10 @@
   <hasTopNeighbor rdf:resource="#brick_5"/>
   <hasTopNeighbor rdf:resource="#brick_4"/>
   <hasRightNeighbor rdf:resource="#brick_3"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
-      <owl:allValuesFrom>
-        <owl:Class>
-          <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-          </owl:oneOf>
-        </owl:Class>
-      </owl:allValuesFrom>
+      <owl:allValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
     </owl:Restriction>
   </rdf:type>
   <rdf:type rdf:resource="#NextBrick"/>
@@ -394,17 +380,10 @@
 <owl:NamedIndividual rdf:about="#brick_3">
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasTopNeighbor rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
-      <owl:allValuesFrom>
-        <owl:Class>
-          <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-          </owl:oneOf>
-        </owl:Class>
-      </owl:allValuesFrom>
+      <owl:allValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Nothing"/>
     </owl:Restriction>
   </rdf:type>
   <rdf:type rdf:resource="#NextBrick"/>
@@ -429,11 +408,10 @@
 
 <owl:NamedIndividual rdf:about="#brick_4">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
   <hasTopNeighbor rdf:resource="#brick_7"/>
+  <hasTopNeighbor rdf:resource="#brick_8"/>
   <hasLeftNeighbor rdf:resource="#brick_6"/>
   <hasRightNeighbor rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_1"/>
   <rdf:type>
@@ -442,9 +420,8 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
             <rdf:Description rdf:about="#brick_2"/>
+            <rdf:Description rdf:about="#brick_1"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
@@ -474,7 +451,6 @@
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasTopNeighbor rdf:resource="#brick_8"/>
   <hasTopNeighbor rdf:resource="#brick_9"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>
   <rdf:type>
@@ -483,9 +459,8 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_3"/>
             <rdf:Description rdf:about="#brick_2"/>
+            <rdf:Description rdf:about="#brick_3"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
@@ -514,7 +489,6 @@
 <owl:NamedIndividual rdf:about="#brick_6">
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasTopNeighbor rdf:resource="#brick_7"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_1"/>
   <rdf:type>
     <owl:Restriction>
@@ -522,7 +496,6 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
             <rdf:Description rdf:about="#brick_1"/>
           </owl:oneOf>
         </owl:Class>
@@ -551,21 +524,19 @@
 
 <owl:NamedIndividual rdf:about="#brick_7">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
   <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
   <hasRightNeighbor rdf:resource="#brick_8"/>
-  <dependsOn rdf:resource="#empty_brick"/>
-  <dependsOn rdf:resource="#brick_4"/>
   <dependsOn rdf:resource="#brick_6"/>
+  <dependsOn rdf:resource="#brick_4"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_4"/>
             <rdf:Description rdf:about="#brick_6"/>
+            <rdf:Description rdf:about="#brick_4"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
@@ -593,10 +564,9 @@
 
 <owl:NamedIndividual rdf:about="#brick_8">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
   <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
   <hasRightNeighbor rdf:resource="#brick_9"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_4"/>
   <rdf:type>
@@ -605,7 +575,6 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
             <rdf:Description rdf:about="#brick_5"/>
             <rdf:Description rdf:about="#brick_4"/>
           </owl:oneOf>
@@ -636,7 +605,6 @@
 <owl:NamedIndividual rdf:about="#brick_9">
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasTopNeighbor rdf:resource="#brick_11"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_5"/>
   <rdf:type>
     <owl:Restriction>
@@ -644,7 +612,6 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
             <rdf:Description rdf:about="#brick_5"/>
           </owl:oneOf>
         </owl:Class>
@@ -677,7 +644,6 @@
   <hasTopNeighbor rdf:resource="#brick_14"/>
   <hasLeftNeighbor rdf:resource="#brick_12"/>
   <hasRightNeighbor rdf:resource="#brick_11"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_8"/>
   <dependsOn rdf:resource="#brick_7"/>
   <rdf:type>
@@ -686,9 +652,8 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_7"/>
             <rdf:Description rdf:about="#brick_8"/>
+            <rdf:Description rdf:about="#brick_7"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
@@ -716,9 +681,8 @@
 
 <owl:NamedIndividual rdf:about="#brick_11">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
   <hasTopNeighbor rdf:resource="#brick_15"/>
-  <dependsOn rdf:resource="#empty_brick"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
   <dependsOn rdf:resource="#brick_8"/>
   <dependsOn rdf:resource="#brick_9"/>
   <rdf:type>
@@ -727,9 +691,8 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_9"/>
             <rdf:Description rdf:about="#brick_8"/>
+            <rdf:Description rdf:about="#brick_9"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
@@ -758,7 +721,6 @@
 <owl:NamedIndividual rdf:about="#brick_12">
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasTopNeighbor rdf:resource="#brick_13"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_7"/>
   <rdf:type>
     <owl:Restriction>
@@ -766,7 +728,6 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
             <rdf:Description rdf:about="#brick_7"/>
           </owl:oneOf>
         </owl:Class>
@@ -796,7 +757,6 @@
 <owl:NamedIndividual rdf:about="#brick_13">
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasRightNeighbor rdf:resource="#brick_14"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_12"/>
   <dependsOn rdf:resource="#brick_10"/>
   <rdf:type>
@@ -805,7 +765,6 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
             <rdf:Description rdf:about="#brick_12"/>
             <rdf:Description rdf:about="#brick_10"/>
           </owl:oneOf>
@@ -836,7 +795,6 @@
 <owl:NamedIndividual rdf:about="#brick_14">
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasRightNeighbor rdf:resource="#brick_15"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_11"/>
   <dependsOn rdf:resource="#brick_10"/>
   <rdf:type>
@@ -845,7 +803,6 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
             <rdf:Description rdf:about="#brick_11"/>
             <rdf:Description rdf:about="#brick_10"/>
           </owl:oneOf>
@@ -875,7 +832,6 @@
 
 <owl:NamedIndividual rdf:about="#brick_15">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <dependsOn rdf:resource="#empty_brick"/>
   <dependsOn rdf:resource="#brick_11"/>
   <rdf:type>
     <owl:Restriction>
@@ -883,7 +839,6 @@
       <owl:allValuesFrom>
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="#empty_brick"/>
             <rdf:Description rdf:about="#brick_11"/>
           </owl:oneOf>
         </owl:Class>
