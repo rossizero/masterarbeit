@@ -9,7 +9,6 @@ Dafür werden seit dem Jahr 2000 die \textit{Industry Foundation Classes} (IFC) 
 
 \section{Industry Foundation Classes}
 \label{basics:ifc}
-%Kurze Einleitung was IFC ist
 In der Spezifikation des Standards selbst, wird dieser wie folgt beschrieben:
 \glqq{}Die Industry Foundation Classes (IFC) sind ein offener internationaler Standard für Daten des Building Information Model (BIM), welche zwischen Softwareanwendungen ausgetauscht, gemeinsam genutzt und von den verschiedenen Akteuren der Bauindustrie und des Gebäudemanagements verwendet werden. 
 Der Standard enthält Definitionen für Daten, die für die Lebenszyklen von Gebäude- und Infrastrukturarbeiten erforderlich sind. 
@@ -45,8 +44,15 @@ In Abbildung~\ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
 
 \subsection{IfcPropertySets und IfcQuantitySets}\label{basics:ifc_properties}
 Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zb. auch eine präzisere Kosten- und Zeitschätzung für den Bau ermöglicht \cite{Industry93:online}. 
-Dies kann mithilfe der IfcPropertySets und der IfcQuantitySets umgesetzt werden blablabla. %TODO
-%TODO diagramm, beispiel Properties und Quantities
+Dies kann mithilfe von \textit{IfcPropertySets} und textit{IfcQuantitySets} umgesetzt werden, welche Objekten oder Objekttypen angehängt werden können.
+Dabei werden IfcQuantitySets vorwiegend dazu verwendet numerische Werte zu geometrischen oder physikalischen Eigenschaften auszudrücken.
+IfcPropertySets dienen hingegen dazu bestimmten Objekten oder  Objekttypen mit sämtlichen nicht numerischen Werten zu annotieren.
+Die Verwendung der Bezeichnung \textit{Set} rührt daher, dass diese Informationen in einer Baumstruktur vorliegen und demnach verschachtelt sein können.
+Es gibt zu vielen Klassenbeschreibungen des IFC Standards vordefinierte PropertySets.
+Das hilft dabei wichtige Informationen zu bestimmten Objekttypen einheitlich angeben zu können.
+Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit dem namen \textit{Pset_WallCommon}.
+Darin können die Ersteller von neuen WallTypes etwa Informationen über Brennbarkeit, thermisches Verhalten oder Akustik hinterlegen.
+Bei Erstellen einer IfcWall-Instanz aus einem bestimmten WallType werden die damit verbundenen Property- und QuantitySets automatisch daran angehängt, sodass jedes Objekt relevante Informationen über sich selbst bereithält.
 
 \subsection{Positionierung von IFCProducts}
 %https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/concepts/Product_Shape/Product_Placement/Product_Local_Placement/content.html
