@@ -47,8 +47,7 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBackNeighbor">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
         <owl:inverseOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasFrontNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
     </owl:ObjectProperty>
     
 
@@ -58,8 +57,7 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasBottomNeighbor">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
         <owl:inverseOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasTopNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
     </owl:ObjectProperty>
     
 
@@ -78,8 +76,7 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasFrontNeighbor">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
     </owl:ObjectProperty>
     
 
@@ -89,8 +86,7 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasLeftNeighbor">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
         <owl:inverseOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRightNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
     </owl:ObjectProperty>
     
 
@@ -109,8 +105,7 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasRightNeighbor">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
     </owl:ObjectProperty>
     
 
@@ -129,8 +124,6 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasTopNeighbor">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/rosrunner/ontologies/2023/10/brick_deduction#hasNeighbor"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
     </owl:ObjectProperty>
     
 
