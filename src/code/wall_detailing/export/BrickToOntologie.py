@@ -174,7 +174,7 @@ class BrickToOntology:
 
         print("all", self.onto.Brick.instances())
         print("placeable", self.onto.PlaceableBrick.instances())
-        print("next", self.onto.NextBrick.instances())
+        print("next", len(self.onto.NextBrick.instances()), self.onto.NextBrick.instances())
         print("placed", self.onto.PlacedBrick.instances())
 
         self.onto.save(file=self.working_file, format="rdfxml")
