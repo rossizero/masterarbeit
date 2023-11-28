@@ -2,6 +2,7 @@ import math
 from typing import List, Dict
 import numpy as np
 import quaternion
+from OCC.Core import BRepAlgoAPI, BOPAlgo, TopTools
 
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
@@ -180,6 +181,45 @@ class WallDetailer:
         return brick_ret
 
     @staticmethod
+    def convert_to_stl2(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = []):
+        import os
+        file_path = os.path.abspath(path)
+        bricks_copy = bricks.copy()
+        print("# bricks: ", len(bricks_copy))
+
+        if len(bricks_copy) + len(additional_shapes) > 0:
+            args = TopTools.TopTools_ListOfShape()  # whatever
+            tools = TopTools.TopTools_ListOfShape()  # whatever
+
+            for brick in bricks_copy:
+                args.Append(brick.shape)
+                tools.Append(brick.shape)
+
+            for shape in additional_shapes:
+                args.Append(shape)
+                tools.Append(shape)
+
+            fop = BRepAlgoAPI.BRepAlgoAPI_Fuse()
+            fop.SetArguments(args)
+            #fop.SetGlue(BOPAlgo.BOPAlgo_GlueEnum.BOPAlgo_GlueShift)
+            fop.SetRunParallel(True)
+            fop.SetTools(tools)
+            build = fop.Build()
+            shape = fop.Shape()
+            print(build, shape)
+
+            if shape is None:
+                print("Fusion failed")
+            else:
+                mesh = BRepMesh_IncrementalMesh(shape, detail)
+                mesh.Perform()
+                assert mesh.IsDone()
+                stl_export = StlAPI_Writer()
+                print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
+                return True
+        return False
+
+    @staticmethod
     def convert_to_stl(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = None):
         import os
         file_path = os.path.abspath(path)
@@ -219,14 +259,14 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
     scenario = CombinationExampleForText()
     scenario = DoppelEck2_Closed_TJoint()
-    scenario = Single_Wall_Slim()
+    #scenario = Single_Wall_Slim()
 
-    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
-    WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
+    WallDetailer.convert_to_stl2([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
+    WallDetailer.convert_to_stl2([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
     BrickExporter(bb).export_to_json("output.json")
     BrickToOntology(bb)
-    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
+    WallDetailer.convert_to_stl2(bb, "output.stl", additional_shapes=[])
