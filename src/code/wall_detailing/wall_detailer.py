@@ -189,31 +189,29 @@ class WallDetailer:
 
         if len(bricks_copy) + len(additional_shapes) > 0:
             args = TopTools.TopTools_ListOfShape()  # whatever
-            tools = TopTools.TopTools_ListOfShape()  # whatever
 
             for brick in bricks_copy:
                 args.Append(brick.shape)
-                tools.Append(brick.shape)
 
             for shape in additional_shapes:
                 args.Append(shape)
-                tools.Append(shape)
 
+            # since this is c++ backend we need to hold some objects in memory to make stuff work
             fop = BRepAlgoAPI.BRepAlgoAPI_Fuse()
-            fop.SetArguments(args)
-            #fop.SetGlue(BOPAlgo.BOPAlgo_GlueEnum.BOPAlgo_GlueShift)
             fop.SetRunParallel(True)
-            fop.SetTools(tools)
-            build = fop.Build()
+            # idk why we need to set both arguments and tools
+            fop.SetArguments(args)
+            fop.SetTools(args)
+            build = fop.Build()  # for example this one
             shape = fop.Shape()
-            print(build, shape)
 
-            if shape is None:
-                print("Fusion failed")
+            if shape is None or not fop.IsDone():
+                print("[ERROR] Fusion failed")
             else:
                 mesh = BRepMesh_IncrementalMesh(shape, detail)
                 mesh.Perform()
                 assert mesh.IsDone()
+
                 stl_export = StlAPI_Writer()
                 print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
                 return True
@@ -257,9 +255,9 @@ class WallDetailer:
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
-    scenario = CombinationExampleForText()
+    #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
-    #scenario = Single_Wall_Slim()
+    scenario = Single_Wall_Slim()
 
     WallDetailer.convert_to_stl2([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     WallDetailer.convert_to_stl2([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])

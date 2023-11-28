@@ -28,6 +28,11 @@ class Rule:
         self.effectedPropertyName = None
 
     def apply(self, ontology: Ontology):
+        """
+        Apply the rule to the ontology. Depending on the RuleType different actions are taken.
+        :param ontology: The ontology to apply the rule to.
+
+        """
         if ontology.holdPropertyByName in self.rule.get_properties():
             prop = ontology.holdPropertyByName[self.rule]
             self.effectedPropertyName = prop[0]
@@ -171,7 +176,6 @@ class BrickToOntology:
             sync_reasoner_hermit(infer_property_values=True) #, infer_data_property_values=True)
 
         print("test", self.onto["hasBottomNeighbor"][self.onto.NamedBrick.instances()[8]])
-
         print("all", self.onto.Brick.instances())
         print("placeable", self.onto.PlaceableBrick.instances())
         print("next", len(self.onto.NextBrick.instances()), self.onto.NextBrick.instances())
