@@ -43,14 +43,14 @@ In Abbildung~\ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
 \end{figure}
 
 \subsection{IfcPropertySets und IfcQuantitySets}\label{basics:ifc_properties}
-Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zb. auch eine präzisere Kosten- und Zeitschätzung für den Bau ermöglicht \cite{Industry93:online}. 
+Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zb. auch eine präzisere Kosten- und Zeitschätzung für den Bau ermöglicht~\cite{Industry93:online}. 
 Dies kann mithilfe von \textit{IfcPropertySets} und textit{IfcQuantitySets} umgesetzt werden, welche Objekten oder Objekttypen angehängt werden können.
 Dabei werden IfcQuantitySets vorwiegend dazu verwendet numerische Werte zu geometrischen oder physikalischen Eigenschaften auszudrücken.
 IfcPropertySets dienen hingegen dazu bestimmten Objekten oder  Objekttypen mit sämtlichen nicht numerischen Werten zu annotieren.
 Die Verwendung der Bezeichnung \textit{Set} rührt daher, dass diese Informationen in einer Baumstruktur vorliegen und demnach verschachtelt sein können.
 Es gibt zu vielen Klassenbeschreibungen des IFC Standards vordefinierte PropertySets.
 Das hilft dabei wichtige Informationen zu bestimmten Objekttypen einheitlich angeben zu können.
-Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit dem namen \textit{Pset_WallCommon}.
+Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit dem Namen \textit{Pset_WallCommon}.
 Darin können die Ersteller von neuen WallTypes etwa Informationen über Brennbarkeit, thermisches Verhalten oder Akustik hinterlegen.
 Bei Erstellen einer IfcWall-Instanz aus einem bestimmten WallType werden die damit verbundenen Property- und QuantitySets automatisch daran angehängt, sodass jedes Objekt relevante Informationen über sich selbst bereithält.
 
