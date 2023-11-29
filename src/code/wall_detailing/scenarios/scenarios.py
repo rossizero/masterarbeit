@@ -5,7 +5,7 @@ import quaternion
 import math
 from detailing.wall import Wall
 
-from masonry.opening import Opening
+from detailing.opening import Opening
 
 
 class Scenario(ABC):

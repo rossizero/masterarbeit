@@ -19,8 +19,9 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Win
     SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners, \
     OverlappingWalls, LucaScenario
 from masonry import corner_rep
-from wall_detailing.export.BrickExporter import BrickExporter
-from wall_detailing.export.BrickToOntologie import BrickToOntology
+from wall_detailing.exporter.BrickExporter import BrickExporter
+from wall_detailing.exporter.BrickToOntologie import BrickToOntology
+from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
@@ -255,11 +256,16 @@ class WallDetailer:
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
+
+    tmp = IfcImporter("../../models/lego_wall_with_door_tmp_random.ifc")
+    www = tmp.get_walls()
+
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
     scenario = Single_Wall_Slim()
 
     WallDetailer.convert_to_stl2([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
+    WallDetailer.convert_to_stl2([], "ifc_output.stl", additional_shapes=[w.get_shape() for w in www])
     WallDetailer.convert_to_stl2([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)

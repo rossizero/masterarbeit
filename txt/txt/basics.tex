@@ -1,7 +1,7 @@
 \chapter{Grundlagen}
 \label{basics}
 Zunächst wird für diese Arbeit ein geeignetes Speicherformat für 3D Modelle von Gebäuden benötigt.
-Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} möglichstvollständig digital abbilden zu können. 
+Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} möglichst vollständig digital abbilden zu können. 
 Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in das Modell zu integrieren, auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
 Da diese Informationen oft von Experten verschiedener Fachbereiche (etwa aus den Bereichen der Architektur, des Bauwesens oder der Statik) stammen, muss das Format sehr flexibel und im besten Fall auch zeitgleich bearbeitbar sein.
 Dafür werden seit dem Jahr 2000 die \textit{Industry Foundation Classes} (IFC) von buildingsmart entwickelt, deren Anwendung im internationalen Bauwesen mittlerweile weit verbreitet ist~\cite{Industry61:online}.
@@ -17,19 +17,17 @@ Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739 regi
 Da die IFC aber nach wie vor kontinuierlich weiterentwickelt werden, wird in dieser Arbeit die derzeit neueste Version verwendet.
 Diese ist die IFC Spezifikation 4.3.1.0~\cite{IFC4310Spezification:online}.
 Das verbreitetste Austauschformat für IFC ist das Step Physical File Format, welches im ISO 10303 Teil 21 registriert ist~\cite{ISO_Step:online}.
-Zudem gibt es speicherreduziertere Formate wie ifcZip oder für Menschen lesbarere Formate wie ifcXML~\cite{Industry93:online}\cite{IFCForma28:online}.
+Zudem gibt es speicherreduziertere Formate wie ifcZip oder für Menschen lesbarere Formate wie ifcXML~\cite{Industry93:online}\cite{IFCForma28:online}\cite{BIM_handbook_AEC_XML_SCHEMAS}.
 
 \subsection{IFC 4.3.1.0 Aufbau}
 Im Grunde definieren die \textit{Industry Foundation Classes} eine Vielzahl an Klassen, die in einer komplexen Hierarchie angeordnet den Grundstock des Datenmodells bilden.
 Diese sind anfangs abstrakte Konzepte, die sich mit zunehmender Tiefe in der Hierarche konkretisieren.
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\columnwidth]{fig/Hierarchie_IfcWall_300.drawio.png}
     \caption{Klassenhierarchie am Beispiel der Klasse \textit{IfcWall}}
     \label{fig:IfcWall_Hierarchie}
 \end{figure}
-
 Da sich diese Arbeit zum größten Teil mit aus Wänden bestehenden Gebäuden befasst, wird nachfolgend die Klasse \textit{IfcWall} wiederholt als Beispiel herangezogen.
 Der für diese Klasse relevante Ausschnitt aus der Klassenhierarchie ist in Abbildung~\ref{fig:IfcWall_Hierarchie} dargestellt.
 Objekte werden von dem Standard in Relation zueinander gestellt, um komplexere Zusammenhänge darzustellen.
@@ -44,13 +42,13 @@ In Abbildung~\ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
 
 \subsection{IfcPropertySets und IfcQuantitySets}\label{basics:ifc_properties}
 Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zb. auch eine präzisere Kosten- und Zeitschätzung für den Bau ermöglicht~\cite{Industry93:online}. 
-Dies kann mithilfe von \textit{IfcPropertySets} und textit{IfcQuantitySets} umgesetzt werden, welche Objekten oder Objekttypen angehängt werden können.
+Dies kann mithilfe von \textit{IfcPropertySets} und \textit{IfcQuantitySets} umgesetzt werden, welche Objekten oder Objekttypen angehängt werden können.
 Dabei werden IfcQuantitySets vorwiegend dazu verwendet numerische Werte zu geometrischen oder physikalischen Eigenschaften auszudrücken.
 IfcPropertySets dienen hingegen dazu bestimmten Objekten oder  Objekttypen mit sämtlichen nicht numerischen Werten zu annotieren.
 Die Verwendung der Bezeichnung \textit{Set} rührt daher, dass diese Informationen in einer Baumstruktur vorliegen und demnach verschachtelt sein können.
 Es gibt zu vielen Klassenbeschreibungen des IFC Standards vordefinierte PropertySets.
 Das hilft dabei wichtige Informationen zu bestimmten Objekttypen einheitlich angeben zu können.
-Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit dem Namen \textit{Pset_WallCommon}.
+Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit dem Namen \textit{Pset\_WallCommon}.
 Darin können die Ersteller von neuen WallTypes etwa Informationen über Brennbarkeit, thermisches Verhalten oder Akustik hinterlegen.
 Bei Erstellen einer IfcWall-Instanz aus einem bestimmten WallType werden die damit verbundenen Property- und QuantitySets automatisch daran angehängt, sodass jedes Objekt relevante Informationen über sich selbst bereithält.
 

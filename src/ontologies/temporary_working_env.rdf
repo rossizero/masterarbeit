@@ -285,24 +285,24 @@
 <owl:NamedIndividual rdf:about="#RuleDependsOnBottomNeighbors">
   <rdf:type rdf:resource="#ApplyObjectPropertyRule"/>
   <applyObjectPropertyTo rdf:resource="#dependsOnObjectPropertyHolder"/>
-  <holdPropertyByName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasBottomNeighbor</holdPropertyByName>
+  <holdPropertyByName>hasBottomNeighbor</holdPropertyByName>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#dependsOnObjectPropertyHolder">
   <rdf:type rdf:resource="#DataPropertyHolderElement"/>
   <rdf:type rdf:resource="#ObjectPropertyHolderElement"/>
-  <holdPropertyByName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">dependsOn</holdPropertyByName>
+  <holdPropertyByName>dependsOn</holdPropertyByName>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#RuleMax5BottomNeighbors">
   <rdf:type rdf:resource="#CardinalityRule"/>
-  <holdPropertyByName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasBottomNeighbor</holdPropertyByName>
+  <holdPropertyByName>hasBottomNeighbor</holdPropertyByName>
   <max rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">5.0</max>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#hasBottomNeighborObjectPropertyHolder">
   <rdf:type rdf:resource="#DataPropertyHolderElement"/>
-  <holdPropertyByName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hasBottomNeighbor</holdPropertyByName>
+  <holdPropertyByName>hasBottomNeighbor</holdPropertyByName>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#building_1">
@@ -336,18 +336,18 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasNeighbor rdf:resource="#brick_1"/>
+  <hasNeighbor rdf:resource="#brick_9"/>
+  <hasNeighbor rdf:resource="#brick_5"/>
   <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasTopNeighbor rdf:resource="#brick_10"/>
   <hasTopNeighbor rdf:resource="#brick_7"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasTopNeighbor rdf:resource="#brick_8"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
   <hasRightNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasNeighbor rdf:resource="#brick_1"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -373,17 +373,17 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
-  <hasTopNeighbor rdf:resource="#brick_9"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasNeighbor rdf:resource="#brick_6"/>
+  <hasNeighbor rdf:resource="#brick_2"/>
   <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasTopNeighbor rdf:resource="#brick_10"/>
   <hasTopNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_2"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasTopNeighbor rdf:resource="#brick_9"/>
+  <hasTopNeighbor rdf:resource="#brick_8"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -405,21 +405,20 @@
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasTopNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
-  <hasTopNeighbor rdf:resource="#brick_9"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
   <hasLeftNeighbor rdf:resource="#brick_1"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
   <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_4"/>
   <hasNeighbor rdf:resource="#brick_7"/>
   <hasNeighbor rdf:resource="#brick_3"/>
+  <hasNeighbor rdf:resource="#brick_4"/>
+  <hasNeighbor rdf:resource="#brick_12"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
+  <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasTopNeighbor rdf:resource="#brick_9"/>
+  <hasTopNeighbor rdf:resource="#brick_8"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -439,22 +438,22 @@
 
 <owl:NamedIndividual rdf:about="#brick_4">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_7"/>
   <hasTopNeighbor rdf:resource="#brick_8"/>
+  <hasTopNeighbor rdf:resource="#brick_7"/>
   <hasLeftNeighbor rdf:resource="#brick_6"/>
   <hasRightNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasNeighbor rdf:resource="#brick_3"/>
   <hasNeighbor rdf:resource="#brick_9"/>
   <hasNeighbor rdf:resource="#brick_4"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
+  <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_1"/>
   <rdf:type>
@@ -482,18 +481,18 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasLeftNeighbor rdf:resource="#brick_6"/>
+  <hasNeighbor rdf:resource="#brick_1"/>
+  <hasNeighbor rdf:resource="#brick_7"/>
+  <hasNeighbor rdf:resource="#brick_12"/>
+  <hasNeighbor rdf:resource="#brick_5"/>
   <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasLeftNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_1"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
-  <dependsOn rdf:resource="#brick_3"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_11"/>
   <dependsOn rdf:resource="#brick_2"/>
+  <dependsOn rdf:resource="#brick_3"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -501,8 +500,8 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_3"/>
             <rdf:Description rdf:about="#brick_2"/>
+            <rdf:Description rdf:about="#brick_3"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
@@ -518,18 +517,18 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasRightNeighbor rdf:resource="#brick_5"/>
+  <hasNeighbor rdf:resource="#brick_6"/>
+  <hasNeighbor rdf:resource="#brick_3"/>
   <hasNeighbor rdf:resource="#brick_15"/>
   <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_8"/>
   <hasNeighbor rdf:resource="#brick_11"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
+  <hasNeighbor rdf:resource="#brick_8"/>
   <hasNeighbor rdf:resource="#brick_2"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
+  <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
+  <hasRightNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_1"/>
   <rdf:type>
     <owl:Restriction>
@@ -550,22 +549,22 @@
 
 <owl:NamedIndividual rdf:about="#brick_7">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
   <hasTopNeighbor rdf:resource="#brick_10"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
   <hasRightNeighbor rdf:resource="#brick_8"/>
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasNeighbor rdf:resource="#brick_3"/>
+  <hasNeighbor rdf:resource="#brick_7"/>
+  <hasNeighbor rdf:resource="#brick_15"/>
+  <hasNeighbor rdf:resource="#brick_11"/>
+  <hasNeighbor rdf:resource="#brick_5"/>
   <hasTopNeighbor rdf:resource="#brick_13"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
   <hasBottomNeighbor rdf:resource="#brick_1"/>
   <hasBottomNeighbor rdf:resource="#brick_2"/>
   <hasRightNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasNeighbor rdf:resource="#brick_11"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_4"/>
@@ -592,20 +591,21 @@
 
 <owl:NamedIndividual rdf:about="#brick_8">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
   <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasTopNeighbor rdf:resource="#brick_10"/>
   <hasRightNeighbor rdf:resource="#brick_9"/>
   <dependsOn rdf:resource="#empty_brick"/>
+  <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
+  <hasNeighbor rdf:resource="#brick_6"/>
+  <hasNeighbor rdf:resource="#brick_8"/>
+  <hasNeighbor rdf:resource="#brick_12"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasTopNeighbor rdf:resource="#brick_15"/>
   <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
   <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_8"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
+  <hasBottomNeighbor rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>
@@ -638,18 +638,18 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
   <hasLeftNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
   <hasNeighbor rdf:resource="#brick_1"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_4"/>
   <hasNeighbor rdf:resource="#brick_13"/>
   <hasNeighbor rdf:resource="#brick_10"/>
+  <hasNeighbor rdf:resource="#brick_6"/>
+  <hasNeighbor rdf:resource="#brick_9"/>
+  <hasNeighbor rdf:resource="#brick_4"/>
+  <hasNeighbor rdf:resource="#brick_12"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasBottomNeighbor rdf:resource="#brick_3"/>
+  <hasBottomNeighbor rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>
   <dependsOn rdf:resource="#brick_5"/>
@@ -681,15 +681,15 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
+  <hasNeighbor rdf:resource="#brick_10"/>
   <hasNeighbor rdf:resource="#brick_15"/>
   <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_10"/>
+  <hasBottomNeighbor rdf:resource="#brick_1"/>
+  <hasBottomNeighbor rdf:resource="#brick_6"/>
+  <hasBottomNeighbor rdf:resource="#brick_3"/>
+  <hasBottomNeighbor rdf:resource="#brick_2"/>
+  <hasBottomNeighbor rdf:resource="#brick_4"/>
+  <hasBottomNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>
@@ -729,16 +729,16 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
   <hasLeftNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_11"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
   <hasNeighbor rdf:resource="#brick_13"/>
+  <hasNeighbor rdf:resource="#brick_6"/>
   <hasNeighbor rdf:resource="#brick_7"/>
+  <hasNeighbor rdf:resource="#brick_11"/>
+  <hasBottomNeighbor rdf:resource="#brick_1"/>
+  <hasBottomNeighbor rdf:resource="#brick_3"/>
+  <hasBottomNeighbor rdf:resource="#brick_2"/>
+  <hasBottomNeighbor rdf:resource="#brick_4"/>
+  <hasBottomNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>
@@ -775,18 +775,18 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
+  <hasNeighbor rdf:resource="#brick_3"/>
+  <hasNeighbor rdf:resource="#brick_15"/>
+  <hasNeighbor rdf:resource="#brick_14"/>
+  <hasNeighbor rdf:resource="#brick_9"/>
+  <hasNeighbor rdf:resource="#brick_8"/>
+  <hasNeighbor rdf:resource="#brick_12"/>
+  <hasNeighbor rdf:resource="#brick_5"/>
   <hasBottomNeighbor rdf:resource="#brick_1"/>
   <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
   <hasBottomNeighbor rdf:resource="#brick_2"/>
+  <hasBottomNeighbor rdf:resource="#brick_4"/>
   <hasRightNeighbor rdf:resource="#brick_11"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasNeighbor rdf:resource="#brick_8"/>
-  <hasNeighbor rdf:resource="#brick_14"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_4"/>
@@ -819,18 +819,18 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <hasBottomNeighbor rdf:resource="#brick_8"/>
-  <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_7"/>
-  <hasRightNeighbor rdf:resource="#brick_15"/>
+  <hasNeighbor rdf:resource="#brick_13"/>
   <hasNeighbor rdf:resource="#brick_9"/>
   <hasNeighbor rdf:resource="#brick_11"/>
-  <hasNeighbor rdf:resource="#brick_13"/>
+  <hasBottomNeighbor rdf:resource="#brick_1"/>
+  <hasBottomNeighbor rdf:resource="#brick_6"/>
+  <hasBottomNeighbor rdf:resource="#brick_3"/>
+  <hasBottomNeighbor rdf:resource="#brick_7"/>
+  <hasBottomNeighbor rdf:resource="#brick_8"/>
+  <hasBottomNeighbor rdf:resource="#brick_2"/>
+  <hasBottomNeighbor rdf:resource="#brick_4"/>
+  <hasBottomNeighbor rdf:resource="#brick_5"/>
+  <hasRightNeighbor rdf:resource="#brick_15"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>
@@ -873,17 +873,17 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
+  <hasNeighbor rdf:resource="#brick_14"/>
+  <hasNeighbor rdf:resource="#brick_12"/>
   <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <hasBottomNeighbor rdf:resource="#brick_9"/>
-  <hasBottomNeighbor rdf:resource="#brick_8"/>
   <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
   <hasBottomNeighbor rdf:resource="#brick_3"/>
   <hasBottomNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_14"/>
+  <hasBottomNeighbor rdf:resource="#brick_9"/>
+  <hasBottomNeighbor rdf:resource="#brick_8"/>
+  <hasBottomNeighbor rdf:resource="#brick_2"/>
+  <hasBottomNeighbor rdf:resource="#brick_4"/>
+  <hasBottomNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>
@@ -927,19 +927,19 @@
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>
+  <hasLeftNeighbor rdf:resource="#brick_13"/>
+  <hasNeighbor rdf:resource="#brick_10"/>
+  <hasNeighbor rdf:resource="#brick_6"/>
+  <hasNeighbor rdf:resource="#brick_7"/>
+  <hasNeighbor rdf:resource="#brick_15"/>
+  <hasNeighbor rdf:resource="#brick_12"/>
   <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
+  <hasBottomNeighbor rdf:resource="#brick_3"/>
   <hasBottomNeighbor rdf:resource="#brick_9"/>
   <hasBottomNeighbor rdf:resource="#brick_8"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
   <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasLeftNeighbor rdf:resource="#brick_13"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_10"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
+  <hasBottomNeighbor rdf:resource="#brick_4"/>
+  <hasBottomNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_1"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_3"/>

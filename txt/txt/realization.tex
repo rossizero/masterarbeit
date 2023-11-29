@@ -23,20 +23,19 @@ In Abschnitt~\ref{concept:wall_detailing} wurde das Wall Detailing als der Vorga
 Innerhalb des IFC Standards werden einige mathematische/geometrische Repräsentationen der sogennanten \textit{IFCWall} unterstützt, um neben einfachen Boxen auch komplexere Formen abbilden zu können.
 Beispielsweise ist es möglich in das Modell eines Hauses zunehmend dünner werdende Wandstücke, kurvige Wandstücke oder Wandstücke, welche nur durch ein arbiträres Vieleck beschrieben werden können zu integrieren.
 Standardmäßig haben \textit{IFCWalls} aber einen einfachen Quader als Grundform, was für die Fallstudien dieser Arbeit ausreichend ist.
+Die Unterkapitel dieses Abschnitts folgen den in Kapitel~\ref{concept:wall_detailing} genannten Schritten, um von einer Menge solcher Wände hin zu einer Menge an Bausteinen zu gelangen, die den gewünschten Mauerwerksverband darauf anweden.
 
 \subsection{Konvertieren des IFC zu BREP}
 Den ersten Schritt stellt das Extrahieren aller notwendigen Daten aus dem vorliegenden IFC Modell dar.
-Für die Fallstudien dieser Arbeit sind sowohl alle Objekte des Typs \textit{IFCWall} als auch die, etwa durch Fenster oder Türen entstehenden, daran angeknüpften Objekte vom Typ \textit{IfcOpeningElement} (siehe \ref{basics:IfcOpeningElement}) von Interesse.
+Für die Fallstudien dieser Arbeit sind sowohl alle Objekte des Typs \textit{IFCWall} als auch die, etwa durch Fenster oder Türen entstehenden, daran angeknüpften Objekte vom Typ \textit{IfcOpeningElement} (siehe~\ref{basics:IfcOpeningElement}) von Interesse.
 Zusätzlich werden aus den, in den \textit{IfcPropertySets} der Wandstücke hinterlegten Daten, Informationen über das zu verwendende Modul und Raster ausgelesen.
-Mithilfe der Werkzeuge der in Kapitel \ref{basics} vorgstellten Python Bibliothek \textit{ifcopenshell} (siehe \ref{basics:ifcopenshell}) ist dies in wenigen Schritten möglich.
+Mithilfe der Werkzeuge der in Kapitel~\ref{basics} vorgstellten Python Bibliothek \textit{ifcopenshell} (siehe~\ref{basics:ifcopenshell}) ist dies in wenigen Schritten möglich.
 
 \begin{lstlisting}[language=Python, caption=Extraktion relevanter Informtionen aus einem IFC-File.]
 TODO Saetze zum Code, Code TODO kleines Klassendiagram von 
 Wall bzw WallLayerGroup und Opening und BrickInformation
 \end{lstlisting}
 
-\subsection{Überprüfen der modellierten Wände}
-\subsubsection{Filtern}
 Da sich diese Arbeit zunächst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen alle zuvor aus dem IFC Modell extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
 Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgenden Schritte weitergegeben werden.
 
@@ -45,14 +44,14 @@ Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgend
   TODO Satz zum Code, Code iscubic
 \end{lstlisting}
 
-\subsubsection{Anwenden des Moduls}
+\subsection{Anwenden des Moduls}
 Mit dem zu jedem Wandstück festgelegten Modul werden nun alle Wandstücke in Schichten aufgeteilt.
 Deren Höhe entspricht im Normalfall der Höhe des jeweilgen Moduls.
 Lediglich die oberste Schicht kann durch falsch modellierte Wandstücke eine niedrigere Schichthöhe aufweisen.
 Dies ist der Fall, wenn die Gesamthöhe des Wandstücks nicht exakt einem Vielfachen der Höhe des Moduls entspricht und ein nicht aufzuteilender Rest existiert.
 Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstücken durchzuführen und Beziehungen zwischen ihnen zu finden.
 
-\subsubsection{Kombinieren passender Wandstücke}
+\subsection{Kombinieren passender Wandstücke}
 \label{real:combination}
 Eine solche Beziehung stellen Wände dar, die, wie bereits in Kapitel~\ref{concept:relations_wandtuecke} definiert, durch mehrere einzelne Objekte modelliert wurden, eigentlich aber eine Einheit bilden.
 Daher werden in diesem Schritt alle Wandstücke miteinander verglichen und eventuell kombiniert, sodass jeweils ein gefundes Paar durch ein einzelnes Wandstück repräsentiert wird.
@@ -142,7 +141,7 @@ AB HIER ÜBERARBEITEN, DA TEILE INS KONZEPT GEWANDERT SIND. @CONSTI hier aufhör
 \par\noindent\rule{\textwidth}{0.4pt}
 \par\noindent\rule{\textwidth}{0.4pt}
 
-\subsubsection{Beziehungen finden}
+\subsection{Finden und Lösen von Beziehungen}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
 Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe \ref{basics:Mauerwerksverband}).
 Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen (wie etwa dem in Abschnitt~\ref{basics:Mauerwerksverband} genannten Überbindemaß) einzuhalten.
@@ -164,15 +163,20 @@ Teilen sich zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetz
 Liegt der Schnittpunkt des Wandstück-Paares mindesten Wandbreite/2 innerhalb beider Wandstücke, so handelt es sich um eine X-Kreuzung - modelliert aus zwei sich schneidenden Wandstücken. 
 TODO Bilder
 
-\subsection{Lösen der Beziehungen}
+\subsection*{Lösen der Beziehungen}
 Je nach gewählten Verband müssen z.B. Ecken (deren Baupläne im vornherein definiert wurden) so angeordnet werden, dass die dazwischenliegenden Wandstücke lückenlos eingefüllt werden können.
 Dafür muss ein sogenannter "plan\_offset" für jede Wand und jede Ecke gefunden werden. Dieser gibt an, an welchem Index der Bauplandefinition das Wandstück (von unten) beginnen muss, um insgesamt einen einheitlichen Wandkörper ohne Lücken zu bilden.
 Voraussetzung dafür ist natürlich ein passender Eckplan zu dem gewählten Verband. 
 
 Schwierigkeiten: Eckpläne insgesamt, Ecken ragen in die sie bildenden Wände hinein. Diese müssen dementsprechend verkleinert werden.
 
-\subsection{Anwenden der Lösung}
+\subsection{Anwenden der Öffnungen}
+Blablabla
+
+\subsection{Anwenden der Mauerwerksverbände}
 Ablaufen aller Ecken und Wände und einsetzen der Ziegel gemäß den gefundenen Lösungen.
+
+\subsection{Nachbarschaftsbeziehungen zwischen Bausteinen berechnen}
 
 \subsection{Export}
 Abhängigkeitsgraph und Ontologie für Regelwerk
