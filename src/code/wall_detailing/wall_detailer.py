@@ -182,7 +182,7 @@ class WallDetailer:
         return brick_ret
 
     @staticmethod
-    def convert_to_stl2(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = []):
+    def convert_to_stl(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = []):
         import os
         file_path = os.path.abspath(path)
         bricks_copy = bricks.copy()
@@ -218,40 +218,6 @@ class WallDetailer:
                 return True
         return False
 
-    @staticmethod
-    def convert_to_stl(bricks: [Brick], path: str, detail: float = 0.1, additional_shapes: List = None):
-        import os
-        file_path = os.path.abspath(path)
-        bricks_copy = bricks.copy()
-        print("# bricks: ", len(bricks_copy))
-        shape = None
-
-        if len(bricks_copy) > 0:
-            shape = bricks_copy.pop(0).shape  # get_brep_shape()
-
-        if shape is not None:
-            for brick in bricks_copy:
-                shape = BRepAlgoAPI_Fuse(
-                    shape,
-                    brick.shape  # get_brep_shape()
-                ).Shape()
-
-        if additional_shapes is not None and len(additional_shapes) > 0:
-            if shape is None:
-                shape = additional_shapes[0]
-
-            for s in additional_shapes:
-                shape = BRepAlgoAPI_Fuse(
-                    shape,
-                    s
-                ).Shape()
-        if shape is not None:
-            mesh = BRepMesh_IncrementalMesh(shape, detail)
-            mesh.Perform()
-            assert mesh.IsDone()
-            stl_export = StlAPI_Writer()
-            print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
-
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
@@ -264,13 +230,13 @@ if __name__ == "__main__":
     #scenario = DoppelEck2_Closed_TJoint()
     scenario = Single_Wall_Slim()
 
-    WallDetailer.convert_to_stl2([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
-    WallDetailer.convert_to_stl2([], "ifc_output.stl", additional_shapes=[w.get_shape() for w in www])
-    WallDetailer.convert_to_stl2([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
+    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
+    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=[w.get_shape() for w in www])
+    WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
     BrickExporter(bb).export_to_json("output.json")
     BrickToOntology(bb)
-    WallDetailer.convert_to_stl2(bb, "output.stl", additional_shapes=[])
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])

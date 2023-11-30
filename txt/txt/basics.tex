@@ -1,5 +1,8 @@
-\chapter{Grundlagen}
-\label{basics}
+% https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-generate-cross-sections-directly-from-an-ifc-file/
+% https://blenderbim.org/docs-python/ifcopenshell-python/geometry_processing.html
+%https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-construct-new-geometry/
+
+\chapter{Grundlagen}\label{basics}
 Zunächst wird für diese Arbeit ein geeignetes Speicherformat für 3D Modelle von Gebäuden benötigt.
 Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} möglichst vollständig digital abbilden zu können. 
 Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in das Modell zu integrieren, auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
@@ -7,8 +10,7 @@ Da diese Informationen oft von Experten verschiedener Fachbereiche (etwa aus den
 Dafür werden seit dem Jahr 2000 die \textit{Industry Foundation Classes} (IFC) von buildingsmart entwickelt, deren Anwendung im internationalen Bauwesen mittlerweile weit verbreitet ist~\cite{Industry61:online}.
 
 
-\section{Industry Foundation Classes}
-\label{basics:ifc}
+\section{Industry Foundation Classes}\label{basics:ifc}
 In der Spezifikation des Standards selbst, wird dieser wie folgt beschrieben:
 \glqq{}Die Industry Foundation Classes (IFC) sind ein offener internationaler Standard für Daten des Building Information Model (BIM), welche zwischen Softwareanwendungen ausgetauscht, gemeinsam genutzt und von den verschiedenen Akteuren der Bauindustrie und des Gebäudemanagements verwendet werden. 
 Der Standard enthält Definitionen für Daten, die für die Lebenszyklen von Gebäude- und Infrastrukturarbeiten erforderlich sind. 
@@ -17,7 +19,7 @@ Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739 regi
 Da die IFC aber nach wie vor kontinuierlich weiterentwickelt werden, wird in dieser Arbeit die derzeit neueste Version verwendet.
 Diese ist die IFC Spezifikation 4.3.1.0~\cite{IFC4310Spezification:online}.
 Das verbreitetste Austauschformat für IFC ist das Step Physical File Format, welches im ISO 10303 Teil 21 registriert ist~\cite{ISO_Step:online}.
-Zudem gibt es speicherreduziertere Formate wie ifcZip oder für Menschen lesbarere Formate wie ifcXML~\cite{Industry93:online}\cite{IFCForma28:online}\cite{BIM_handbook_AEC_XML_SCHEMAS}.
+Zudem gibt es speicherreduzierte Formate wie ifcZip oder für Menschen lesbarere Formate wie ifcXML~\cite{Industry93:online}\cite{IFCForma28:online}\cite{BIM_handbook_AEC_XML_SCHEMAS}.
 
 \subsection{IFC 4.3.1.0 Aufbau}
 Im Grunde definieren die \textit{Industry Foundation Classes} eine Vielzahl an Klassen, die in einer komplexen Hierarchie angeordnet den Grundstock des Datenmodells bilden.
@@ -41,47 +43,49 @@ In Abbildung~\ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
 \end{figure}
 
 \subsection{IfcPropertySets und IfcQuantitySets}\label{basics:ifc_properties}
-Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zb. auch eine präzisere Kosten- und Zeitschätzung für den Bau ermöglicht~\cite{Industry93:online}. 
-Dies kann mithilfe von \textit{IfcPropertySets} und \textit{IfcQuantitySets} umgesetzt werden, welche Objekten oder Objekttypen angehängt werden können.
+Mit dem Erweitern des Gebäudemodells um möglichst viele Informationen, schafft man einen detailierten digitalen Zwilling, der neben der bloßen Darstellung des Gebäudes als 3D Modell zusätzlich die Untersuchung auf andere Eigenschaften ermöglicht.
+Dazu zählen zum Beispiel eine präzisere Kosten- und Zeitschätzung, Sicherheitsaspekte und Emissionen eines Bauvorhabens~\cite{Industry93:online}~\cite{Ding2014}. 
+Dies ist mithilfe von \textit{IfcPropertySets} und \textit{IfcQuantitySets} umsetzbar, welche Objekten oder Objekttypen angehängt werden können.
 Dabei werden IfcQuantitySets vorwiegend dazu verwendet numerische Werte zu geometrischen oder physikalischen Eigenschaften auszudrücken.
-IfcPropertySets dienen hingegen dazu bestimmten Objekten oder  Objekttypen mit sämtlichen nicht numerischen Werten zu annotieren.
+IfcPropertySets dienen hingegen dazu bestimmten Objekten oder Objekttypen mit sämtlichen nicht numerischen Werten zu annotieren.
+Beispiele dafür sind etwa Material oder Farbe eines bestimmten Objekts.
 Die Verwendung der Bezeichnung \textit{Set} rührt daher, dass diese Informationen in einer Baumstruktur vorliegen und demnach verschachtelt sein können.
 Es gibt zu vielen Klassenbeschreibungen des IFC Standards vordefinierte PropertySets.
 Das hilft dabei wichtige Informationen zu bestimmten Objekttypen einheitlich angeben zu können.
-Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit dem Namen \textit{Pset\_WallCommon}.
-Darin können die Ersteller von neuen WallTypes etwa Informationen über Brennbarkeit, thermisches Verhalten oder Akustik hinterlegen.
+Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit dem Namen \textit{Pset\_WallCommon}~\cite{IFC4310PSetWallCommon:online}.
+Darin können die Ersteller von neuen WallTypes unter anderem Informationen über Brennbarkeit, thermisches Verhalten oder Akustik hinterlegen.
 Bei Erstellen einer IfcWall-Instanz aus einem bestimmten WallType werden die damit verbundenen Property- und QuantitySets automatisch daran angehängt, sodass jedes Objekt relevante Informationen über sich selbst bereithält.
 
 \subsection{Positionierung von IFCProducts}
 %https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/concepts/Product_Shape/Product_Placement/Product_Local_Placement/content.html
+%https://community.osarch.org/discussion/654/how-to-extract-location-data-from-ifc mal schauen ob man das easy machen kann mit openshell
 TODO: Positionierung ist anscheinend bisschen verschachtelt
 Blablabla so können aus einem IFC Projekt alle relevanten Klassen mit den für diese Arbeit erforderlichen Eigenschaften extrahiert werden.
-
+This is a test
 
 \subsection{IfcOpeningElement}
 \label{basics:IfcOpeningElement}
-Wie funktionieren Löcher in z.B. IfcWall? -> IfcOpeningElement.
-Am Beispiel eines Fensters erklären. In dessen Doku steht dass Windows auf ein IfcOpeningElement verweisen, welches ein Stück Wand wegmacht und z.b. durch das Fenster aufgefüllt wird.
-%(https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcWindow.htm) 
-%https://standards.buildingsmart.org/IFC/DEV/IFC4_2/FINAL/HTML/schema/ifcproductextension/lexical/ifcopeningelement.htm
-TODO: mit rausparsen und aus wandmeshes rauschneiden vor detailing.
-
-ifcopeningelement um lücken in wände zu machen.
-"The opening element stands for opening, recess or chase, all reflecting voids. It represents a void within any element that has physical manifestation. Openings can be inserted into walls, slabs, beams, columns, or other elements." Auszug aus Doku. und This also includes IfcOpeningElements, the mechanism used to extract openings for windows and doors, typically from walls. %https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-construct-new-geometry/
-%https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcDoor.htm
+Neben Wänden stellen Fenster und Türen wichtige Elemente eines Gebäudes dar.
+Diese sind ebenfalls Teil der Klassen des IFC Standards.
+Objekte des Typs \textit{IfcOpeningElement} dienen dazu die notwendigen Lücken in einer Wand zu definieren in die später eine Tür oder ein Fenster eingebaut werden soll.
+In der Dokumentation wird dies wie folgt formuliert (aus dem Englischen): \glqq{}[Das IfcOpeningElement] stellt eine Lücke in jedem Element dar, das eine physische Manifestation hat\grqq{}~\cite{IFC4310OpeningElement:online}.
+Es gibt zwei Arten an IfcOpeningElement, je nachdem ob die Öffnung durch die gesamte Breite eines Objektes reicht oder nicht. 
+Folglich entsteht dadurch eine Unterscheidung zwischen Nischen und tatsächlichen Öffnungen, wobei nur letztere im Zusammenhang mit Fenstern oder Türen Sinn ergibt.
+TODO: Diagramm zwischen IFCWall und IfcOpeningElement.
 
 \section{IFC for Blender}\label{basics:blender}
 \subsection{Blender}
-Blender ist eines der beliebtesten Open Source Programme zur Modellierung von 3D Modellen und Animationen \cite{blendero56:online}.
-Aufgrund dessen existieren auch eine Vielzahl an freien Erweiterungen bzw. Plugins - unter anderem auch eine Integration von IFC Projekten.
+Blender ist eines der beliebtesten Open Source Programme zur Modellierung von 3D Modellen und Animationen~\cite{blendero56:online}.
+Eine umfangreiche Python API erlaubt es Blender durch sogenannte Addons an die eigenen Bedürfnisse anzupassen~\cite{PythonWebsite:online}~\cite{BlenderPythonAPI:online}.
+Aufgrund dessen existiert auch eine Vielzahl an freien Erweiterungen \textendash{} unter anderem auch eine Integration von IFC Projekten.
 
 \subsection{blenderbim}
-Neben kommerziellen Produkten wie etwa revit von autodesk \cite{RevitSof26:online} zur Modellierung von IFC Modellen, gibt es auch für Blender ein freies Plugin, um IFC Modelle zu erstellen \cite{BlenderB43:online}.
+Neben kommerziellen Produkten wie etwa revit von autodesk zur Modellierung von IFC Modellen, gibt es auch für Blender ein freies Plugin, um IFC Modelle zu erstellen~\cite{RevitSof26:online}~\cite{BlenderB43:online}.
 Dieses Plugin ermöglicht es neben dem bloßen Designen des Gebäudes in kurzer Zeit z.B. detailierte Zeichnungen verschiedener Perspektiven herauszuarbeiten, die z.B. von Bauingeneuren verwendet werden können, um einzelne Stockwerke oder Verkabelungen zu planen.
 Blenderbim selbst kapselt unter anderem die Open Source Python Bibliothek \textit{IfcOpenShell}, sodass diese in der Blender Laufzeitumgebung zur Verfügung steht \cite{IFCOpenShell:online}.
 
-\subsection{IfcOpenShell} \label{basics:ifcopenshell}
-\begin{lstlisting}[language=Python, caption=Beispielprogrammcode um bestimmte Daten aus einem IFC File zu laden und daraus ein Mesh zu generieren]
+\subsection{IfcOpenShell}\label{basics:ifcopenshell}
+\begin{lstlisting}[label={basics:ifcopenshell_sample_code}, language=Python, caption=Beispielprogramm zur Extraktion bestimmter Daten einer IFC Datei und Generierung eines Meshes aus deren geometrischen Representationen.]
 import ifcopenshell
 from ifcopenshell import geom
 from stl import mesh, Mode
@@ -90,7 +94,7 @@ import numpy as np
 settings = ifcopenshell.geom.settings()
 settings.set(settings.USE_WORLD_COORDS, True)
 
-ifc_file = ifcopenshell.open("../models/sample_house.ifc")
+ifc_file = ifcopenshell.open("model.ifc")
 products = ifc_file.by_type("IfcProduct")
 meshes = []
 
@@ -109,37 +113,21 @@ for product in products:
 
 # Create the combined mesh
 combined = mesh.Mesh(np.concatenate([m.data for m in meshes]))
-combined.save('cube.stl', mode=Mode.ASCII)
+combined.save('model.stl', mode=Mode.ASCII)
 \end{lstlisting}
-TODO Beispielcode zum extrahieren einer Wand und deren geometrischen Eigenschaften
-% https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-generate-cross-sections-directly-from-an-ifc-file/
-% https://blenderbim.org/docs-python/ifcopenshell-python/geometry_processing.html
-%https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-construct-new-geometry/
 
-conda create -n masterarbeit
-conda activate masterarbeit
-conda install -c conda-forge ifcopenshell
-conda install -c conda-forge ipykernel
-python -m ipykernel install --user --name=masterarbeit
-conda install -c conda-forge pythonocc-core=7.7.0
-conda install -c conda-forge meshplot 
-% in ifcopenshell acadamy a grafic backend is needed
-
-conda create -n masterarbeit
-conda activate masterarbeit
-conda install -c conda-forge ifcopenshell
-conda install -c conda-forge pythonocc-core=7.7.0
-conda install -c anaconda pyqt 
-
-the ABS models to solve floor layout problems
-constraint solver / programming
+IfcOpenShell ist eine frei verfügbare Bibliothek, die es erleichtert mit Daten im IFC Format zu arbeiten.
+Sie bietet unter anderem eine Python API an und ist wie bereits erwähnt ein Teil des Blender Addons blenderbim.
+Natürlich ist es dennoch möglich diese Bibliothek auch ohne Blender zu verwenden.
+In Listing~\ref{basics:ifcopenshell_sample_code} ist ein kurzes Beispiel eines Programmes gegeben, das in einer IFC Datei alle Objekte des Typs IfcWall ausfindig macht und dessen geometrische Representation in ein herkömmliches Mesh konvertiert.
+Damit existiert ein intuitiver Zugang zu den Daten von IFC Dateien.
 
 \section{Building Information Modeling}\label{basics:bim}
 Ein weiterer Punkt, der für die Verwendung von IFC spricht ist das sogenannte \textit{Building Information Modeling} (BIM)\cite{Building41:online}.
 Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Übersetzt aus dem Englischen)\cite{Microsof51:online}.
 Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
 BIM kommt in all diesen Phasen zum Tragen und erleichtert diese Prozesse durch Anbieten einer einheitlichen Schnittstelle für alle am Infrastrukturbau und -management beteiligten Personen.
-Zusätzlich ermöglicht BIM eine exakte Dokumentation des Geschehens in sämtlichen Phasen des Bauwerks, was unter anderem zu einer  genaueren Zeit- und Kostenplanung führt.
+Zusätzlich ermöglicht BIM eine exakte Dokumentation des Geschehens in sämtlichen Phasen des Bauwerks, was unter anderem zu einer genaueren Zeit- und Kostenplanung führt~\cite{Ding2014}.
 Auch Verantwortlichkeiten sind Teil von BIM, was zu einer erhöhten Produktivität beiträgt.
 Um nun das Zusammenarbeiten der unterschiedlichen Fachbereiche zu erleichtern, gibt es sogennante BIM-Server auf welchen mehrere Arbeitende synchron an einem Projekt arbeiten können, während sie jeweils die für ihren Aufgabenbereich passende Ansicht vor sich haben.
 BIM-Server unterstützen zusätzlich eine Versionierung des Fortschritts an einem Projekt.
