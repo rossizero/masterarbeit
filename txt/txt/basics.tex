@@ -123,8 +123,8 @@ In Listing~\ref{basics:ifcopenshell_sample_code} ist ein kurzes Beispiel eines P
 Damit existiert ein intuitiver Zugang zu den Daten von IFC Dateien.
 
 \section{Building Information Modeling}\label{basics:bim}
-Ein weiterer Punkt, der für die Verwendung von IFC spricht ist das sogenannte \textit{Building Information Modeling} (BIM)\cite{Building41:online}.
-Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Übersetzt aus dem Englischen)\cite{Microsof51:online}.
+Ein weiterer Punkt, der für die Verwendung von IFC spricht ist das sogenannte \textit{Building Information Modeling} (BIM)~\cite{Building41:online}.
+Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Übersetzt aus dem Englischen)~\cite{Microsof51:online}.
 Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
 BIM kommt in all diesen Phasen zum Tragen und erleichtert diese Prozesse durch Anbieten einer einheitlichen Schnittstelle für alle am Infrastrukturbau und -management beteiligten Personen.
 Zusätzlich ermöglicht BIM eine exakte Dokumentation des Geschehens in sämtlichen Phasen des Bauwerks, was unter anderem zu einer genaueren Zeit- und Kostenplanung führt~\cite{Ding2014}.
@@ -142,85 +142,79 @@ Hier unterstützt BIM, indem sämtliche Teile der Installationen in einem Gebäu
 Dies wurde allerdings \glqq{}angesichts der Realität der Handwerker und Gebäudenutzer für völlig unrealisitsch und auch etwas over-engineered\grqq{} eingestuft.
 Trotzdem sei \glqq{}BIM [\ldots] das große Ding in der Bauwelt und der einzige echte Standard\grqq{}.
 
-\section{brick schema}
-ChatGPT \glqq{}While IFC is primarily focused on representing building information for interoperability between software applications, BrickSchema focuses on providing a standardized and semantically rich representation of building systems and their components. In practice, BrickSchema can be used in conjunction with IFC to enhance the semantic representation and analysis of building data, particularly when it comes to systems-level information.
-
-By using IFC as a foundation for representing the overall building information and combining it with the more detailed and specialized semantic representation offered by BrickSchema, it becomes possible to achieve a comprehensive and interoperable representation of building information that can support various use cases, including energy modeling, fault detection and diagnosis, and optimization of building performance.\grqq{}
-%https://brickschema.org/
-%https://github.com/BrickSchema/Brick
-
 \section{opensourcebim}
-Während es vorwiegend kommerzielle Produkte gibt, die Unternehmen das Arbeiten mit BIM ermöglichen, exisitiert auch hier eine Open Source Bewegung.
-Darin enthalten sind 70 Repositories, unter anderem ein BIM-Server inklusive diverser Clients für Endanwender und Werkzeuge, um einfacher mit den IFC Files zu agieren\cite{Theopens96:online}.
-Ein kurzer Test hat gezeigt, dass die in Blender modellierte IFC Files tatsächlich über einen \glqq{}Anzeige-Client\grqq{}, der mit einer BIM-Server verbunden ist, angezeigt werden können.
+Während es vorwiegend kommerzielle Produkte gibt, die Unternehmen das Arbeiten mit BIM ermöglichen, exisitiert auch hier eine aktive Open Source Bewegung.
+Unter dem Namem \glqq{}The open source BIM collective\grqq{} oder kurz \glqq{}opensourceBIM\grqq{} werden derzeit um die 70 Repositories betrieben.
+Darin enthalten sind unter anderem ein BIM-Server inklusive verschiedener Clients für Endanwender auf unterschiedlichen Systemen und Werkzeuge, die es erleichtern den IFC Files zu arbeiten~\cite{Theopens96:online}.
+Ein kurzer Test hat gezeigt, dass die in Blender modellierte IFC Files tatsächlich über einen \glqq{}Anzeige-Client\grqq{}, der mit einem lokal gehosteten BIM-Server verbunden ist, angezeigt werden können.
 Obwohl die Verwendung des BIM-Servers für diese Arbeit nicht notwendig ist, besteht die Option diesen künftig mit in den Workflow zu integrieren, da damit auch das simultante Arbeiten an einem IFC File möglich ist, was in Blender nur teilweise und mit dem Einsatz von Plugins ermöglicht wird.
-Dabei ist fraglich, ob diese Plugins dann ebenfalls die IFC Erweiterung unterstützen.
 Das stellt einen Praxisbezug zum aktuell verwendeten Stand dieser Technologien her, was in der oftmals konzeptionellen Natur der Forschung nicht immer der Fall ist.
 Wie auch Blender untertützt BIM-Server das Einbinden von eigenen Plugins, sodass eine Erweiterung um neue Funktionalität möglich ist.
 Die Plugins werden in Java geschrieben.
 Der Server bietet aber auch eine REST Schnittstelle an, um Clients in anderen Sprachen anzubinden.
 
-\section{LEGO}
-\label{basics:lego}
-Ein 1x1 LEGO Stein hat eine  quadratische Grundfläche von \(7.8mm\) x \(7.8mm\).
-Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2mm\).
-Daraus ergibt sich ein Rastermaß von \(8mm\) x  \(8mm\).
-In Abbildung \ref{fig:Lego 2x4 Brick} werden zur Veranschaulichung die Maße des populären 2x4 Steines aufgeschlüsselt.
-Die für ein dreidimensionales Raster noch fehlende Größe ist die Höhe der Steine.
-Diese beträgt \(9.6mm\).
-Der Abstand zwischen zwei übereinander gestapelten Steinen hängt von dem Druck ab, der beim Zusammenstecken geleistet wurde.
-Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet werden.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\columnwidth]{fig/LEGO 2x4 Brick horizontal.png}
-    \caption{Maße des Standard 2x4 LEGO Steins \cite{LEGOBric2:online}}
-    \label{fig:Lego 2x4 Brick}
-\end{figure}
-
 \section{Mauerwerksbau}
 \label{basics: Mauerwerksbau}
 Der Mauerwerksbau ist eine Art des Massivbaus, bei welchem Natur- oder Formsteine aufgeschichtet werden, um Wände beziehungsweise Mauern zu errichten.
-Eine derart gebaute Wand besteht demnach aus Steinen und den dazwischen entstehenden Fugen.
+Eine derart erbaute Wand besteht demnach aus (Bau)-Steinen und den dazwischen entstehenden Fugen.
 Mörtel ist dabei nicht zwangsläufig notwendig.
 Man spricht von trocken versetzten Steinen oder einer Trockenmauer, wenn darauf verzichtet wird.
 Heutzutage wird fast ausschließlich mit quaderförmigen Formsteinen gebaut.
 Zur Beschreibung solcher Formsteine existieren zwei relevante Größen.
 Die eine ist das sogenannte \textit{Baunennmaß}, mit dem die tatsächliche Größe des Steins angegeben wird.
 Die andere das \textit{Baurichtmaß}, das sich aus Baunennmaß und dem Fugenmaß zusammensetzt.
-Baurichtmaße sind gemäß dem oktametrischen Maßsystem immer ein Vielfaches von \(12,5 cm\) (das entspricht \(1/8 m\)) und mindestens \(6.25cm\).
-Dies gilt sowohl für die Breite als auch die Höhe der Steine.
-Das System ist in der DIN 4172 Maßordnung im Hochbau geregelt und ist das fest definierte Grundmaß für das Bauwesen in Europa\cite{DIN417224}.
 
+\subsection{Maßsysteme}
+Als Maßsystem bezeichnet man das Vorgeben der Größen von Bausteinen anhand eines konkret definierten (Grund-)Moduls.
+Zwei in Deutschland populäre Grundmodule sind zum einem das \textit{ISO-2848-Basismodul} mit Länge 100mm und zum anderen der Achtelmeter, verankert in der \textit{DIN 4172 Maßordnung im Hochbau}~\cite{ISO2848}\cite{DIN417224}.
+Letzteres bezeichnet man daher auch als das oktametrische Maßsystem.
+Nachfolgend wird auf dieses Maßsystem näher eingegangen.
+
+\subsubsection*{Oktametrisches Maßsystem}
+Baurichtmaße sind gemäß dem oktametrischen Maßsystem immer ein Vielfaches von \(12,5 cm\) (das entspricht \(1/8 m\)) und nach der Norm aber mindestens \(6.25cm\).
+Dies gilt sowohl für Länge und Breite als auch für die Höhe der Steine.
+Das System ist in der \textit{DIN 4172 Maßordnung im Hochbau} geregelt und ist ein fest definiertes Grundmaß für das Bauwesen in Europa~\cite{DIN417224}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/Ziegelsteinformate DF NF 2DF 6DF.png}
-    \caption{Darstellung verschiedener Steinformate nach DIN 4172 (Baunennmaß in Millimetern) \cite{Steinfor38:online}}
-    \label{fig:Steinformate}
+    \caption{Darstellung verschiedener Steinformate nach DIN 4172 (Baunennmaß in Millimetern)~\cite{Steinfor38:online}}
+    \label{fig:basics:Steinformate}
 \end{figure}
-
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.5\columnwidth]{fig/Oktametrische Maßordnung.png}
+  \caption{Besondere Eigenschaften der oktametrischen Maßordnung~\cite{Moro2021}}
+  \label{fig:basics:OktametrischeMassordnung}
+\end{figure}
 Daraus gehen insbesondere folgende zwei Formate für Ziegelsteine hervor:
-Das Normalformat (NF) mit \(240 x 115 x 71 mm\) und das Dünnformat (DF) mit  \(240 x 115 x 52 mm\) (Länge x Breite x Höhe).
+Das Normalformat (NF) mit \(240\times115\times71 mm\) und das Dünnformat (DF) mit \(240\times115\times52 mm\) (Länge$\times$Breite$\times$Höhe)~\cite{Moro2021}.
 Alle anderen Formate werden mithilfe dieser beiden Grundsteine angegeben.
-So sind zum Beispiel die in Abbildung \ref{fig:Steinformate} gezeigten 2 DF und 6 DF Steine eine Kombination aus mehreren Steinen im Dünnformat.
-Dabei sieht die Norm ein Fugenmaß von \(1 cm\) für Stoßfugen (vertikal) und \(1.2 cm\) for Lagerfugen (horizontal) vor.
-Für Systeme, die eine schmalere oder keine Fuge benötigen, werden entsprechend größere Steine hergestellt, um der Maßordnung zu entsprechen.
-Mithilfe des Systems ist man zusätzlich in der Lage Türen und Fenster an die daraus entstehenden Öffnungen anzupassen und vermeidet zeitaufwendiges, nachträgliches Anpassen.
+So sind zum Beispiel die in Abbildung~\ref{fig:basics:Steinformate} gezeigten 2 DF und 6 DF Steine eine Kombination aus mehreren Steinen im Dünnformat.
+Dabei sieht die Norm ein Fugenmaß von \(10 mm\) für Stoßfugen (vertikal) und \(12 mm\) for Lagerfugen (horizontal) vor.
+Für Systeme, die eine schmalere oder keine Fuge benötigen, werden entsprechend größere Steine hergestellt, um der Maßordnung weiterhin zu entsprechen.
+Durch Einhalten eines Systems ist man zusätzlich in der Lage Türen und Fenster an die daraus entstehenden Öffnungsgrößen anzupassen und vermeidet dadurch zeitaufwendiges, nachträgliches Anpassen.
+Da Höhe, Breite und Länge der Steine zusammen mit den dazwischenliegenden Fugen aufgrund des Maßsystems jeweils Vielfache voneinander sind, ergeben sich viele Möglichkeiten zur Aufschichtung und Aneinanderreihung der Bausteine.
+Einige davon sind in Abbildung~\ref{fig:basics:OktametrischeMassordnung} zu sehen und sind gleichzeitig Beispiele für einen sogenannten \textit{Mauerwerksverband}.
 
 \subsection{Mauerwerksverband}
 \label{basics:Mauerwerksverband}
-Als Mauerwerksverband bezeichnet man bestimmte, gleichmäßige Anordnungen von Mauersteinen, um einen homogenen Mauerwerkskörper zu erreichen \cite{Mauerwer39:online}.
+Als Mauerwerksverband bezeichnet man bestimmte, gleichmäßige Anordnungen von Mauersteinen, um einen homogenen Mauerwerkskörper zu erreichen~\cite{Mauerwer39:online}.
 Damit kann eine gleichmäßige Kraftverteilung innerhalb der Mauer gewährleistet werden.
 Eine wichtige Rolle nimmt dabei das Überbindemaß ein, welches die Mindestüberlappung von Mauersteinen aus zwei Schichten der Mauer vorgibt.
-Für das planmäßige Überbindemaß \(l_{ ol }\) gilt für übliche Mauersteine mit Schichthöhen \(h_{ u } \leq 249 mm\) nach DIN EN 1996-1-1: \( l_{ ol } \geq 0,4 · h_{ u } \geq 45 mm\)\cite{Bemessun72:online}\cite{DIN_EN_1996_1_1}.
-Zudem wird darin die Mindestwanddicke für tragendes Mauerwerk, "sofern aus Gründen der Standsicherheit, der Bauphysik oder des Brandschutzes nicht größere Dicken erforderlich sind" \cite{Bemessun72:online}, auf  \(t_{ min } = 115 mm\) festgelegt \cite{DIN_EN_1996_1_1}.
-Dies ist, wie in Abbildung \ref{fig:Steinformate} zu sehen, exakt die Breite der kleinsten Ziegelformate NF und DF.
-
+Für das planmäßige Überbindemaß \(l_{ol}\) gilt für übliche Mauersteine mit Schichthöhen 
+\(h_{u} \leq 249 mm\) 
+nach DIN EN 1996-1-1: 
+\(l_{ol} \geq 0,4h_{u} \geq 45 mm\)
+~\cite{Bemessun72:online}\cite{DIN_EN_1996_1_1}.
+Zudem wird darin die Mindestwanddicke für tragendes Mauerwerk, \glqq{}sofern aus Gründen der Standsicherheit, der Bauphysik oder des Brandschutzes nicht größere Dicken erforderlich sind\grqq{}~\cite{Bemessun72:online}, auf 
+\(t_{min} = 115 mm\) 
+festgelegt~\cite{DIN_EN_1996_1_1}.
+Dies ist, wie in Abbildung~\ref{fig:basics:Steinformate} zu sehen, exakt die Breite der kleinsten Ziegelformate NF und DF.
 Man unterscheidet zwei Arten von Mauerwerk: das Einsteinmauerwerk und das Verbandsmauerwerk.
 Wie schon dem Namen zu entnehmen, handelt es sich beim Einsteinmauerwerk und ein Mauerwerk, bei welchem die Wanddicke der Steindicke entspricht.
 Hier muss das Überbindemaß lediglich über die Wandlängsrichtung eingehalten werden.
-Bei Verbandsmauerwerk gilt dies zusätzlich für die Wandquerrichtung. \cite{05maurer1:online}
-
+Bei Verbandsmauerwerk gilt dies zusätzlich für die Wandquerrichtung~\cite{05maurer1:online}.
+Einige Beispiele sind in Abbildung~\ref{fig:basics:verbaende} zu sehen.
 \begin{figure}[htb]
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/blockverband.png}
@@ -253,46 +247,70 @@ Bei Verbandsmauerwerk gilt dies zusätzlich für die Wandquerrichtung. \cite{05m
     \caption{Gotischer Verband.}
     \label{fig:basics:gotischer_verband}
   \end{subfigure}
-  \label{fig:verbaende}
   \caption{Typische Mauerwerksverbände.}
+  \label{fig:basics:verbaende}
 \end{figure}
-
-Treffen zwei oder mehrere Wandstücke aufeinander, so gilt es diese miteinander zu verzahnen.
-Dabei muss nach wie vor das Überbindemaß eingehalten werden.
-Es treten verschiedene Fälle ein: TODO Bilder!
-\paragraph{Ecken}
-Zwei Wandenden stehen in einem (meistens rechten) Winkel zueinander und bilden so eine Ecke.
-\paragraph{Kreuzungen}
-Zwei Wandenden treffen von beiden Seiten einer dritten Wand an der selben Stelle aufeinander und bilden zusammen eine Kreuzung.
-Dabei ist es möglich, dass die aufeinandertreffenden Wände jeweils unterschiedliche Dicken aufweisen.
-\paragraph{T-Kreuzungen}
-Ein Wandende steht senkrecht auf einer anderen Wand und bildet damit eine T-Kreuzung.
-Auch hier kann es vorkommen, dass die beiden Wandstücke unterschiedliche Dicken haben.
+Als Wandstück wird von nun an ein gerader Wandabschnitt bezeichnet.
+Dieser hat eine Länger, eine Höhe und durch einen vorgegebenen Bausteintyp und einem gewünschten Verband eine gewisse Breite.
+Treffen zwei oder mehrere Wandstücke aufeinander, so gilt es diese dem Überbindemaß entsprechend miteinander zu verzahnen.
+Es treten verschiedene Sonderfälle auf, die für unterschiedliche Verbände nach unterschiedlichen Lösungen verlangen.
+\paragraph{Ecken} werden durch zwei sich an Wandenden berührenden, meist rechtwinklig zueinanderstehenden Wandstücken gebildet.
+\paragraph{Kreuzungen} stellen zum Beispiel zwei sich kreuzende Wandstücke dar.
+\paragraph{T-Kreuzungen} entstehen, wenn ein Wandende des einen Wandstücks auf einer anderen Wand steht.
 Sowohl bei Kreuzungen als auch T-Kreuzungen kann auf das aufwendige Verahnen verzichtet und stattdessen die sogenannte Stumpfstoßtechnik angewandt werden.
-Dabei werden Stahlanker zwischen der Wand und den darauf treffenden "stumpfen" Wandenden verwendet, um die beiden Wände sicher miteinander zu verbinden.
-\paragraph{Wandenden}
-Eine Wandende steht frei im Raum, ohne ein anderes Wandstück zu berühren. 
+Dabei werden Stahlanker zwischen der Wand und den darauf treffenden \glqq{}stumpfen\grqq{} Wandenden verwendet, um die beiden Wände sicher miteinander zu verbinden.
+\paragraph{Wandenden} sind die \glqq{}Enden\grqq{} eines Wandstücks, die kein anderes Wandstück berühren.
 Dafür muss der verwendete Mauerwerksverband zu einem geraden Abschluss gebracht werden.
-Öffnungen innerhalb eines Wandstücks können in der selben Art behandelt werden, da der vorherrschende Verband in den betroffenen Schichten gerade unterbrochen werden muss.
+Oftmals lässt sich das Anpassen der Bausteine (etwa durch zerschneiden) nicht vermeiden.
+\paragraph{Öffnungen} innerhalb eines Wandstücks können in der selben Art behandelt werden, da der vorherrschende Verband in den betroffenen Schichten gerade unterbrochen werden muss.
 Über Öffnungen für Fenster und Türen wird ein sogenannter Sturz gelegt, welcher ebenfalls in den der Wand zugrunde liegenden Mauerwerksverband eingebunden werden muss.
 
-Die Lösungen für die oben geannten Situationen variieren je nach angestrebten Mauerwerksverband und der verwendeten Modulgröße stark. 
-Gleichzeitig beeinflussen unterschiedliche Ecklösungen die Art in der ein Wandende gemauert werden muss.
-TODO Bild von ecklösung und kreuzung für läuferverband und einem größerem verband:\label{basics:mauerwerk_eckloesung}
-% https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-4-einsteinmauerwerk-eckloesungen/
-% https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-5-verbandsmauerwerk-eckloesungen/
-% https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-7-mauern-von-stoessen-und-kreuzungen/ 
+Die Lösungen für die oben geannten Situationen variieren je nach angestrebten Mauerwerksverband und der verwendeten Modulgröße stark.
+Einige Beispiele sind in Abbildung~\ref{fig:basics:mauerwerk_eckloesung} und Abbildung~\ref{fig:basics:Kreuzungsloesung} zu sehen~\cite{Moro2021}\cite{MaurerfibelKreuzungen:online}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.5\columnwidth]{fig/Eck- und Kreuzungslösungen.png}
+  \caption{Lösungen für Ecken und T-Kreuzungen unterschiedlicher Verbände~\cite{Moro2021}}
+  \label{fig:basics:mauerwerk_eckloesung}
+\end{figure}
+
+\begin{figure}[ht]
+  % https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-7-mauern-von-stoessen-und-kreuzungen/ 
+  \centering
+  \includegraphics[width=0.5\columnwidth]{fig/KreuzungslösungBeispiel.png}
+  \caption{Lösung einer Kreuzung am Beispiel einer \glqq{}Wand aus 2 DF im Kreuz- und Blockverband\grqq{}~\cite{MaurerfibelKreuzungen:online}}
+  \label{fig:basics:Kreuzungsloesung}
+\end{figure}
 
 %https://baulexikon.beuth.de/MAUERWERKSVERBAND.HTM
 %https://www.bauprofessor.de/mauerwerksverband/
-DIN 1053-1 (wurde durch DIN EN 1996-1-1 ersetzt)
-anstoßendes Wandstück: der bereich an dem zwei wandsegmente aneinanderstoßen z.b eine ecke
+%DIN 1053-1 (wurde durch DIN EN 1996-1-1 ersetzt)
+%anstoßendes Wandstück: der bereich an dem zwei wandsegmente aneinanderstoßen z.b eine ecke
 %https://www.baunetzwissen.de/mauerwerk/fachwissen/planungsgrundlagen/verbaende-und-verzahnung-162752
-Verzahnung: aus https://baulexikon.beuth.de/VERZAHNUNG.HTM : Verzahnung, im Mauerwerksbau übliche Technik, beim Herstellen einer Wand eine Verbindungsstelle für eine später zu errichtende und in die bereits bestehende einzubindende Wand den Verbandsregeln entsprechend vorzubereiten. Es gibt Lochverzah- nung, stehende und liegende Verzahnung. Nur die letztgenannte Verzahnungsart gilt nach DIN 1053-1 als ausreichende Verbindung zwischen tragenden und aussteifenden Mauerwerkswänden
-Überbindemaß ist wichtig um Mauerwerksverbände zu bewerten
+%Verzahnung: aus https://baulexikon.beuth.de/VERZAHNUNG.HTM : Verzahnung, im Mauerwerksbau übliche Technik, beim Herstellen einer Wand eine Verbindungsstelle für eine später zu errichtende und in die bereits bestehende einzubindende Wand den Verbandsregeln entsprechend vorzubereiten. Es gibt Lochverzah- nung, stehende und liegende Verzahnung. Nur die letztgenannte Verzahnungsart gilt nach DIN 1053-1 als ausreichende Verbindung zwischen tragenden und aussteifenden Mauerwerkswänden
+%Überbindemaß ist wichtig um Mauerwerksverbände zu bewerten
 %https://www.mauerwerksbau-lehre.de/vorlesungen/1-grundlagen-und-baustoffe-des-mauerwerksbaus/13-wandkonstruktionen/132-mauerwerksverband-und-ueberbindemass
+%TODO Rund Wände, keine 90 Grad Ecken
 
-TODO Rund Wände, keine 90 Grad Ecken
+\section{LEGO}
+\label{basics:lego}
+Ein 1$\times$1 LEGO Stein hat eine quadratische Grundfläche von \(7.8mm\)$\times$\(7.8mm\).
+Dies entspricht demnach dem Baunennmaß des 1$\times$1 LEGO Steins.
+Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2mm\).
+Daraus ergibt sich ein Baurichtmaß beziehungsweise ein Rastermaß von \(8mm\)$\times$\(8mm\).
+In Abbildung~\ref{fig:basics:Lego 2x4 Brick} werden zur Veranschaulichung die Maße des populären 2$\times$4 Steines aufgeschlüsselt.
+Die für ein dreidimensionales Maß noch fehlende Größe ist die Höhe der Steine.
+Diese beträgt \(9.6mm\).
+Der Abstand zwischen zwei übereinander gestapelten Steinen hängt von dem Druck ab, der beim Zusammenstecken geleistet wurde.
+Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet werden.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/LEGO 2x4 Brick horizontal.png}
+    \caption{Maße des Standard 2$\times$4 LEGO Steins~\cite{LEGOBric2:online}}
+    \label{fig:basics:Lego 2x4 Brick}
+\end{figure}
 
 \section{BRep}
 \label{basics:brep}
