@@ -231,7 +231,7 @@ if __name__ == "__main__":
     scenario = Single_Wall_Slim()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
-    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=[w.get_shape() for w in www])
+    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=[o.get_shape() for w in www for o in w.openings])
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)
