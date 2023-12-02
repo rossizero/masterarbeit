@@ -223,7 +223,7 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
 
-    tmp = IfcImporter("../../models/lego_wall_with_door_tmp_random.ifc")
+    tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()
@@ -231,7 +231,9 @@ if __name__ == "__main__":
     scenario = Single_Wall_Slim()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
-    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=[o.get_shape() for w in www for o in w.openings])
+    shapes = [o.get_shape() for w in www for o in w.openings]
+    shapes.extend([w.get_shape() for w in www])
+    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)

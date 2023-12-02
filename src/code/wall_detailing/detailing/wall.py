@@ -55,8 +55,7 @@ class Wall:
         self.rotation = rotation
 
         transformation = gp_Trsf()
-        translation = gp_Vec(*translation).Reversed()
-        transformation.SetTranslation(translation)
+        transformation.SetTranslation( gp_Vec(*translation).Reversed())
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
         transformation = gp_Trsf()
@@ -241,9 +240,12 @@ class Wall:
         self.update_shape(shape)
 
     @classmethod
-    def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, name=""):
+    def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, name="", use_mid: bool = True):
         length, width = max(length, width), min(length, width)
-        corner = gp_Pnt(-length / 2.0, -width / 2.0, -height / 2.0)
+        corner = gp_Pnt(0.0, 0.0, 0.0)
+
+        if use_mid:
+            corner = gp_Pnt(-length / 2.0, -width / 2.0, -height / 2.0)
 
         shape = BRepPrimAPI_MakeBox(corner, length, width, height).Shape()
 

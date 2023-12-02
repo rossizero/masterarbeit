@@ -14,13 +14,6 @@ import quaternion
 from wall_detailing.detailing.wall import Wall
 from wall_detailing.detailing.opening import Opening
 
-settings = geom.settings()
-# global coordinates
-settings.set(settings.USE_WORLD_COORDS, True)
-# Specify to return pythonOCC shapes from ifcopenshell.geom.create_shape()
-settings.set(settings.USE_PYTHON_OPENCASCADE, True)
-
-
 print("OCC version", VERSION)
 print("IfcOpenshell version", ifcopenshell.version)
 
@@ -74,6 +67,11 @@ class IfcImporter:
                 x_axis = relative_placement.RefDirection.DirectionRatios
                 y_axis = np.cross(z_axis, x_axis)
 
+                # Ensure the basis is orthonormal
+                x_axis = x_axis / np.linalg.norm(x_axis)
+                y_axis = y_axis / np.linalg.norm(y_axis)
+                z_axis = z_axis / np.linalg.norm(z_axis)
+
                 rotation_matrix = np.column_stack((x_axis, y_axis, z_axis))
 
                 # Update the transformation matrix with the relative placement information
@@ -85,18 +83,37 @@ class IfcImporter:
 
         position = np.array([transformation_matrix[0][3], transformation_matrix[1][3], transformation_matrix[2][3]])
         rotation = quaternion.from_rotation_matrix(transformation_matrix[:3, :3])
-
-        return position, rotation
+        #rotation = np.quaternion(rotation.z, rotation.x, rotation.y, rotation.w)
+        return np.round(position, decimals=6), rotation
 
     def get_walls(self):
         ifc_walls = self.ifc_file.by_type("IfcWall")
         walls = []
 
+        settings = geom.settings()
+        # global coordinates
+        settings.set(settings.USE_WORLD_COORDS, True)
+        # Specify to return pythonOCC shapes from ifcopenshell.geom.create_shape()
+        settings.set(settings.USE_PYTHON_OPENCASCADE, True)
+
         for w in ifc_walls:
             shape = geom.create_shape(settings, w).geometry
+            translation, rotation = self.get_absolute_position(w.ObjectPlacement)
+
             wall = Wall(shape, "TODO")
 
-            print("wall", wall.length, wall.width, wall.height)
+            transformation = gp_Trsf()
+            transformation.SetTranslation(gp_Vec(*translation).Reversed())
+            wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
+
+            transformation = gp_Trsf()
+            transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
+            wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
+
+            wall.translation = translation
+            wall.rotation = rotation
+
+            #print("wall", wall.length, wall.width, wall.height, wall.get_translation(), translation, wall.get_rotation(), rotation)
             walls.append(wall)
 
             # get openings of the wall
@@ -108,17 +125,11 @@ class IfcImporter:
                     shape = geom.create_shape(settings, o).geometry
                     translation, rotation = self.get_absolute_position(o.ObjectPlacement)
 
-                    # translate back to origin
-                    transformation = gp_Trsf()
-                    transformation.SetTranslation(gp_Vec(*translation).Reversed())
-                    shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-                    transformation = gp_Trsf()
-                    transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
-                    shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
                     dimensions = self.get_shape_dimensions(shape)
                     print("opening", dimensions)
+                    translation -= wall.get_translation() - np.array([wall.length / 2, wall.width / 2, wall.height / 2])
+                    translation -= np.array([dimensions[0] / 2, dimensions[1] / 2, 0.0])
+                    rotation *= wall.get_rotation().inverse()
                     opening = Opening(wall, translation, rotation, dimensions)
                     wall.openings.append(opening)
 
