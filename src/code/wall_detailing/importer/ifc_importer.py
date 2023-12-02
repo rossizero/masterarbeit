@@ -8,6 +8,7 @@ from OCC.Core.BRep import BRep_Tool
 from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import TopoDS_Shape, topods
+from ifcopenshell.express.rules.IFC4X3 import IfcUnitEnum
 from ifcopenshell.util import placement
 import quaternion
 
@@ -22,6 +23,17 @@ class IfcImporter:
     def __init__(self, ifc_file_path):
         self.ifc_file_path = ifc_file_path
         self.ifc_file = ifcopenshell.open(self.ifc_file_path)
+        self.unit_scale = 1.0  # what factor do we need to multiply the units with to get meters
+        projects = self.ifc_file.by_type("IfcProject")
+
+        alll = IfcUnitEnum
+        if len(projects) > 0: # MAYDO differentiate between projects
+            project = projects[0]
+            if hasattr(project, "UnitsInContext"):
+                if project.UnitsInContext is not None:
+                    for unit in project.UnitsInContext.Units:
+                        pass
+
 
     def get_shape_dimensions(self, shape: TopoDS_Shape):
         """
@@ -97,6 +109,10 @@ class IfcImporter:
         settings.set(settings.USE_PYTHON_OPENCASCADE, True)
 
         for w in ifc_walls:
+
+            if True not in [rep.RepresentationType == "SweptSolid" for rep in w.Representation.Representations]:
+                continue
+
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
 
@@ -108,8 +124,9 @@ class IfcImporter:
 
             transformation = gp_Trsf()
             transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
-            wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
 
+            # update wall
+            wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
             wall.translation = translation
             wall.rotation = rotation
 

@@ -224,6 +224,7 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
 
     tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
+    tmp = IfcImporter("../../models/scenario11.ifc")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()

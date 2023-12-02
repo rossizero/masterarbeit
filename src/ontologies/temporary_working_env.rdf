@@ -330,8 +330,8 @@
 
 <owl:NamedIndividual rdf:about="#brick_1">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_4"/>
   <hasTopNeighbor rdf:resource="#brick_6"/>
+  <hasTopNeighbor rdf:resource="#brick_4"/>
   <hasRightNeighbor rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
@@ -674,8 +674,8 @@
 
 <owl:NamedIndividual rdf:about="#brick_10">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasLeftNeighbor rdf:resource="#brick_12"/>
   <hasRightNeighbor rdf:resource="#brick_11"/>
   <dependsOn rdf:resource="#empty_brick"/>
@@ -724,8 +724,8 @@
 
 <owl:NamedIndividual rdf:about="#brick_11">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
   <hasTopNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
   <dependsOn rdf:resource="#empty_brick"/>
   <rdf:type rdf:resource="#Brick"/>
   <rdf:type rdf:resource="#PlaceableBrick"/>

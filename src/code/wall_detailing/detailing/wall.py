@@ -2,8 +2,8 @@ import numpy as np
 import quaternion
 
 from OCC.Core.BRep import BRep_Tool
-from OCC.Core.BRepBndLib import brepbndlib_Add
-from OCC.Core.BRepGProp import brepgprop_VolumeProperties
+from OCC.Core.BRepBndLib import brepbndlib_Add, brepbndlib
+from OCC.Core.BRepGProp import brepgprop_VolumeProperties, brepgprop
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.GProp import GProp_GProps
 from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX
@@ -188,7 +188,8 @@ class Wall:
 
         # create a boundingbox around the shape
         bounding_box = Bnd_Box()
-        brepbndlib_Add(self.occ_shape, bounding_box)
+        shape = BRepPrimAPI_MakeBox(gp_Pnt(0.0, 0.0, 0.0), self.length, self.width, self.height).Shape()
+        brepbndlib.Add(self.occ_shape, bounding_box)
 
         # Get the minimum and maximum coordinates of the bounding box
         xmin, ymin, zmin, xmax, ymax, zmax = bounding_box.Get()
@@ -206,14 +207,15 @@ class Wall:
         ]
 
         gprops = GProp_GProps()
-        brepgprop_VolumeProperties(self.occ_shape, gprops)
+        brepgprop.VolumeProperties(self.occ_shape, gprops)
 
         # check if boundingbox has the same vertices as our axis aligned shape
         # and if their volumes are equal (if not there are openings inside the shape)
         min_max_array_wall = np.around(np.array([min(coords[0]), min(coords[1]), min(coords[2]),
                                        max(coords[0]), max(coords[1]), max(coords[2])]), decimals=6)
         close = np.allclose(min_max_array_wall, min_max_array_bbox) or np.allclose(min_max_array_bbox, min_max_array_wall)
-        return close and np.isclose(gprops.Mass(), length * width * height)
+        volume_close = np.isclose(gprops.Mass(), length * width * height)
+        return close # or volume_close
 
     def rotate_around(self, rotation: np.quaternion, pivot_point: np.array = np.array([0.0, 0.0, 0.0])):
         """
