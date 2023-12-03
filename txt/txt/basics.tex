@@ -320,4 +320,24 @@ Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet w
 \label{basics:brep}
 Mal schauen
 
-\section{Ontologien}
+\section{Ontologie}
+Der Begriff Ontologie stammt ursprünglich aus der Philosophie.
+Wörtlich übersetzt bedeutet er \glqq{}Lehre des Seins\grqq{}.
+Ein Definitionsvorschlag lautet wie folgt (aus dem Englischen):
+\glqq{}Die Ontologie als Teilgebiet der Philosophie ist die Wissenschaft von dem, was existiert, den Arten und Strukturen von Objekten, Eigenschaften, Ereignissen, Prozessen und Relationen in allen Bereichen der Wirklichkeit\grqq{}~\cite{Ontology}.
+Eine Anmerkung, die oft im Anschluss eines Definitionsvorschlags zu finden ist, besagt, dass dabei nicht nur \textit{das was ist}, sondern ebenfalls \textit{das was sein könnte} betrachtet werden müsse~\cite{Ontology}\cite{OntologieDefinitionLMU:online}.
+Dieser Gedanke spiegelt sich ebenfalls in dem Ontologiebegriff aus der Informatik wider und ist unter dem Begriff \glqq{}Open World Assumption\grqq{} bekannt.
+In dem Fachbereich der Informatik wurde der Begriff Ontologie adaptiert und zunächst als \glqq{}explicit specification of a conceptualization\grqq{} definiert~\cite{Gruber1993}.
+Im Laufe der Jahre wandelte sich diese Definition, sodass sich daraus zum Beispiel folgendes ergibt: \glqq{}An ontology is a formal, explicit specification of a shared conceptualization\grqq{}~\cite{Studer1998}.
+Den wichtigesten Zusatz hierbei stellt das Wort \glqq{}shared\grqq{} (geteilt) dar, da Ontologien unter anderem dem Zweck dienen, Wissen mehrerer Agenten zu vereinen.
+Der Begriff Konzeptualisierung wird oft als \glqq{}vereinfachte, abstrakte Sicht auf einen für einen bestimmten Nutzen relevanten Teil der Welt\grqq{} beschrieben~\cite{Guarino2009}.
+
+Eine solche \glqq{}Spezifizierung einer Konzeptualisierung\grqq{} einer Domäne kann heutzutage mithilfe der sogenannten \textit{Web Ontology Language} (OWL), welche auf dem \textit{Resource Description Framework} (RDF) aufbaut, realisiert werden~\cite{OWL_W3C}\cite{RDF_W3C}.
+OWL erlaubt es Klassen zu definiert und daran Eigenschaften anzubringen.
+Außerdem können sogennante Individuen / Instanzen erstellt werden.
+Diese realisieren eine oder mehrere Klassen.
+Auf diesen Klassen, Eigenschaften und Individuen können sogennante \textit{Reasoner} logische Schlussfolgerungen über implizit angegebenes Wissen ziehen und damit die Ontologie erweitern.
+Vererbungen und Unstimmigkeiten (verletzung von Axiomen)
+\subsection{Protege}
+
+\subsection{Owlready 2}
