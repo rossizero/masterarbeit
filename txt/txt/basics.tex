@@ -325,19 +325,40 @@ Der Begriff Ontologie stammt ursprünglich aus der Philosophie.
 Wörtlich übersetzt bedeutet er \glqq{}Lehre des Seins\grqq{}.
 Ein Definitionsvorschlag lautet wie folgt (aus dem Englischen):
 \glqq{}Die Ontologie als Teilgebiet der Philosophie ist die Wissenschaft von dem, was existiert, den Arten und Strukturen von Objekten, Eigenschaften, Ereignissen, Prozessen und Relationen in allen Bereichen der Wirklichkeit\grqq{}~\cite{Ontology}.
-Eine Anmerkung, die oft im Anschluss eines Definitionsvorschlags zu finden ist, besagt, dass dabei nicht nur \textit{das was ist}, sondern ebenfalls \textit{das was sein könnte} betrachtet werden müsse~\cite{Ontology}\cite{OntologieDefinitionLMU:online}.
+Eine Anmerkung, die oft im Anschluss eines Definitionsvorschlags zu finden ist, besagt, dass dabei nicht nur das, \textit{was ist}, sondern ebenfalls das, \textit{was sein könnte} betrachtet werden müsse~\cite{Ontology}\cite{OntologieDefinitionLMU:online}.
 Dieser Gedanke spiegelt sich ebenfalls in dem Ontologiebegriff aus der Informatik wider und ist unter dem Begriff \glqq{}Open World Assumption\grqq{} bekannt.
+%TODO: da nochmal genauer drauf eingehen und semantic web kurz erwähnen -> wissen könnte ja noch iwo im internet sein, außer explizit anders angegeben.
 In dem Fachbereich der Informatik wurde der Begriff Ontologie adaptiert und zunächst als \glqq{}explicit specification of a conceptualization\grqq{} definiert~\cite{Gruber1993}.
 Im Laufe der Jahre wandelte sich diese Definition, sodass sich daraus zum Beispiel folgendes ergibt: \glqq{}An ontology is a formal, explicit specification of a shared conceptualization\grqq{}~\cite{Studer1998}.
-Den wichtigesten Zusatz hierbei stellt das Wort \glqq{}shared\grqq{} (geteilt) dar, da Ontologien unter anderem dem Zweck dienen, Wissen mehrerer Agenten zu vereinen.
+Den wichtigsten Zusatz hierbei stellt das Wort \glqq{}shared\grqq{} (geteilt) dar, da Ontologien unter anderem dem Zweck dienen, Wissen mehrerer Agenten zu vereinen.
 Der Begriff Konzeptualisierung wird oft als \glqq{}vereinfachte, abstrakte Sicht auf einen für einen bestimmten Nutzen relevanten Teil der Welt\grqq{} beschrieben~\cite{Guarino2009}.
 
 Eine solche \glqq{}Spezifizierung einer Konzeptualisierung\grqq{} einer Domäne kann heutzutage mithilfe der sogenannten \textit{Web Ontology Language} (OWL), welche auf dem \textit{Resource Description Framework} (RDF) aufbaut, realisiert werden~\cite{OWL_W3C}\cite{RDF_W3C}.
-OWL erlaubt es Klassen zu definiert und daran Eigenschaften anzubringen.
-Außerdem können sogennante Individuen / Instanzen erstellt werden.
+OWL erlaubt es Klassen zu definieren und daran Eigenschaften anzuheften.
+Außerdem können sogennante Individuen beziehungsweise Instanzen erstellt werden.
 Diese realisieren eine oder mehrere Klassen.
-Auf diesen Klassen, Eigenschaften und Individuen können sogennante \textit{Reasoner} logische Schlussfolgerungen über implizit angegebenes Wissen ziehen und damit die Ontologie erweitern.
-Vererbungen und Unstimmigkeiten (verletzung von Axiomen)
-\subsection{Protege}
+Mithilfe dieser Klassen, Eigenschaften und Individuen können sogennante \textit{Reasoner} logische Schlussfolgerungen über implizit angegebenes Wissen ziehen.
+Eine Ontologie kann damit einerseits etwa mit neuen Klassenzuordnungen oder implizit angegeben Vererbungen erweitert, andererseits auf Validität überprüft werden.
+Werden Verletzungen von Axiomem oder widersprüchliche Einschränkungen entdeckt, so kann ein Reasoner diese nicht nur melden, sondern auch mithilfe logischer Beweisführung herleiten.
+Damit stellen Reasoner ein wertvolles Werkzeug für die Entwicklung und Erweiterung von Ontologien dar.
+Drei weit verbreitete Reasoner sind: 
+\begin{itemize}
+  \item ELK Reasoner der Universitäten Ulm und Oxford~\cite{Kazakov2014}.
+  \item HermiT Reasoner von der \textit{Information Systems Group} der Universität Oxford~\cite{Glimm2014}\cite{HermitReasoner:online}.
+  \item Open Source Pellet Reasoner der Clark \& Parsia LLC~\cite{Sirin2007}. 
+\end{itemize}
 
-\subsection{Owlready 2}
+\subsection{Protégé}
+Protégé ist ein graphischer Editor zur Erstellung und Instandhaltung von Ontologien~\cite{Protege}.
+Entwickelt wird das Programm an der Universität Stanford und ist als Open Source Anwendung kostenfrei nutzbar.
+Die erste Version wurde bereits 1999 veröffentlicht.
+Durch seine Plugin-Struktur können neben zahlreichen Erweiterungen beispielsweise auch neue Reasoner an das Programm angeschlossen werden.
+Standardmäßig sind der ELK und der HermiT Reasoner integriert, aber es exisitieren Plugins um auch Pellet in Protégé zu integrieren.
+Das Arbeiten mit einem graphischen Editor erleichtert den Einstieg und ermöglicht später einen besseren Überblick über oftmals umfangreiche Ontologien, als es in einem herkömmlichen Texteditor möglich wäre.
+Darum wurde das Programm zur Erstellung einer Ontologie für diese Arbeit herangezogen.
+
+\subsection{Owlready2}
+Owlready2 ist eine Python 3 Bibliothek, die es ermöglicht \glqq{}ontologie-orientiert\grqq{} zu programmieren~\cite{Owlready}.
+Bisher mussten Ontologien mithilfe von Abfragesprachen (etwa SPARQL) oder APIs bearbeitet und ausgewertet werden~\cite{SPARQLF_W3C}.
+Owlready2 bietet hingegen einen einfacheren Umgang mit Ontologien, ebnet damit den Einstieg in das Thema und ermöglicht gleichzeitig die Integration von Ontologien in jedes mit Python umsetzbare Projekt.
+Im Zusammenspiel mit Protégé bietet diese Bibliothek eine für Programmierer intiuitive Möglichkeit, die oben genannten Werkzeuge für IFC und BIM durch Nutzung von Python 3 direkt mit einer Ontologie zu koppeln.
