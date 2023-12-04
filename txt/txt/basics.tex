@@ -325,21 +325,24 @@ Der Begriff Ontologie stammt ursprünglich aus der Philosophie.
 Wörtlich übersetzt bedeutet er \glqq{}Lehre des Seins\grqq{}.
 Ein Definitionsvorschlag lautet wie folgt (aus dem Englischen):
 \glqq{}Die Ontologie als Teilgebiet der Philosophie ist die Wissenschaft von dem, was existiert, den Arten und Strukturen von Objekten, Eigenschaften, Ereignissen, Prozessen und Relationen in allen Bereichen der Wirklichkeit\grqq{}~\cite{Ontology}.
-Eine Anmerkung, die oft im Anschluss eines Definitionsvorschlags zu finden ist, besagt, dass dabei nicht nur das, \textit{was ist}, sondern ebenfalls das, \textit{was sein könnte} betrachtet werden müsse~\cite{Ontology}\cite{OntologieDefinitionLMU:online}.
-Dieser Gedanke spiegelt sich ebenfalls in dem Ontologiebegriff aus der Informatik wider und ist unter dem Begriff \glqq{}Open World Assumption\grqq{} bekannt.
-%TODO: da nochmal genauer drauf eingehen und semantic web kurz erwähnen -> wissen könnte ja noch iwo im internet sein, außer explizit anders angegeben.
-In dem Fachbereich der Informatik wurde der Begriff Ontologie adaptiert und zunächst als \glqq{}explicit specification of a conceptualization\grqq{} definiert~\cite{Gruber1993}.
-Im Laufe der Jahre wandelte sich diese Definition, sodass sich daraus zum Beispiel folgendes ergibt: \glqq{}An ontology is a formal, explicit specification of a shared conceptualization\grqq{}~\cite{Studer1998}.
-Den wichtigsten Zusatz hierbei stellt das Wort \glqq{}shared\grqq{} (geteilt) dar, da Ontologien unter anderem dem Zweck dienen, Wissen mehrerer Agenten zu vereinen.
+Eine Anmerkung, die oftmals im Anschluss eines Definitionsvorschlags zu finden ist, besagt, dass dabei nicht nur das, \textit{was ist}, sondern ebenfalls das, \textit{was sein könnte} betrachtet werden müsse~\cite{Ontology}\cite{OntologieDefinitionLMU:online}.
+Dieser Gedanke spiegelt sich ebenfalls in dem Ontologiebegriff aus der Informatik wider und ist unter dem Begriff \textit{Open World Assumption} bekannt.
+Das wird nach der Definition von Ontologien im Kontext der Informatik noch einmal ausführlicher aufgegriffen.
+
+Im Fachbereich der Informatik wurde der Begriff Ontologie adaptiert und zunächst als \glqq{}explicit specification of a conceptualization\grqq{} definiert~\cite{Gruber1993}.
+Wörtlich übersetzt lautet diese Definition etwa \glqq{}explizite Spezifizierung einer Konzeptualisierung\grqq{}.
+Im Laufe der Jahre wandelte sich diese Definition, sodass sich daraus zum Beispiel folgendes ergab: \glqq{}An ontology is a formal, explicit specification of a shared conceptualization\grqq{}~\cite{Studer1998}.
+Hier wird eine Ontologie also als \glqq{}formale, explizite Spezifizierung einer geteilten Konzeptualisierung\grqq{} definiert.
+Den wichtigsten Zusatz hierbei stellt das Wort \glqq{}geteilt\grqq{} dar, da Ontologien unter anderem dem Zweck dienen, Informationen und Vokabulare mehrerer Wissensrepräsentation zu vereinen.
 Der Begriff Konzeptualisierung wird oft als \glqq{}vereinfachte, abstrakte Sicht auf einen für einen bestimmten Nutzen relevanten Teil der Welt\grqq{} beschrieben~\cite{Guarino2009}.
 
-Eine solche \glqq{}Spezifizierung einer Konzeptualisierung\grqq{} einer Domäne kann heutzutage mithilfe der sogenannten \textit{Web Ontology Language} (OWL), welche auf dem \textit{Resource Description Framework} (RDF) aufbaut, realisiert werden~\cite{OWL_W3C}\cite{RDF_W3C}.
+Eine solche \glqq{}Spezifizierung einer Konzeptualisierung\grqq{} einer gewissen Domäne kann heutzutage mithilfe der sogenannten \textit{Web Ontology Language} (OWL), welche auf dem \textit{Resource Description Framework} (RDF) aufbaut, realisiert werden~\cite{OWL_W3C}\cite{RDF_W3C}.
 OWL erlaubt es Klassen zu definieren und daran Eigenschaften anzuheften.
 Außerdem können sogennante Individuen beziehungsweise Instanzen erstellt werden.
 Diese realisieren eine oder mehrere Klassen.
 Mithilfe dieser Klassen, Eigenschaften und Individuen können sogennante \textit{Reasoner} logische Schlussfolgerungen über implizit angegebenes Wissen ziehen.
 Eine Ontologie kann damit einerseits etwa mit neuen Klassenzuordnungen oder implizit angegeben Vererbungen erweitert, andererseits auf Validität überprüft werden.
-Werden Verletzungen von Axiomem oder widersprüchliche Einschränkungen entdeckt, so kann ein Reasoner diese nicht nur melden, sondern auch mithilfe logischer Beweisführung herleiten.
+Werden Verletzungen von aufgestellten Axiomem oder widersprüchliche Einschränkungen von Klassen oder Eigenschaften entdeckt, so kann ein Reasoner diese nicht nur melden, sondern auch mithilfe logischer Beweisführung herleiten.
 Damit stellen Reasoner ein wertvolles Werkzeug für die Entwicklung und Erweiterung von Ontologien dar.
 Drei weit verbreitete Reasoner sind: 
 \begin{itemize}
@@ -347,6 +350,16 @@ Drei weit verbreitete Reasoner sind:
   \item HermiT Reasoner von der \textit{Information Systems Group} der Universität Oxford~\cite{Glimm2014}\cite{HermitReasoner:online}.
   \item Open Source Pellet Reasoner der Clark \& Parsia LLC~\cite{Sirin2007}. 
 \end{itemize}
+Aufgrund der oben genannten Idee der \textit{Open World Assumption} unterscheidet sich die Art der Reasoner logische Schlussfolgerungen zu ziehen von der, mit welcher logische Aussagen von zum Beispiel Programmiersprachen bewertet werden.
+Im Grunde versteht man unter der \textit{Open World Assumption}, das nicht Falsifizieren eines logischen Ausdrucks, falls Wissen exisitieren könnte, das den Ausdruck doch verifizieren würde.
+Ein Reasoner beziehungsweise eine Programmiersprache im Kontext der \textit{Closed World Assumption} würde in so einer Situation davon ausgehen alle exisitierenden Informationen darüber bereits vorliegen zu haben und eventuell zu einem anderen Schluss gelangen.
+Definiert man zum Beispiel eine Klasse A als alle Individuen, die nur eine Eigenschaft E besitzen, die sie mit Individuen einer bestimmten anderen Klasse B verbindet, so kann ein Reasoner innerhalb dieser Ontologie ein Individuum, das zwar diese Anforderung erfüllt, nicht der Klasse A zuordnen, da es sein kann, dass zu einem späteren Zeitpunkt (oder an anderer Stelle) Informationen existieren, die diese Zuordnung fehlerhaft machen würden.
+In einer Umgebung, in der die \textit{Closed World Assumption} gilt, wäre diese Zuordnung hingegen völlig korrekt.
+Diese Eigenschaft ermöglicht es ebenfalls die Idee des sogenannten \glqq{}Semantic Web\grqq{} mithilfe von Ontologien zu realisieren~\cite{SemanticWebLee}.
+Denn die Natur des Internets entspricht eher einer sich ständig ändernden und \glqq{}offenen\grqq{} Welt, als einer Geschlossenen.
+Als Semantic Web wird das Annotieren von sämtlichen Webinhalten mit semantischen Informationen bezeichnet.
+Damit wird das Ziel verfolgt, ein maschinenlesbares Internet zu schaffen. 
+%TODO: da nochmal genauer drauf eingehen und semantic web kurz erwähnen -> wissen könnte ja noch iwo im internet sein, außer explizit anders angegeben.
 
 \subsection{Protégé}
 Protégé ist ein graphischer Editor zur Erstellung und Instandhaltung von Ontologien~\cite{Protege}.
@@ -361,4 +374,4 @@ Darum wurde das Programm zur Erstellung einer Ontologie für diese Arbeit herang
 Owlready2 ist eine Python 3 Bibliothek, die es ermöglicht \glqq{}ontologie-orientiert\grqq{} zu programmieren~\cite{Owlready}.
 Bisher mussten Ontologien mithilfe von Abfragesprachen (etwa SPARQL) oder APIs bearbeitet und ausgewertet werden~\cite{SPARQLF_W3C}.
 Owlready2 bietet hingegen einen einfacheren Umgang mit Ontologien, ebnet damit den Einstieg in das Thema und ermöglicht gleichzeitig die Integration von Ontologien in jedes mit Python umsetzbare Projekt.
-Im Zusammenspiel mit Protégé bietet diese Bibliothek eine für Programmierer intiuitive Möglichkeit, die oben genannten Werkzeuge für IFC und BIM durch Nutzung von Python 3 direkt mit einer Ontologie zu koppeln.
+Im Zusammenspiel mit Protégé bietet diese Bibliothek eine für Programmierer intiuitive Möglichkeit, die oben genannten Werkzeuge für IFC und BIM durch Nutzung von Python 3 direkt mit der Technologie der Ontologien zu koppeln.
