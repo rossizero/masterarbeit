@@ -1,9 +1,13 @@
 \chapter{Konzept}
-Dieser Einleitungssatz leitet mit durchdachten Worten das Kapitel ein, in dem es um die Konzepte geht, die ich mir ganz sicher vor der Implementierung ausgedacht habe!
-Hier ist allerdings anzumerken, dass dies nur ein Platzhalter ist und mithilfe dieses TODOs als solcher gekennzeichnet ist.
-Ab jetzt sind wir aber alle mal wieder seriös.
+Mit den zuvor behandelten Grundlagen und den Inspirationen aus Kapitel~\ref{related} wird nun ein Konzept zur Bearbeitung der Problemstellungen der in Kapitel~\ref{scenarios} definierten Fallstudien und Szenarien vorgestellt.
+Grob teilt sich das Vorgehen in drei Phasen.
+Falls noch kein Modell des geplanten Gebäudes vorliegt, muss dieses erstellt werden.
+Abschnitt~\ref{concept:modellierung} beschäftigt sich mit verschiedenen Möglichkeiten diesen Modelliervorgang zu vereinfachen.
+Im Anschluss folgen einige Konzepte und Definitionen, die für das \textit{Wall Detailing} relevant sind, das die zweite Phase darstellt und in Abschnitt~\ref{concept:wall_detailing} konkretisiert wird.
+Die dritte Phase beschäftigt sich damit, das Ergebnis des \textit{Wall Detailings} durch Anwenden von Regelsets in eine geordnete Form zu gießen.
+Dies wird ab Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} behandelt.
 
-\section{Modellierung}
+\section{Modellierung}\label{concept:modellierung}
 Für gewöhnlich sind beim Planungsprozess eines Gebäudes oder anderer Infrastruktur eine Vielzahl an Experten aus unterschiedlichen Disziplinen beteiligt.
 Ein Ziel dieser Arbeit ist es allerdings eine intuitive Konstruktionsplanung zu ermöglichen, sodass eine Einzelperson mit relativ geringer Einlern- und Modellierungszeit in der Lage ist ein Gebäude zu entwerfen.
 Dieser Entwurf muss dennoch alle notwendigen Informationen für die anschließende Bauplandeduktion enthalten, ohne dass das Einpflegen dieser Daten spezielles Fachwissen voraussetzt.
@@ -366,7 +370,7 @@ Außerdem weisen unterschiedliche Bausteinarten und Umgebungen, in die man das G
 So ist es notwendig je nach Situation voneinander abweichende Regelsets auf dem Konstruktionsplan anzuwenden zu können.
 Die Möglichkeit der nachträglichen Definition dieser Regeln verhindert zusätzlich die Notwendigkeit den Konstruktionsplan für sich unterscheidene Situationen neu berechnen zu müssen.
 
-\section{Regelbasierte Bauplandeduktion}
+\section{Regelbasierte Bauplandeduktion}\label{concept:regelbasierte_bauplandeduktion}
 Ontologien bieten verschiedene Werkzeuge an, mithilfe derer auf streng definierten Objekttypen und deren Relationen zueinander konkrete Instanzen gruppiert und gefiltert werden können.
 
 \begin{enumerate}
