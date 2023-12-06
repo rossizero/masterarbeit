@@ -1,7 +1,7 @@
 \chapter{Motivation}\label{motivation}
 Der stetig steigende Fachkräftemangel trifft auch das Baugwerbe. 
 Laut einer Umfrage des Hauptverbandes der Deutschen Bauindustrie e.V. stufen über 75 Prozent aller befragten Unternehmen sowohl den vorherrschenden Fachkräftemangel, als auch die steigenden Energie- und Rohstoffpreise als Risiko für das eigene wirtschaftliche Wachstum ein \cite{Bauindustrie:online}.
-Abbildung~\ref{fig:Fachkräftemangel} illustriert die Entwicklung dieser Sorge über einen Zeitraum von etwas mehr als zwanzig Jahren.
+Abbildung~\ref{fig:Fachkraeftemangel} illustriert die Entwicklung dieser Sorge über einen Zeitraum von etwas mehr als zwanzig Jahren.
 Damit ist es wenig überraschend, dass eine Bewegung weg von menschlichen Arbeitskräften hin zur Automatisierung existiert.
 Neben dem Fachkräftemangel stellt aber auch die geringe Effizienz von Bauvorhaben ein Problem dar, welche sich über den gesamten Planungs- und Bauprozess erstreckt. 
 Diese Ineffizienz entsteht aufgrund der Vielzahl der an Bauprojekten beteiligten Experten und Unternehmen.
@@ -10,31 +10,25 @@ Dies ist ein bekanntes Problem und wird als \textit{Fragmentierungsproblem der B
     \centering
     \includegraphics[width=0.7\columnwidth]{fig/Grafik_23.jpg}
     \caption{Während wirtschaftliches Risiko durch eine potentiell sinkende Nachfrage nach Bauafträgen und eventuell steigender Arbeitskosten unverändert blieben oder sogar als weniger relevant bewertet wurden, ist ein deutlicher Anstieg aufgrund des vorherrschenden Fachkräftemangels und der Energie- und Rohstoffpreise zu erkennen.}
-    \label{fig:Fachkräftemangel}
+    \label{fig:Fachkraeftemangel}
 \end{figure}
-Um diesem Problem entgegenzuwirken, etablieren sich bereits seit einigen Jahren Standards, um Bauprojekte digital zu begleiten.
+Um dem entgegenzuwirken, etablieren sich bereits seit einigen Jahren Standards, um Bauprojekte digital zu begleiten.
 Mit diesen soll gleichzeitig die Effizienz gesteigert, die Kommunikation zwischen den einzelnen Expertenteams vereinfacht, der Arbeitsplatz \glqq{}Baustelle\grqq{} sicherer gestaltet und ein resourcensparender Bau ermöglicht werden~\cite{BIMforHe12:online}\cite{Top10Ben31:online}.
 Zusätzlich steigen mit der Zunahme an digitalen Informationen zu Bauprojekten, auch die Möglichkeiten diese ausführlicher zu analysieren, zu optimieren und an neue Technologien zu knüpfen.
 Erst dadurch wurde das seit einigen Jahren erforschte Gebiet der \textit{Additiven Fertigung} von Gebäuden realisierbar.
-Beispiele dafür sind etwa mit Beton druckende Roboterarme oder mobile Roboter~\cite{AdditiveManufacturingUsingMobileRobots}. %TODO mehr Beispiele!!
+Einige erfolgreiche Beispiele dafür sind in~\cite{AdditiveManufactoringDelgado},~\cite{AdditiveManufacturingUsingMobileRobots} und~\cite{Tankova2020} aufgezeigt und wurden etwa mit Beton druckenden Roboterarmen, mobilen Robotern oder aufgehängten Druckköpfen durchgeführt.
+Dabei werden teils herkömmliche, teils speziell für die druckenden Roboter entwickelte Materialien verwendet~\cite{Tankova2020}.
 Obwohl es mittlerweile viele Projekte zur Additiven Fertigung von Gebäuden gibt, haben diese oft den Nachteil der Nicht-Parallelisierbarkeit der druckenden Roboter und die daraus resultierende, vergleichsweise lange Bauzeit.
-Auch die durch die Höhe der temporären Stützstrukturen (etwa Kräne, Gerüste oder Aufhängungen) eingeschränkte Bauhöhe limitiert die Vielfalt der mit additiver Fertigung realisierbaren Projekte.
+Auch die durch die Höhe der temporären Stützstrukturen (wie Kräne, Gerüste oder Aufhängungen) eingeschränkte Bauhöhe limitiert die Vielfalt der mit additiver Fertigung realisierbaren Projekte.
 Diesen Einschränkungen soll nun mithilfe eines Schwarmes bodengebundener automoner Roboter, die gleichzeitig an dem Bauprojekt arbeiten können, entgegengewirkt werden.
-Dabei sollen sich die Roboter auf den Mauern des Gebäudes selbst bewegen können, während sie dieses errichten.
-Eine Material-Zulieferung über fliegende Roboter ist denkbar.
+Dabei sollen sich die Roboter auf den Mauern des Gebäudes selbst bewegen können, während sie diese errichten.
+Im Gegensatz zur additiven Fertigung sollen die Roboter das Material nicht etwa drucken, sondern herkömmliche Bausteine verweden können.
 In dieser Arbeit liegt der Schwerpunkt allerdings nicht auf der Entwicklung dieser Roboter, sondern auf dem Erarbeiten eines Vorgehens zur Berechnung von für Roboterschwärme geeigneten Bauplänen, ausgehend von 3D Modellen der Gebäude.
-Dies stellt die Grundlage für eventuell nachfolgende Automatisierungsprojekte im Bereich der Bauindustrie dar.
-Das Erstellen des Modells innerhalb eines 3D Editors stellt nicht nur die geometrischen und physikalischen Eigenschaften des Gebäudes digital bereit, sondern verschlankt auch die Kommunikation zwischen Endnutzer und Architekturbüro oder ersetzt letzteres komplett.
-
-Gleichzeitig bildet diese Arbeit damit auch den Trend hin zur sogennanten Massenpersonalisierung ab, welcher als Nachfolgetrend zur Massenproduktion und als "heilger Gral" der Fertigung angesehen wird
-%[TODO https://link.springer.com/chapter/10.1007/978-3-642-56192-4_4]
-.
-Dieser Trend ist auch für die Bauindustrie interessant, denn auch hier schafft die Möglichkeit sämtliche 
-%[ugs https://link.springer.com/chapter/10.1007/978-3-319-77556-2_34] 
-Kundenwünsche an ein Produkt (oder Gebäude) umzusetzen, ohne dafür spezielles Werkzeug herstellen zu müssen, neue Gewinnmöglichkeiten.
-Mit der Option der Modellierung des Gebäudes durch den Kunden selbst, ist die Kommunikation mit den Architekten über dessen Wünsche effizienter, da beide Parteien zusammen an dem Modell arbeiten können.
-Im Anschluss an den Designprozess des 3D Models des Gebäudes, soll dieses in einen Bauplan übersetzt werden, welcher alle notwendigen Informationen für den oben genannten Roboterschwarm enthält, sodass dieser das Gebäude selbstständig errichten kann [TODO ugs].
-Dieses Konzept wird anhand nachfolgender Fallstudie(n) getestet.
-
-
-
+Dies stellt die Grundlage für nachfolgende Automatisierungsprojekte im Bereich der Bauindustrie dar.
+Das Anfertigen der Modelle innerhalb eines 3D Editors stellt nicht nur die geometrischen und physikalischen Eigenschaften des Gebäudes digital bereit, sondern verschlankt auch die Kommunikation zwischen Endnutzer und Architekturbüro oder ersetzt letzteres komplett.
+Gleichzeitig macht diese Arbeit damit einen Schritt in Richtung des relativ neuen Trends der sogennanten Massenpersonalisierung, welcher als Nachfolgetrend zur Massenproduktion und als \glqq{}heilger Gral\grqq{} der Fertigung angesehen wird~\cite{MassCustomHolyGrail}.
+Dieser Trend ist auch für die Bauindustrie interessant, denn auch hier schafft die Möglichkeit sämtliche Kundenwünsche an ein Produkt (oder in diesem Fall ein Gebäude) umzusetzen, ohne dafür spezielles Werkzeug herstellen oder Verfahren entwickeln zu müssen, neue Gewinnmöglichkeiten~\cite{Jensen2018}~\cite{Jensen2015}.
+Dennoch existiert noch vergleichsweise wenig Forschung diesen Trend ebenfalls in der Bauindustrie zu etablieren~\cite{Larsen2019}.
+Darum soll in dieser Arbeit untersucht werden, in welcher Weise sich die digitalen Standards und Austauschformate dafür eigenen, Baupläne aus den 3D Plänen von Gebäuden zu generieren.
+Da unterschiedliche Bauprojekte unterschiedliche Eigenheiten und Prioritäten besitzen, wird zudem nach einer Möglichkeit gesucht, die resultierenden Baupläne durch individuelle Regelsets an die jeweilige Situation anpassen zu können.
+Diese Konzepte werden daraufhin anhand nachfolgender Fallstudien getestet.
