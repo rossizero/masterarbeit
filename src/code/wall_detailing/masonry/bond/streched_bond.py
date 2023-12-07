@@ -36,17 +36,42 @@ class StrechedBond(Bond):
         return plan
 
     def _get_corner_plan(self) -> List[List[Transformation]]:
+        plan = []
         if self.schleppend:
-            pass
-        else:
-            plan = []
-            plan.append([
-                Transformation(
-                    translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
-                    rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
-            ])
+            if self.offset == 0.5:
+                plan.append([
+                    Transformation(
+                        translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                        rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+                ])
 
-            plan.append([
-                Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
-            ])
+                plan.append([
+                    Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+                ])
+        else:
+            if self.offset == 0.5:
+                plan.append([
+                    Transformation(
+                        translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                        rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
+                ])
+
+                plan.append([
+                    Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+                ])
+            elif self.offset == 0.25:
+                plan.append([
+                    Transformation(
+                        translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
+                        rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2])))
+                ])
+
+                plan.append([
+                    Transformation(translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])))
+                ])
+                for tfs in plan:
+                    for tf in tfs:
+                        tf.module = BrickInformation(self.module.length * 3 / 4.0, self.module.width,
+                                                     self.module.height)
+
         return plan

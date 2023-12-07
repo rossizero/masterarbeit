@@ -1,3 +1,5 @@
+import math
+
 import ifcopenshell
 import numpy as np
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
@@ -94,8 +96,8 @@ class IfcImporter:
             object_placement = object_placement.PlacementRelTo
 
         position = np.array([transformation_matrix[0][3], transformation_matrix[1][3], transformation_matrix[2][3]])
-        rotation = quaternion.from_rotation_matrix(transformation_matrix[:3, :3])
-        #rotation = np.quaternion(rotation.z, rotation.x, rotation.y, rotation.w)
+        rotation = quaternion.from_rotation_matrix(np.around(transformation_matrix[:3, :3], decimals=6))
+        #rotation = np.quaternion(round(rotation.z, 6), round(rotation.x, 6), round(rotation.y, 6), round(rotation.w, 6))
         return np.round(position, decimals=6), rotation
 
     def get_walls(self):
@@ -115,11 +117,12 @@ class IfcImporter:
 
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
-
-            wall = Wall(shape, "TODO")
+            rotation2 = quaternion.from_euler_angles(0, 0, math.pi / 2.0)
+            wall = Wall(shape, "test")
 
             transformation = gp_Trsf()
-            transformation.SetTranslation(gp_Vec(*translation).Reversed())
+            tmp = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
+            transformation.SetTranslation(gp_Vec(*tmp).Reversed())
             wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
 
             transformation = gp_Trsf()
@@ -127,7 +130,8 @@ class IfcImporter:
 
             # update wall
             wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
-            wall.translation = translation
+            wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, np.array([wall.length / 2, wall.width / 2, wall.height / 2])), decimals=6)
+            #wall.translation = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
             wall.rotation = rotation
 
             #print("wall", wall.length, wall.width, wall.height, wall.get_translation(), translation, wall.get_rotation(), rotation)

@@ -37,9 +37,9 @@ class Wall:
 
     def update_dimensions(self):
         dimensions = self._get_dimensions()
-        self.length = max(dimensions[0], dimensions[1])
-        self.width = min(dimensions[0], dimensions[1])
-        self.height = dimensions[2]
+        self.length = round(max(dimensions[0], dimensions[1]), 4)
+        self.width = round(min(dimensions[0], dimensions[1]), 4)
+        self.height = round(dimensions[2], 4)
 
     def update_shape(self, shape: TopoDS_Shape):
         rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),

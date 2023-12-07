@@ -224,7 +224,7 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
 
     tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    tmp = IfcImporter("../../models/scenario11.ifc")
+    tmp = IfcImporter("../../models/scenarios/scenario1_tower_thin_walls.ifc")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()
@@ -237,9 +237,9 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(scenario.walls, brick_information)
+    wall_detailer = WallDetailer(www, brick_information)
     bb = wall_detailer.detail()
+    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
     BrickExporter(bb).export_to_json("output.json")
-    BrickToOntology(bb)
-    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
+    #BrickToOntology(bb)
