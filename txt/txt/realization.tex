@@ -145,11 +145,33 @@ Objekte der \textit{Corner} halten alle notwendigen Informationen zu jedem gefun
 Wird ein Eckobjekt an einer schon vorhandener Position im Raum in die Liste eingefügt, so wird der dort bereits liegende Eckbereich lediglich um die neuen \textit{WallLayer} erweitert und falls nötig, dessen \textit{CornerType} angepasst.
 
 \subsection*{Lösen der Beziehungen}
-Je nach gewählten Verband müssen z.B. Ecken (deren Baupläne im vornherein definiert wurden) so angeordnet werden, dass die dazwischenliegenden Wandstücke lückenlos eingefüllt werden können.
-Dafür muss ein sogenannter "plan\_offset" für jede Wand und jede Ecke gefunden werden. Dieser gibt an, an welchem Index der Bauplandefinition das Wandstück (von unten) beginnen muss, um insgesamt einen einheitlichen Wandkörper ohne Lücken zu bilden.
-Voraussetzung dafür ist natürlich ein passender Eckplan zu dem gewählten Verband. 
+In Abschnitt~\ref{concept:solving_beziehungen} wurde die Problematik der Eckbereiche bereits ausführlich behandelt.
+Je nach gewählten Verband und anzuwendenden Modul können unterschiedliche Problemzonen beim Setzen der Bausteine auftreten.
+Das Ziel dieses Schritts ist es, die jeweiligen Eck- oder Kreuzungspläne der betroffenen Wandstücke so anzuordnen, dass die dazwischenliegenden Wandbereiche unter Einhaltung des festgelegten Mauerwerksverbands lückenlos aufgefüllt werden können.
+Dies ist nur möglich, wenn die Längen der modellierten Wandstücke zum gewählten Verband passen.
+Unter der Annahme ein Modell ist mit den ausgewählten Modulen und Mauerwerksverbänden lückenlos baubar, führt das in Abschnitt~\ref{concept:solving_beziehungen} vorgestellte Vorgehen zu einer Lösung. 
+Dabei werden die sogenannten \textit{plan\_offsets} so manipuliert, bis eine lückenlose Lösung gefunden wurde.
+Sowohl Eckbereiche (siehe \textit{Corner} im Klassendiagramm aus Abbildung~\ref{fig:real:class_diagram_corners}) als auch die Wandstücke (mit der Klasse \textit{WallLayerGroup} realisiert) besitzen dieses Attribut.
+Diese \textit{plan\_offsets} geben an, mit welcher Schicht des angebenen Eck- oder Wandstückplans in der untersten Schicht einer \textit{WallLayerGroup} beim Berechnen der konkreten Bausteine begonnen werden muss.
 
-Schwierigkeiten: Eckpläne insgesamt, Ecken ragen in die sie bildenden Wände hinein. Diese müssen dementsprechend verkleinert werden.
+Das in dieser Arbeit angewandte Verfahren stellt derzeit lediglich eine Verbesserung der Exhautionsmethode dar.
+In Kapitel~\ref{concept:solving_beziehungen} wurde bereits festgestellt, dass alle durch mindestens einen \textit{Corner} verbundenen \textit{WallLayerGroups} miteinander zusammenhängen.
+Daraus ergibt sich ein Abhängigkeitsgraph, der im Normalfall sämtliche Wandstücke eines Modells miteinander verbindet.
+Durch Festlegen des \textit{plan\_offset} eines einzigen Eckbereichs, können alle direkt und indirekt damit verbundenen Wandstücke und Eckbereiche daran angepasst werden.
+Denn ändert man den \textit{plan\_offset} eines Eckbereichs, müssen alle darüber und darunterliegenden \textit{Corner} ebenfalls angepasst werden, um die vorgeschriebene Reihenfolge des Planes weiterhin einzuhalten.
+Auch die Distanz, die ein Eckbereich in die daran anschließenden geraden Schichten ragt, kann sich dadurch verändern.
+Dies ist anhand des Beispiels in Abbildung~\ref{fig:concept:loesen_von_beziehungen1} nachvollziehbar.
+Je nach Eckplankonfiguration sind die weißen Reste jeder Schicht unterschiedlich groß.
+Darum muss auch die \textit{length} (ebenfalls Teil des Klassendiagramms in Abbildung~\ref{fig:real:class_diagram_corners}) jeder Verbindungsschicht aller darüber und darunterliegenden \textit{Corner} neu berechnet werden.
+
+Das Anpassen eines geraden Reststücks an einen damit verbundenen \textit{Corner} ist eine von zwei Operationen, die der Lösungsalgorithmus anwenden muss.
+Die Zweite ist das umgekehrte Anpassen eines \textit{Corners} an ein bereits angepasstes gerades Reststück.
+Bei beiden Opterationen werden diejenigen \textit{plan\_offsets} aller Schichten der Ecke beziehungsweise des Wandstücks gesucht, die zu einer lückenlosen Lösung führen, ohne die Reihenfolge der Pläne zu verletzen.
+Die Startkonfiguration des Verfahrens ist lediglich ein Knoten des Abhängigkeitsgraphen und ein daran angewandter \textit{plan\_offset}.
+Davon ausgehend können diese Operationen abwechselnd auf die nächsten Nachbarknoten angewendet werden, bis alle Knoten des Graphen abgearbeitet wurden.
+Findet sich mit einer Startkonfiguration keine valide Lösung, so wird eine neue gewählt; entweder durch Verändern des \textit{plan\_offsets} oder dem Auswählen eines neuen Startknotens.
+So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsräum, dieser wurde aber durch den Abhängigkeitsgraphen deutlich minimiert, da das Modell dadurch in sinnvoller Weise durchsucht wird und Szenarien, die ohnehin zu keiner Lösung geführt hätten, übersprungen werden.
+
 
 \subsection{Anwenden der Öffnungen}
 Blablabla
