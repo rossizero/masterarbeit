@@ -21,13 +21,14 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Win
 from masonry import corner_rep
 from wall_detailing.exporter.BrickExporter import BrickExporter
 from wall_detailing.exporter.BrickToOntologie import BrickToOntology
-from wall_detailing.importer.ifc_importer import IfcImporter
+#from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
+from wall_detailing.scenarios.examples_for_text.scenario1 import Scenario1
 
 
 class WallDetailer:
@@ -116,8 +117,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0
-            fill_right = len(layer.right_connections) == 0
+            fill_left = len(layer.left_connections) == 0 or True
+            fill_right = len(layer.right_connections) == 0 or True
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -223,21 +224,21 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
 
-    tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    tmp = IfcImporter("../../models/scenarios/scenario1_tower_thin_walls.ifc")
-    www = tmp.get_walls()
+    #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
+    #tmp = IfcImporter("../../models/scenarios/scenario1_tower_thin_walls.ifc")
+    #www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Single_Wall_Slim()
+    scenario = Scenario1()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
-    shapes = [o.get_shape() for w in www for o in w.openings]
-    shapes.extend([w.get_shape() for w in www])
-    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
+    #shapes = [o.get_shape() for w in www for o in w.openings]
+    #shapes.extend([w.get_shape() for w in www])
+    #WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(www, brick_information)
+    wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))

@@ -72,6 +72,6 @@ class StrechedBond(Bond):
                 for tfs in plan:
                     for tf in tfs:
                         tf.module = BrickInformation(self.module.length * 3 / 4.0, self.module.width,
-                                                     self.module.height)
+                                                     self.module.height, grid=np.array([1, 1, 0.5]))
 
         return plan
