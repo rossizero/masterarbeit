@@ -155,7 +155,7 @@ Sowohl Eckbereiche (siehe \textit{Corner} im Klassendiagramm aus Abbildung~\ref{
 Diese \textit{plan\_offsets} geben an, mit welcher Schicht des angebenen Eck- oder Wandstückplans in der untersten Schicht einer \textit{WallLayerGroup} beim Berechnen der konkreten Bausteine begonnen werden muss.
 
 Das in dieser Arbeit angewandte Verfahren stellt derzeit lediglich eine Verbesserung der Exhautionsmethode dar.
-In Kapitel~\ref{concept:solving_beziehungen} wurde bereits festgestellt, dass alle durch mindestens einen \textit{Corner} verbundenen \textit{WallLayerGroups} miteinander zusammenhängen.
+In Kapitel~\ref{concept:solving_beziehungen} wurde bereits festgestellt, dass alle, durch mindestens einen \textit{Corner} verbundenen \textit{WallLayerGroups} miteinander zusammenhängen.
 Daraus ergibt sich ein Abhängigkeitsgraph, der im Normalfall sämtliche Wandstücke eines Modells miteinander verbindet.
 Durch Festlegen des \textit{plan\_offset} eines einzigen Eckbereichs, können alle direkt und indirekt damit verbundenen Wandstücke und Eckbereiche daran angepasst werden.
 Denn ändert man den \textit{plan\_offset} eines Eckbereichs, müssen alle darüber und darunterliegenden \textit{Corner} ebenfalls angepasst werden, um die vorgeschriebene Reihenfolge des Planes weiterhin einzuhalten.
@@ -171,15 +171,29 @@ Die Startkonfiguration des Verfahrens ist lediglich ein Knoten des Abhängigkeit
 Davon ausgehend können diese Operationen abwechselnd auf die nächsten Nachbarknoten angewendet werden, bis alle Knoten des Graphen abgearbeitet wurden.
 Findet sich mit einer Startkonfiguration keine valide Lösung, so wird eine neue gewählt; entweder durch Verändern des \textit{plan\_offsets} oder dem Auswählen eines neuen Startknotens.
 So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsräum, dieser wurde aber durch den Abhängigkeitsgraphen deutlich minimiert, da das Modell dadurch in sinnvoller Weise durchsucht wird und Szenarien, die ohnehin zu keiner Lösung geführt hätten, übersprungen werden.
-
+Falls keine lückenlose Lösung gefunden werden kann, wird diejenige mit dem insgesamt kleinsten Lückenvolumen zurückgegeben.
 
 \subsection{Anwenden der Öffnungen}
-Blablabla
+Den nächsten Schritt stellt das Anwenden der Öffnungen (siehe Klasse \textit{Openings} im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners}) sämtlicher \textit{WallLayerGroups} dar.
+Auch diese Operation wird schichtweise durchgeführt.
+Auf jede Schicht der betroffenen \textit{WallLayerGroup} wird folgendes Verfahren angewandt:
+\begin{enumerate}
+  \item Zunächst muss überprüft werden, ob die Öffnung innerhalb der betrachteten Schicht liegt. Dies kann aufgrund des geteilten Elternobjekts mit den relativen Koordinaten beider Objekte berechnet werden. 
+  \item Falls Punkt 1 zutrifft, wird die Schicht in zwei Teile geteilt. Als Schnittpunkt wird der Mittelpunkt der Öffnung gewählt. Die ursprüngliche Schicht ist damit obsolet.
+  \item Nun muss ausgehend vom Schnittpunkt das rechte oder linke Ende der beiden neuen Schichten um jeweils die halbe Länge der Öffnung verschoben werden.
+\end{enumerate}
+Eine Öffnung kann einen Sturz voraussetzen.
+Das ist ein oftmals vorgefertigtes Bauteil aus Stahlbeton, welches etwas länger ist als die Öffnung selbst und über diese gelegt wird, um die Stabiltät der Wand trotz Integration eines Fensters oder einer Tür zu gewährleisten.
+Stürze werden in dieser Arbeit wie eine eigene Bausteingröße behandelt und können aus diesem Grund als spezielles Modul betrachtet werden.
+Dies wird im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} durch die Verbindung zwischen den Klassen \textit{Opening} und \textit{BrickInformation} dargestellt.
+Der für den Sturz benötigte Platz, kann mit dem gleichen Öffnungsverfahren von oben geschaffen werden.
 
 \subsection{Anwenden der Mauerwerksverbände}
 Ablaufen aller Ecken und Wände und einsetzen der Ziegel gemäß den gefundenen Lösungen.
+TODO klassendiagramm der Verbände.
 
 \subsection{Nachbarschaftsbeziehungen zwischen Bausteinen berechnen}
+TODO bild mit möglichen nachbarn laut dem raster.
 
 \subsection{Export}
 Abhängigkeitsgraph und Ontologie für Regelwerk
@@ -188,7 +202,5 @@ Abhängigkeitsgraph und Ontologie für Regelwerk
 
 \subsection*{TODOs}
 \begin{enumerate}
-  \item reduzieren der layer length abhängig vom corner plan
-  \item aufteilen der layer bei öffnungen
   \item einpflegen der Dimensionen der Bausteine und Rasterinformationen
 \end{enumerate}
