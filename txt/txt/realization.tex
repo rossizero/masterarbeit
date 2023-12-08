@@ -49,7 +49,7 @@ Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgend
 
 \subsection{Anwenden des Moduls}
 Mit dem zu jedem Wandstück festgelegten Modul werden nun alle Wandstücke in Schichten aufgeteilt.
-Deren Höhe entspricht im Normalfall der Höhe des jeweilgen Moduls.
+Deren Höhe entspricht im Normalfall der Höhe des jeweiligen Moduls.
 Lediglich die oberste Schicht kann durch falsch modellierte Wandstücke eine niedrigere Schichthöhe aufweisen.
 Dies ist der Fall, wenn die Gesamthöhe des Wandstücks nicht exakt einem Vielfachen der Höhe des Moduls entspricht und ein nicht aufzuteilender Rest existiert.
 Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstücken durchzuführen und Beziehungen zwischen ihnen zu finden.
@@ -120,29 +120,30 @@ Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglich
 
 \subsection{Finden und Lösen von Beziehungen}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
-Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe~\ref{concept:solving_beziehungen}).
+Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe Kapitel~\ref{concept:solving_beziehungen}).
 Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen einzuhalten.
 Dazu zählt zum Beispiel das in Abschnitt~\ref{basics:Mauerwerksverband} genannte Überbindemaß.
 In Abschnitt~\ref{concept:corner_etc_properties} wurden bereits die Eigenschaften aufgeführt, mithilfe derer sich die gesuchten Beziehungen identifizieren lassen.
 Die wichtigsten Informationen für jede dieser Beziehungen ist einerseits der Punkt, an dem sie sich im Raum befindet, andererseits die Art der Beziehung (also die Unterscheidung zwischen Ecke, T- oder X-Kreuzung).
-Die Position ist der Schnittpunkt der Richtungsvektoren beider Wandstücke entlang der lokalen X-Achsen beider Wandstücke.
+Die Position ist der Schnittpunkt der Richtungsvektoren beider Wandstücke entlang ihrer lokalen X-Achsen.
 Die Unterscheidung der Beziehungen kann mithilfe des Vorgehens, das ebenfalls in Abschnitt~\ref{concept:corner_etc_properties} erläutert wurde, durchgeführt werden.
 Dabei spielen die Anzahl der Wandstücke, die sich in einem Punkt schneiden und der Ort des Punktes innerhalb der beteiligten Wandstücke eine Rolle.
 Da ein Wandstück zu diesem Zeitpunkt schon als Menge an Schichten vorliegt, wird das Verfahren, wie es bereits oben getan wurde, paarweise auf alle Schichten angewandt.
 Somit werden für jede, sich durch Verkettungen über mehrere Wandstücke erstreckende Schicht alle Kreuzungs- und Eckbereiche ausfindig gemacht.
-Bevor aber ein neues \glqq{}Eckobjekt\grqq{} angelegt wird, wird überprüft, ob an dem errechneten Schnittpunkt bereits ein Eckbereich gefunden wurde und das dazu gehörende Eckobjekt in dem Fall um eine neue Schicht erweitert.
+Bevor aber eine neue Eckinstanz angelegt wird, wird überprüft, ob an dem errechneten Schnittpunkt bereits ein Eckbereich gefunden wurde und die dazugehörige Eckinstanz in dem Fall um die neuen Schichten erweitert.
 Außerdem kann im selben Schritt bereits die Zuweisung der Art der Beziehung vorgenommen werden.
-Durch die Eckobjekte werden nun die bis dahin unabhängigen Wandstücke, welche durch den vorherigen Schritt bereits schichtweise und kombiniert vorliegen, miteinader verknüpft.
+Durch die Eckinstanzen werden nun die bis dahin unabhängigen Wandstücke, welche durch den vorherigen Schritt bereits schichtweise und kombiniert vorliegen, miteinader verknüpft.
 \begin{figure}[hb]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/klassendiagramm_corners.drawio.png}
   \caption{Klassendiagramm nach Errechnen der Eckbereiche.}
   \label{fig:real:class_diagram_corners}
 \end{figure}
-Ein nützlicher Nebeneffekt der schichtweisen Betrachtung der Eckbereiche ist, dass nun auch zwei Wände mit unterschiedlichen Höhen, die gemeinsam einen Eckbereich bilden korrekt dargestellt werden können, denn es werden nur für die Schichten Eckobjekte erzeugt, die sich beide Wandstücke teilen.
-Die daraus resultierende neue Struktur der Daten ist in Abbildung~\ref{fig:real:class_diagram_corners} zu sehen.
-Objekte der \textit{Corner} halten alle notwendigen Informationen zu jedem gefunden Eckbereich einer Schicht, während ein Objekt der Klasse \textit{Corners} dafür zuständig ist, die wachsende Liste an Eckobjekten auf geteilte Schnittpunkte zu überprüfen.
-Wird ein Eckobjekt an einer schon vorhandener Position im Raum in die Liste eingefügt, so wird der dort bereits liegende Eckbereich lediglich um die neuen \textit{WallLayer} erweitert und falls nötig, dessen \textit{CornerType} angepasst.
+Ein nützlicher Nebeneffekt der schichtweisen Betrachtung der Eckbereiche ist, dass nun auch zwei Wände mit unterschiedlichen Höhen, die gemeinsam einen Eckbereich bilden, korrekt dargestellt werden können, denn es werden nur für die Schichten Eckinstanzen erzeugt, die in beiden Wandstücken vorhanden sind.
+Die daraus resultierende neue Datenstruktur ist im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} zu sehen.
+Objekte der \textit{Corner} (oben als Eckinstanzen bezeichnet) halten alle notwendigen Informationen zu jedem gefunden Eckbereich einer Schicht, während ein Objekt der Klasse \textit{Corners} dafür zuständig ist, die wachsende Liste an Eckinstanzen auf geteilte Schnittpunkte zu überprüfen.
+Wird eine Eckinstanz an einer schon vorhandenen Position im Raum in die Liste eingefügt, so wird der dort bereits liegende Eckbereich lediglich um die neuen \textit{WallLayer} erweitert und falls nötig, dessen \textit{CornerType} angepasst.
+Wie bereits erwähnt werden dabei die Voraussetzungen aus Kapitel~\ref{concept:corner_etc_properties} zur Unterscheidung der \textit{CornerTypes} herangezogen.
 
 \subsection*{Lösen der Beziehungen}
 In Abschnitt~\ref{concept:solving_beziehungen} wurde die Problematik der Eckbereiche bereits ausführlich behandelt.
@@ -151,12 +152,12 @@ Das Ziel dieses Schritts ist es, die jeweiligen Eck- oder Kreuzungspläne der be
 Dies ist nur möglich, wenn die Längen der modellierten Wandstücke zum gewählten Verband passen.
 Unter der Annahme ein Modell ist mit den ausgewählten Modulen und Mauerwerksverbänden lückenlos baubar, führt das in Abschnitt~\ref{concept:solving_beziehungen} vorgestellte Vorgehen zu einer Lösung. 
 Dabei werden die sogenannten \textit{plan\_offsets} so manipuliert, bis eine lückenlose Lösung gefunden wurde.
-Sowohl Eckbereiche (siehe \textit{Corner} im Klassendiagramm aus Abbildung~\ref{fig:real:class_diagram_corners}) als auch die Wandstücke (mit der Klasse \textit{WallLayerGroup} realisiert) besitzen dieses Attribut.
+Sowohl Eckbereiche (siehe Klasse \textit{Corner} im Klassendiagramm aus Abbildung~\ref{fig:real:class_diagram_corners}) als auch die Wandstücke (mit der Klasse \textit{WallLayerGroup} realisiert) besitzen dieses Attribut.
 Diese \textit{plan\_offsets} geben an, mit welcher Schicht des angebenen Eck- oder Wandstückplans in der untersten Schicht einer \textit{WallLayerGroup} beim Berechnen der konkreten Bausteine begonnen werden muss.
 
 Das in dieser Arbeit angewandte Verfahren stellt derzeit lediglich eine Verbesserung der Exhautionsmethode dar.
-In Kapitel~\ref{concept:solving_beziehungen} wurde bereits festgestellt, dass alle, durch mindestens einen \textit{Corner} verbundenen \textit{WallLayerGroups} miteinander zusammenhängen.
-Daraus ergibt sich ein Abhängigkeitsgraph, der im Normalfall sämtliche Wandstücke eines Modells miteinander verbindet.
+In Kapitel~\ref{concept:solving_beziehungen} wurde bereits festgestellt, dass alle durch mindestens einen \textit{Corner} verbundenen \textit{WallLayerGroups} verkettet zusammenhängen.
+Daraus ergibt sich ein Abhängigkeitsgraph, der im Normalfall sämtliche Wandstücke eines Gebäudemodells miteinander verbindet.
 Durch Festlegen des \textit{plan\_offset} eines einzigen Eckbereichs, können alle direkt und indirekt damit verbundenen Wandstücke und Eckbereiche daran angepasst werden.
 Denn ändert man den \textit{plan\_offset} eines Eckbereichs, müssen alle darüber und darunterliegenden \textit{Corner} ebenfalls angepasst werden, um die vorgeschriebene Reihenfolge des Planes weiterhin einzuhalten.
 Auch die Distanz, die ein Eckbereich in die daran anschließenden geraden Schichten ragt, kann sich dadurch verändern.
@@ -168,9 +169,9 @@ Das Anpassen eines geraden Reststücks an einen damit verbundenen \textit{Corner
 Die Zweite ist das umgekehrte Anpassen eines \textit{Corners} an ein bereits angepasstes gerades Reststück.
 Bei beiden Opterationen werden diejenigen \textit{plan\_offsets} aller Schichten der Ecke beziehungsweise des Wandstücks gesucht, die zu einer lückenlosen Lösung führen, ohne die Reihenfolge der Pläne zu verletzen.
 Die Startkonfiguration des Verfahrens ist lediglich ein Knoten des Abhängigkeitsgraphen und ein daran angewandter \textit{plan\_offset}.
-Davon ausgehend können diese Operationen abwechselnd auf die nächsten Nachbarknoten angewendet werden, bis alle Knoten des Graphen abgearbeitet wurden.
+Davon ausgehend können diese Operationen abwechselnd auf die nächsten Nachbarknoten und die dazwischenliegenden Wandstücke angewendet werden, bis alle Knoten des Graphen abgearbeitet wurden.
 Findet sich mit einer Startkonfiguration keine valide Lösung, so wird eine neue gewählt; entweder durch Verändern des \textit{plan\_offsets} oder dem Auswählen eines neuen Startknotens.
-So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsräum, dieser wurde aber durch den Abhängigkeitsgraphen deutlich minimiert, da das Modell dadurch in sinnvoller Weise durchsucht wird und Szenarien, die ohnehin zu keiner Lösung geführt hätten, übersprungen werden.
+So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsräum, dieser wurde aber mithilfe des Abhängigkeitsgraphen deutlich minimiert, da das Modell dadurch in sinnvoller Weise durchsucht wird und Szenarien, die ohnehin zu keiner Lösung geführt hätten, übersprungen werden.
 Falls keine lückenlose Lösung gefunden werden kann, wird diejenige mit dem insgesamt kleinsten Lückenvolumen zurückgegeben.
 
 \subsection{Anwenden der Öffnungen}
@@ -178,26 +179,58 @@ Den nächsten Schritt stellt das Anwenden der Öffnungen (siehe Klasse \textit{O
 Auch diese Operation wird schichtweise durchgeführt.
 Auf jede Schicht der betroffenen \textit{WallLayerGroup} wird folgendes Verfahren angewandt:
 \begin{enumerate}
-  \item\label{real:openings_tmp1} Zunächst muss überprüft werden, ob die Öffnung innerhalb der betrachteten Schicht liegt. Dies kann aufgrund des geteilten Elternobjekts mit den relativen Koordinaten beider Objekte berechnet werden. 
+  \item\label{real:openings_tmp1} Zunächst muss überprüft werden, ob die Öffnung innerhalb der betrachteten Schicht liegt. Dies kann aufgrund des geteilten Elternobjekts (einer \textit{WallLayerGroup}) mit den relativen Koordinaten beider Objekte berechnet werden. 
   \item Falls Punkt~\ref{real:openings_tmp1} zutrifft, wird die Schicht in zwei Teile geteilt. Als Schnittpunkt wird der Mittelpunkt der Öffnung gewählt. Die ursprüngliche Schicht ist damit obsolet.
-  \item Nun muss ausgehend vom Schnittpunkt das rechte oder linke Ende der beiden neuen Schichten um jeweils die halbe Länge der Öffnung verschoben werden.
+  \item Nun muss ausgehend vom Schnittpunkt jeweils das rechte oder linke Ende der beiden neuen Schichten um jeweils die halbe Länge der Öffnung verschoben werden.
 \end{enumerate}
-Eine Öffnung kann einen Sturz voraussetzen.
-Das ist ein oftmals vorgefertigtes Bauteil aus Stahlbeton, welches etwas länger ist als die Öffnung selbst und über diese gelegt wird, um die Stabiltät der Wand trotz Integration eines Fensters oder einer Tür zu gewährleisten.
+Oftmals werden über Öffnungen im Mauerwerk sogenannte Stürze eingesetzt.
+Das ist ein meist vorgefertigtes Bauteil aus Stahlbeton, welches etwas länger ist als die Öffnung selbst und das über diese gelegt wird, um die Stabiltät der Wand trotz Integration eines Fensters oder einer Tür zu gewährleisten.
 Stürze werden in dieser Arbeit wie eine eigene Bausteingröße behandelt und können aus diesem Grund als spezielles Modul betrachtet werden.
 Dies wird im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} durch die Verbindung zwischen den Klassen \textit{Opening} und \textit{BrickInformation} dargestellt.
 Der für den Sturz benötigte Platz, kann mit dem gleichen Öffnungsverfahren von oben geschaffen werden.
 
 \subsection{Anwenden der Mauerwerksverbände}
-Die für Mauerwerksverbände entwickelte mathematische Representation aus Abschnitt~\ref{concept:mauerwerksverband} wurde mithilfe der in Abbildung~\ref{fig:real:class_diagram_bonds} dargestellten Klassenstruktur umgesetzt.
+Die für Mauerwerksverbände entwickelte mathematische Darstellung aus Kapitel~\ref{concept:mauerwerksverband} wurde mithilfe der in Abbildung~\ref{fig:real:class_diagram_bonds} dargestellten Klassenstruktur umgesetzt.
 Beispielhaft sind darin auch die den Kreuzverband und den Läuferverband repräsentierenden Klassen zu sehen.
-Letzterer kann durch Parameter angepasst werden.
-Durch die Vorbereitung der verausgegangen Schritte, müssen nun lediglich Objekte der Klasse \textit{Brick} anhand der vorgegebenen Mauerwerksverbände und den in den einzelnen Wandbereichen festgesetzte \textit{plan\_offsets} erzeugt werden.
-Diese können mithilfe der Transformationen der \textit{Corner} oder der textit{WallLayerGroups} und den Informationen des Verbands passend Positioniert werden.
-Wandenden können mithilfe der \textit{Corner} identifiziert werden.
+Letzterer kann zusätzlich durch Parameter angepasst werden, um zum Beispiel den Versatz zu verändern.
+Dabei ändert sich aber nicht nur der Legeplan für gerade Wandabschnitte.
+Auch die speziellen Pläne für Ecken und Kreuzungen müssen den Parameterwerten entsprechend abgewandelt werden.
+
+Durch die Vorbereitung der vorausgegangen Schritte, müssen nun lediglich Objekte der Klasse \textit{Brick} anhand der vorgegebenen Mauerwerksverbände und den in den einzelnen Wandbereichen festgesetzten \textit{plan\_offsets} erzeugt werden.
+Diese können mithilfe der Transformationen der jeweiligen \textit{Corner} oder \textit{WallLayerGroups} und den Informationen des Verbands passend positioniert und rotiert werden.
+Es gibt aber drei Besonderheiten, die neben dem bloßen Abarbeiten der jeweiligen Mauerwerksverbände zusätzlich zu beachten sind:
+
+\paragraph*{Lokale \textit{Corner} Rotationen}
+Im Falle von \textit{Cornern} ist neben der globalen Transformation allerdings noch eine weitere Information zu beachten.
+Bei T-Kreuzungen und Ecken ist die globale Rotation nicht ausreichend, um die Bausteine mithilfe des vorgegebenen Plans richtig zu platzieren.
+Es wird zusätzlich ein weitere lokale Rotation um die \textit{Achse} einer T-Kreuzung oder Ecke benötigt.
+Dies soll in Abbildung~\ref{fig:real:eckrotationen} anhand einer Ecke veranschaulicht werden.
+Angenommen der Eckplan für den darauf abgebildeten Verband liegt in der Art der linkesten Ecke vor.
+So ist deutlich zu erkennen, dass das Anwenden desselben unrotierten Eckplans am zweiten Eckpunkt zu einem ungewünschten Ergebnis führen würde.
+Auch die beiden rechten Eckbereiche haben jeweils eine andere lokale Rotation um ihre als Punkt dargestellte Achse.
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{fig/Eckrotationen.png}
+  \caption{Möglichkeiten eines Eckbereichs.}
+  \label{fig:real:eckrotationen}
+\end{figure}
+Um diese lokalen Eckrotationen zu berechnen wird für jede Ecke zunächst ein normierter Vektor in Richtung des Punktes x anhand der Mittelpunkte beider \textit{WallLayer} und dem Eckpunkt gebildet.
+Dies entspricht sozusagen der \textit{Richtung} der Ecke.
+Dieser Vektor wird dann um das Inverse der Rotation einer der am \textit{Corner} beteiligten \textit{WallLayerGroup} rotiert, um ihn in das globale Koordinatensystem zu überführen.
+Durch diese Rotation ist nun die Achse der Ecke gleich der Z-Achse des Koordinatensystems.
+Deshalb kann mithilfe des sogennanten \glqq{}Arkustangens zwei\grqq{} (bekannt als arctan2) der Quadrant herausgefunden werden, in dessen Richtung der Vektor zeigt.
+Da sowohl bekannt ist, dass der Vektor des Punktes x um 45\degree{} versetzt ist, als auch dass die Rotation nur die Z-Achse betrifft, kann mit dem Ergebnis des Arkustangens nun ein Quaternion erstellt werden, welches die spezielle lokale Eckrotation beschreibt.
+Auch mit T-Kreuzungen kann in ähnlicher Weise verfahren werden. 
+Allerdings exisitieren hierbei nur zwei Fallunterscheidungen.
+
+\paragraph*{Abschluss eines Wandstücks} Wandenden sind mithilfe der \textit{Corner} identifizierbar.
 Exisitiert kein \textit{Corner} an einem Ende einer Schicht, handelt es sich entweder um ein Wandende oder den Außenbereich einer Öffnung.
-Dank den Informationen in den einzelnen Schichten eines Wandstücks, können die durch den Verband an diesen Bereichen gebliebenen Lücken kleiner Bausteine eingefügt werden.
-TODO Bild mit fill left and right und ohne.
+Dank den Informationen in den einzelnen Schichten eines Wandstücks, können die durch den Verband an diesen Bereichen gebliebenen Lücken kleinere Bausteine eingefügt werden, sofern dies gewünscht ist.
+Beispiele dafür sind in Abschnitt~\ref{concept:wandende} zu sehen.
+
+\paragraph*{Besondere Bausteine über Öffnungen} Wird von einer Öffnung ein Sturz definiert, so muss dieser ähnlich zu einem Baustein des Standardmoduls ebenfalls in einen konkreten \textit{Brick} überführt werden.
+Die lokale Position innerhalb des Wandstücks liefert die Öffnung selbst.
+Die Dimensionen des Bausteins sind mithilfe des Moduls, das zur Beschreibung des Sturzes erstellt wurde wie gewohnt vorgegeben.
 
 \begin{figure}[hb]
   \centering
@@ -206,15 +239,35 @@ TODO Bild mit fill left and right und ohne.
   \label{fig:real:class_diagram_bonds}
 \end{figure}
 
-\subsection{Nachbarschaftsbeziehungen zwischen Bausteinen berechnen}
-TODO bild mit möglichen nachbarn laut dem raster.
+\subsection{Nachbarschaftsbeziehungen zwischen Bausteinen}
+\begin{figure}[h!bt]
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/raster_neighbors1.png}
+    \caption{Nachbarschaften in einem 1$\times$1 Raster}
+    \label{fig:real:raster_neigbors1}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/raster_neighbors2.png}
+    \caption{Nachbarschaften in einem 0.5$\times$0.5 Raster}
+    \label{fig:real:raster_neigbors2}
+  \end{subfigure}
+  \caption{Mögliche rasterabhängige Nachbarschaften.}
+  \label{fig:real:raster_neigbors}
+\end{figure}
+
+Um valide Nachbarschaften zwischen den berechneten Bausteinen festzustellen werden die den Wandstücken zugeordneten Raster herangezogen.
+In Abbildung~\ref{fig:real:raster_neigbors} ist der Effekt zweier unterschiedlicher Raster auf den selben Baustein dargestellt.
+Die gestrichelten Plätze sind potentielle Nachbarfelder.
+Da es sich allerdings nicht um eine zwei-, sondern eine dreidimensionalen Umgebung handelt, gibt es auch unter- und überhalb der Bausteine mögliche Nachbarn.
+Um Bausteinen diese Informationen hinzuzufügen, wurde die Enumeration \textit{Neighbor} und das \textit{neighbors} Feld in der Klasse \textit{Brick} erstellt.
+Dies ist im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_bonds} zu sehen.
+Die Enumeration \textit{Neighbor} definiert sechs mögliche Nachbarschaftsarten: linke, rechte, vordere, hintere, darüber und darunter liegende Nachbarn.
+Die Klasse \textit{Brick} wird mit dem Feld \textit{neighbors} um ein Dictionary ergänzt, welches zu jedem dieser Fälle eine Menge eindeutiger Bausteine beinhalten kann.
+Der Grund dafür ist, dass es einem Baustein möglich ist etwa mehrere linke Nachbarn haben kann.
+Nun kann für einen Baustein durch den Vergleich mit anderen Bausteinen herausgefunden werden, welche Bausteine welche Nachbarfelder besetzen.
+Über die Funktion \textit{opposite} der Enumeration \textit{Neighbor}, kann auch den gefundenen Bausteinen ein Nachbar hinzugefügt werden.
+
 
 \subsection{Export}
 Abhängigkeitsgraph und Ontologie für Regelwerk
-
-
-
-\subsection*{TODOs}
-\begin{enumerate}
-  \item einpflegen der Dimensionen der Bausteine und Rasterinformationen
-\end{enumerate}
