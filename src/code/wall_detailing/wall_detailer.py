@@ -230,7 +230,7 @@ if __name__ == "__main__":
 
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = ThickWallAllCorners()
+    scenario = Scenario1()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     #shapes = [o.get_shape() for w in www for o in w.openings]

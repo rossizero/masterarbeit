@@ -125,43 +125,33 @@ TODO erklärung Code
 
 Steht ein Wandstück in X-Richtung versetzt auf einem anderem, so ist es notwendig diesen Versatz während dem nachfolgenden Detailing zu berücksichtigen.
 Ignoriert man dies, kann das zu den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlern (zum Beispiel zwischen Wandstück 2 und 7) innerhalb des Mauerwerksverbands und damit ebenfalls zu Verletzungen des vorgeschriebenen Überbindemaßes führen (siehe Abschnitt~\ref*{basics:Mauerwerksverband}).
-Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert durch die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes und der lokalen X-Koordinate der zu betrachtenden Schicht.
-Der daraus resultierende Wert wird später dazu verwendet den anzuwendenden Mauerwerksverband erst an der passenden Stelle zu beginnen.
+Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert als die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes und der lokalen X-Koordinate der zu betrachtenden Schicht.
+Der daraus resultierende Wert wird später dazu verwendet den anzuwendenden Mauerwerksverband erst an passender Stelle zu beginnen.
 Dadurch erzielt man einen einheitlichen Verband über das gesamte Wandstück und verhindert den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlerfall.
 Eine weitere Eigenschaft, die aus dem Kombinieren mehrerer Wandstücke entstehen kann, ist das vorhandensein unterbrochender Schichten oder, anders ausgedrückt, mehrerer Schichten auf einer Höhe innerhalb des resultierenden Wandstückes.
-Dies ist ebenfalls in Abbildung~\ref{fig:real:combination_example_base} zu sehen. 
+Dies ist ebenfalls in Abbildung~\ref{fig:concept:combination_example_base} zu sehen. 
 Zwischen drei Schichten des Bereichs der Wandstücke 5 und 6 und des Wandstücks 7 ist eine Lücke.
 Durch das Einbeziehen des \textit{x\_offset} können derartige Situationen jedoch ebenfalls gelöst werden, da für jedes Teilstück einer Schicht ein eigener \textit{x\_offset} berechnet wird.
 
 Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglichen Wandstücke aus dem Modell in Abbildung~\ref{fig:concept:combination_example_base} von 7 auf 2.
 
-\par\noindent\rule{\textwidth}{0.4pt}
-\par\noindent\rule{\textwidth}{0.4pt}
-AB HIER ÜBERARBEITEN, DA TEILE INS KONZEPT GEWANDERT SIND. @CONSTI hier aufhören zu lesen :)
-\par\noindent\rule{\textwidth}{0.4pt}
-\par\noindent\rule{\textwidth}{0.4pt}
-
 \subsection{Finden und Lösen von Beziehungen}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
-Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe \ref{basics:Mauerwerksverband}).
-Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen (wie etwa dem in Abschnitt~\ref{basics:Mauerwerksverband} genannten Überbindemaß) einzuhalten.
-Deswegen existieren für jeden Mauerwerksverband eigene spezielle Eck- und Kreuzungslegepläne, die an diesen Stellen eingefügt werden müssen.
-Es werden wie oben nur die Wandstücke miteinander verglichen, die mit dem selben Wandtyp annotiert wurden und das gleiche Modul verwenden.
-Da die drei Beziehungen sich stark ähneln, besitzen sie einige geteilte Eigenschaften:
-\begin{enumerate}
-    \item Die lokalen Z-Achsen beider Wandstücke sind parallel. Das Vorgehen zur Überprüfung ist dasselbe wie in Abschnitt~\ref{real:combination}.
-    \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
-    \item Mindestens eines der beiden Wandstücke endet auf einem anderen, sodass mindestens eine Schicht das andere Wandstück direkt berührt.
-\end{enumerate}
-Sind diese Eigenschaften erfüllt, werden für jede durch die einzelnen Schichten der Wandstücke vorgegebene Höhe Schnittpunkte zwischen den beiden Wandstücken errechnet.
-Im Falle einer einfachen Ecke oder einer T-Kreuzung, existiert nur ein einzelnes Paar an Wandstücken, deren Schichten sich in jedem Höhenschritt des Moduls im Mittelpunkt der Ecke schneiden.
-Der Unterschied ist lediglich die Stelle des Schnittpunkts relativ zu den beiden Wandstücken.
-Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als Wandbreite/2 an einer der beiden Außenkanten handelt es sich um eine Ecke.
-Falls der Schnittpunkt bei einem der beiden Wandstücke allerdings mindestens Wandbreite/2 innerhalb des Wandstücks liegt, so handelt es sich um eine T-Kreuzung.
-Werden für zwei unterschiedliche Paare die selben Schnittpunkte errechnet, so kann es sich entweder um eine mit drei Wandstücken modellierte T-Kreuzung oder X-Kreuzung handeln.
-Teilen sich zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetzungen für eine eine X-Kreuzung gegeben.
-Liegt der Schnittpunkt des Wandstück-Paares mindesten Wandbreite/2 innerhalb beider Wandstücke, so handelt es sich um eine X-Kreuzung - modelliert aus zwei sich schneidenden Wandstücken. 
-TODO Bilder
+Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe~\ref{concept:solving_beziehungen}).
+Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen (wie etwa das in Abschnitt~\ref{basics:Mauerwerksverband} genannte Überbindemaß) einzuhalten.
+In Abschnitt~\ref{concept:corner_etc_properties} wurden bereits die Eigenschaften aufgeführt, mithilfe derer sich die gesuchten Beziehungen identifizieren lassen.
+Die wichtigsten Informationen für jede dieser Beziehungen ist einerseits der Punkt, an dem sie sich im Raum befindet, andererseits die Art der Beziehung (also ob es sich um eine Ecke, T- oder X-Kreuzung handelt).
+Die Position ist der Schnittpunkt der Richtungsvektoren entlang der lokalen X-Achsen beider Wandstücke.
+Die Unterscheidung der Beziehungen kann mithilfe des Vorgehens, das ebenfalls in Abschnitt~\ref{concept:corner_etc_properties} erläutert wurde, gemacht werden.
+Dabei spielen die Anzahl der Wandstücke, die sich in einem Punkt schneiden und der Ort des Punktes innerhalb der beteiligten Wandstücke eine Rolle.
+Da ein Wandstück zu diesem Zeitpunkt schon als Menge an Schichten vorliegt, wird das Verfahren, wie es bereits oben getan wurde, paarweise auf alle Schichten angewandt.
+Somit werden für jede, sich durch Verkettungen über mehrere Wandstücke erstreckende Schicht alle Kreuzungs- und Eckbereiche ausfindig gemacht.
+Bevor aber ein neues \glqq{}Eckobjekt\grqq{} angelegt wird, wird überprüft, ob an dem errechneten Schnittpunkt bereits ein Eckbereich gefunden wurde und das dazu gehörende Eckobjekt in dem Fall um eine neue Schicht erweitert.
+Außerdem kann im selben Schritt bereits die Zuweisung der Art der Beziehung vorgenommen werden.
+Durch die Eckobjekte werden nun die bis dahin unabhängigen Wandstücke, welche durch den vorherigen Schritt bereits schichtweise und kombiniert vorliegen, miteinader verknüpft.
+TODO Klassendiagramm
+
+Durch diese schichtweise Betrachtung wird automatisch das korrekte Auffinden von Ecken zwischen zwei unterschiedlich hohen Wandstücken ermöglicht.
 
 \subsection*{Lösen der Beziehungen}
 Je nach gewählten Verband müssen z.B. Ecken (deren Baupläne im vornherein definiert wurden) so angeordnet werden, dass die dazwischenliegenden Wandstücke lückenlos eingefüllt werden können.

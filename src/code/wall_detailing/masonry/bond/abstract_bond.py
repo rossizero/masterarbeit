@@ -171,6 +171,9 @@ class Bond(ABC):
         plan = self._get_corner_plan()
 
         ret = []
+        if len(plan) == 0:
+            return ret
+
         for t in plan[layer % len(plan)].copy():
             tf = t.copy()
             tf.set_mask_multiplier(0, 0, layer)
@@ -187,6 +190,8 @@ class Bond(ABC):
         """
         plan = self._get_corner_plan()
         ret = 0
+        if len(plan) == 0:
+            return ret
 
         for t in plan[layer % len(plan)].copy():
             module = t.module if t.module is not None else self.module

@@ -1,15 +1,15 @@
 \chapter{Fallstudien}\label{scenarios}
 Beim Überführen eines 3D Modells eines Gebäudes in einen Bauplan von einzelnen, sinnvoll platzierten Bausteinen \dots
-\section{Modellierung und Bauplandeduktion eines einfachen vierwändigen Turmes mit Anwenden unterschiedlicher Mauerwerksverbände}\label{scenarios:scenario1}
+\section{Szenario 1}\label{scenarios:scenario1}
+Modellierung und Bauplandeduktion eines einfachen vierwändigen Turmes mit Anwenden unterschiedlicher Mauerwerksverbände
 \subsection*{Beschreibung}
 In dieser Fallstudie soll ein einfaches, turmartiges Gebäude modelliert werden.
 Dies soll mit Hilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen und enstpricht darum in seiner Struktur einem verbreiteten Industriestandard.
-Das Gebäude besteht lediglich aus vier 20 Meter hohe Wänden, die einen einzigen Raum einschließen.
+Das Gebäude besteht lediglich aus vier 20 Meter hohen Wänden, die einen einzigen Raum einschließen.
 Es hat einen Grundriss von 10$\times$10 Metern.
 Die Wände sollen nun unter Anwendung folgender Mauerwerksverbände realisiert werden:
 \begin{itemize}
   \item Einem Läuferverband mit einem Versatz von 50\% der Bausteinlänge.
-  \item Einem mittlerern Läuferverband mit einem Versatz von 25\% der Bausteinlänge.
   \item Einem Kopf/Binderverband.
   \item Einem Kreuzverband 
 \end{itemize}
@@ -22,13 +22,15 @@ TODO: Bilder, Modelle erstellen, Eckpläne noch einpflegen
 \subsection*{Problemstellungen}
 Durch Lösen dieser Szenarien sollen folgende Fragestellungen beantwortet werden:
 \begin{itemize}
-  \item In welcher Art muss das Basismodul vorliegen?
-  \item Wie können einem Algorithmus die verschiedenen Mauerwerksverbände sinnvoll übergeben werden?
-  \item Wie können Eckbereiche gefunden und der jeweilige Mauerwerksverband auch an diesen stellen passend angebracht werden ohne das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) zu verletzen?
+  \item In welcher Art muss das Basismodul vorliegen und wie kann es notfalls angepasst werden? 
+  Denn oftmals werden an Wandenden oder Ecken Bausteine benötigt, die eine geringere Länge aufweisen.
+  \item Wie können einem Algorithmus die verschiedenen Mauerwerksverbände sinnvoll vorgegeben werden?
+  \item Wie können Eckbereiche gefunden und der jeweilige Mauerwerksverband auch an diesen Stellen passend angebracht werden ohne das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) zu verletzen?
   \item Welche Informationen werden in den resultierenden Bauplan integriert?
 \end{itemize}
 
-\section{Modellierung und Bauplandeduktion eines LEGO Gebäudes mit Einsteinmauerwerk}\label{scenarios:scenario2}
+\section{Szenario 2}\label{scenarios:scenario2}
+Modellierung und Bauplandeduktion eines LEGO Gebäudes mit Einsteinmauerwerk
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.44\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario1_screenshot.png}
@@ -79,13 +81,17 @@ TODO Bild von dumm gestapelter LEGO Wand zu LEGO Wand mit Überbindemaß.
   \item T-Kreuzungen?
 \end{itemize}
 
-\section{Bauplandeduktion eines Gebäudemodells des KIT}\label{scenarios:scenario3}
+\section{Scenario 3}\label{scenarios:scenario3}
+Bauplandeduktion eines Gebäudemodells des KIT
+\subsection*{Beschreibung}
 Um das Konzept nicht nur an eigens modellierten Gebäuden zu evaluieren, werden zusätzlich externe Modelle herangezogen.
 Dabei kann sich zum Beispiel an den Beispielprojekten des KIT bedient werden~\cite{KITSAMPLEHOUSE:online}.
 TODO Bild von kleinem Hause
 TODO überlegen ob eines der beiden riesendinger auch mal ran soll?
+\subsection*{Problemstellungen}
 
-\section{Definition von Regelsets}\label{scenarios:scenario4}
+\section{Scenario 4}\label{scenarios:scenario4}
+Definition von Regelsets.
 \subsection*{Beschreibung}
 \subsection*{Problemstellungen}
 \begin{itemize}

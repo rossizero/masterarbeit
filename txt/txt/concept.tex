@@ -227,13 +227,13 @@ So entsteht aus Fall 3 aus Abbildung~\ref{fig:concept:t_joint_variationen} der F
 Durch Ecken, T- und X-Kreuzungen werden ansonsten unabhängige Wandstücke miteinander verkettet.
 Das kann zu Situationen führen, in welchen das einfache Anwenden eines Mauerwerksverbands Lücken in manchen Wandstücken hinterlässt.
 Das Beispiel in Abbildung~\ref{fig:concept:loesen_von_beziehungen1} soll helfen diese Problematik zu veranschaulichen.
-Zu sehen ist eine Konstellation von 4 Wandstücken, die in einer Kette durch 3 Ecken miteinander verbunden sind.
+Zu sehen ist eine Konstellation von vier Wandstücken, die in einer Kette durch drei Ecken miteinander verbunden sind.
 Das anzuwendende Modul hat die Dimensionen \([2, 1, 0.5]\). 
 Die Höhe des Moduls ist für dieses Problem allerdings irrelevant, weshalb die folgenden Skizzen ausschließlich die Draufsicht auf die Situationen zeigen.
 Wie in Kapitel~\ref{concept:mauerwerksverband} am Beispiel des Läuferverbands gezeigt, gibt es mehrere Möglichkeiten einem Eckplan zu folgen.
 Solange die Reihenfolge weiterhin eingehalten wird, kann mit jeder Schicht des Eckplans begonnen werden einen Eckbereich aufzufüllen.
-Das führt in dem Beispiel aufgrund des zwei-schichtigen Eckplans des Läuferverbands dazu, dass für jede der 3 Ecken zwei mögliche Startschichten existieren.
-Dies resultiert demnach in insgesamt 8 unterschiedlichen Varianten, von welchen allerdings nicht alle zielführend sind.
+Das führt in dem Beispiel aufgrund des zwei-schichtigen Eckplans des Läuferverbands dazu, dass für jede der drei Ecken zwei mögliche Startschichten existieren.
+Dies resultiert demnach in insgesamt acht unterschiedlichen Varianten, von welchen allerdings nicht alle zielführend sind.
 In Abbildung~\ref{fig:concept:loesen_von_beziehungen2} ist eine Variante dargestellt, die Lücken in der Wand hinterlassen würde.
 Das zunächst naheliegend wirkende Füllen der Löcher durch kleinere Bausteine ist nicht zulässig, da damit das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) verletzt wäre.
 Darum ist es notwendig eine Kombination an Startschichten über alle miteinander verbundenen Eckbereiche zu finden, die es ermöglicht die verbleibenden geraden Wandstücke im Anschluss durch einfaches Anwenden des Läuferverbands aufzufüllen, ohne dass Lücken entstehen.
@@ -297,7 +297,7 @@ Dieser kann wie folgt erstellt werden:
     \item Stößt man dabei auf einen schon existierenden Knoten, so bricht man diesen Pfad an der Stelle ab. Dieser Fall tritt zum Beispiel auf, wenn in dem Modell ein abgeschlossener Raum exisitiert.
 \end{enumerate}
 
-Nun kann das Modell mithilfe des Graphen einfach ähnlich einer Breitensuche durchlaufen und ausgehend von den Startindex des Eckplans eines Knotens die Indizes von dessen Nachbarn in passender Weise gewählt werden.
+Nun kann das Modell mithilfe des Graphen ähnlich einer Breitensuche durchlaufen und ausgehend von den Startindex des Eckplans eines Knotens die Indizes von dessen Nachbarn in passender Weise gewählt werden.
 Dies wiederholt man für alle Nachbarn des derzeitigen Knotens, im nächsten Schritt für deren Nachbarn, solange bis alle Knoten einen Startindex zugewiesen bekommen haben.
 In ungünstigen Situationen hängt das Finden einer passenden Lösung von dem Startknoten ab.
 Dies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph exisitieren.
