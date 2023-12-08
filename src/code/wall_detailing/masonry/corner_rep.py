@@ -86,7 +86,7 @@ class Corn:
             # mid of those vectors -> the point in the corner between both walls and 45 degrees from both walls
             mid = wall_orientation_1 + wall_orientation_2
 
-            return np.round(mid, 6)
+            return mid
         return np.array([0, 0, 0])
 
     def get_rotation(self) -> np.quaternion:
@@ -277,13 +277,12 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
             angle = round(diff.angle(), 6)
 
             # check if rotation of wall leads to parallel corners
-            z_part1 = np.round(quaternion.rotate_vectors(r1, np.array([0.0, 0.0, 1.0])), decimals=6)
-            z_part2 = np.round(quaternion.rotate_vectors(r2, np.array([0.0, 0.0, 1.0])), decimals=6)
+            z_part1 = quaternion.rotate_vectors(r1, np.array([0.0, 0.0, 1.0]))
+            z_part2 = quaternion.rotate_vectors(r2, np.array([0.0, 0.0, 1.0]))
             z_parallel = np.isclose(abs(np.dot(z_part1, z_part2)), 1.0)
 
-
-            x_part1 = np.round(quaternion.rotate_vectors(r1, np.array([1.0, 0.0, 0.0])), decimals=6)
-            x_part2 = np.round(quaternion.rotate_vectors(r2, np.array([1.0, 0.0, 0.0])), decimals=6)
+            x_part1 = quaternion.rotate_vectors(r1, np.array([1.0, 0.0, 0.0]))
+            x_part2 = quaternion.rotate_vectors(r2, np.array([1.0, 0.0, 0.0]))
             x_parallel = np.isclose(abs(np.dot(x_part1, x_part2)), 1.0)
 
             degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))

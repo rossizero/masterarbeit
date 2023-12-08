@@ -75,4 +75,4 @@ class Line:
             return None
         except AssertionError:  # Weird shit
             return None
-        return np.round(intersection_point1, 6)
+        return intersection_point1  # np.round(intersection_point1, 6)

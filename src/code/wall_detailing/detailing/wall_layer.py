@@ -114,7 +114,7 @@ class WallLayer:
         ret[0] += self.length / 2.0
 
         if not relative:
-            ret = np.round(quaternion.rotate_vectors(self.parent.get_rotation(), ret), decimals=6)
+            ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
         return ret
 
@@ -147,7 +147,7 @@ class WallLayer:
         ret = self.translation.copy()
 
         if not relative:
-            ret = np.round(quaternion.rotate_vectors(self.parent.get_rotation(), ret), decimals=6)
+            ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
         return ret
 
@@ -247,7 +247,7 @@ class WallLayer:
         """
         is_left = np.linalg.norm(start_point - self.left_edge) < np.linalg.norm(start_point - self.right_edge)
         local_start_point = start_point - self.parent.get_translation()
-        local_start_point = np.round(quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point), decimals=6)
+        local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
 
         right = self.get_right_edge(True)
         left = self.get_left_edge(True)

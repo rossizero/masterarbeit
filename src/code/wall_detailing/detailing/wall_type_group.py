@@ -14,6 +14,6 @@ class WallTypeGroup:
         self.brick_information = brick_information
         self.brick_information.sort(key=lambda x: x.volume(), reverse=True)
         self.module = self.brick_information[0]
-        self.bond = StrechedBond(self.module, offset=0.25)
-        self.bond = CrossBond(self.module)
+        self.bond = StrechedBond(self.module)
+        self.bond = HeadBond(self.module)
         self.layer_groups: List[WallLayerGroup] = []

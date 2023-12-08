@@ -117,8 +117,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 or True
-            fill_right = len(layer.right_connections) == 0 or True
+            fill_left = len(layer.left_connections) == 0
+            fill_right = len(layer.right_connections) == 0
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -230,7 +230,7 @@ if __name__ == "__main__":
 
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario1()
+    scenario = ThickWallAllCorners()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     #shapes = [o.get_shape() for w in www for o in w.openings]

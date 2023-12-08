@@ -388,7 +388,7 @@ class ThickWallAllCorners(Scenario):
     def get_walls(self):
         width = 2
         height = 5
-        an = 0.0 # 0.3
+        an = 0.3
 
         w10 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 2.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0")
