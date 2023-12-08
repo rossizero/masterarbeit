@@ -27,22 +27,25 @@ Die Unterkapitel dieses Abschnitts folgen den in Kapitel~\ref{concept:wall_detai
 
 \subsection{Konvertieren des IFC zu BREP}
 Den ersten Schritt stellt das Extrahieren aller notwendigen Daten aus dem vorliegenden IFC Modell dar.
-Für die Fallstudien dieser Arbeit sind sowohl alle Objekte des Typs \textit{IFCWall} als auch die, etwa durch Fenster oder Türen entstehenden, daran angeknüpften Objekte vom Typ \textit{IfcOpeningElement} (siehe~\ref{basics:IfcOpeningElement}) von Interesse.
+Für die Fallstudien dieser Arbeit sind sowohl alle Objekte des Typs \textit{IFCWall} als auch die daran angeknüpften Objekte vom Typ \textit{IfcOpeningElement} (siehe~\ref{basics:IfcOpeningElement}) von Interesse.
+Diese entstehen während der Modellierungsphase etwa durch Anbringen von Fenstern oder Türen an einer Wand.
 Zusätzlich werden aus den, in den \textit{IfcPropertySets} der Wandstücke hinterlegten Daten, Informationen über das zu verwendende Modul und Raster ausgelesen.
 Mithilfe der Werkzeuge der in Kapitel~\ref{basics} vorgstellten Python Bibliothek \textit{ifcopenshell} (siehe~\ref{basics:ifcopenshell}) ist dies in wenigen Schritten möglich.
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.8\columnwidth]{fig/klassendiagramm_ifc_to_wall.drawio.png}
+  \caption{Klassendiagramm von der Klasse \textit{Wall} und der Klasse \textit{Opening}.}
+  \label{fig:real:ifc_to_wall}
+\end{figure}
 
-\begin{lstlisting}[language=Python, caption=Extraktion relevanter Informtionen aus einem IFC-File.]
-TODO Saetze zum Code, Code TODO kleines Klassendiagram von 
-Wall bzw WallLayerGroup und Opening und BrickInformation
-\end{lstlisting}
-
+Zunächst werden aus jeder \textit{IfcWall} ein Objekt der Klasse \textit{Wall} erzeugt und anschließend mit deren in der IFC Datei angegebenen Öffnungen versehen.
+Deren Zusammenspiel in dieser Arbeit kann dem Klassendiagramm aus Abbildung~\ref{fig:real:ifc_to_wall} entnommen werden und ist eine vereinfachte Version der Struktur innerhalb des IFC Modells.
+Um die globalen Transformationen der \textit{IfcWalls} und \textit{IfcOpenings} zu errechnen, muss der in Abbildung~\ref{fig:IfcWall_Hierarchie} gezeigten Klassenhierarchie nach oben gefolgt werden, da die in den Kindern eines Objekts angegebene Transformation relativ zu dessen Eltern angegeben ist.
+Im Anschluss werden die nun globalen Transformationen der Openings wiederum in eine relative Transformation zum davon betroffenden Wall-Objekt umgewandelt.
+Das erleichtert später die Berechnungen für das Anwenden der Öffnungen in einer Wand.
 Da sich diese Arbeit zunächst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen alle zuvor aus dem IFC Modell extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
+Alle anders geformten \textit{IfcWalls} werden in dieser Arbeit zunächst ignoriert.
 Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgenden Schritte weitergegeben werden.
-
-
-\begin{lstlisting}[language=Python, caption=Überprüfen der extrahierten Wandstücke auf Quaderförmigkeit.]
-  TODO Satz zum Code, Code iscubic
-\end{lstlisting}
 
 \subsection{Anwenden des Moduls}
 Mit dem zu jedem Wandstück festgelegten Modul werden nun alle Wandstücke in Schichten aufgeteilt.
@@ -50,6 +53,12 @@ Deren Höhe entspricht im Normalfall der Höhe des jeweilgen Moduls.
 Lediglich die oberste Schicht kann durch falsch modellierte Wandstücke eine niedrigere Schichthöhe aufweisen.
 Dies ist der Fall, wenn die Gesamthöhe des Wandstücks nicht exakt einem Vielfachen der Höhe des Moduls entspricht und ein nicht aufzuteilender Rest existiert.
 Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstücken durchzuführen und Beziehungen zwischen ihnen zu finden.
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=0.7\columnwidth]{fig/klassendiagramm_apply_module.drawio.png}
+  \caption{Klassendiagramm nach Anwenden des Moduls.}
+  \label{fig:real:apply_module}
+\end{figure}
 
 \subsection{Kombinieren passender Wandstücke}
 \label{real:combination}
@@ -77,46 +86,21 @@ Anhand von Abbildung~\ref{fig:real:combination_example_solution_xoffset} kann ma
 Während dem Kombinieren von zwei Wänden, wird ein Wandstück schichtweise in das Andere überführt.
 Dabei werden alle Schichten paarweise miteinader verglichen, um diejenigen Paare zu finden, die die Eigenschaften aus Punkt~\ref{real:schichten} erfüllen.
 Ein solches Paar wird dann wie folgt miteinander verschmolzen:
+\begin{enumerate}
+  \item Errechne die kleinste und die größte relative x Koordinate der linken und rechten Ecken beider Schichten.
+  \item Die Differenz der beiden Werte entspricht der neuen Länge der resultierenden Schicht.
+  \item Die kleinste x Koordinate ist deren neue linke Eckkoordinate.
+  \item Mit dieser und der halben neuen Länge kann nun der Mittelpunkt der resultierenden Schicht berechnet werden. Dieser entspricht der relativen Translation einer Schicht in Abhängigkeit der dazugehörigen \textit{WallLayerGroup}.
+\end{enumerate}
 
-\begin{lstlisting}[language=Python, caption=Pseudocode zur Vereinigung zweier sich berührender oder überlappender Schichten von zwei nach den Voraussetzungen aus Abschnitt~\ref{concept:combination_properties} kombinierbaren Wandstücken.]
-  def combine(layer1, layer2):
-    # get the local positions of both edges of layer1 as 3D array
-    left_edge1 = layer1.get_left_edge(relative=True)
-    right_edge1 = layer1.get_right_edge(relative=True)
-
-    # get the position of both edges of layer 2 relative to the coordinate systsem of layer1 as 3D array
-    left_edge2 = layer2.get_left_edge(relative=False)
-    left_edge2 = layer1.relative_position_of(left_edge2)
-
-    right_edge2 = layer2.get_right_edge(relative=False)
-    right_edge2 = layer1.relative_position_of(righ_edge2)
-
-    # get the total length both layers cover by subtracting max - min of the x coordinates
-    max_x = max(left_edge1[0], right_edge1[0], left_edge2[0], right_edge2[0]) 
-    min_x = min(left_edge1[0], right_edge1[0], left_edge2[0], right_edge2[0]) 
-    total_length = max_x - min_x
-
-    # calculate the center of the resulting layer
-    left = min([left_edge1, right_edge1, left_edge2, bright_edge22], key=lambda x: x[0])
-    local_center = left.copy()
-    local_center[0] += total_length / 2.0
-
-    # convert to global coordinates and return new layer
-    center = layer1.global_position_of(local_center)
-    return Layer(center, total_length)
-
-\end{lstlisting}
-
-TODO erklärung Code
-
-\begin{figure}[ht!]
+\begin{figure}[htb]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Output.png}
   \caption{Ergebnis mit berücksichtigtem \textit{x\_offset}.}
   \label{fig:real:combination_example_solution_xoffset}
 \end{figure}
 
-\begin{figure}[hb!]
+\begin{figure}[hbt]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Output_No_XOffsetpng.png}
   \caption{Ergebnis mit ignoriertem \textit{x\_offset}.}
@@ -125,33 +109,40 @@ TODO erklärung Code
 
 Steht ein Wandstück in X-Richtung versetzt auf einem anderem, so ist es notwendig diesen Versatz während dem nachfolgenden Detailing zu berücksichtigen.
 Ignoriert man dies, kann das zu den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlern (zum Beispiel zwischen Wandstück 2 und 7) innerhalb des Mauerwerksverbands und damit ebenfalls zu Verletzungen des vorgeschriebenen Überbindemaßes führen (siehe Abschnitt~\ref*{basics:Mauerwerksverband}).
-Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert als die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes und der lokalen X-Koordinate der zu betrachtenden Schicht.
+Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert als die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes (beziehungsweise einer \textit{WallLayerGroup}) und der lokalen X-Koordinate der zu betrachtenden Schicht.
 Der daraus resultierende Wert wird später dazu verwendet den anzuwendenden Mauerwerksverband erst an passender Stelle zu beginnen.
 Dadurch erzielt man einen einheitlichen Verband über das gesamte Wandstück und verhindert den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlerfall.
 Eine weitere Eigenschaft, die aus dem Kombinieren mehrerer Wandstücke entstehen kann, ist das vorhandensein unterbrochender Schichten oder, anders ausgedrückt, mehrerer Schichten auf einer Höhe innerhalb des resultierenden Wandstückes.
 Dies ist ebenfalls in Abbildung~\ref{fig:concept:combination_example_base} zu sehen. 
 Zwischen drei Schichten des Bereichs der Wandstücke 5 und 6 und des Wandstücks 7 ist eine Lücke.
 Durch das Einbeziehen des \textit{x\_offset} können derartige Situationen jedoch ebenfalls gelöst werden, da für jedes Teilstück einer Schicht ein eigener \textit{x\_offset} berechnet wird.
-
-Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglichen Wandstücke aus dem Modell in Abbildung~\ref{fig:concept:combination_example_base} von 7 auf 2.
+Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglichen Wandstücke aus dem Modell in Abbildung~\ref{fig:concept:combination_example_base} von sieben auf zwei.
 
 \subsection{Finden und Lösen von Beziehungen}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
 Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe~\ref{concept:solving_beziehungen}).
-Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen (wie etwa das in Abschnitt~\ref{basics:Mauerwerksverband} genannte Überbindemaß) einzuhalten.
+Der Grund dafür ist die Komplexität in diesen Bereichnen die vorgeschriebenen Normen einzuhalten.
+Dazu zählt zum Beispiel das in Abschnitt~\ref{basics:Mauerwerksverband} genannte Überbindemaß.
 In Abschnitt~\ref{concept:corner_etc_properties} wurden bereits die Eigenschaften aufgeführt, mithilfe derer sich die gesuchten Beziehungen identifizieren lassen.
-Die wichtigsten Informationen für jede dieser Beziehungen ist einerseits der Punkt, an dem sie sich im Raum befindet, andererseits die Art der Beziehung (also ob es sich um eine Ecke, T- oder X-Kreuzung handelt).
-Die Position ist der Schnittpunkt der Richtungsvektoren entlang der lokalen X-Achsen beider Wandstücke.
-Die Unterscheidung der Beziehungen kann mithilfe des Vorgehens, das ebenfalls in Abschnitt~\ref{concept:corner_etc_properties} erläutert wurde, gemacht werden.
+Die wichtigsten Informationen für jede dieser Beziehungen ist einerseits der Punkt, an dem sie sich im Raum befindet, andererseits die Art der Beziehung (also die Unterscheidung zwischen Ecke, T- oder X-Kreuzung).
+Die Position ist der Schnittpunkt der Richtungsvektoren beider Wandstücke entlang der lokalen X-Achsen beider Wandstücke.
+Die Unterscheidung der Beziehungen kann mithilfe des Vorgehens, das ebenfalls in Abschnitt~\ref{concept:corner_etc_properties} erläutert wurde, durchgeführt werden.
 Dabei spielen die Anzahl der Wandstücke, die sich in einem Punkt schneiden und der Ort des Punktes innerhalb der beteiligten Wandstücke eine Rolle.
 Da ein Wandstück zu diesem Zeitpunkt schon als Menge an Schichten vorliegt, wird das Verfahren, wie es bereits oben getan wurde, paarweise auf alle Schichten angewandt.
 Somit werden für jede, sich durch Verkettungen über mehrere Wandstücke erstreckende Schicht alle Kreuzungs- und Eckbereiche ausfindig gemacht.
 Bevor aber ein neues \glqq{}Eckobjekt\grqq{} angelegt wird, wird überprüft, ob an dem errechneten Schnittpunkt bereits ein Eckbereich gefunden wurde und das dazu gehörende Eckobjekt in dem Fall um eine neue Schicht erweitert.
 Außerdem kann im selben Schritt bereits die Zuweisung der Art der Beziehung vorgenommen werden.
 Durch die Eckobjekte werden nun die bis dahin unabhängigen Wandstücke, welche durch den vorherigen Schritt bereits schichtweise und kombiniert vorliegen, miteinader verknüpft.
-TODO Klassendiagramm
-
-Durch diese schichtweise Betrachtung wird automatisch das korrekte Auffinden von Ecken zwischen zwei unterschiedlich hohen Wandstücken ermöglicht.
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{fig/klassendiagramm_corners.drawio.png}
+  \caption{Klassendiagramm nach Errechnen der Eckbereiche.}
+  \label{fig:real:class_diagram_corners}
+\end{figure}
+Ein nützlicher Nebeneffekt der schichtweisen Betrachtung der Eckbereiche ist, dass nun auch zwei Wände mit unterschiedlichen Höhen, die gemeinsam einen Eckbereich bilden korrekt dargestellt werden können, denn es werden nur für die Schichten Eckobjekte erzeugt, die sich beide Wandstücke teilen.
+Die daraus resultierende neue Struktur der Daten ist in Abbildung~\ref{fig:real:class_diagram_corners} zu sehen.
+Objekte der \textit{Corner} halten alle notwendigen Informationen zu jedem gefunden Eckbereich einer Schicht, während ein Objekt der Klasse \textit{Corners} dafür zuständig ist, die wachsende Liste an Eckobjekten auf geteilte Schnittpunkte zu überprüfen.
+Wird ein Eckobjekt an einer schon vorhandener Position im Raum in die Liste eingefügt, so wird der dort bereits liegende Eckbereich lediglich um die neuen \textit{WallLayer} erweitert und falls nötig, dessen \textit{CornerType} angepasst.
 
 \subsection*{Lösen der Beziehungen}
 Je nach gewählten Verband müssen z.B. Ecken (deren Baupläne im vornherein definiert wurden) so angeordnet werden, dass die dazwischenliegenden Wandstücke lückenlos eingefüllt werden können.
