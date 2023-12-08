@@ -135,7 +135,7 @@ Außerdem kann im selben Schritt bereits die Zuweisung der Art der Beziehung vor
 Durch die Eckobjekte werden nun die bis dahin unabhängigen Wandstücke, welche durch den vorherigen Schritt bereits schichtweise und kombiniert vorliegen, miteinader verknüpft.
 \begin{figure}[hb]
   \centering
-  \includegraphics[width=0.9\columnwidth]{fig/klassendiagramm_corners.drawio.png}
+  \includegraphics[width=0.8\columnwidth]{fig/klassendiagramm_corners.drawio.png}
   \caption{Klassendiagramm nach Errechnen der Eckbereiche.}
   \label{fig:real:class_diagram_corners}
 \end{figure}
@@ -178,8 +178,8 @@ Den nächsten Schritt stellt das Anwenden der Öffnungen (siehe Klasse \textit{O
 Auch diese Operation wird schichtweise durchgeführt.
 Auf jede Schicht der betroffenen \textit{WallLayerGroup} wird folgendes Verfahren angewandt:
 \begin{enumerate}
-  \item Zunächst muss überprüft werden, ob die Öffnung innerhalb der betrachteten Schicht liegt. Dies kann aufgrund des geteilten Elternobjekts mit den relativen Koordinaten beider Objekte berechnet werden. 
-  \item Falls Punkt 1 zutrifft, wird die Schicht in zwei Teile geteilt. Als Schnittpunkt wird der Mittelpunkt der Öffnung gewählt. Die ursprüngliche Schicht ist damit obsolet.
+  \item\label{real:openings_tmp1} Zunächst muss überprüft werden, ob die Öffnung innerhalb der betrachteten Schicht liegt. Dies kann aufgrund des geteilten Elternobjekts mit den relativen Koordinaten beider Objekte berechnet werden. 
+  \item Falls Punkt~\ref{real:openings_tmp1} zutrifft, wird die Schicht in zwei Teile geteilt. Als Schnittpunkt wird der Mittelpunkt der Öffnung gewählt. Die ursprüngliche Schicht ist damit obsolet.
   \item Nun muss ausgehend vom Schnittpunkt das rechte oder linke Ende der beiden neuen Schichten um jeweils die halbe Länge der Öffnung verschoben werden.
 \end{enumerate}
 Eine Öffnung kann einen Sturz voraussetzen.
@@ -189,8 +189,22 @@ Dies wird im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} d
 Der für den Sturz benötigte Platz, kann mit dem gleichen Öffnungsverfahren von oben geschaffen werden.
 
 \subsection{Anwenden der Mauerwerksverbände}
-Ablaufen aller Ecken und Wände und einsetzen der Ziegel gemäß den gefundenen Lösungen.
-TODO klassendiagramm der Verbände.
+Die für Mauerwerksverbände entwickelte mathematische Representation aus Abschnitt~\ref{concept:mauerwerksverband} wurde mithilfe der in Abbildung~\ref{fig:real:class_diagram_bonds} dargestellten Klassenstruktur umgesetzt.
+Beispielhaft sind darin auch die den Kreuzverband und den Läuferverband repräsentierenden Klassen zu sehen.
+Letzterer kann durch Parameter angepasst werden.
+Durch die Vorbereitung der verausgegangen Schritte, müssen nun lediglich Objekte der Klasse \textit{Brick} anhand der vorgegebenen Mauerwerksverbände und den in den einzelnen Wandbereichen festgesetzte \textit{plan\_offsets} erzeugt werden.
+Diese können mithilfe der Transformationen der \textit{Corner} oder der textit{WallLayerGroups} und den Informationen des Verbands passend Positioniert werden.
+Wandenden können mithilfe der \textit{Corner} identifiziert werden.
+Exisitiert kein \textit{Corner} an einem Ende einer Schicht, handelt es sich entweder um ein Wandende oder den Außenbereich einer Öffnung.
+Dank den Informationen in den einzelnen Schichten eines Wandstücks, können die durch den Verband an diesen Bereichen gebliebenen Lücken kleiner Bausteine eingefügt werden.
+TODO Bild mit fill left and right und ohne.
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{fig/klassendiagramm_bonds.drawio.png}
+  \caption{Klassendiagramm für die Mauerwerksverbände.}
+  \label{fig:real:class_diagram_bonds}
+\end{figure}
 
 \subsection{Nachbarschaftsbeziehungen zwischen Bausteinen berechnen}
 TODO bild mit möglichen nachbarn laut dem raster.
