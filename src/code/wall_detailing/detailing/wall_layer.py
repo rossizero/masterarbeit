@@ -94,7 +94,7 @@ class WallLayer:
         ret[0] -= self.length/2.0
 
         if not relative:
-            ret = np.round(quaternion.rotate_vectors(self.parent.get_rotation(), ret), decimals=6)
+            ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
         return ret
 
