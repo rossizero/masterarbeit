@@ -1,15 +1,19 @@
 \chapter{Fallstudien}\label{scenarios}
-Anhand der nachfolgenden Fallstudien und Szenarien werden die dieser Arbeit zugrundeliegenden Konzepte veranschaulicht und auf Anwendbarkeit überprüft.
+Anhand der nachfolgenden Fallstudien und Szenarien werden die dieser Arbeit zugrundeliegenden Konzepte zur Errechnung eines Bauplanentwurfs aus einem als 3D Modell vorliegenden Gebäudeplans veranschaulicht und auf Anwendbarkeit überprüft.
 Dabei werden die Szenarien zunehmend komplexer, um auch das Zusammenspiel verschiedener Teilkonzepte zur Lösung einzelner Probleme zu verifizieren.
 Abschließend wird für einige Szenarien untersucht wie Regeln erstens definiert und zweitens auf deren Ergebnisse angewandt werden können.
-Damit sollen die ungeordneten Listen an Bausteinen, die das Ergebnis der Szenarien darstellen, so umsortiert werden, dass daraus ein schrittweise umsetzbarer Bauplan entsteht.
+Damit soll die ungeordnete Menge von konkreten Bausteinen eines Bauplanentwurfs durch Regeln in eine Reihenfolge gebracht werden, sodass daraus ein schrittweise umsetzbarer Bauplan entsteht.
 
-\section{Szenario 1}\label{scenarios:scenario1}
-In diesem einleitenden Szenario werden anhand eines einfachen vierwändigen Turmes einige der Kernkonzepte geprüft.
-Dabei werden sowohl die Modellierung des Turmes innerhalb eines Konstruktionsplaners, als auch die anschließende Bauplandeduktion thematisiert.
+\section{Von 3D Gebäudeplan zu Bauplanentwurf}
+Diese erste Fallstudie enthält drei Szenarien anhand derer die Konzepte zur Errechnung eines Bauplanentwurfs ausgehend von 3D Gebäudeplänen erläutert und getestet werden.
+Die Pläne sind das Ergebnis der Gebäudemodellierung innerhalb eines Konstruktionsplaners.
+Die Modellierung soll mit Hilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen und die Gebäudepläne entsprechen darum in ihrer Struktur einem verbreiteten Industriestandard.
+
+\subsection{Szenario 1}\label{scenarios:scenario1}
+In diesem einleitenden Szenario werden mithilfe eines einfachen vierwändigen Turmes einige der Kernkonzepte geprüft.
+Dabei werden sowohl die Modellierung des Turmes innerhalb des Konstruktionsplaners, als auch das anschließende Errechnen des Bauplanentwurfs thematisiert.
 Insbesondere das Anwenden verschiedener Mauerwerksverbände soll die Flexibilität des erarbeiteten Vorgehens demonstrieren.
-\subsection*{Beschreibung}
-Das Modellieren des Gebäudes soll mit Hilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen und enstpricht darum in seiner Struktur einem verbreiteten Industriestandard.
+\subsubsection*{Beschreibung}
 Der Turm besteht lediglich aus vier 20 Meter hohen Wänden, die einen einzigen Raum einschließen.
 Es hat einen Grundriss von 10$\times$10 Metern.
 Die Wände sollen daraufhin unter Anwendung folgender Mauerwerksverbände realisiert werden:
@@ -23,69 +27,81 @@ Als Basismodul wird ein Baustein mit den Maßen 2$\times$1$\times$0.5 Metern ver
 Das vereinfacht die Interpretation der generierten Lösungen.
 Das dazugehörige Raster hat die Größe 1$\times$1$\times$0.5 Meter.
 
-\subsection*{Problemstellungen}
+\subsubsection*{Problemstellungen}
 Durch Lösen dieser Szenarien werden folgende Fragestellungen beantwortet:
 \begin{itemize}
+  \item Wie lässt sich die Modellierung des Gebäudes innerhalb des Konstruktionsplaners trotz Integration eines Industriestandards intuitiv gestalten?
   \item In welcher Art muss das Basismodul vorliegen und wie kann es notfalls angepasst werden? 
   Denn oftmals werden an Wandenden oder Ecken Bausteine benötigt, die eine geringere Länge aufweisen.
   Dies entspricht in Realität dem Zerschneiden von Bausteinen.
   \item Wie können einem Algorithmus die verschiedenen Mauerwerksverbände sinnvoll vorgegeben werden?
   \item Wie können Eckbereiche gefunden und der jeweilige Mauerwerksverband auch an diesen Stellen passend angebracht werden ohne das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) zu verletzen?
-  \item Welche Informationen werden in den resultierenden Bauplan integriert?
+  \item Wie sieht das Ergebnis des erarbeiteten Konzepts aus und welche Informationen werden in den resultierenden Bauplanentwurf integriert?
 \end{itemize}
 
-\section{Szenario 2}\label{scenarios:scenario2}
-Nun folgt ein Szenario das den Gegebenheiten eines realen Gebäudes eher entspricht.
+\subsection{Szenario 2}\label{scenarios:scenario2}
+Nun folgt ein Szenario das den Gegebenheiten eines realen Gebäudes bis auf die Skalierung eher entspricht.
 Es soll ein Gebäude konstruiert werden, welches einen Innenraum, Fenster und Türen enthält.
 Gleichzeitig wird das Modul stark verkleinert, sodass es den Maßen eines 4$\times$2 LEGO Steins entspricht (siehe Kapitel~\ref{basics:lego}).
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.505\columnwidth]{fig/scenario1_story_plan.jpg}
-  \caption{Gebäudeplan des 3D Modells.}
-  \label{fig:scenarios:Scenario1 Gebaeudeplan}
+  \caption{TODO bessere türen und so machen.Gebäudeplan des 3D Modells.}\label{fig:scenarios:Scenario1 Gebaeudeplan}
 \end{figure}
 
-\subsection*{Beschreibung}
+\subsubsection*{Beschreibung}
 Zu sehen ist der Plan eines einfachen Hauses mit einem Stockwerk.
 Dieses besitzt eine Eingangstür, eine Terassentür neben einem Fenster und eine Tür, die das Badezimmer vom Hauptraum trennt.
 Türen und Fenster stellen eine Herausforderung für den Planungsalgorithmus dar, da der Verlauf einer ansonsten durchgängigen Wand dadurch unterbrochen wird und Lücken aufweist.
 Es gibt breite Außen- und dünne Innenwände.
 Dafür müssen zwei Wandtypen definiert werden, die jeweils unterschiedliche Wanddicken vorgeben.
 Diese entsprechen in ihren Maßen dem Raster, welches das \textit{LEGO System} vorgibt.
-Breite Wände sollen zwei Noppen breit sein.
-Daher hat deren Grundmodul Maße von 31.8$\times$15.8$\times$9.6 Millimetern mit einem Raster von 8$\times$8$\times$9.6 Millimetern.
+Dickere Wände sollen zwei Noppen breit sein.
+Daher wird für diesen Wandtyp ein Grundmodul mit den Maßen 31.8$\times$15.8$\times$9.6 Millimetern und einem Raster von 8$\times$8$\times$9.6 Millimetern gewählt.
 Für die dünneren Innenwände soll eine Breite von einer Noppe verwendet werden.
-Dies entspricht einem Grundmodul mit den Maßen 15.8$\times$7.8$\times$9.6 Millimetern mit einem gleichbleibenden Raster.
+Dies entspricht einem Grundmodul von 15.8$\times$7.8$\times$9.6 Millimetern mit einem gleichbleibenden Raster.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\columnwidth]{fig/scenario1_lego_set.png}
-  \caption{LEGO Steintypen für die Innen- und Außenwände. (TODO Bild ist sehr hässlich)}
-  \label{fig:Scenario1 Lego Set}
+  \caption{LEGO Steintypen für die Innen- und Außenwände. (TODO Bild ist sehr hässlich)}\label{fig:scenarios:Scenario1 Lego Set}
 \end{figure}
-Nicht nur die Abmessungen der Wände müssen in ein Raster fallen, auch deren Rotation wird in diesem Szenario auf 90\textdegree{} Schritte limitiert. 
-Das stellt in diesem Fall eine vertretbare Enschränkung dar, da es ohnehin dem intuitiven Umgang mit LEGO Steinen und gleichzeitig dem Baustil der meisten einfachen Gebäuden entspricht.
+Mögliche Rotationen von Wänden, Fenstern und Türen sind auf 90\textdegree{} Schritte limitiert.
+Das stellt im Fall von LEGO eine vertretbare Enschränkung dar, da es ohnehin dem intuitiven Umgang mit dessen Steinen und gleichzeitig dem Baustil der meisten einfachen Gebäuden entspricht.
 
-\subsection*{Problemstellungen}
+\subsubsection*{Problemstellungen}
 \begin{itemize}
-  \item Wie können Öffnungen berücksichtigt werden?
-  \item Stürze
-  \item Verschiedene Wanddicken
-  \item Übergänge zwischen verschiedenen Wanddicken
-  \item T-Kreuzungen? Doch noch einbauen? Vlt die untere dünne wand dick machen?
+  \item Wie werden Öffnungen im Konstruktionsplaner umgesetzt und im Anschluss weiter verarbeitet?
+  \item Wände können verschiedene Dicken aufweisen. Wie kann das während der Modellierung angegeben werden? Wie kann das zu verwendende Modul und der Mauerwerksverband für eine Wand vorgegeben werden?
+  \item Wie können Übergänge zwischen Wänden verschiedener Dicke oder Verband realisiert werden?
+  \item In diesem Szenario liegt eine T-Kreuzung vor. Wie können T-Kreuzungen von Eckbereichen unterschieden und dem Mauerwerksverband entsprechend umgesetzt werden? 
 \end{itemize}
 
-\section{Scenario 3}\label{scenarios:scenario3}
-Bauplandeduktion eines Gebäudemodells des KIT
-\subsection*{Beschreibung}
-Um das Konzept nicht nur an eigens modellierten Gebäuden zu evaluieren, werden zusätzlich externe Modelle herangezogen.
-Dabei kann sich zum Beispiel an den Beispielprojekten des KIT bedient werden~\cite{KITSAMPLEHOUSE:online}.
-TODO Bild von kleinem Hause
-TODO überlegen ob eines der beiden riesendinger auch mal ran soll?
-\subsection*{Problemstellungen}
+\subsection{Scenario 3}\label{scenarios:scenario3}
+Um das Konzept nicht nur an eigens modellierten Gebäuden zu evaluieren, werden für dieses Szenario externe Modelle herangezogen.
+\subsubsection*{Beschreibung}
+Dabei kann sich zum Beispiel an den Beispielprojekten des \textit{Karlsruher Institut für Technologie} (KIT) bedient werden~\cite{KITSAMPLEHOUSE:online}.
+Zum Zeitpunkt der Erstellung dieser Arbeit exisitieren dort drei verschiedene Modelle.
+Getestet wird das Konzept an den beiden Gebäuden aus Abbildung~\ref{fig:scenarios:Scenario3 KIT}.
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.6\columnwidth]{fig/TODO.jpg}
+  \caption{TODO kleines haus und office}\label{fig:scenarios:Scenario3 KIT}
+\end{figure}
+Darum muss es möglich sein, zu einem bereits abgeschlossenen Gebäudeplan weiter Informationen hinzuzufügen.
+Dazu zählen wie in den vorherigen Szenarios etwa die angabe verschiedener Wandtypen und die dafür gewünschten Grundmodule und Mauerwerksverbände.
 
-\section{Scenario 4}\label{scenarios:scenario4}
-Definition von Regelsets.
+\subsubsection*{Problemstellungen}
+\begin{itemize}
+  \item Wie lassen sich vorhandene Gebäudemodelle um die für diese Arbeit notwendigen Informationen erweitern?
+  \item Oft sind Gebäudepläne sehr detailiert und gespickt mit Informationen aus allen Fachbereichen des Bauwesens. Wie können lediglich die relevanten Daten aus dem Modell gefiltert werden?
+\end{itemize}
+
+\section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}\label{scenarios:scenario4}
+In dieser Fallstudie wird untersucht wie das Integrieren und Anwenden von Regeln in das erarbeitete Konzept ermöglicht werden kann.
+Dabei ist es wünschenswert Regeln erst im Nachgang an den vorangegangenen Schritt des Berechnens eines Bauplanentwurfs zu definieren und auf diesem anzuwenden.
+Darum dürfen konkrete Regelbeschreibungen nicht Teil der Programmcodebasis dieser Arbeit sein, sondern müssen auf andere Weise in das Projekt eingefügt werden können.
+
 \subsection*{Beschreibung}
 \subsection*{Problemstellungen}
 \begin{itemize}
