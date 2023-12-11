@@ -21,6 +21,7 @@ from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Win
 from masonry import corner_rep
 from wall_detailing.exporter.BrickExporter import BrickExporter
 from wall_detailing.exporter.BrickToOntologie import BrickToOntology
+from wall_detailing.importer.ifc_importer import IfcImporter
 #from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
 from wall_detailing.masonry.bond.head_bond import HeadBond
@@ -225,8 +226,8 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    #tmp = IfcImporter("../../models/scenarios/scenario1_tower_thin_walls.ifc")
-    #www = tmp.get_walls()
+    tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thin_walls.ifc")
+    www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()

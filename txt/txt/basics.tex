@@ -56,12 +56,12 @@ Im Falle des \textit{IfcWallType} existiert beispielsweise das PropertySet mit d
 Darin können die Ersteller von neuen WallTypes unter anderem Informationen über Brennbarkeit, thermisches Verhalten oder Akustik hinterlegen.
 Bei Erstellen einer IfcWall-Instanz aus einem bestimmten WallType werden die damit verbundenen Property- und QuantitySets automatisch daran angehängt, sodass jedes Objekt relevante Informationen über sich selbst bereithält.
 
-\subsection{Positionierung von IFCProducts}
+\subsection{Positionierung von \textit{IfcProducts}}
 %https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/concepts/Product_Shape/Product_Placement/Product_Local_Placement/content.html
-%https://community.osarch.org/discussion/654/how-to-extract-location-data-from-ifc mal schauen ob man das easy machen kann mit openshell
-TODO: Positionierung ist anscheinend bisschen verschachtelt
-Blablabla so können aus einem IFC Projekt alle relevanten Klassen mit den für diese Arbeit erforderlichen Eigenschaften extrahiert werden.
-This is a test
+Die Platzierung eines \textit{IfcProducts} wird durch eine Verkettung relativer Transformationen ausgehend vom \textit{IfcProduct}, über sätmliche Strukturen, die dieses Objekt enthalten, bis hin zur \textit{IfcSite} realisiert~\cite{IFCPlatzierung}.
+Diese Hierarche kann der Abbildung~\ref{fig:IFC_Relationships} entnommen werden.
+Um die globale Position eines \textit{IfcProducts} zu erhalten, müssen die relativen Transformationen miteinander verrechnet werden.
+Der IFC Standard unterstützt zudem die Möglichkeit Positionierungen anhand eines Rasters oder mithilfe des sogennanten \textit{linear placements} anzugeben.
 
 \subsection{IfcOpeningElement}
 \label{basics:IfcOpeningElement}
