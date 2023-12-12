@@ -1,4 +1,4 @@
-\chapter{Konzept}
+\chapter{Konzept}\label{concept}
 Mit den zuvor behandelten Grundlagen und den Inspirationen aus Kapitel~\ref{related} wird nun ein Konzept zur Bearbeitung der Problemstellungen der in Kapitel~\ref{scenarios} definierten Fallstudien und Szenarien vorgestellt.
 Grob teilt sich das Vorgehen in drei Phasen:
 Falls noch kein Modell des geplanten Gebäudes vorliegt, muss dieses mithilfe eines Konstruktionsplaners erstellt werden.
@@ -40,7 +40,7 @@ Da eine Wand im Prinzip ein arbiträrer geometrischer Körper sein kann, dies ab
 Ein solcher Quader wird nachfolgend auch als \textit{Wandstück} bezeichnet.
 Ein solches Wandstück besitzt demnach auch die Eigenschaften eines Quaders: eine Skalierung, eine Rotation um seinen eigenen Mittelpunkt und eine Translation im Raum.
 Nachfolgend werden die Begriffe Länge, Breite und Höhe zur einfachen Unterscheidung von einer Skalierung in X, Y und Z Richtung verwendet.
-Während Länge und Höhe dem Raster entsprechend beliebig gewählt werden können, ergibt sich die Breite aus dem gewählten Bausteinformat (auch als \textit{Modul} bezeichnet) und dem geplanten Mauerwerksverband (siehe Kapitel~\ref{basics:mauerwerk}).
+Während Länge und Höhe dem Raster entsprechend beliebig gewählt werden können, ergibt sich die Breite aus dem gewählten Bausteinformat (auch als \textit{Modul} bezeichnet) und dem geplanten Mauerwerksverband (siehe Kapitel~\ref{basics:Mauerwerksbau}).
 Der Verband und das Modul können jedem Wandstück als sogenannter \textit{Wandtyp} zugewiesen werden.
 Dadurch ist es möglich, verschiedene Arten von Wänden innerhalb eines Gebäudemodells zu verwenden.
 Diese Informationen werden später dafür verwendet, die durch das Wandstück abgesteckten Dimensionen sinnvoll mit Bausteinen zu füllen.
@@ -84,8 +84,7 @@ Letzteres entspricht einer festen Rotation um 90\degree{} um die Z-Achse des Bau
 \begin{figure}[hb!]
     \centering
     \includegraphics[width=0.7\columnwidth]{fig/concept_Mauerwerksverband.png}
-    \caption{Der Läuferverband mit einem Versatz von 50\%.}
-    \label{fig:concept:concept_Mauerwerksverband}
+    \caption{Der Läuferverband mit einem Versatz von 50\%.}\label{fig:concept:concept_Mauerwerksverband}
 \end{figure}
 
 Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (0, 0, 0))\) und je einer Schicht gebildet aus den Mengen \(\{B_1\}\) bzw. \(\{B_2\}\) erhält man bereits eine komplette Beschreibung für den Läuferverband mit einem Versatz von 50\% der Steinlänge.
@@ -96,18 +95,15 @@ Aber auch andere, komplexere Verbände können in dieser Form abgebildet und so 
     \centering
     \begin{subfigure}[b]{0.3\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept_streched_bond_corner.png}
-      \caption{Erst \(E_1\), dann \(E_2\).}
-      \label{fig:concept:concept_streched_bond_corner}
+      \caption{Erst \(E_1\), dann \(E_2\).}\label{fig:concept:concept_streched_bond_corner}
     \end{subfigure}
     \hfil
     \begin{subfigure}[b]{0.3\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept_streched_bond_corner_inverse.png}
-      \caption{Erst \(E_2\), dann \(E_1\).}
-      \label{fig:concept:concept_streched_bond_corner_inverse}
+      \caption{Erst \(E_2\), dann \(E_1\).}\label{fig:concept:concept_streched_bond_corner_inverse}
     \end{subfigure}
     \hfil
-  \caption{Eckpläne für den Läuferverband mit einem Versatz von 50\%.}
-  \label{fig:concept:corner_bond}
+  \caption{Eckpläne für den Läuferverband mit einem Versatz von 50\%.}\label{fig:concept:corner_bond}
 \end{figure}
 
 Die speziellen Legepläne zur korrekten Auflösung von kritischen Bereichen wie zum Beispiel Ecken können ebenfalls in dieser Form für jeden Mauerwerksverband angegeben werden.
@@ -122,7 +118,7 @@ Während aus dem Eckplan später für jede Schicht nur ein Baustein pro hinterle
 \subsection{Beziehungen zwischen Wandstücken}\label{concept:relations_wandtuecke}
 In dieser Arbeit stehen Wandstücke zueinander in einer Beziehung, sobald sie sich berühren oder schneiden.
 Diese Beziehungen sind relevant, um die gewählten Mauerwerksverbände ordnungsgemäß über mehrere voneinander abhängige Wandstücke anzuwenden, ohne dass es zu Verletzungen von Vorschriften und Normen wie etwa dem Überbindemaß aus Kapitel~\ref{basics:Mauerwerksverband} kommt.
-Wie bereits in Abschnitt~\ref{scenarios:scenario1:problem} und~\ref{basics:Mauerwerksverband} angesprochen, treten verschiedene Arten von Beziehungen auf, die für das nachfolgende \glqq{}Wall Detailing\grqq{} zu unterscheiden sind.
+Wie bereits in Abschnitt~\ref{basics:Mauerwerksverband} angesprochen, treten verschiedene Arten von Beziehungen auf, die für das nachfolgende \glqq{}Wall Detailing\grqq{} zu unterscheiden sind.
 Zur Modellierung von Gebäuden sind vor allem folgende Beziehungen unabdingbar:
 \textit{Ecken}, \textit{T-Kreuzungen} und \textit{X-Kreuzungen}.
 Diese stellen wichtige Elemente bei der Planung von Gebäuden dar. 
@@ -136,8 +132,7 @@ Es werden nun für jede dieser Beziehungen Eigenschaften aufgezeigt anhand derer
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Base_labeled.png}
-    \caption{Modell einer Wand, die durch 7 einzelne Wandstücke des selben Typs gebildet wird, deren Mittelpunkte alle auf einer Ebene liegen.}
-    \label{fig:concept:combination_example_base}
+    \caption{Modell einer Wand, die durch 7 einzelne Wandstücke des selben Typs gebildet wird, deren Mittelpunkte alle auf einer Ebene liegen.}\label{fig:concept:combination_example_base}
 \end{figure}
 
 \paragraph*{Wandstückverbände}\label{concept:combination_properties} sind alle Wandstücke,  die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Wandstücke realisiert wurden, eigentlich aber eine Einheit darstellen. 
@@ -188,22 +183,19 @@ Da sich Ecken, T-Kreuzungen und X-Kreuzungen stark ähneln, besitzen sie einige 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/ecken_variationen.png}
-    \caption{Draufsicht auf Varianten der Modellierung einer Ecke.}
-    \label{fig:concept:ecken_variationen}
+    \caption{Draufsicht auf Varianten der Modellierung einer Ecke.}\label{fig:concept:ecken_variationen}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/t_joint_variationen.png}
-    \caption{Draufsicht auf Varianten der Modellierung einer T-Kreuzung.}
-    \label{fig:concept:t_joint_variationen}
+    \caption{Draufsicht auf Varianten der Modellierung einer T-Kreuzung.}\label{fig:concept:t_joint_variationen}
 \end{figure}
 
 \begin{figure}[hb]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/x_joint_variationen.png}
-    \caption{Draufsicht auf Varianten der Modellierung einer X-Kreuzung.}
-    \label{fig:concept:x_joint_variationen}
+    \caption{Draufsicht auf Varianten der Modellierung einer X-Kreuzung.}\label{fig:concept:x_joint_variationen}
 \end{figure}
 
 Sind diese Eigenschaften erfüllt, werden die Schnittpunkte der Richtungsvektoren entlang der lokalen X-Achsen beider Wandstücke errechnet.
@@ -241,15 +233,13 @@ Darum ist es notwendig eine Kombination an Startschichten über alle miteinander
 \begin{figure}[]
     \centering
     \includegraphics[width=0.4\columnwidth]{fig/concept lösung von beziehungen1.png}
-    \caption{Draufsicht auf eine Verkettung von 4 Wandstücken durch 3 dazwischenliegende Ecken.}
-    \label{fig:concept:loesen_von_beziehungen1}
+    \caption{Draufsicht auf eine Verkettung von 4 Wandstücken durch 3 dazwischenliegende Ecken.}\label{fig:concept:loesen_von_beziehungen1}
 \end{figure}
 
 \begin{figure}[]
     \centering
     \includegraphics[width=0.4\columnwidth]{fig/concept lösung von beziehungen2.png}
-    \caption{Draufsicht auf eine unzulässige Lösung der Eckplankonfiguration.}
-    \label{fig:concept:loesen_von_beziehungen2}
+    \caption{Draufsicht auf eine unzulässige Lösung der Eckplankonfiguration.}\label{fig:concept:loesen_von_beziehungen2}
 \end{figure}
 
 
@@ -257,17 +247,14 @@ Darum ist es notwendig eine Kombination an Startschichten über alle miteinander
     \centering
     \begin{subfigure}[b]{0.4\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept lösung von beziehungen3.png}
-      \caption{Eine zulässige Lösung.}
-      \label{fig:concept:loesen_von_beziehungen3}
+      \caption{Eine zulässige Lösung.}\label{fig:concept:loesen_von_beziehungen3}
     \end{subfigure}
     \hfil
     \begin{subfigure}[b]{0.4\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept lösung von beziehungen4.png}
-      \caption{Die darüberliegende Schicht.}
-      \label{fig:concept:loesen_von_beziehungen4}
+      \caption{Die darüberliegende Schicht.}\label{fig:concept:loesen_von_beziehungen4}
     \end{subfigure}
-  \caption{Eine mögliche Lösung und die durch die Eckpläne entstehende zweite Lösung für die darüber liegende Schicht.}
-  \label{fig:concept:loesen_von_beziehungen3und4}
+  \caption{Eine mögliche Lösung und die durch die Eckpläne entstehende zweite Lösung für die darüber liegende Schicht.}\label{fig:concept:loesen_von_beziehungen3und4}
 \end{figure}
 
 Ein Verfahren, welches für das vorliegende Beispiel des halbversetzten Läuferverbands, dessen sehr einfachen Eckplans und dem durch seine praktische Form gewählten Moduls Lösungen findet, löst nicht zwangsläufig auch eine beliebig andere Situation.
@@ -322,14 +309,12 @@ Häufig ist dies nur möglich, indem man für manche Bausteine die Länge des ve
 \begin{figure}[htb]
     \begin{subfigure}[b]{0.5\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept_wall_endings_1.png}
-      \caption{Läuferverband.}
-      \label{fig:concept:lauferverband_ending}
+      \caption{Läuferverband.}\label{fig:concept:lauferverband_ending}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.5\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept_wall_endings_2.png}
-      \caption{Kreuzverband.}
-      \label{fig:concept:kreuzverband_ending}
+      \caption{Kreuzverband.}\label{fig:concept:kreuzverband_ending}
     \end{subfigure}
   \caption{Wandenden verschiedener Mauerwerksverbände.}
 \end{figure}
@@ -341,8 +326,7 @@ Auch an den zuvor angesprochen Öffnungen ist dies für die Schichten erforderli
 Für den Fall, dass das vollständige Detailing eines Modells das Anpassen des gewünschten Moduls notwendig macht, muss diese Information neben den errechneten Transformationen der Bausteine ebenfalls in das Ergebnis integriert werden.
 Somit erhält jeder Baustein aus diesem Grund zusätzlich eine Beschreibung über dessen Dimensionen.
 
-\section{Wall Detailing}
-\label{concept:wall_detailing}
+\section{Wall Detailing}\label{concept:wall_detailing}
 Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang bezeichnet ein als geometrischer Körper definiertes Wandstück in konkretes Mauerwerk zu überführen.
 Dieser Vorgang wendet die zuvor behandelten Konzepte an, um Lösungen für beliebig komplexe Gebäudemodelle zu errechnen.
 Als Lösung sollen nur diejenigen Bausteinmengen gelten, die sämtliche von Wandstücken abgedeckten Bereiche lückenlos mit Bausteinen füllen, während gleichzeitig die gewünschten Mauerwerksverbände eingehalten werden.
@@ -371,7 +355,7 @@ So ist es notwendig je nach Situation voneinander abweichende Regelsets auf dem 
 Die Möglichkeit der nachträglichen Definition dieser Regeln verhindert zusätzlich die Notwendigkeit den Bauplanentwurf für sich unterscheidene Situationen neu berechnen zu müssen.
 
 \section{Regelbasierte Bauplandeduktion}\label{concept:regelbasierte_bauplandeduktion}
-Ontologien bieten verschiedene Werkzeuge an, mithilfe derer auf streng definierten Objekttypen und deren Relationen zueinander, konkrete Instanzen gruppiert und gefiltert werden können (siehe Kapitel~\ref{basics:ontologie}).
+Ontologien bieten verschiedene Werkzeuge an, mithilfe derer sowohl streng definierte Objekttypen und deren Relationen zueinander modelliert, als auch konkrete Instanzen gruppiert und gefiltert werden können (siehe Kapitel~\ref{basics:ontologie}).
 Da damit theoretisch sowohl Bausteindefinitionen und Instanzen, als auch Regeldefinitionen und konkrete Regeln formulierbar sind, ermöglicht dies ein flexibles Hinzufügen und Entfernen von Regeln und Bausteinen ohne dafür Programmcode schreiben zu müssen.
 Durch geschicktes Aufstellen von Einschränkungen an die Bausteinklassen kann ein Reasoner dazu verwendet werden, ein den Regeln entsprechendes Subset derjenigen Bausteine zu bilden, die in der derzeitig in der Ontologie hinterlegten Ausgangssituation platzierbar sind.
 Dies geschieht durch die Neuzuordnung einiger Bausteine zu einer speziell dafür definierten Klasse.
@@ -382,17 +366,23 @@ Notwendige Informationen für eine generische Ausgangsklasse zur Beschreibung vo
   Da Bausteine sechs Seiten haben, an welchen andere Bausteine anliegen können, ist eine Unterscheidung zwischen den verschiedenen Nachbarschaftsarten (untere, obere, linke, rechte, vordere und hintere Nachbarn) möglich.
   \item Eine \textit{Abhängigkeits}-Eigenschaft zwischen Bausteinen, die angibt, an welchen Bausteinen jeder Baustein gebunden ist. 
   Diese Relation kann durch eine entsprechende Regel manipuliert werden und dadurch die Schlussfolgerungen eines Reasoners direkt beinflussen. 
-  Sie wird als Objekteigenschaft mit dem Namen \textit{dependOn} realisiert, deren Wertebereich (Range) Individuen der Klasse Brick sind.
-  \item Einen Indikator \textit{hasBeenSet} der angibt, ob der Baustein bereits gesetzt wurde oder nicht. Darüber kann ein Reasoner verstehen, welche benachbarten Bausteine über die Abhängigkeits-Eigenschaft nicht mehr zu berücksichtigen sind.
+  Sie wird als Objekteigenschaft mit dem Namen \textit{dependsOn} realisiert, deren Wertebereich (Range) Individuen der Klasse Brick sind.
+  \item Einen Indikator \textit{hasBeenSet} der angibt, ob der Baustein bereits gesetzt wurde oder nicht. 
+  Darüber kann ein Reasoner verstehen, welche benachbarten Bausteine über die \textit{dependsOn}-Eigenschaft nicht mehr zu berücksichtigen sind.
 \end{itemize}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.4\columnwidth]{fig/TODO.jpg}
+  \caption{TODO Klassendiagramm der Ontologie für Baustein und Regelbeschreibungen.}\label{fig:concept:ontologie_diagramm}
+\end{figure}
 Diese Klasse wird nachfolgend als \textit{Brick} bezeichnet.
 Um verschiedene Bauplanentwürfe gleichzeitig zu bearbeiten kann eine Klasse \textit{Building} definiert werden, die alle Bausteine des dazugehörigen Bauplanentwurfs referenziert.
 Eine Klasse \textit{Rule} stellt die Grundlage zur Regeldefinition dar.
 Davon ausgehend können verschiedene Regelarten erstellt werden, die durch konkrete Individuen realisiert werden.
-Ein Beispiel wären Regeln, die eine Kardinalität zu einer ebenfalls in der Regel festgelegten Daten- oder Objekteigenschaft der Ontologie vorgeben (Informationen zu Eigenschaften im Kontext von Ontologien siehe Kapitel~\ref{basics:ontologie}).
+Ein Beispiel wären Regeln, die eine Kardinalität zu einer ebenfalls in der Regel festgelegten Daten- oder Objekteigenschaft der Ontologie vorgeben (für Informationen zu Eigenschaften im Kontext von Ontologien siehe Kapitel~\ref{basics:ontologie}).
 Damit könnte etwa die Menge aller Nachbarn eines Bausteins auf exakt, minimal oder maximal eine bestimmte Anzahl beschränkt werden.
 Eine weitere Art wären Regeln, die das Übernehmen einer bestimmten Eigenschaft auf alle über eine andere Eigenschaft assoziierten Bausteine voraussetzen.
-So könnten zum Beispiel alle über die \textit{untere Nachbarn}-Eigenschaft verbundenen Bausteine eines konkreten Bausteins in dessen Abhängigkeits-Eigenschaft übernommen werden.
+So könnten zum Beispiel alle über die \textit{untere Nachbarn}-Eigenschaft verbundenen Bausteine eines konkreten Bausteins in dessen \textit{dependsOn}-Eigenschaft übernommen werden.
 Notwendige Eigenschaften für diese Klasse sind:
 \begin{itemize}
   \item Eine Assoziation auf eine Objekt- oder Dateneigenschaft der Ontologie, die angibt auf welche Eigenschaft die Regel Einfluss nimmt. 
@@ -404,23 +394,23 @@ Notwendige Eigenschaften für diese Klasse sind:
   \item Für Kardinalitäten-vorgebende Regeln exisitieren die Eigenschaften \textit{min}, \textit{max} und \textit{exactly}, welche auf einen Zahlenwert verweisen.
   \item Für Eigenschafts-übertragende Regeln exisitiert eine Eigenschaft, die ähnlich zu der aus dem obersten Punkt den Namen der \glqq{}Zieleigenschaft\grqq{} enthält.
 \end{itemize}
-Um zwischen verschiedenen Situationen wechseln zu können, die die Anwendung mehrerer Regeln voraussetzen wird die Klasse \textit{Ruleset} definiert, die lediglich auf beliebig viele Individuen der Rule-Klasse referenziert.
+Um zwischen verschiedenen Situationen wechseln zu können, die manchmal die Anwendung mehrerer Regeln voraussetzen, wird die Klasse \textit{Ruleset} definiert, die lediglich auf beliebig viele Individuen der Rule-Klasse referenziert.
 
 Mit diesem Aufbau wurde die Grundlage für einen Reasoner geschaffen, der die Individuen der Klasse Brick konkreteren Subklassen zuweist.
-So lässt sich über die Werte in der \textit{hasBeenSet} Dateneigenschaft zwischen schon gesetzten und noch zu setzenden Brick unterscheiden.
+So lässt sich über die Werte in der \textit{hasBeenSet} Dateneigenschaft zwischen schon gesetzten und noch zu setzenden Brick-Individuen unterscheiden.
 Diese Klassen werden als \textit{PlacedBrick} und \textit{PlaceableBrick} bezeichnet und sind zwangsläufig disjunkt.
 Es können nur diejenigen Brick-Individuen, die ebenfalls der Klasse PlaceableBrick zugeordnet werden können, Teil des Subsets an Bausteinen sein, das in der derzeit gegeben Situation platziert werden kann.
 Daraus lässt sich die erste Einschränkung für die als \textit{NextBrick} bezeichnete Klasse aufstellen:
 Sie ist eine Subklasse der Klasse PlaceableBrick.
-Die Abhängigkeits-Eigenschaft der Klasse Brick wird nun zur Überprüfung der Legbarkeit eines Bausteins herangezogen.
+Die  \textit{dependsOn}-Eigenschaft der Klasse Brick wird nun zur Überprüfung der Legbarkeit eines Bausteins herangezogen.
 Sind für einen PlaceableBrick nur PlacedBricks über diese Eigenschaft referenziert, so gilt dieser als derzeit ablegbar und wird ebenfalls Teil der Klasse NextBrick.
 Insgesamt sieht die Klassenbeschreibung der Klasse NextBrick schließlich wie folgt aus:
-\lstinline{PlaceableBrick and (dependsOn only PlacedBrick)}
+\lstinline{PlaceableBrick and (dependsOn only PlacedBrick)}.
 Zu beachten ist allerdings die \textit{Open World Assumption}, nach welcher sich Ontologien richten (siehe Kapitel~\ref{basics:ontologie}).
-Darum ist es notwendig bei der Befüllung der Ontologie mit den im Bauplanentwurf errechneten Baustein-Instanzen explizite Einschränkungen vorzugeben.
+Darum ist es notwendig bei der Befüllung der Ontologie zusammen mit den im Bauplanentwurf errechneten Baustein-Instanzen explizite Einschränkungen vorzugeben.
 Für jeden Baustein müssen alle konkreten Individuen definiert werden, die mit ihm über Eigenschaften verbunden sind.
 Zusätzlich muss angegeben werden, dass diese Menge an Bausteinen auch tatsächlich die einzige unveränderbare Menge darstellt, die über sämtliche Eigenschaften damit verbunden sind.
-Falls dies nicht vorgenommen wird, kann ein Reasoner kein Individuum der Klasse NextBrick zuordnen, da es theoretisch sein könnte, dass ein anderer PlaceableBrick existiert, der der Abhängigkeits-Eigenschaft des Individuums zugeordnet ist.
+Falls dies nicht vorgenommen wird, ist ein Reasoner nicht in der Lage ein PlaceableBrick-Individuum der Klasse NextBrick zuzuordnen, da es theoretisch sein könnte, dass ein anderer PlaceableBrick existiert, der der \textit{dependsOn}-Eigenschaft des Individuums zugeordnet ist.
 
 \begin{enumerate}
   \item Klassendefinition aufstellen
