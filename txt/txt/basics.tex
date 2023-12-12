@@ -27,8 +27,7 @@ Diese sind anfangs abstrakte Konzepte, die sich mit zunehmender Tiefe in der Hie
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\columnwidth]{fig/Hierarchie_IfcWall_300.drawio.png}
-    \caption{Klassenhierarchie am Beispiel der Klasse \textit{IfcWall}}
-    \label{fig:IfcWall_Hierarchie}
+    \caption{Klassenhierarchie am Beispiel der Klasse \textit{IfcWall}}\label{fig:IfcWall_Hierarchie}
 \end{figure}
 Da sich diese Arbeit zum größten Teil mit aus Wänden bestehenden Gebäuden befasst, wird nachfolgend die Klasse \textit{IfcWall} wiederholt als Beispiel herangezogen.
 Der für diese Klasse relevante Ausschnitt aus der Klassenhierarchie ist in Abbildung~\ref{fig:IfcWall_Hierarchie} dargestellt.
@@ -38,8 +37,7 @@ In Abbildung~\ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\columnwidth]{fig/IFC_Relationships_300.drawio.png}
-    \caption{Relation der IfcWall und einem \textit{IfcProject}}
-    \label{fig:IFC_Relationships}
+    \caption{Relation der IfcWall und einem \textit{IfcProject}}\label{fig:IFC_Relationships}
 \end{figure}
 
 \subsection{IfcPropertySets und IfcQuantitySets}\label{basics:ifc_properties}
@@ -63,8 +61,7 @@ Diese Hierarchie kann der Abbildung~\ref{fig:IFC_Relationships} entnommen werden
 Um die globale Position eines \textit{IfcProducts} zu erhalten, müssen die relativen Transformationen miteinander verrechnet werden.
 Der IFC Standard unterstützt zudem die Möglichkeit Positionierungen anhand eines Rasters oder mithilfe des sogennanten \textit{linear placements} anzugeben.
 
-\subsection{IfcOpeningElement}
-\label{basics:IfcOpeningElement}
+\subsection{IfcOpeningElement}\label{basics:IfcOpeningElement}
 Neben Wänden stellen Fenster und Türen wichtige Elemente eines Gebäudes dar.
 Diese sind ebenfalls Teil der Klassen des IFC Standards.
 Objekte des Typs \textit{IfcOpeningElement} dienen dazu die notwendigen Lücken in einer Wand zu definieren in die später eine Tür oder ein Fenster eingebaut werden soll.
@@ -79,7 +76,7 @@ Blender ist eines der beliebtesten Open Source Programme zur Modellierung von 3D
 Eine umfangreiche Python API erlaubt es Blender durch sogenannte Addons an die eigenen Bedürfnisse anzupassen~\cite{PythonWebsite:online}~\cite{BlenderPythonAPI:online}.
 Aufgrund dessen existiert auch eine Vielzahl an freien Erweiterungen \textendash{} unter anderem auch eine Integration von IFC Projekten.
 
-\subsection{blenderbim}
+\subsection{blenderbim}\label{basics:blenderbim}
 Neben kommerziellen Produkten wie etwa revit von autodesk zur Modellierung von IFC Modellen, gibt es auch für Blender ein freies Plugin, um IFC Modelle zu erstellen~\cite{RevitSof26:online}~\cite{BlenderB43:online}.
 Dieses Plugin ermöglicht es neben dem bloßen Designen des Gebäudes in kurzer Zeit z.B. detailierte Zeichnungen verschiedener Perspektiven herauszuarbeiten, die z.B. von Bauingeneuren verwendet werden können, um einzelne Stockwerke oder Verkabelungen zu planen.
 Blenderbim selbst kapselt unter anderem die Open Source Python Bibliothek \textit{IfcOpenShell}, sodass diese in der Blender Laufzeitumgebung zur Verfügung steht \cite{IFCOpenShell:online}.
@@ -153,8 +150,7 @@ Wie auch Blender untertützt BIM-Server das Einbinden von eigenen Plugins, sodas
 Die Plugins werden in Java geschrieben.
 Der Server bietet aber auch eine REST Schnittstelle an, um Clients in anderen Sprachen anzubinden.
 
-\section{Mauerwerksbau}
-\label{basics: Mauerwerksbau}
+\section{Mauerwerksbau}\label{basics: Mauerwerksbau}
 Der Mauerwerksbau ist eine Art des Massivbaus, bei welchem Natur- oder Formsteine aufgeschichtet werden, um Wände beziehungsweise Mauern zu errichten.
 Eine derart erbaute Wand besteht demnach aus (Bau)-Steinen und den dazwischen entstehenden Fugen.
 Mörtel ist dabei nicht zwangsläufig notwendig.
@@ -177,14 +173,12 @@ Das System ist in der \textit{DIN 4172 Maßordnung im Hochbau} geregelt und ist 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/Ziegelsteinformate DF NF 2DF 6DF.png}
-    \caption{Darstellung verschiedener Steinformate nach DIN 4172 (Baunennmaß in Millimetern)~\cite{Steinfor38:online}}
-    \label{fig:basics:Steinformate}
+    \caption{Darstellung verschiedener Steinformate nach DIN 4172 (Baunennmaß in Millimetern)~\cite{Steinfor38:online}}\label{fig:basics:Steinformate}
 \end{figure}
 \begin{figure}[hb]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/Oktametrische Maßordnung.png}
-  \caption{Besondere Eigenschaften der oktametrischen Maßordnung~\cite{Moro2021}}
-  \label{fig:basics:OktametrischeMassordnung}
+  \caption{Besondere Eigenschaften der oktametrischen Maßordnung~\cite{Moro2021}}\label{fig:basics:OktametrischeMassordnung}
 \end{figure}
 Daraus gehen insbesondere folgende zwei Formate für Ziegelsteine hervor:
 Das Normalformat (NF) mit \(240\times115\times71 mm\) und das Dünnformat (DF) mit \(240\times115\times52 mm\) (Länge$\times$Breite$\times$Höhe)~\cite{Moro2021}.
@@ -196,8 +190,7 @@ Durch Einhalten eines Systems ist man zusätzlich in der Lage Türen und Fenster
 Da Höhe, Breite und Länge der Steine zusammen mit den dazwischenliegenden Fugen aufgrund des Maßsystems jeweils Vielfache voneinander sind, ergeben sich viele Möglichkeiten zur Aufschichtung und Aneinanderreihung der Bausteine.
 Einige davon sind in Abbildung~\ref{fig:basics:OktametrischeMassordnung} zu sehen und sind gleichzeitig Beispiele für einen sogenannten \textit{Mauerwerksverband}.
 
-\subsection{Mauerwerksverband}
-\label{basics:Mauerwerksverband}
+\subsection{Mauerwerksverband}\label{basics:Mauerwerksverband}
 Als Mauerwerksverband bezeichnet man bestimmte, gleichmäßige Anordnungen von Mauersteinen, um einen homogenen Mauerwerkskörper zu erreichen~\cite{Mauerwer39:online}.
 Damit kann eine gleichmäßige Kraftverteilung innerhalb der Mauer gewährleistet werden.
 Eine wichtige Rolle nimmt dabei das Überbindemaß ein, welches die Mindestüberlappung von Mauersteinen aus zwei Schichten der Mauer vorgibt.
@@ -218,37 +211,30 @@ Einige Beispiele sind in Abbildung~\ref{fig:basics:verbaende} zu sehen.
 \begin{figure}[htb]
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/blockverband.png}
-    \caption{Blockverband.}
-    \label{fig:basics:blockverband}
+    \caption{Blockverband.}\label{fig:basics:blockverband}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/kreuzverband.png}
-    \caption{Kreuzverband.}
-    \label{fig:basics:kreuzverband}
+    \caption{Kreuzverband.}\label{fig:basics:kreuzverband}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/läuferverband025_mittig.png}
-    \caption{Mittlerer Läuferverband \textit{(1/4 Versatz).}}
-    \label{fig:basics:laeuferverband_mittig}
+    \caption{Mittlerer Läuferverband \textit{(1/4 Versatz).}}\label{fig:basics:laeuferverband_mittig}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/läuferverband033_schleppend.png}
-    \caption{Schleppender Läuferverband \textit{(1/3 Versatz).}}
-    \label{fig:basics:laeuferverband_schleppend}
+    \caption{Schleppender Läuferverband \textit{(1/3 Versatz).}}\label{fig:basics:laeuferverband_schleppend}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/kopfverband.png}
-    \caption{Kopf/Binderverband.}
-    \label{fig:basics:binderverband}
+    \caption{Kopf/Binderverband.}\label{fig:basics:binderverband}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\columnwidth}
     \includegraphics[width=\columnwidth]{fig/gotischerverband.png}
-    \caption{Gotischer Verband.}
-    \label{fig:basics:gotischer_verband}
+    \caption{Gotischer Verband.}\label{fig:basics:gotischer_verband}
   \end{subfigure}
-  \caption{Typische Mauerwerksverbände.}
-  \label{fig:basics:verbaende}
+  \caption{Typische Mauerwerksverbände.}\label{fig:basics:verbaende}
 \end{figure}
 Als Wandstück wird von nun an ein gerader Wandabschnitt bezeichnet.
 Dieser hat eine Länge, eine Höhe und durch einen vorgegebenen Bausteintyp und einem gewünschten Verband eine gewisse Breite.
@@ -273,16 +259,14 @@ Während etwa beim Läuferverband darauf verzichtet werden kann Bausteine für E
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/Eck- und Kreuzungslösungen.png}
-  \caption{Lösungen für Ecken und T-Kreuzungen unterschiedlicher Verbände~\cite{Moro2021}}
-  \label{fig:basics:mauerwerk_eckloesung}
+  \caption{Lösungen für Ecken und T-Kreuzungen unterschiedlicher Verbände~\cite{Moro2021}.}\label{fig:basics:mauerwerk_eckloesung}
 \end{figure}
 
 \begin{figure}[h]
   % https://www.ks-maurerfibel.de/maurerfibel/4-mauerwerksverbaende/4-7-mauern-von-stoessen-und-kreuzungen/ 
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/KreuzungslösungBeispiel.png}
-  \caption{Lösung einer Kreuzung am Beispiel einer \glqq{}Wand aus 2 DF im Kreuz- und Blockverband\grqq{}~\cite{MaurerfibelKreuzungen:online}}
-  \label{fig:basics:Kreuzungsloesung}
+  \caption{Lösung einer Kreuzung am Beispiel einer \glqq{}Wand aus 2 DF im Kreuz- und Blockverband\grqq{}~\cite{MaurerfibelKreuzungen:online}.}\label{fig:basics:Kreuzungsloesung}
 \end{figure}
 
 %https://baulexikon.beuth.de/MAUERWERKSVERBAND.HTM
@@ -295,8 +279,7 @@ Während etwa beim Läuferverband darauf verzichtet werden kann Bausteine für E
 %https://www.mauerwerksbau-lehre.de/vorlesungen/1-grundlagen-und-baustoffe-des-mauerwerksbaus/13-wandkonstruktionen/132-mauerwerksverband-und-ueberbindemass
 %TODO Rund Wände, keine 90 Grad Ecken
 
-\section{LEGO}
-\label{basics:lego}
+\section{LEGO}\label{basics:lego}
 Ein 1$\times$1 LEGO Stein hat eine quadratische Grundfläche von \(7.8mm\)$\times$\(7.8mm\).
 Dies entspricht demnach dem Baunennmaß des 1$\times$1 LEGO Steins.
 Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2mm\).
@@ -310,12 +293,10 @@ Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet w
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/LEGO 2x4 Brick horizontal.png}
-    \caption{Maße des Standard 2$\times$4 LEGO Steins~\cite{LEGOBric2:online}}
-    \label{fig:basics:Lego 2x4 Brick}
+    \caption{Maße des Standard 2$\times$4 LEGO Steins~\cite{LEGOBric2:online}}\label{fig:basics:Lego 2x4 Brick}
 \end{figure}
 
-\section{BRep}
-\label{basics:brep}
+\section{BRep}\label{basics:brep}
 Mal schauen
 
 \section{Ontologie}

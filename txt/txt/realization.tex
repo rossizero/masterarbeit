@@ -3,10 +3,10 @@ Mit dem in Kapitel~\ref{basics:ifc} vorgestellten \textit{IFC Standard} existier
 Im Zusammenspiel mit dem darauf aufbauenden \textit{Building Information Modelling} wird ein einheitliches Verwaltungskonzept für das Planen, Bauen und Bewirtschaften von Infrastrukur vorgeschlagen (siehe Kapitel~\ref{basics:bim}).
 Darum stellen im IFC Format vorliegende Gebäudepläne den Ausgangspunkt dieser Arbeit dar.
 
-\section{Modellierung}
+\section{Modellierung}\label{real:modellierung}
 Dank den in Kapitel~\ref{basics:ifcopenshell} vorgstellten Open Source Projekten zu den Technologien \textit{IFC} und \textit{BIM} sowie deren Anbindungen an die ebenfalls öffentliche 3D-Grafiksoftware Blender (siehe Kapitel~\ref{basics:blender}) ist es möglich auf einen komplett kostenlosen Technologiestack zur Modellierung von Gebäuden im IFC Format zurückzugreifen.
 Die Option Blender mithilfe sogennanter \textit{Addons} an spezielle projektabhängige Anforderungen anzupassen, macht diese Modellierungsumgebung noch zweckdienlicher.
-Ein solches Addon ist zum Beispiel \textit{blenderbim}. 
+Ein solches Addon ist zum Beispiel \textit{blenderbim} (siehe Abschnitt~\ref{basics:blenderbim}). 
 Dieses ermöglicht es ein IFC Projekt direkt in Blender entweder neu zu beginnen oder ein vorhandenes zu bearbeiten.
 Für diese Arbeit relevant ist zunächst das Erstellen und Annotieren von Wänden beziehungsweise Wandtypen, sowie das Anbringen von Öffnungen.
 Beide Konzepte sind Teil des IFC Standards und wurden bereits ausführlich in Kapitel~\ref{basics:ifc} vorgestellt.
@@ -15,7 +15,7 @@ Diese können mit den von Blender nativ angebotenen Werkzeugen angepasst werden.
 Zusätzlich gibt es weitere hilfreiche von Blenderbim eingeführte Modellierungsmöglichkeiten.
 Dank der Möglichkeit eigene \textit{IFCProperties} (siehe Kapitel~\ref{basics:ifc_properties}) zu definieren, lassen sich die in Kapitel~\ref{concept:raster} konzeptionierten Raster- und Modulinformationen zu den neu definierten Wandtypen hinzufügen.
 Bei Generierung eines \textit{IFCWall} Objekts werden diese Properties ebenfalls an das neue konkrete Wandstück geknüpft.
-Damit können diese Informationen sowohl an das nachfolgende Wall Detailing übermittelt, als auch zur intuitiveren Modellierung des 3D Modells herangezogen werden, indem man Nutzern durch ein für diese Arbeit entwickeltes Addon das für jeden Wandtyp zugeordnete Raster bei sämtlichen Transformationsvorgängen aufzwingt.
+Damit können diese Informationen sowohl an das nachfolgende Wall Detailing übermittelt, als auch zur intuitiveren Modellierung des 3D Modells herangezogen werden, indem man Nutzern durch ein für diese Arbeit entwickeltes Addon das für jeden Wandtyp zugeordnete Raster bei sämtlichen Transformationsvorgängen aufzwingt (siehe Abschnitt~\ref{concept:raster}).
 Dadurch werden kleine Modellierungsfehler von vornherein vermieden.
 
 \section{Wall Detailing}
@@ -175,7 +175,7 @@ Findet sich mit einer Startkonfiguration keine valide Lösung, so wird eine neue
 So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsraum, dieser wurde aber mithilfe des Abhängigkeitsgraphen deutlich minimiert, da das Modell dadurch in sinnvoller Weise durchsucht wird und Szenarien, die ohnehin zu keiner Lösung geführt hätten, übersprungen werden.
 Falls keine lückenlose Lösung gefunden werden kann, wird diejenige mit dem insgesamt kleinsten Lückenvolumen zurückgegeben.
 
-\subsection{Anwenden der Öffnungen}
+\subsection{Anwenden der Öffnungen}\label{real:openings}
 Den nächsten Schritt stellt das Anwenden der Öffnungen (siehe Klasse \textit{Openings} im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners}) sämtlicher \textit{WallLayerGroups} dar.
 Auch diese Operation wird schichtweise durchgeführt.
 Auf jeder Schicht der betroffenen \textit{WallLayerGroup} wird folgendes Verfahren angewandt:
@@ -191,7 +191,7 @@ Stürze werden in dieser Arbeit wie eine eigene Bausteingröße behandelt und k�
 Dies wird im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} durch die Verbindung zwischen den Klassen \textit{Opening} und \textit{BrickInformation} dargestellt.
 Der für den Sturz benötigte Platz, kann mit dem gleichen Öffnungsverfahren von oben geschaffen werden.
 
-\subsection{Anwenden der Mauerwerksverbände}
+\subsection{Anwenden der Mauerwerksverbände}\label{real:verband}
 Die für Mauerwerksverbände entwickelte mathematische Darstellung aus Kapitel~\ref{concept:mauerwerksverband} wurde mithilfe der in Abbildung~\ref{fig:real:class_diagram_bonds} dargestellten Klassenstruktur umgesetzt.
 Beispielhaft sind darin auch die den Kreuzverband und den Läuferverband repräsentierenden Klassen zu sehen.
 Letzterer kann zusätzlich durch Parameter angepasst werden, um zum Beispiel den Versatz zu verändern.
@@ -273,4 +273,5 @@ Nun kann für einen Baustein durch den Vergleich mit anderen Bausteinen herausge
 
 
 \subsection{Export}
+JSON struktur beschreiben
 Abhängigkeitsgraph und Ontologie für Regelwerk
