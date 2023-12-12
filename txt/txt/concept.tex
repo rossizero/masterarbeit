@@ -375,15 +375,45 @@ Ontologien bieten verschiedene Werkzeuge an, mithilfe derer auf streng definiert
 Da damit theoretisch sowohl Bausteindefinitionen und Instanzen, als auch Regeldefinitionen und konkrete Regeln formulierbar sind, ermöglicht dies ein flexibles Hinzufügen und Entfernen von Regeln und Bausteinen ohne dafür Programmcode schreiben zu müssen.
 Durch geschicktes Aufstellen von Einschränkungen an die Bausteinklassen kann ein Reasoner dazu verwendet werden, ein den Regeln entsprechendes Subset derjenigen Bausteine zu bilden, die in der derzeitig in der Ontologie hinterlegten Ausgangssituation platzierbar sind.
 Dies geschieht durch die Neuzuordnung einiger Bausteine zu einer speziell dafür definierten Klasse.
-Für eine Klasse \textit{Baustein} notwendige Informationen sind:
+Notwendige Informationen für eine generische Ausgangsklasse zur Beschreibung von Bausteinen sind:
 \begin{itemize}
-  \item Eine eindeutige ID anhand derer zum Beispiel Relationen zwischen Bausteinen angegeben werden können.
-  \item Einen Indikator der angibt, ob der Baustein bereits gesetzt wurde oder nicht.
-  \item Nachbarschaftsrelationen zu anderen Bausteinen. Da Bausteine sechs Seiten haben, an welchen andere Bausteine anliegen können, ist eine Unterscheidung zwischen den verschiedenen Nachbarschaftsarten möglich.
-  \item Eine Relation zwischen Bausteinen, die angibt, von welchen Bausteinen jeder Baustein abhängig ist. Diese Relation kann durch eine entsprechende Regel manipuliert werden und dadurch die Schlussfolgerungen eines Reasoners direkt beinflussen.
+  \item Eine eindeutige ID anhand derer für Bausteine aus der Ontologie die passenden Instanzen aus dem Programmcode identifiziert werden können.
+  \item Nachbarschaftsrelationen zu anderen Bausteinen. Da Bausteine sechs Seiten haben, an welchen andere Bausteine anliegen können, ist eine Unterscheidung zwischen den verschiedenen Nachbarschaftsarten (unten, oben, links, rechts, vorne, hinten) möglich.
+  \item Eine \textit{Abhängigkeits}-Eigenschaft zwischen Bausteinen, die angibt, an welchen Bausteinen jeder Baustein gebunden ist. Diese Relation kann durch eine entsprechende Regel manipuliert werden und dadurch die Schlussfolgerungen eines Reasoners direkt beinflussen. Sie wird als \textit{dependOn} Objekteigenschaft realisiert, deren Range Individuen der Klasse Brick sind.
+  \item Einen Indikator \textit{hasBeenSet} der angibt, ob der Baustein bereits gesetzt wurde oder nicht. Darüber kann ein Reasoner verstehen, welche benachbarten Bausteine über die Abhängigkeits-Eigenschaft nicht mehr zu berücksichtigen sind.
 \end{itemize}
-Um verschiedene Bauplanentwürfe gleichzeitig zu bearbeiten kann eine Klasse \textit{Gebäude} definiert werden, die alle Bausteine des dazugehörigen Bauplanentwurfs referenziert.
-Eine Klasse \textit{Regel}
+Diese Klasse wird nachfolgend als \textit{Brick} bezeichnet.
+Um verschiedene Bauplanentwürfe gleichzeitig zu bearbeiten kann eine Klasse \textit{Building} definiert werden, die alle Bausteine des dazugehörigen Bauplanentwurfs referenziert.
+Eine Klasse \textit{Rule} stellt die Grundlage zur Regeldefinition dar.
+Davon ausgehend können verschiedene Regelarten erstellt werden, die durch konkrete Individuen realisiert werden.
+Ein Beispiel wären Regeln, die eine Kardinalität zu einer ebenfalls in der Regel festgelegten Daten- oder Objekteigenschaft der Ontologie vorgeben (Informationen zu Eigenschaften im Kontext von Ontologien siehe Kapitel~\ref{basics:ontologie}).
+Damit könnte etwa die Menge aller Nachbarn eines Bausteins auf exakt, minimal oder maximal eine bestimmte Anzahl beschränkt werden.
+Eine weitere Art wären Regeln, die das Übernehmen einer bestimmten Eigenschaft auf alle über eine andere Eigenschaft assoziierten Bausteine voraussetzen.
+So könnten zum Beispiel alle über die \textit{untere Nachbarn}-Eigenschaft verbundenen Bausteine eines konkreten Bausteins in dessen Abhängigkeits-Eigenschaft übernommen werden.
+Notwendige Eigenschaften für diese Klasse sind:
+\begin{itemize}
+  \item Eine Assoziation auf eine Objekt- oder Dateneigenschaft der Ontologie, die angibt auf welche Eigenschaft die Regel Einfluss nimmt. Dazu wurde die Eigenschaft \textit{holdPropertyByName} eingeführt. Daraus werden die beiden Klassen \textit{DataPropertyHolder} und \textit{ObjectPropertyHolder} abgeleitet. Alle Instanzen dieser Klassen haben den Namen einer Daten- oder Objekteigenschaft als String-Wert hinterlegt.
+  \item Eine Unterscheidung zwischen Regeln, die Kardinalitäten voraussetzen und jenen, die Eigenschaften übertragen. Nachfolgend werden diese als \textit{CardinalityRule} und \textit{ApplyObjectPropertyRule} bezeichnet.
+  \item Für Kardinalitäten-vorgebende Regeln exisitieren die Eigenschaften \textit{min}, \textit{max} und \textit{exactly}, welche auf einen Integer-Wert verweisen.
+  \item Für Eigenschafts-übertragende Regeln exisitiert eine Eigenschaft, die ähnlich zu der aus dem obersten Punkt den Namen der \glqq{}Zieleigenschaft\grqq{} enthält.
+\end{itemize}
+Um zwischen verschiedenen Situationen wechseln zu können, die die Anwendung mehrerer Regeln voraussetzen wird die Klasse \textit{Ruleset} definiert, die lediglich auf beliebig viele Individuen der Rule-Klasse referenziert.
+
+Mit diesem Aufbau wurde die Grundlage geschaffen, einen Reasoner einzusetzen, der die Individuen der Klasse Brick konkreteren Subklassen zuweist.
+So lässt sich über die Werte in der \textit{hasBeenSet} Dateneigenschaft zwischen schon gesetzten und noch zu setzenden Brick unterscheiden.
+Diese Klassen werden als \textit{PlacedBrick} und \textit{PlaceableBrick} bezeichnet und sind zwangsläufig disjunkt.
+Es können nur diejenigen Brick-Individuen, die ebenfalls die der Klasse PlaceableBrick zugeordnet werden können, Teil des Subsets an Bausteinen sein, das in der derzeit gegeben Situation platziert werden können.
+Daraus lässt sich die erste Einschränkung für die als \textit{NextBrick} bezeichnete Klasse aufstellen:
+Sie ist eine Subklasse der Klasse PlaceableBrick.
+Die Abhängigkeits-Eigenschaft der Klasse Brick wird nun zur Überprüfung der Legbarkeit eines Bausteins herangezogen.
+Sind für einen PlaceableBrick nur PlacedBricks über diese Eigenschaft referenziert, so gilt dieser als derzeit ablegbar und wird ebenfalls Teil der Klasse NextBrick.
+Insgesamt sieht die Klassenbeschreibung der Klasse NextBrick schließlich wie folgt aus:
+\lstinline{PlaceableBrick and (dependsOn only PlacedBrick)}
+Zu beachten ist allerdings die \textit{Open World Assumption}, nach welcher sich Ontologien richten (siehe ebenfalls Kapitel~\ref{basics:ontologie}).
+Darum ist es notwendig bei Befüllen der Ontologie, den im Bauplanentwurf errechneten Baustein-Instanzen explizite Einschränkungen vorzugeben.
+Für jeden Baustein müssen alle konkreten Individuen definiert werden, die mit ihm über Eigenschaften verbunden sind.
+Zusätzlich muss angegeben werden, dass diese Menge an Bausteinen auch tatsächlich die einzige unveränderbare Menge darstellt, die über sämtliche Eigenschaften damit verbunden sind.
+Falls dies nicht vorgenommen wird, kann ein Reasoner kein Individuum der Klasse NextBrick zuweisen, da es sein könnte, dass ein anderer PlaceableBrick existiert, der der Abhängigkeits-Eigenschaft des Individuums zugeordnet ist.
 
 \begin{enumerate}
   \item Klassendefinition aufstellen
