@@ -307,12 +307,12 @@ Stehen eine oder beide Kanten eines Wandstücks allein, ohne dort über eine Bez
 Häufig ist dies nur möglich, indem man für manche Bausteine die Länge des verwendeten Moduls anpasst.
 
 \begin{figure}[htb]
-    \begin{subfigure}[b]{0.5\columnwidth}
+    \begin{subfigure}[b]{0.49\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept_wall_endings_1.png}
       \caption{Läuferverband.}\label{fig:concept:lauferverband_ending}
     \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.5\columnwidth}
+    \hfil
+    \begin{subfigure}[b]{0.49\columnwidth}
       \includegraphics[width=\columnwidth]{fig/concept_wall_endings_2.png}
       \caption{Kreuzverband.}\label{fig:concept:kreuzverband_ending}
     \end{subfigure}
@@ -412,11 +412,5 @@ Für jeden Baustein müssen alle konkreten Individuen definiert werden, die mit 
 Zusätzlich muss angegeben werden, dass diese Menge an Bausteinen auch tatsächlich die einzige unveränderbare Menge darstellt, die über sämtliche Eigenschaften damit verbunden sind.
 Falls dies nicht vorgenommen wird, ist ein Reasoner nicht in der Lage ein PlaceableBrick-Individuum der Klasse NextBrick zuzuordnen, da es theoretisch sein könnte, dass ein anderer PlaceableBrick existiert, der der \textit{dependsOn}-Eigenschaft des Individuums zugeordnet ist.
 
-\begin{enumerate}
-  \item Klassendefinition aufstellen
-  \item welche infos kommen in das json?
-  \item Relationen definieren
-  \item Bild Einfügen
-  \item Regel einführen (und versuchen diese nachträglich mit owlready reinzuhauen)
-  \item Reasoner ausprobieren und schrittweise bausteine als gesetzt markieren um neue Menge an möglichen steinen rauszubekommen
-\end{enumerate}
+Werden all die notwendigen Informationen zu den Bausteinen auf diese Weise und unter Einhaltung der definierten Regeln eines Regelsets in die Ontologie gespeist, kann durch Starten eines Reasoners das erste Subset aller Bausteine anhand der Zuordnung zu der Klasse NextBrick ausgelesen werden.
+Nun kann daraus schrittweise ein Baustein gewählt und als platziert markiert werden, sodass mit erneuten Starten des Reasoners ein neues Set an Individuen der Klasse Nextbrick errechnet wird, das zu der veränderten Situation und den vorgegebenen Regeln passt.
