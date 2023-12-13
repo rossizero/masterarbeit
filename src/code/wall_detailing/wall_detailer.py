@@ -118,8 +118,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0
-            fill_right = len(layer.right_connections) == 0
+            fill_left = len(layer.left_connections) == 0# or True
+            fill_right = len(layer.right_connections) == 0# or True
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -226,7 +226,7 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thin_walls.ifc")
+    tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls.ifc")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()

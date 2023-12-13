@@ -325,6 +325,9 @@ def calculate_neighborhood(bricks: List[Brick], grid: np.array):
     """
     s = 0
     for i, brick in enumerate(bricks):
+        if i%10 == 0:
+            print(i, "/", len(bricks))
+
         neighbor_positions = brick.get_neighbour_positions(grid)
 
         for other in bricks[i + 1:]:
