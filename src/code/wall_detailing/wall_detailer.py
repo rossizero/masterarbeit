@@ -226,11 +226,13 @@ if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))],
                          "LegoWallType2": [BrickInformation(0.032, 0.016, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
-                         "LegoWallType1": [BrickInformation(0.016, 0.008, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))]
+                         "LegoWallType1": [BrickInformation(0.016, 0.008, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
+                         "Test1": [BrickInformation(0.32, 0.16, 0.096, grid=np.array([0.08, 0.08, 0.096]))],
+                         "Scenario2": [BrickInformation(2.0, 1.0, 1.2, grid=np.array([0., 0.5, 1.2]))],
                          }
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario3/AC20-FZK-Haus.ifc")
+    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc")
     #tmp = IfcImporter("../../models/scenario11.ifc")
     #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc")
     www = tmp.get_walls()
@@ -245,7 +247,7 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(scenario.walls, brick_information)
+    wall_detailer = WallDetailer(www, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))

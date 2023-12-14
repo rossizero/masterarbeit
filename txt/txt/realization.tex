@@ -273,5 +273,13 @@ Nun kann für einen Baustein durch den Vergleich mit anderen Bausteinen herausge
 
 
 \subsection{Export}\label{real:export}
-JSON struktur beschreiben
-Abhängigkeitsgraph und Ontologie für Regelwerk
+In Kapitel~\ref{concept:regelbasierte_bauplandeduktion} wurde bereits erarbeitet, wie sich Regeln in einer Ontologie definieren lassen.
+Gleichzeitig wurde die Klasse \textit{Brick} definiert, welche alle notwendigen Informationen zu einem Baustein enthält, um diesen nach weiteren Eigenschaften zu analysieren.
+Sämtliche Klassen und Eigenschaften des Konzepts aus diesem Kapitel konnten mithilfe des Ontologie-Editors Protégé (siehe Kapitel~\ref{basics:protege}) umgesetzt werden.
+Dank der Python Bibliothek \textit{owlready 2} (siehe Kapitel~\ref{basics:owlready}) kann diese Ontologie leicht an den bisher entstandenen Programmcode angeschlossen werden.
+Zunächst werden die in der Ontologie erstellten Regel-Individuen ausgelesen und während der Befüllung der Ontologie mit Brick-Instanzen auf deren Eigenschaften angewandt.
+Insbesondere das Auffüllen der \textit{dependsOn}-Eigenschaft anhand der zuvor ausgerechneten Nachbarschaften spielt hier eine wichtige Rolle.
+Owlready erlaubt das Wählen und Starten unterschiedlicher Reasoner.
+Nachdem die Berechnungen des Reasoners beendet sind, kann über eine Anfrage, welche alle Individuen einer bestimmten Klasse zurückgibt, die derzeitige Liste platzierbarer Bausteine ausgelesen werden.
+Da es in anderen Programmiersprachen womöglich schwieriger ist, Daten aus Ontologien auszulesen, werden zusätzlich alle relevanten Informationen zu den Bausteinen in einer sogenannte JSON-Datei zur Verfügung gestellt.
+JSON (JavaScript Object Notation) ist ein weit verbeitetes, menschenlesbares Austauschformat, zu welchem in den meisten Programmiersprachen hilfreiche Bibliotheken exisitieren, die das Auslesen und Strukturieren von Daten aus diesen Dateien sehr~\cite{json}.
