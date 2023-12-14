@@ -131,7 +131,7 @@ class IfcImporter:
             # update wall
             wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
             wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, np.array([wall.length / 2, wall.width / 2, wall.height / 2])), decimals=6)
-            #wall.translation = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
+            wall.translation = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
             wall.rotation = rotation
 
             #print("wall", wall.length, wall.width, wall.height, wall.get_translation(), translation, wall.get_rotation(), rotation)
@@ -143,16 +143,21 @@ class IfcImporter:
             for void_element in w.HasOpenings:
                 o = void_element.RelatedOpeningElement
                 if "Body" in [rep.RepresentationIdentifier for rep in o.Representation.Representations]:
-                    shape = geom.create_shape(settings, o).geometry
-                    translation, rotation = self.get_absolute_position(o.ObjectPlacement)
+                    try:
+                        shape = geom.create_shape(settings, o).geometry
+                        translation, rotation = self.get_absolute_position(o.ObjectPlacement)
 
-                    dimensions = self.get_shape_dimensions(shape)
-                    print("opening", dimensions)
-                    translation -= wall.get_translation() - np.array([wall.length / 2, wall.width / 2, wall.height / 2])
-                    translation -= np.array([dimensions[0] / 2, dimensions[1] / 2, 0.0])
-                    rotation *= wall.get_rotation().inverse()
-                    opening = Opening(wall, translation, rotation, dimensions)
-                    wall.openings.append(opening)
+                        dimensions = self.get_shape_dimensions(shape)
+                        print("opening", dimensions)
+                        translation -= wall.get_translation() - np.array([wall.length / 2, wall.width / 2, wall.height / 2])
+                        translation -= np.array([dimensions[0] / 2, dimensions[1] / 2, 0.0])
+                        #rotation = quaternion.from_euler_angles(0, 0, 0)
+                        rotation *= wall.get_rotation().inverse()
+                        opening = Opening(wall, translation, rotation, dimensions)
+                        wall.openings.append(opening)
+                    except Exception as e:
+                        print(e)
+                        continue
 
         return walls
 

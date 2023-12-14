@@ -226,7 +226,7 @@ if __name__ == "__main__":
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls.ifc")
+    tmp = IfcImporter("../../models/scenarios/Scenario3/AC20-FZK-Haus.ifc")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()
@@ -234,9 +234,9 @@ if __name__ == "__main__":
     scenario = Scenario1()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
-    #shapes = [o.get_shape() for w in www for o in w.openings]
-    #shapes.extend([w.get_shape() for w in www])
-    #WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
+    shapes = [o.get_shape() for w in www for o in w.openings]
+    shapes.extend([w.get_shape() for w in www])
+    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
     wall_detailer = WallDetailer(scenario.walls, brick_information)

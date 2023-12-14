@@ -52,11 +52,17 @@ class IfcModelingHelper:
     def get_grid_from_type(cls, ifc_type):
         type_psets = ifcopenshell.util.element.get_psets(ifc_type)
         if type_psets is not None:
+            grid_tmp = [0.0, 0.0, 0.0]
             for name in type_psets.keys():
                 pset = type_psets[name]
-                if cls.GRID_IDENTIFICATOR in pset.keys():
-                    g = [round(n, 9) for n in pset[cls.GRID_IDENTIFICATOR]]
-                    return g
+                if cls.GRID_IDENTIFICATOR+"_x" in pset.keys():
+                    grid_tmp[0] = round(pset[cls.GRID_IDENTIFICATOR+"_x"], 6)
+                if cls.GRID_IDENTIFICATOR+"_y" in pset.keys():
+                    grid_tmp[1] = round(pset[cls.GRID_IDENTIFICATOR+"_y"], 6)
+                if cls.GRID_IDENTIFICATOR+"_z" in pset.keys():
+                    grid_tmp[2] = round(pset[cls.GRID_IDENTIFICATOR+"_z"], 6)
+                if grid_tmp != [0.0, 0.0, 0.0]:
+                    return grid_tmp
         return None
 
     @classmethod
