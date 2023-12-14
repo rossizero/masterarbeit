@@ -332,6 +332,7 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                                            or np.linalg.norm(intersection - l1.right_edge) < width
                                            or np.linalg.norm(intersection - l2.left_edge) < width
                                             or np.linalg.norm(intersection - l2.right_edge) < width)
+                                print("T-Joint")
                                 #c = Corn(intersection)
                                 #c.layers.update([l1, l2, t_joint])
                                 #corners.add_corner(c)

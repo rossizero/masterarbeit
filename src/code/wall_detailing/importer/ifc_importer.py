@@ -148,10 +148,9 @@ class IfcImporter:
                         translation, rotation = self.get_absolute_position(o.ObjectPlacement)
 
                         dimensions = self.get_shape_dimensions(shape)
-                        print("opening", dimensions)
-                        translation -= wall.get_translation() - np.array([wall.length / 2, wall.width / 2, wall.height / 2])
+                        print("opening", dimensions, translation)
+                        translation -= quaternion.rotate_vectors(wall.get_rotation().inverse(), wall.get_translation()) - np.array([wall.length / 2, wall.width / 2, wall.height / 2])
                         translation -= np.array([dimensions[0] / 2, dimensions[1] / 2, 0.0])
-                        #rotation = quaternion.from_euler_angles(0, 0, 0)
                         rotation *= wall.get_rotation().inverse()
                         opening = Opening(wall, translation, rotation, dimensions)
                         wall.openings.append(opening)

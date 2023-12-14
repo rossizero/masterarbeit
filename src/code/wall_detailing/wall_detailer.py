@@ -30,6 +30,7 @@ from scenarios.examples_for_text.CombinationExample import CombinationExampleFor
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
 from wall_detailing.scenarios.examples_for_text.scenario1 import Scenario1
+from wall_detailing.scenarios.examples_for_text.scenario2 import Scenario2
 
 
 class WallDetailer:
@@ -223,15 +224,20 @@ class WallDetailer:
 
 if __name__ == "__main__":
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
-                                  BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))]}
+                                  BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))],
+                         "LegoWallType2": [BrickInformation(0.032, 0.016, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
+                         "LegoWallType1": [BrickInformation(0.016, 0.008, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))]
+                         }
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
     tmp = IfcImporter("../../models/scenarios/Scenario3/AC20-FZK-Haus.ifc")
+    #tmp = IfcImporter("../../models/scenario11.ifc")
+    #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario1()
+    scenario = Scenario2()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
