@@ -1,23 +1,38 @@
 \chapter{Related Work}\label{related}
 
-\section{Automatisierte Legeroboter Projekte}
-TERMES von Kirstin Petersen et al.~\cite{Petersen2012}.
-\section{Planungsvorgehen Paper}
-Grundlage in sämtlichen Projekten, in welchen mithilfe von Legerobotern Automatisiert Gebäude beziehungsweise Gebilde mit Bausteinen errichtet werden, ist eine vorangehende Planungsphase.
-In dieser Planungsphase müssen alle notwendigen Infomrationen zu allen benötigten Bausteinen gesammelt werden, um im Anschluss die Bauphase überhaupt möglich zu machen.
-Das sogennante \textit{Wall Detailing} stellt ein Teilproblem des 3D Bin Packing Problems dar.
-Paper zum 3D Bin Packing~\cite{Liu2015}(Obst und Genüse)~\cite{Zuo2022}. TODO: Paar Sätze zum bin packing finden und zitieren.
+\section{Projekte mit automatisierten Legerobotern}
+Die Automatisierung der Baubranche hat neben Faktoren wie Geschwindigkeit, Effizienz und Kostenreduzierung auch den Vorteil Bauprojekte an Orten zu realisieren, die für Menschen ungeeignet sind~\cite{Petersen2012}.
+Dafür wurde unter anderem das Projekt \textit{TERMES} von Kirstin Petersen et al.\ konzipiert, mit welchem das Team, angelehnt an dem Verhalten von Termiten, einen Schwarm bodengebundener Roboter koordinieren, die zusammen Strukturen errichten~\cite{Petersen2012}.
+Darüber hinaus stellen Kirstin Petersen et al.\ in einer anderen Veröffentlichung eine umfangreiche Übersicht von weiteren Projekten aus dem Bereich \textit{Collective Robotic Construction} vor~\cite{Petersen2019}.
+Doch nicht nur vollautomatische Roboterschwärme haben das Ziel die Baubranche zu verändern.
+Es gibt bereits etablierte Firmen, die semi-automatische Roboteranlagen zur Unterstützung der Arbeiter vor Ort anbieten und damit erfolgreich die Bauzeit reduzieren können.
+Dazu zählt zum Beispiel \textit{Hadrian X} der Firma FBR:\ ein mobiler, bodengebundener Kran der in der Lage ist ausgehend von einem CAD Modell ein bis zu drei Stockwerke hohes Gebäude aufzuschichten~\cite{HadrianX}.
+Ein weiteres Beispiel stellt \textit{SAM100}, ein mobiler Ziegelstein legender Roboter der Firma \textit{Construction Robotics} dar~\cite{SAM}.
+Dieser kann sich sogar erhöht auf einem Gerüst bewegen.
+
+\section{Planungsvorgehen}
+Grundlage für sämtliche Projekte, in welchen mithilfe von Legerobotern automatisiert Gebäude beziehungsweise Gebilde mit einer Form von Bausteinen errichtet werden, ist eine vorangehende Planungsphase.
+In dieser Planungsphase müssen die notwendigen Informationen zu allen benötigten Bausteinen gesammelt werden, um im Anschluss die Bauphase überhaupt zu ermöglichen.
+Das sogennante \textit{Wall Detailing} stellt ein ähnliches Problem wie das \textit{3D Bin Packing Problem} dar und errechnet, ausgehend von einem 3D Modell eines Gebäudes und Informationen zu den gewünschten Mauerwerksverbänden und Bausteinformen, einen möglichen Bauplan für das gesamte Gebäude.
+Unter dem \textit{Bin Packing Problem} (auf deutsch als Behälterproblem bekannt) versteht man das möglichst platzsparende Schichten von Objekten in einen oder mehrere limitierte Behälter.
+Dies kann sowohl im zwei- als auch im dreidimensionalen Raum geschehen.
+Besonders herausfordernd ist das Verteilen unregelmäßig geformter Objekte wie es etwa Xiao Liu et al.\ am Beispiel verschiedener geometrischer Formen oder Qiruyi Zuo et al.\ am Beispiel von Obstkisten zeigen~\cite{Liu2015}~\cite{Zuo2022}.
 Während sich in diesem Bereich viel mit unregelmäßig geformten Objekten beschäftigt wird, kann im Falle von Wänden, die mit Bausteinen errichtet werden eine Einschränkung auf quaderförmige Objekte vorgenommen werden.
+Zudem ist das Ziel des \textit{Wall Detailings} nicht eine möglichst gute, sprich eine möglichst lückenlose Lösung zu finden, sondern eine, die sinvoll aufgeschichtete Wände hervorbringt.
+Dabei stellen vor allem Übergänge zwischen mehreren Wandstücken besonders kritische Bereiche dar, für die es vor Ort oft Expertenwissen benötigt.
+Zusätzlich muss Mauerwerk in Deutschland und Europa einigen Normen entsprechen. 
+Darauf wird in Kapitel~\ref{basics:Mauerwerksbau} näher eingegangen.
+Nachfolgend werden einige Veröffentlichungen vorgestellt, die ein ähnliches Ziel wie diese Arbeit verfolgen.
 
 \subsection{Digital Plan of Brickwork Layout for Robotic Bricklaying Technology}\label{related:digital_plan_of_brickwork_layout}
-In diesem Paper stellen Usmanov et al. ein generelles Vorgehen für das Erstellen eines Ziegel-Legeplans für ein als digitales Modell vorliegendes Gebäude vor~\cite{Usmanov2021}.
+In diesem Paper stellen Usmanov et al.\ ein generelles Vorgehen für das Erstellen eines Ziegel-Legeplans für ein als digitales Modell vorliegendes Gebäude vor~\cite{Usmanov2021}.
 Dieses Vorgehen gliedern sie in sechs Schritte:
 \begin{enumerate}
 \item Das vorliegende IFC Modell (siehe~\ref{basics:ifc}) nach Wandelementen durchsuchen und diese in das sogennante BREP-Format (siehe~\ref{basics:brep}) konvertieren.
 \item Das Aufteilen des gesamten Modells in Schichten, die der Modulhöhe des verwendeten Ziegelsteinformats entspricht.
 \item Verbindungen von getrennt modellierten Wandelementen heraussuchen. Dies ist zum Beispiel an Eckstücken der Fall, da dafür oft zwei einzelne Wandelemente modelliert werden, welche in einem Winkel zueinander stehen und sich berühren. Für die nachfolgenden Schritte sind diese Verbindungen relevante Informationen.
-\item  Mit den Informationen der vorhergegangenen Schritte können nun für jede Schicht kritische Bereiche identifiziert werden, an welchen später ein komplexer Legevorgang von Ziegeln von Nöten ist.
-\item  Nun werden zunächst die kritischen Bereiche anhand einer vorher definierten Legeanleitung mit teilweise angepassten Ziegelsteinen bestückt und im Anschluss die restlichen Bereiche aller Wände mit dem ausgewählten Standardziegel aufgefüllt. In diesem Schritt werden zusätzlich Fenster- und Türstürze über deren Öffnungen in den Wänden gelegt.
+\item Mit den Informationen der vorhergegangenen Schritte können nun für jede Schicht kritische Bereiche identifiziert werden, an welchen später ein komplexer Legevorgang von Ziegeln von Nöten ist.
+\item Nun werden zunächst die kritischen Bereiche anhand einer vorher definierten Legeanleitung mit teilweise angepassten Ziegelsteinen bestückt und im Anschluss die restlichen Bereiche aller Wände mit dem ausgewählten Standardziegel aufgefüllt. In diesem Schritt werden zusätzlich Fenster- und Türstürze über deren Öffnungen in den Wänden gelegt.
 \item Dieser Schritt fasst das Anzeigen als 3D Modell und Konvertieren des Resultats in eine nicht konkreter definierte Listenform zusammen. Das Ergebnis für das von den Autoren ausgewählte Beispielgebäude ist in Abbildung~\ref{fig:related:usmanov} zu sehen.
 \end{enumerate}
 
