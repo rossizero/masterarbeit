@@ -48,7 +48,7 @@ class WallDetailer:
                 wall_type_groups[w.ifc_wall_type] = WallTypeGroup(w.ifc_wall_type, self.brick_informations[w.ifc_wall_type])
             layer_group = WallLayerGroup.from_wall(w, wall_type_groups[w.ifc_wall_type].module)
             wall_type_groups[w.ifc_wall_type].layer_groups.append(layer_group)
-
+        print("combining now")
         for group in wall_type_groups.values():
             # combine layer_groups if possible
             wall_num = len(group.layer_groups)
@@ -228,13 +228,14 @@ if __name__ == "__main__":
                          "LegoWallType2": [BrickInformation(0.032, 0.016, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
                          "LegoWallType1": [BrickInformation(0.016, 0.008, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
                          "Test1": [BrickInformation(0.32, 0.16, 0.096, grid=np.array([0.08, 0.08, 0.096]))],
-                         "Scenario2": [BrickInformation(2.0, 1.0, 1.2, grid=np.array([0., 0.5, 1.2]))],
+                         "Scenario2": [BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))],   # like lego but a little nicer to read
                          }
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
     tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc")
     #tmp = IfcImporter("../../models/scenario11.ifc")
     #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc")
+    tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()

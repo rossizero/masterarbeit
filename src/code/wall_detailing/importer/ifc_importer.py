@@ -22,11 +22,12 @@ print("IfcOpenshell version", ifcopenshell.version)
 
 
 class IfcImporter:
-    def __init__(self, ifc_file_path):
+    def __init__(self, ifc_file_path, wall_type="Test"):
         self.ifc_file_path = ifc_file_path
         self.ifc_file = ifcopenshell.open(self.ifc_file_path)
         self.unit_scale = 1.0  # what factor do we need to multiply the units with to get meters
         projects = self.ifc_file.by_type("IfcProject")
+        self.wall_type = wall_type
 
         alll = IfcUnitEnum
         if len(projects) > 0: # MAYDO differentiate between projects
@@ -117,7 +118,7 @@ class IfcImporter:
 
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
-            wall = Wall(shape, "Scenario2")
+            wall = Wall(shape, self.wall_type)
 
             transformation = gp_Trsf()
             tmp = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
@@ -146,20 +147,26 @@ class IfcImporter:
                     try:
                         shape = geom.create_shape(settings, o).geometry
                         translation, rotation = self.get_absolute_position(o.ObjectPlacement)
-
-                        transformation = gp_Trsf()
-                        transformation.SetTranslation(gp_Vec(*translation).Reversed())
-                        shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
                         transformation = gp_Trsf()
                         transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
                         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
+                        #transformation = gp_Trsf()
+                        #transformation.SetTranslation(gp_Vec(*translation).Reversed())
+                        #shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
+
                         dimensions = self.get_shape_dimensions(shape)
-                        print("opening", dimensions, translation)
-                        translation -= wall.get_translation() - np.array([wall.length / 2, wall.width / 2, wall.height / 2])
-                        translation -= np.array([dimensions[0] / 2, dimensions[1] / 2, 0.0])
-                        rotation *= wall.get_rotation().inverse()
+                        dimensions = (dimensions[0], wall.width, dimensions[2])
+                        print("opening", dimensions, translation, rotation)
+                        translation -= wall.get_translation() # quaternion.rotate_vectors(wall.get_rotation(), wall.get_translation())  # wall.get_translation() -
+                        translation += quaternion.rotate_vectors(wall.get_rotation(), np.array([wall.length / 2, wall.width / 2, wall.height / 2]))
+
+                        #translation += quaternion.rotate_vectors(wall.get_rotation().inverse(), np.array([wall.length / 2, wall.width / 2, wall.height / 2]))
+                        #translation += quaternion.rotate_vectors(wall.get_rotation(), )
+                        #translation -= np.array([dimensions[0] / 2, dimensions[1] / 2, 0.0])
+                        #translation -= quaternion.rotate_vectors(wall.get_rotation(), np.array([0.0, dimensions[1] / 2.0, 0.0]))
+                        rotation *= wall.get_rotation().inverse()  # rotation = 0 rotation
+                        #print("rotation", rotation)
                         opening = Opening(wall, translation, rotation, dimensions)
                         wall.openings.append(opening)
                     except Exception as e:
