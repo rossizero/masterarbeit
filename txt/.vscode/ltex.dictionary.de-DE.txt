@@ -34,3 +34,7 @@ ELK
 HermiT
 Parsia
 Clark
+Modellierungsphase
+Bauplandeduktion
+Fragmentierungsproblem
+Massenpersonalisierung
