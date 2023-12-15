@@ -1,23 +1,30 @@
-\chapter{Related Work} \label{related}
-\section{3D Druck und Additive Fertigung von Gebäuden}
-\section{Legeroboter}
+\chapter{Related Work}\label{related}
+
+\section{Automatisierte Legeroboter Projekte}
+TERMES von Kirstin Petersen et al.~\cite{Petersen2012}.
+\section{Planungsvorgehen Paper}
+Grundlage in sämtlichen Projekten, in welchen mithilfe von Legerobotern Automatisiert Gebäude beziehungsweise Gebilde mit Bausteinen errichtet werden, ist eine vorangehende Planungsphase.
+In dieser Planungsphase müssen alle notwendigen Infomrationen zu allen benötigten Bausteinen gesammelt werden, um im Anschluss die Bauphase überhaupt möglich zu machen.
+Das sogennante \textit{Wall Detailing} stellt ein Teilproblem des 3D Bin Packing Problems dar.
+Paper zum 3D Bin Packing~\cite{Liu2015}(Obst und Genüse)~\cite{Zuo2022}. TODO: Paar Sätze zum bin packing finden und zitieren.
+Während sich in diesem Bereich viel mit unregelmäßig geformten Objekten beschäftigt wird, kann im Falle von Wänden, die mit Bausteinen errichtet werden eine Einschränkung auf quaderförmige Objekte vorgenommen werden.
+
 \subsection{Digital Plan of Brickwork Layout for Robotic Bricklaying Technology}\label{related:digital_plan_of_brickwork_layout}
-In diesem Paper stellen Usmanov et al. ein generelles Vorgehen für das Erstellen eines Ziegel-Legeplans für ein als digitales Modell vorliegendes Gebäude vor \cite{Usmanov2021}.
+In diesem Paper stellen Usmanov et al. ein generelles Vorgehen für das Erstellen eines Ziegel-Legeplans für ein als digitales Modell vorliegendes Gebäude vor~\cite{Usmanov2021}.
 Dieses Vorgehen gliedern sie in sechs Schritte:
 \begin{enumerate}
-\item Das vorliegende IFC Modell (siehe \ref{basics:ifc}) nach Wandelementen durchsuchen und diese in das sogennante BREP-Format (siehe \ref{basics:brep}) konvertieren.
+\item Das vorliegende IFC Modell (siehe~\ref{basics:ifc}) nach Wandelementen durchsuchen und diese in das sogennante BREP-Format (siehe~\ref{basics:brep}) konvertieren.
 \item Das Aufteilen des gesamten Modells in Schichten, die der Modulhöhe des verwendeten Ziegelsteinformats entspricht.
 \item Verbindungen von getrennt modellierten Wandelementen heraussuchen. Dies ist zum Beispiel an Eckstücken der Fall, da dafür oft zwei einzelne Wandelemente modelliert werden, welche in einem Winkel zueinander stehen und sich berühren. Für die nachfolgenden Schritte sind diese Verbindungen relevante Informationen.
 \item  Mit den Informationen der vorhergegangenen Schritte können nun für jede Schicht kritische Bereiche identifiziert werden, an welchen später ein komplexer Legevorgang von Ziegeln von Nöten ist.
 \item  Nun werden zunächst die kritischen Bereiche anhand einer vorher definierten Legeanleitung mit teilweise angepassten Ziegelsteinen bestückt und im Anschluss die restlichen Bereiche aller Wände mit dem ausgewählten Standardziegel aufgefüllt. In diesem Schritt werden zusätzlich Fenster- und Türstürze über deren Öffnungen in den Wänden gelegt.
-\item Dieser Schritt fasst das Anzeigen als 3D Modell und Konvertieren des Resultats in eine nicht konkreter definierte Listenform zusammen. Das Ergebnis für das von den Autoren ausgewählte Beispielgebäude ist in Abbildung \ref{fig:usmanov} zu sehen.
+\item Dieser Schritt fasst das Anzeigen als 3D Modell und Konvertieren des Resultats in eine nicht konkreter definierte Listenform zusammen. Das Ergebnis für das von den Autoren ausgewählte Beispielgebäude ist in Abbildung~\ref{fig:related:usmanov} zu sehen.
 \end{enumerate}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\columnwidth]{fig/sustainability-13-03905-g004.png}
-    \caption{Ergebnis des Verfahrens zur Erstellung eines Ziegel-Legeplans nach Usmanov et al. \cite{Usmanov2021}.}
-    \label{fig:usmanov}
+    \caption{Ergebnis des Verfahrens zur Erstellung eines Ziegel-Legeplans nach Usmanov et al.~\cite{Usmanov2021}.}\label{fig:related:usmanov}
 \end{figure}
 
 Besonders detailliert ist ihr Ansatz für das Finden von besagten kritischen Teilbereichen einer Wand mithilfe mathematischer Gleichungen, die alle Wände zueinander in Beziehung stellen.
@@ -26,15 +33,8 @@ Anhand der von ihnen zusammengetragenen Informationen konnten die Autoren erfolg
 Dennoch werden zum Schluss noch einige Einschränkungen ihres Verfahrens angesprochen.
 Vor allem die Beschränkung auf 90 Grad Ecken und das Gebunden sein an einen einzigen Standardziegel werden als besonders restriktiv wahrgenommen.
 
-\section{Materialien}
-\section{Bausteine}
-\section{Wall detailing und das (3D) Bin Packing Problem}
-\label{basics:wall-detailing}
-TODO hinführen über Bin Packing hin zu "spezialfall" Wall detailing mit arbiträren Bausteinen und Eigenschaften (wie versetzen der ziegel)
-
-TODO über bin packing schreiben, erklären paper suchen, lösungsansätze zu np hartem problem 
-
-Xu Chengran et al. haben in ihrem Paper "Optimal brick layout of masonry walls based on intelligent evolutionary algorithm and building information modeling" verschiedene Optimierungsansätze aus dem Bereich des 2D Packaging Problems getestet \cite{Xu2021}.
+\subsection{Optimal brick layout of masonry walls based on intelligent evolutionary algorithm and building information modeling}
+Xu Chengran et al.\ haben in ihrem Paper verschiedene Optimierungsansätze aus dem Bereich des 2D Packaging Problems getestet~\cite{Xu2021}.
 %TODO was ist das für ein Problem? Zitat aus nem Paper finden!
 Konkret wurden drei Algorithmen verwendet: Differential Evolution, Particle Swarm Optimization und Neighbourhood Field Optimization.
 %TODO ergebnisse vergleichen und eines davon hervorheben, welches ich evtl selbst einbau
@@ -43,17 +43,19 @@ Außerdem wird ein drei-phasiges Vorgehen vorgeschlagen: Data collection, Brick 
 Dieses Vorgehen eignet sich auch für das Finden von Bausteinkonfigurationen in dieser Arbeit, da zuerst alle relevanten geometrischen Daten (in diesem Fall Wände, Fenster, Türen usw.) aus dem 3D Modell gesammelt werden müssen, bevor das Detailing stattfinden kann.
 Nach dem Optimieren der Bausteinkonfiguration muss das Ergebnis ebenfalls in ein Format gebracht werden, das für die folgenden Schritte verwendet und eventuell auch dem Nutzer angezeigt werden kann.
 
+\subsection{Automated Brick Pattern Generator for Robotic Assembly using Machine Learning and Images}
+Bárbara Andrade Zandavali et al.\ untersuchen in ihrem Paper wie gut sich Machine Learning Algorithmen dazu eignen anhand von Bildern Pläne für konkretes Mauerwerk zu erzeugen~\cite{Zandavali2019}.
+Ein Kernaspekt dabei war das Anwenden verschiedener Mauerwerksverbände auf arbiträre Vielecke, welche die Form eines Wandabschnitts beschreiben.
+\begin{figure}[hb!]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{fig/ecaadesigradi2019_605.png}
+    \caption{Eingaben und Ergebnisse des \textit{Brick Pattern Generator} nach Bárbara Andrade Zandavali et al.~\cite{Zandavali2019}.}\label{fig:related:Zandavali2019}
+\end{figure}
+In Abbildung~\ref{fig:related:Zandavali2019} sind verschiedene Eingabeformen (linke Spalte) und deren Ergebnisse in vier verschiedenen Ausgabearten zu sehen.
+Da es sich sowohl bei dem Eingabe- als auch bei dem Ausgabeformat um Bilder handelt, musste im Anschluss zunächst untersucht werden, wie gut sich die verschiedenen Ergebnisarten dazu eignen daraus tatsächliches Mauerwerk zu interpretieren.
+Zusammenfassend konnten die Autoren berichten, dass das Vorgehen teilweise zu fragwürdigen Resultaten geführt hat, welches sich aber mit Sicherheit noch verbessern lässt.
+Dennoch ist der Anwendungsfall auf gerade Wandabschnitte schlecht gewählt, da sich die selben Ergebnisse auch durch \glqq{}Ausstanzen\grqq{} der Vielecke aus einem zuvor aufgefüllten quadratischem Bereich erreichen lassen.
+Das Anwenden intelligenter Mechanismen wie Machine Learning zum automatischen Lösen der kritischen Eck- und Kreuzungsbreiche zwischen mehreren Wandstücken kann sich allerdings durchaus als nützlich erweisen.
 
-Soft items: https://arxiv.org/abs/2206.15116
-
-Irregular Shaped items: https://link.springer.com/content/pdf/10.1631/FITEE.1400421.pdf
-
-"Parametric Blockwall-Assembly Algorithms for the Automated Generation of Virtual Wall Mockups Using BIM"
-\section{Ludwigs Dissertation}
-\label{related:ludwigs dis}
-
-
-%https://www.mdpi.com/2227-7390/7/12/1232
-%https://www.mdpi.com/2071-1050/13/7/3905
-%https://www.itcon.org/papers/2014_13.content.080704.pdf
-%https://books.google.de/books?hl=de&lr=&id=9-HxCwAAQBAJ&oi=fnd&pg=PA257&dq=Autonomous+robotic+building+system&ots=090tO8dB6l&sig=MiaKFiU5uqRUFeEH5rBg08wfvL8#v=onepage&q=Autonomous%20robotic%20building%20system&f=false
+\subsection{Parametric Blockwall-Assembly Algorithms for the Automated Generation of Virtual Wall Mockups Using BIM}
+Tarek Zaki et al.~\cite{Zaki2017}.
