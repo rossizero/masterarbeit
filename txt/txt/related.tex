@@ -2,7 +2,7 @@
 
 \section{Projekte mit automatisierten Legerobotern}
 Die Automatisierung der Baubranche hat neben Faktoren wie Geschwindigkeit, Effizienz und Kostenreduzierung auch den Vorteil Bauprojekte an Orten zu realisieren, die für Menschen ungeeignet sind~\cite{Petersen2012}.
-Dafür wurde unter anderem das Projekt \textit{TERMES} von Kirstin Petersen et al.\ konzipiert, mit welchem das Team, angelehnt an dem Verhalten von Termiten, einen Schwarm bodengebundener Roboter koordinieren, die zusammen Strukturen errichten~\cite{Petersen2012}.
+Dafür wurde unter anderem das Projekt \textit{TERMES} von Kirstin Petersen et al.\ konzipiert, mit welchem das Team, angelehnt an dem Verhalten von Termiten, einen Schwarm bodengebundener Roboter koordinieren, die als Einheit Strukturen errichten~\cite{Petersen2012}.
 Darüber hinaus stellen Kirstin Petersen et al.\ in einer anderen Veröffentlichung eine umfangreiche Übersicht von weiteren Projekten aus dem Bereich \textit{Collective Robotic Construction} vor~\cite{Petersen2019}.
 Doch nicht nur vollautomatische Roboterschwärme haben das Ziel die Baubranche zu verändern.
 Es gibt bereits etablierte Firmen, die semi-automatische Roboteranlagen zur Unterstützung der Arbeiter vor Ort anbieten und damit erfolgreich die Bauzeit reduzieren können.
@@ -31,15 +31,19 @@ Dieses Vorgehen gliedern sie in sechs Schritte:
 \begin{enumerate}
 \item Das vorliegende IFC Modell (siehe~\ref{basics:ifc}) nach Wandelementen durchsuchen und diese in das sogennante BREP-Format (siehe~\ref{basics:brep}) konvertieren.
 \item Das Aufteilen des gesamten Modells in Schichten, die der Modulhöhe des verwendeten Ziegelsteinformats entspricht.
-\item Verbindungen von getrennt modellierten Wandelementen heraussuchen. Dies ist zum Beispiel an Eckstücken der Fall, da dafür oft zwei einzelne Wandelemente modelliert werden, welche in einem Winkel zueinander stehen und sich berühren. Für die nachfolgenden Schritte sind diese Verbindungen relevante Informationen.
+\item Verbindungen von getrennt modellierten Wandelementen heraussuchen. 
+Dies ist zum Beispiel an Eckstücken der Fall, da dafür oft zwei einzelne Wandelemente modelliert werden, welche in einem Winkel zueinander stehen und sich berühren. 
+Für die nachfolgenden Schritte sind diese Verbindungen relevante Informationen.
 \item Mit den Informationen der vorhergegangenen Schritte können nun für jede Schicht kritische Bereiche identifiziert werden, an welchen später ein komplexer Legevorgang von Ziegeln von Nöten ist.
-\item Nun werden zunächst die kritischen Bereiche anhand einer vorher definierten Legeanleitung mit teilweise angepassten Ziegelsteinen bestückt und im Anschluss die restlichen Bereiche aller Wände mit dem ausgewählten Standardziegel aufgefüllt. In diesem Schritt werden zusätzlich Fenster- und Türstürze über deren Öffnungen in den Wänden gelegt.
-\item Dieser Schritt fasst das Anzeigen als 3D Modell und Konvertieren des Resultats in eine nicht konkreter definierte Listenform zusammen. Das Ergebnis für das von den Autoren ausgewählte Beispielgebäude ist in Abbildung~\ref{fig:related:usmanov} zu sehen.
+\item Nun werden zunächst die kritischen Bereiche anhand einer vorher definierten Legeanleitung mit teilweise angepassten Ziegelsteinen bestückt und im Anschluss die restlichen Bereiche aller Wände mit dem ausgewählten Standardziegel aufgefüllt. 
+In diesem Schritt werden zusätzlich Fenster- und Türstürze über deren Öffnungen in den Wänden gelegt.
+\item Dieser Schritt fasst das Anzeigen als 3D Modell und Konvertieren des Resultats in eine nicht konkreter definierte Listenform zusammen. 
+Das Ergebnis für das von den Autoren ausgewählte Beispielgebäude ist in Abbildung~\ref{fig:related:usmanov} zu sehen. 
 \end{enumerate}
 
-\begin{figure}[ht]
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.6\columnwidth]{fig/sustainability-13-03905-g004.png}
+    \includegraphics[width=0.7\columnwidth]{fig/sustainability1303905g004.png}
     \caption{Ergebnis des Verfahrens zur Erstellung eines Ziegel-Legeplans nach Usmanov et al.~\cite{Usmanov2021}.}\label{fig:related:usmanov}
 \end{figure}
 
@@ -51,18 +55,18 @@ Vor allem die Beschränkung auf 90 Grad Ecken und das Gebunden sein an einen ein
 
 \subsection{Optimal brick layout of masonry walls based on intelligent evolutionary algorithm and building information modeling}
 Xu Chengran et al.\ haben in ihrem Paper verschiedene Optimierungsansätze aus dem Bereich des 2D Packaging Problems getestet~\cite{Xu2021}.
-%TODO was ist das für ein Problem? Zitat aus nem Paper finden!
 Konkret wurden drei Algorithmen verwendet: Differential Evolution, Particle Swarm Optimization und Neighbourhood Field Optimization.
-%TODO ergebnisse vergleichen und eines davon hervorheben, welches ich evtl selbst einbau
-Außerdem wird ein drei-phasiges Vorgehen vorgeschlagen: Data collection, Brick layout und Data Output.
-%TODO das vmtl einfach auch so aufziehen. Mauern aus modell extrahieren mit geometrischen infos, optimieren und iwie rausballern
-Dieses Vorgehen eignet sich auch für das Finden von Bausteinkonfigurationen in dieser Arbeit, da zuerst alle relevanten geometrischen Daten (in diesem Fall Wände, Fenster, Türen usw.) aus dem 3D Modell gesammelt werden müssen, bevor das Detailing stattfinden kann.
-Nach dem Optimieren der Bausteinkonfiguration muss das Ergebnis ebenfalls in ein Format gebracht werden, das für die folgenden Schritte verwendet und eventuell auch dem Nutzer angezeigt werden kann.
+Außerdem wird ein drei-phasiges Vorgehen vorgeschlagen: \textit{Data collection}, \textit{Brick layout} und \textit{Data Output}.
+Dieses Vorgehen ähnelt dem von Usmanov et al.\ und eignet sich ebenfalls für das Finden von Bausteinkonfigurationen in dieser Arbeit, da zuerst alle relevanten geometrischen Daten aus dem 3D Modell gesammelt werden müssen, bevor das \textit{Wall Detailing} stattfinden kann.
+Nach dem Optimieren der Bausteinkonfiguration muss das Ergebnis auch in ein Format gebracht werden, das für die nachfolgenden Schritte verwendet und eventuell auch dem Nutzer angezeigt werden kann.
+Auch in dieser Veröffentlichung werden lediglich zwei verschiedene Mauerwerksverbände betrachtet, die zwar von den Optimierungsalgorithmen umgesetzt werden konnten, aber nur an geraden Wandstücken getestet wurden.
+Das Anwenden der Lösungsalgorithmen auf Eck- und Kreuzungsbereiche stellt einen sinnvolleren Anwendungsfall dar, als damit das \textit{Wall Detailing} gerader Wandabschnitte zu lösen.
+Letzteres kann ebenso iterativ berechnet werden, was potentielle Fehler der Optimierungsalgorithmen verhindert, während das Lösen der kritischen Bereiche eher einem Problem entspricht, das mit \glqq{}intelligenten\grqq{} Optimierungsverfahren bewältigt werden kann. 
 
 \subsection{Automated Brick Pattern Generator for Robotic Assembly using Machine Learning and Images}
 Bárbara Andrade Zandavali et al.\ untersuchen in ihrem Paper wie gut sich Machine Learning Algorithmen dazu eignen anhand von Bildern Pläne für konkretes Mauerwerk zu erzeugen~\cite{Zandavali2019}.
 Ein Kernaspekt dabei war das Anwenden verschiedener Mauerwerksverbände auf arbiträre Vielecke, welche die Form eines Wandabschnitts beschreiben.
-\begin{figure}[hb!]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/ecaadesigradi2019_605.png}
     \caption{Eingaben und Ergebnisse des \textit{Brick Pattern Generator} nach Bárbara Andrade Zandavali et al.~\cite{Zandavali2019}.}\label{fig:related:Zandavali2019}
@@ -71,7 +75,15 @@ In Abbildung~\ref{fig:related:Zandavali2019} sind verschiedene Eingabeformen (li
 Da es sich sowohl bei dem Eingabe- als auch bei dem Ausgabeformat um Bilder handelt, musste im Anschluss zunächst untersucht werden, wie gut sich die verschiedenen Ergebnisarten dazu eignen daraus tatsächliches Mauerwerk zu interpretieren.
 Zusammenfassend konnten die Autoren berichten, dass das Vorgehen teilweise zu fragwürdigen Resultaten geführt hat, welches sich aber mit Sicherheit noch verbessern lässt.
 Dennoch ist der Anwendungsfall auf gerade Wandabschnitte schlecht gewählt, da sich die selben Ergebnisse auch durch \glqq{}Ausstanzen\grqq{} der Vielecke aus einem zuvor aufgefüllten quadratischem Bereich erreichen lassen.
-Das Anwenden intelligenter Mechanismen wie Machine Learning zum automatischen Lösen der kritischen Eck- und Kreuzungsbreiche zwischen mehreren Wandstücken kann sich allerdings durchaus als nützlich erweisen.
+Das Anwenden intelligenter Mechanismen wie Machine Learning zum automatischen Lösen der kritischen Eck- und Kreuzungsbereiche zwischen mehreren Wandstücken kann sich allerdings durchaus als nützlich erweisen.
 
 \subsection{Parametric Blockwall-Assembly Algorithms for the Automated Generation of Virtual Wall Mockups Using BIM}
-Tarek Zaki et al.~\cite{Zaki2017}.
+Tarek Zaki et al.\ beschreiben in diesem Paper ein Vorgehen, das es ermöglicht die Werkstatt- und Montageplanung für ein Bauprojekt, das in einer BIM-fähigen Umgebung geplant wird, direkt innerhalb derselben Umgebung durchführen zu können~\cite{Zaki2017}.
+Dies wurde bisher von Hand als zusätzliches sogennantes \textit{Level of Detail} (LOD) berechnet und in das Projekt integriert.
+Das angestrebte LOD ist eine Art Mockup und ein Schritt vor dem nächsten LOD, dem Baubestandsplan, der eine exakte Repräsentation der zu bauenden Elemente darstellt.
+Das Ziel dieser Veröffentlichung ist dieses LOD direkt in der BIM Umgebung zu berechnen und anzuzeigen, da die dafür notwendigen Informationen darin ohnehin vorhanden sind.
+Insgesamt soll dies eine genauere Materialanalyse und Kostenplanung ermöglichen.
+Da es sich aber \glqq{}nur\grqq{} um ein Mockup handelt, werden zum Beispiel Eckbereiche nicht berücksichtigt, sondern durch sich überlappende Wandstücke realisiert.
+Dafür kann jedoch ein beliebiges Basismodul vorgegeben werden, das nach Erstellen des Mockups bereits offensichtliche Fehler sichtbar macht.
+So überschneidet sich etwa ein deplatziertes Fenster mit dem Mauerwerk, wenn sich dieses nicht auf dem durch das Grundmodul vorgegebene Raster befindet.
+Dennoch soll das Ergebnis dieser Arbeit im Gegensatz dazu ein konkreter Bauplanentwurf sein, der direkt in die Realität überführt werden kann; sei es von Robotern oder Menschen oder einer Kombination aus beiden.
