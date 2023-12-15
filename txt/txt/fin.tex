@@ -1,9 +1,12 @@
 \chapter{Fazit und Ausblick}
-Statik, Schiefe Wände (bzw der dachgiebel zb. da hab ich iwo ein paper rumliegen)
-Nicht 90 grad ecken
-Machine Learning und Optimierungsansätze zum lösen kritischer Bereiche (ecken und so, auch zwischen verschiedenen (gleich hohen) bausteinen / Mauerwerksverbänden)!
-Ausstanzen beliebiger Vielecke die die form eines wandstücks beschreiben.
-\section{Sternchenaufgabe: Szenario mit "runden" Wänden und arbiträren (nicht rechteckige) Bausteinformen / schräge schnitte}
-Was machen wir wenn die Wand nicht perfekt mit den vorgegebenen Bausteintypen gebaut werden kann (Beispiel ein runder Turm)
-Bausteinverbindungen (wie Mörtel) betrachten und als \textit{Verbindungselement} in das Bausteinformat mit aufnehmen? Wie kann man diesen so einschränken, dass nur physisch machbares ausgrechnet wird.
-Was wenn die Bausteine arbiträre Formen haben und nur in sehr komplexen Mustern eine "dichte" Wand ergeben -> tiling Probleme.
+Mit dem Ergebnis dieser Arbeit konnten erstaunlich viele Teilprobleme bei der Überführung eines 3D Modells eines Gebäudes in konkretes Mauerwerk identifiziert und für viele davon Lösungen gefunden werden.
+Vor allem durch die Unterstützung beliebiger Basismodule und das einfache Definieren neuer Mauerwerksverbände unterscheidet sich das erarbeitete Konzept von einigen in Kapitel~\ref{related} vorgestellten Veröffentlichungen.
+Mit der flexiblen Definition von Regelsets innerhalb einer Ontologie konnte der Grundstein für eine komplexe regelbasierte Analyse des errechneten Bauplanentwurfs gelegt werden.
+Dies konnte anhand diverser Fallstudien und Szenarien belegt werden.
+Dennoch gibt es selbstverständlich einige Erweiterungsmöglichkeiten.
+Insbesondere das programmatische Lösen kritischer Bereiche wie etwa T-Kreuzungen und anderen Situationen, die nicht zuvor in den beteiligten Mauerwerksverbänden eingepflegt wurden, stellt ein interessantes aber komplexes Problem dar.
+Hier bietet sich das Verwenden von Optimierungsansätzen aus der Domäne des \textit{Bin Packings} oder das darauf gezielte Trainieren von \textit{Machine Learning Algorithmen} an.
+Damit könnten eventuell auch Probleme wie runde Ecken und Ecken, die keinen 90\textdegree{} Winkel aufweisen umgesetzt werden.
+Aber auch der Anwendungsfall nicht quadratischer Wandstücke kann mit dem vorliegenden Grundgerüst der schichtweisen Betrachtung eines Wandabschnitts durch \glqq{}Ausstanzen\grqq{} eines Vielecks daraus berücksichtigt werden.
+Eine Erweiterung um eine simulative Komponente ist ebenfalls denkbar.
+Darin könnten etwa Statikberechnungen durchgeführt werden, um potentiell fehlerhafte Bereiche im Gebäudemodell ausfindig zu machen.
