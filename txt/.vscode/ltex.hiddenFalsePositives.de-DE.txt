@@ -1,0 +1,2 @@
+{"rule":"F_ANSTATT_PH","sentence":"^\\QDa sich an einem Wandstück übereinander mehrere Ecken befinden können, bildet sich damit ein Abhängigkeitsgraph zwischen allen miteinander verketteten Wandstücken.\\E$"}
+{"rule":"F_ANSTATT_PH","sentence":"^\\QDies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph exisitieren.\\E$"}

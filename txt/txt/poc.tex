@@ -1,12 +1,12 @@
 \chapter{Proof of Concept}
 Nun wird das realisierte Konzept anhand der in Kapitel~\ref{scenarios} vorgestellten Fallstudien auf Applikabilität geprüft.
-Aus den Ergebnissen dieses Kapitels kann im Anschluss ein Fazit gezogen und ein potentieller Ausblick auf künftige Erweiterungen des Konzepts gegeben werden.
+Aus den Ergebnissen dieses Kapitels kann im Anschluss ein Fazit gezogen und ein potenzieller Ausblick auf künftige Erweiterungen des Konzepts gegeben werden.
 
 \section{Von 3D Gebäudeplan zu Bauplanentwurf}
 Zunächst müssen für Szenario 1 und 2 Gebäudepläne in einem Konstruktionsplaner modelliert werden.
 Dazu wurde, wie schon in Kapitel~\ref{real:modellierung} beschrieben, die 3D Modellierungs-Software Blender herangezogen (siehe Kapitel~\ref{basics:blender}).
 Diese kann mit der frei verfügbaren Erweiterung \textit{blenderbim} zu einem funktionsfähigen BIM Editor mit \textit{IFC} Unterstützung ausgebaut werden (auch diese Technologien wurden bereits in den Kapiteln~\ref{basics:blenderbim} und~\ref{basics:ifc} vorgestellt).
-Darin lassen sich sowohl individuelle Wandtypen erstellen, als auch mithilfe der \textit{IfcProperties} Annotationen über Modul und Rastermaße daran anhängen.
+Darin lassen sich sowohl individuelle Wandtypen erstellen, als auch mithilfe der \textit{IfcPropertySets} Annotationen über Modul und Rastermaße daran anhängen.
 Mit den in Kapitel~\ref{concept:raster} definierten Modellierungseinschränkungen, deren Umsetzung in Kapitel~\ref{real:modellierung} thematisiert wurde, konnte die Modellierungsphase sowohl erleichtert, als auch beschleunigt werden.
 
 \subsection{Szenario 1}\label{poc:scenario1}
@@ -23,7 +23,7 @@ Die verschiedenen Verbände lassen sich wie in Kapitel~\ref{real:verband} gezeig
 Das Basismodul ist überall dort zu sehen, wo ein gerader Wandabschnitt vorliegt.
 Alle vier Eckbereiche sind korrekt identifiziert worden, denn dort wurde der für den jeweiligen Mauerwerksverband definierte Eckplan passend umgesetzt.
 Im Falle des Kreuz- und Kopfverbandes wurde das Basismodul dabei etwas verkürzt.
-Die drei den Bauplanentwürfe werden als Json-Dateien ausgegeben.
+Die drei den Bauplanentwürfe werden als JSON-Dateien ausgegeben.
 Darin sind alle in Abschnitt~\ref{real:export} angegebenen Informationen enthalten.
 In Abbildung~\ref{fig:poc:result_scenario1} sind die Meshes der drei mit Bausteinen realisierten Türme zu sehen.
 

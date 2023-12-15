@@ -7,10 +7,10 @@ Damit soll die ungeordnete Menge von konkreten Bausteinen eines Bauplanentwurfs 
 \section{Von 3D Gebäudeplan zu Bauplanentwurf}
 Diese erste Fallstudie enthält drei Szenarien anhand derer die Konzepte zur Errechnung eines Bauplanentwurfs ausgehend von 3D Gebäudeplänen erläutert und getestet werden.
 Die Pläne sind das Ergebnis der Gebäudemodellierung innerhalb eines Konstruktionsplaners.
-Die Modellierung soll mit Hilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen und die Gebäudepläne entsprechen darum in ihrer Struktur einem verbreiteten Industriestandard.
+Die Modellierung soll mithilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen und die Gebäudepläne entsprechen darum in ihrer Struktur einem verbreiteten Industriestandard.
 
 \subsection{Szenario 1}\label{scenarios:scenario1}
-In diesem einleitenden Szenario werden mithilfe eines einfachen vierwändigen Turmes einige der Kernkonzepte geprüft.
+In diesem einleitenden Szenario werden mithilfe eines einfachen Turmes mit vier Wänden einige der Kernkonzepte geprüft.
 Dabei werden sowohl die Modellierung des Turmes innerhalb des Konstruktionsplaners, als auch das anschließende Errechnen des Bauplanentwurfs thematisiert.
 Insbesondere das Anwenden verschiedener Mauerwerksverbände soll die Flexibilität des erarbeiteten Vorgehens demonstrieren.
 \subsubsection*{Beschreibung}
@@ -18,11 +18,11 @@ Der Turm besteht lediglich aus vier 20 Meter hohen Wänden, die einen einzigen R
 Es hat einen Grundriss von 10$\times$10 Metern.
 Die Wände sollen daraufhin unter Anwendung folgender Mauerwerksverbände realisiert werden:
 \begin{itemize}
-  \item Einem Läuferverband mit einem Versatz von 50\% der Bausteinlänge.
+  \item Einem Läuferverband mit einem Versatz von 50 \% der Bausteinlänge.
   \item Einem Kopf/Binderverband.
-  \item Einem Kreuzverband 
+  \item Einem Kreuzverband.
 \end{itemize}
-Da die beiden letzten Verbände bei gleichbleibendem Modul die Wanddicke verdoppeln, muss das Modell etwas angepasst werden, um nach wie vor den selben Grundriss aufzuweisen.
+Da die beiden letzten Verbände bei gleichbleibendem Modul die Wanddicke verdoppeln, muss das Modell etwas angepasst werden, um nach wie vor denselben Grundriss aufzuweisen.
 Als Basismodul wird ein Baustein mit den Maßen 2$\times$1$\times$0.5 Metern verwendet.
 Das vereinfacht die Interpretation der generierten Lösungen.
 Das dazugehörige Raster hat die Größe 1$\times$1$\times$0.5 Meter.
@@ -40,19 +40,19 @@ Durch Lösen dieses Szenarios werden folgende Fragestellungen beantwortet:
 \end{itemize}
 
 \subsection{Szenario 2}\label{scenarios:scenario2}
-Nun folgt ein Szenario das den Gegebenheiten eines realen Gebäudes bis auf die Skalierung eher entspricht.
+Nun folgt ein Szenario, das den Gegebenheiten eines realen Gebäudes bis auf die Skalierung eher entspricht.
 Es soll ein Gebäude konstruiert werden, welches einen Innenraum, Fenster und Türen enthält.
 Gleichzeitig wird das Modul stark verkleinert, sodass es den Maßen eines 4$\times$2 LEGO Steins entspricht (siehe Kapitel~\ref{basics:lego}).
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.505\columnwidth]{fig/scenario1_story_plan.jpg}
-  \caption{TODO bessere türen und so machen.Gebäudeplan des 3D Modells.}\label{fig:scenarios:Scenario2 Gebaeudeplan}
+  \caption{TODO bessere Türen und so machen. Gebäudeplan des 3D Modells.}\label{fig:scenarios:Scenario2 Gebaeudeplan}
 \end{figure}
 
 \subsubsection*{Beschreibung}
 Zu sehen ist der Plan eines einfachen Hauses mit einem Stockwerk.
-Dieses besitzt eine Eingangstür, eine Terassentür neben einem Fenster und eine Tür, die das Badezimmer vom Hauptraum trennt.
+Dieses besitzt eine Eingangstür, eine Terrassentür neben einem Fenster und eine Tür, die das Badezimmer vom Hauptraum trennt.
 Türen und Fenster stellen eine Herausforderung für den Planungsalgorithmus dar, da der Verlauf einer ansonsten durchgängigen Wand dadurch unterbrochen wird und Lücken aufweist.
 Es gibt breite Außen- und dünne Innenwände.
 Dafür müssen zwei Wandtypen definiert werden, die jeweils unterschiedliche Wanddicken vorgeben.
@@ -67,21 +67,23 @@ Dies entspricht einem Grundmodul von 15.8$\times$7.8$\times$9.6 Millimetern mit 
   \caption{LEGO Steintypen für die Innen- und Außenwände. (TODO Bild ist sehr hässlich)}\label{fig:scenarios:Scenario1 Lego Set}
 \end{figure}
 Mögliche Rotationen von Wänden, Fenstern und Türen sind auf 90\textdegree{} Schritte limitiert.
-Das stellt im Fall von LEGO eine vertretbare Enschränkung dar, da es ohnehin dem intuitiven Umgang mit dessen Steinen und gleichzeitig dem Baustil der meisten einfachen Gebäuden entspricht.
+Das stellt im Fall von LEGO eine vertretbare Einschränkung dar, da es ohnehin dem intuitiven Umgang mit dessen Steinen und gleichzeitig dem Baustil der meisten einfachen Gebäuden entspricht.
 
 \subsubsection*{Problemstellungen}
 \begin{itemize}
   \item Wie werden Öffnungen im Konstruktionsplaner umgesetzt und im Anschluss weiter verarbeitet?
-  \item Wände können verschiedene Dicken aufweisen. Wie kann das während der Modellierung angegeben werden? Wie kann das zu verwendende Modul und der Mauerwerksverband für eine Wand vorgegeben werden?
+  \item Wände können verschiedene Dicken aufweisen. 
+  Wie kann das während der Modellierung angegeben werden? 
+  Wie kann das zu verwendende Modul und der Mauerwerksverband für eine Wand vorgegeben werden?
   \item Wie können Übergänge zwischen Wänden verschiedener Dicke oder Verband realisiert werden?
   \item In diesem Szenario liegt eine T-Kreuzung vor. Wie können T-Kreuzungen von Eckbereichen unterschieden und dem Mauerwerksverband entsprechend umgesetzt werden? 
 \end{itemize}
 
-\subsection{Scenario 3}\label{scenarios:scenario3}
+\subsection{Szenario 3}\label{scenarios:scenario3}
 Um das Konzept nicht nur an eigens modellierten Gebäuden zu evaluieren, werden für dieses Szenario externe Modelle herangezogen.
 \subsubsection*{Beschreibung}
-Dabei kann sich zum Beispiel an den Beispielprojekten des \textit{Karlsruher Institut für Technologie} (KIT) bedient werden~\cite{KITSAMPLEHOUSE:online}.
-Zum Zeitpunkt der Erstellung dieser Arbeit exisitieren dort drei verschiedene Modelle.
+Dabei kann sich zum Beispiel an den Beispielprojekten des \textit{Karlsruher Instituts für Technologie} (KIT) bedient werden~\cite{KITSAMPLEHOUSE:online}.
+Zum Zeitpunkt der Erstellung dieser Arbeit existieren dort drei verschiedene Modelle.
 Getestet wird das Konzept an den beiden Gebäuden aus Abbildung~\ref{fig:scenarios:Scenario3 KIT}.
 \begin{figure}[htb]
   \begin{subfigure}[b]{0.5\columnwidth}
@@ -93,17 +95,17 @@ Getestet wird das Konzept an den beiden Gebäuden aus Abbildung~\ref{fig:scenari
     \includegraphics[width=\columnwidth]{fig/KIT-Buerogebaeude.png}
     \caption{Modell eines großen Bürogebäudes.}\label{fig:scenarios:scenario3 kit office}
   \end{subfigure}
-  \caption{Beispielmodelle des Karlsruher Institut für Technologie (KIT)~\cite{KITSAMPLEHOUSE:online}.}\label{fig:scenarios:Scenario3 KIT}
+  \caption{Beispielmodelle des Karlsruher Instituts für Technologie (KIT)~\cite{KITSAMPLEHOUSE:online}.}\label{fig:scenarios:Scenario3 KIT}
 \end{figure}
 \begin{comment}
 \end{comment}
 Darum muss es möglich sein, zu einem bereits abgeschlossenen Gebäudeplan weiter Informationen hinzuzufügen.
-Dazu zählen wie in den vorherigen Szenarios etwa die angabe verschiedener Wandtypen und die dafür gewünschten Grundmodule und Mauerwerksverbände.
+Dazu zählen wie in den vorherigen Szenarios etwa die Angabe verschiedener Wandtypen und die dafür gewünschten Grundmodule und Mauerwerksverbände.
 
 \subsubsection*{Problemstellungen}
 \begin{itemize}
   \item Wie lassen sich vorhandene Gebäudemodelle um die für diese Arbeit notwendigen Informationen erweitern?
-  \item Oft sind Gebäudepläne sehr detailiert und gespickt mit Informationen aus allen Fachbereichen des Bauwesens. Wie können lediglich die relevanten Daten aus dem Modell gefiltert werden?
+  \item Oft sind Gebäudepläne sehr detailliert und gespickt mit Informationen aus allen Fachbereichen des Bauwesens. Wie können lediglich die relevanten Daten aus dem Modell gefiltert werden?
 \end{itemize}
 
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}\label{scenarios:scenario4}
@@ -115,5 +117,5 @@ Darum dürfen konkrete Regelbeschreibungen nicht Teil der Programmcodebasis dies
 \subsection*{Problemstellungen}
 \begin{itemize}
   \item Wie können Regelsets ohne Code vorgegeben werden? Also in welchem Format.
-  \item In welcher Weise werden die Regeln dann angewendet etc?
+  \item In welcher Weise werden die Regeln dann angewendet etc.?
 \end{itemize}

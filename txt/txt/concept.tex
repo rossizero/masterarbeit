@@ -19,20 +19,20 @@ Dabei ist es allerdings wichtig diese Einschränkungen so zu wählen, dass die d
 Im Fall von Gebäude- oder besser Gebilde-Konstruktionen existieren bereits einige Beispiele, die durch Einschränkungen so stark vereinfacht werden, dass sogar Kinder damit umgehen können.
 Das wohl bekannteste ist das Lego System (siehe Kapitel~\ref{basics:lego}).
 Neben dessen nützlichen Steckverbindungen, die es ermöglichen ohne Anwenden von Klebstoff oder Schrauben Steine aneinander zu befestigen, ist für diese Arbeit das dadurch vorgegebene Raster ein interessantes Konzept zur Vereinfachung der Modellierung von Gebäuden.
-In Kapitel~\ref{basics: Mauerwerksbau} wurden auch schon die Begriffe \textit{Baunennmaß} und des \textit{Baurichtmaß} eingeführt und das oktametrischen Maßsystem vorgestellt.
+In Kapitel~\ref{basics:Mauerwerksbau} wurden auch schon die Begriffe \textit{Baunennmaß} und des \textit{Baurichtmaß} eingeführt und das oktametrischen Maßsystem vorgestellt.
 Dies entspricht im Prinzip ebenfalls einem Raster, das aber in Realität durch die Möglichkeit des Zerschneidens von Bausteinen nicht zwingend eingehalten werden muss.
 Da das Vorgeben eines Rasters, dem sowohl die Größen der zu verwendenden Bausteine, als auch (im Fall des Lego Systems) deren Platzierung folgen müssen, eine Einschränkung darstellt, die im Einklang mit der Intuition vieler Menschen steht, wurde dies in das Modellierungskonzept dieser Arbeit integriert.
 Das Vorgeben eines einzigen, fest definierten Rasters stellt allerdings eine zu große Einschränkung dar, weshalb das Definieren verschiedener Rastergrößen möglich sein muss.
 So können Modelle erstellt werden, die sowohl genau dem Lego System oder dem oktametrischen Maßsystem entsprechen, als auch beliebig anderen Rastern.
 
-Die Modellierungsumgebung kann mithilfe von Rasterinformationen eines Objektes für dessen korrekte Platzierung, Skalierung und Rotierung sorgen, indem eine solche Transformation auf die nächstliegende Größenordnung des Rasters gerundet wird.
+Die Modellierungsumgebung kann mithilfe von Rasterinformationen eines Objektes für dessen korrekte Platzierung, Skalierung und Rotation sorgen, indem eine solche Transformation auf die nächstliegende Größenordnung des Rasters gerundet wird.
 Im Beispiel eines Rasters von \([1.0m, 1.0m, 1.0m]\) würde demnach ein auf \([0.9m, -0.7m, 0.1m]\) zu translatierendes Objekt an die Position \([1.0m, -1.0m, 0.0m]\) versetzt werden.
 Da aber gewünschte valide Rotationen nicht aus einem derart vorgegebenen Raster interpretierbar sind, kann diese zusätzliche Information mithilfe eines kleinstmöglichen Winkelschritts angegeben werden.
 In den Modellen der Fallstudien aus Kapitel~\ref{scenarios} werden zum Beispiel ausschließlich Rotationen eines Vielfachen von 90\degree{} verwendet, was neben den Rastern ebenfalls hinterlegt wurde.
 Damit kann die Modellierungsumgebung auch den Rotationen von Objekten durch Runden eine Art Raster aufzwingen.
 
 \subsection{Wandstück}
-Auch die schiere Menge verschiedener Bestandteile eines Hause ist für eine Einzelperson ohne Vorkenntnisse nicht überblickbar.
+Auch die schiere Menge verschiedener Bestandteile eines Hauses ist für eine Einzelperson ohne Vorkenntnisse nicht überblickbar.
 Da das Ziel dieser Arbeit das automatische Generieren von Legeplänen für Bausteine innerhalb der Wände eines Gebäudes darstellt, lässt sich diese Menge vorerst auf zwei wesentliche Objekttypen reduzieren:
 Wände und Öffnungen in Wänden.
 Öffnungen werden zum Beispiel für Fenster oder Türen benötigt.
@@ -53,7 +53,7 @@ Dabei wiederholen sich sowohl die Bausteintransformationen innerhalb einer Schic
 Daher sind folgende Informationen zur Beschreibung eines Mauerwerksverbands notwendig:
 
 \begin{enumerate}
-    \item eine Menge einzigartiger Schichten, bis diese sich (mit einem Versatz) wiederholen.
+    \item Eine Menge einzigartiger Schichten, bis diese sich (mit einem Versatz) wiederholen.
     \item Für jede Schicht eine Menge verschiedener Bausteintransformationen, bis diese sich (ebenfalls mit einem Versatz) wiederholen.
 \end{enumerate}
 
@@ -62,7 +62,7 @@ Diese Schichten besitzen jeweils einen festgelegten, darunter liegenden Vorgäng
 Das bedeutet, die Reihenfolge in der Schichten eines Mauerwerksverbands auftreten, darf nicht verändert werden.
 Leicht zu sehen ist dies am Beispiel eines Kreuzverbandes, der durch Veränderung der Reihenfolge seiner Schichten, seine typische kreuzartige Form verlieren würde.
 
-Eine Bausteintransformationen wird in dieser Arbeit als Tupel mit folgendem Inhalt definiert:
+Eine Bausteintransformation wird in dieser Arbeit als Tupel mit folgendem Inhalt definiert:
 
 \begin{enumerate}
     \item Eine skalierbare Position \(\vec{p} = {[x, y, z]}^T\).
@@ -73,21 +73,21 @@ Eine Bausteintransformationen wird in dieser Arbeit als Tupel mit folgendem Inha
 
 Skalierbar bedeutet in diesem Fall, dass die Werte von beispielsweise der Position eines Bausteins in Abhängigkeit eines veränderbaren Faktors stehen.
 Zur endgültigen Platzierung eines Bausteins anhand einer Bausteintransformation aus einer Schicht eines Mauerwerksverbands wird lediglich noch ein Faktor benötigt, der angibt, die wievielte Wiederholung der Menge an Bausteintransformationen einer Schicht gerade Anwendung findet.
-Sei \(B_1 = (\vec{p}, r, \vec{p}_o, r_o) = ({[l, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, 0))\) eine Bausteintransformationen, \(M = (l, b, h) = (2, 1, 1)\) ein Modul und \(c\in\mathbb{N}\) ein Skalar,
+Sei \(B_1 = (\vec{p}, r, \vec{p}_o, r_o) = ({[l, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, 0))\) eine Bausteintransformation, \(M = (l, b, h) = (2, 1, 1)\) ein Modul und \(c\in\mathbb{N}\) ein Skalar,
 dann ergibt sich die Position \(P\) eines Bausteins zur Wiederholung \(c = 1\) wie folgt: \(P = \vec{p}_o + c * \vec{p} = {[0, 0, 0]}^T + 1 * {[2, 0, 0]}^T = {[2, 0, 0]}^T\).
 Im nächsten Wiederholungsschritt mit \(c = 2\) ergibt dies eine Position \(P = {[4, 0, 0]}^T\).
 Da die Rotationen als Euler-Winkel vorliegen, kann diese in ähnlicher Weise berechnet werden.
 Sie beschreibt die Rotation um den Mittelpunkt des Bausteins.
 In den meisten Fällen ist \(r\) allerdings gleich \((0, 0, 0)\) und \(r_o\) entweder ebenfalls \((0, 0, 0)\) oder \((0, 0, \frac{\pi}{2})\).
-Letzteres entspricht einer festen Rotation um 90\degree{} um die Z-Achse des Bausteins, unabhängig des Wiederholungsschritts \(r\).
+Letzteres entspricht einer festen Rotation um 90\degree{} um die z-Achse des Bausteins, unabhängig des Wiederholungsschritts \(r\).
 
 \begin{figure}[hb!]
     \centering
     \includegraphics[width=0.7\columnwidth]{fig/concept_Mauerwerksverband.png}
-    \caption{Der Läuferverband mit einem Versatz von 50\%.}\label{fig:concept:concept_Mauerwerksverband}
+    \caption{Der Läuferverband mit einem Versatz von 50 \%.}\label{fig:concept:concept_Mauerwerksverband}
 \end{figure}
 
-Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (0, 0, 0))\) und je einer Schicht gebildet aus den Mengen \(\{B_1\}\) bzw. \(\{B_2\}\) erhält man bereits eine komplette Beschreibung für den Läuferverband mit einem Versatz von 50\% der Steinlänge.
+Mit \(B_2 = ({[l, 0, 0]}^T, (0, 0, 0), {[\frac{l}{2}, 0, 0]}^T, (0, 0, 0))\) und je einer Schicht gebildet aus den Mengen \(\{B_1\}\) bzw. \(\{B_2\}\) erhält man bereits eine komplette Beschreibung für den Läuferverband mit einem Versatz von 50 \% der Steinlänge.
 Dieses Beispiel ist in Abbildung~\ref{fig:concept:concept_Mauerwerksverband} schematisch dargestellt.
 Aber auch andere, komplexere Verbände können in dieser Form abgebildet und so dem nachfolgenden Wall Detailing in abstrahierter Weise übergeben werden.
 
@@ -109,7 +109,7 @@ Aber auch andere, komplexere Verbände können in dieser Form abgebildet und so 
 Die speziellen Legepläne zur korrekten Auflösung von kritischen Bereichen wie zum Beispiel Ecken können ebenfalls in dieser Form für jeden Mauerwerksverband angegeben werden.
 Für das vorangegangene Beispiel sähe der Eckplan wie folgt aus:
 Eine Nulltransformation \(E_1 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, 0))\) in der ersten Schicht und eine Bausteintransformationen 
-\(E_2 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, \frac{\pi}{2}))\) mit einer festen 90\degree{} Rotation um die Z-Achse in der Zweiten.
+\(E_2 = ({[0, 0, 0]}^T, (0, 0, 0), {[0, 0, 0]}^T, (0, 0, \frac{\pi}{2}))\) mit einer festen 90\degree{} Rotation um die z-Achse in der Zweiten.
 Dieser Eckplan ist in Abbildung~\ref{fig:concept:corner_bond} zu sehen.
 Ein Beispiel, in welchem dieser Eckplan angewandt wird, wurde bereits in Abbildung~\ref{fig:basics:mauerwerk_eckloesung} in Kapitel~\ref{basics:Mauerwerksverband} gezeigt.
 Der einzige Unterschied zwischen dem Plan eines Mauerwerksverbands für gerade Wände und dessen Spezialplänen ist deren Anwendung.
@@ -125,14 +125,14 @@ Diese stellen wichtige Elemente bei der Planung von Gebäuden dar.
 Nur so ist es möglich abgeschlossene und aneinanderhängende Räume zu erstellen.
 Eine weitere, nicht ganz offensichtliche Beziehung besteht zwischen zwei Wandstücken, die in Verlängerung zueinander stehen, also gemeinsam einen größeren Wandbereich abdecken.
 Diese Beziehung wird nachfolgend \textit{Wandstückverbund} genannt.
-Bei allen vier Beziehungen handelt es sich Sonderfällle, für welche sich der Mauerwerksverband nicht ohne weiteres anwenden lässt, sondern teilweise explizit vorgegebene Legepläne angewandt werden müssen.
+Bei allen vier Beziehungen handelt es sich Sonderfälle, für welche sich der Mauerwerksverband nicht ohne weiteres anwenden lässt, sondern teilweise explizit vorgegebene Legepläne angewandt werden müssen.
 Darum ist es notwendig diese Bereiche ausfindig zu machen und voneinander unterscheiden zu können.
 Es werden nun für jede dieser Beziehungen Eigenschaften aufgezeigt anhand derer man diese in einer Menge an Wandstücken erkennen kann.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/Real_Combination_Base_labeled.png}
-    \caption{Modell einer Wand, die durch 7 einzelne Wandstücke des selben Typs gebildet wird, deren Mittelpunkte alle auf einer Ebene liegen.}\label{fig:concept:combination_example_base}
+    \caption{Modell einer Wand, die durch 7 einzelne Wandstücke desselben Typs gebildet wird, deren Mittelpunkte alle auf einer Ebene liegen.}\label{fig:concept:combination_example_base}
 \end{figure}
 
 \paragraph*{Wandstückverbände}\label{concept:combination_properties} sind alle Wandstücke,  die zwar in dem Modellierungsprozess des Gebäudes durch mehrere einzelne Wandstücke realisiert wurden, eigentlich aber eine Einheit darstellen. 
@@ -142,14 +142,14 @@ Ein umfangreiches Beispiel ist in Abbildung~\ref*{fig:concept:combination_exampl
 Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf folgende Eigenschaften getestet werden:
 
 \begin{enumerate}
-    \item Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden. 
+    \item Beide Wandstücke verwenden dasselbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden. 
     Dies verhindert vor allem das Kombinieren unterschiedlich dicker Wände.
     \item\label{real:z_parallel} Die lokalen Z-Achsen beider Wandstücke sind parallel. 
     Dies verhindert das Kombinieren unpassend rotierter Wandstücke.
     Die Überprüfung der Parallelität der Z-Achsen beider Wandstücke wird wie folgt durchgeführt:
 
     Sei \(\vec{v}_z = {[0, 0, 1]}^T\)
-    eine Z-Achse und \(v_z = (v_w, v_x, v_y, v_z) = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
+    eine z-Achse und \(v_z = (v_w, v_x, v_y, v_z) = (0, 0, 0, 1)\) das dazugehörige Quaternion. 
     Außerdem seien \(q_1\) und \(q_2\) die beiden Rotationen der Wandstücke. Dann stellen 
     \(v_{z^1} = q_1 * v_z * q_1^{-1}\) und 
     \(v_{z^2} = q_2 * v_z * q_2^{-1}\) die jeweiligen \glqq{}Z-Anteile\grqq{} dieser Rotationen dar.
@@ -157,8 +157,8 @@ Um zu überprüfen, ob zwei Wandstücke eine Einheit bilden, kann das Paar auf f
     \(\vec{v}_{z^1} = {[v_{z^1_x}, v_{z^1_y}, v_{z^1_z}]}^T\) und
     \(\vec{v}_{z^2} = {[v_{z^2_x}, v_{z^2_y}, v_{z^2_z}]}^T\).
     Ist nun \(|\vec{v}_{z^1} \cdot \vec{v}_{z^2}| = 1\) gegeben, so sind die lokalen Z-Achsen der Wandstücke gleich oder um exakt 180\degree{} verdreht und damit Parallelität erfüllt.
-    \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{real:z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der X-Achse, ersetzt werden muss.
-    \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
+    \item Die lokalen X-Achsen beider Wandstücke sind ebenfalls parallel. Das Vorgehen zur Überprüfung entspricht dem von Punkt~\ref{real:z_parallel}, nur dass \(v_z\) durch \(v_x = (0, 1, 0, 0)\), also der x-Achse, ersetzt werden muss.
+    \item Sie stehen auf derselben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
     \item\label{concept:schichten} Es liegt eine Berührung oder gar eine Überlappung vor.
 \end{enumerate}
 
@@ -174,9 +174,9 @@ Es liegt deshalb nahe, die Eck- und Kreuzungslegepläne zur Beschreibung des Mau
 Durch das vorangegangene Kombinieren mehrerer Wandstücke zu einer Einheit, können nachfolgend Wandstücke auch das Ergebnis solcher Kombinationen sein, aber aufgrund deren Parallelität wie ein einzelnes behandelt werden.
 Da sich Ecken, T-Kreuzungen und X-Kreuzungen stark ähneln, besitzen sie einige geteilte Eigenschaften:
 \begin{enumerate}
-    \item\label{concept:tmp1} Beide Wandstücke verwenden das selbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden.
+    \item\label{concept:tmp1} Beide Wandstücke verwenden dasselbe Modul und sind während der Modellierung mit den gleichen Wandtyp annotiert worden.
     \item Die lokalen Z-Achsen beider Wandstücke sind parallel. Das Vorgehen zur Überprüfung ist dasselbe wie in Abschnitt~\ref{concept:combination_properties}.
-    \item Sie stehen auf der selben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
+    \item Sie stehen auf derselben Höhe oder versetzt um ein Vielfaches der gemeinsamen Modulhöhe.
     \item\label{concept:tmp4} Mindestens eines der beiden Wandstücke endet auf einem anderen.
 \end{enumerate}
 
@@ -202,13 +202,13 @@ Sind diese Eigenschaften erfüllt, werden die Schnittpunkte der Richtungsvektore
 Im Falle einer einfachen Ecke oder einer T-Kreuzung, existiert nur ein einzelnes Paar an Wandstücken, die sich im Mittelpunkt der Ecke oder der T-Kreuzung schneiden.
 Der Unterschied ist lediglich die Stelle des Schnittpunkts relativ zu den beiden Wandstücken.
 Sei \(w_1\) die Breite von einem und \(w_2\) die des anderen Wandstücks, so gilt nach Punkt~\ref{concept:tmp1} \(w_1 = w_2\).
-Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als \(\frac{w_1}{2}\) entlang der lokalen X-Achse an einer der beiden Außenkanten handelt es sich um eine Ecke, da beide Wandstücke an diesem Punkt enden.
+Liegt der errechnete Schnittpunkt bei beiden Wandstücken näher als \(\frac{w_1}{2}\) entlang der lokalen x-Achse an einer der beiden Außenkanten handelt es sich um eine Ecke, da beide Wandstücke an diesem Punkt enden.
 Falls der Schnittpunkt bei einem der beiden Wandstücke allerdings mindestens  \(\frac{w_1}{2}\) innerhalb des Wandstücks liegt, so handelt es sich um eine T-Kreuzung.
 Ein Wandstück steht also auf einem Anderen.
 Dies ist in den Abbildungen~\ref{fig:concept:ecken_variationen} und~\ref{fig:concept:t_joint_variationen} zu sehen. 
-Werden für zwei unterschiedliche Paare die selben Schnittpunkte errechnet, so kann es sich entweder um eine mit drei Wandstücken modellierte T-Kreuzung oder X-Kreuzung handeln.
+Werden für zwei unterschiedliche Paare dieselben Schnittpunkte errechnet, so kann es sich entweder um eine mit drei Wandstücken modellierte T-Kreuzung oder X-Kreuzung handeln.
 Treffen sich an dem Schnittpunkt zwei Ecken, ergibt sich daraus eine T-Kreuzung (siehe Fall 2 in Abbildung~\ref{fig:concept:t_joint_variationen}).
-Teilen sich aber zwei T-Kreuzungen die selben Schnittpunkte, so sind alle Vorraussetzungen für eine eine X-Kreuzung gegeben (siehe Fall 1 in Abbildung~\ref{fig:concept:x_joint_variationen}).
+Teilen sich aber zwei T-Kreuzungen dieselben Schnittpunkte, so sind alle Voraussetzungen für eine X-Kreuzung gegeben (siehe Fall 1 in Abbildung~\ref{fig:concept:x_joint_variationen}).
 Einen Sonderfall für Punkt~\ref{concept:tmp4} stellt eine X-Kreuzung dar - modelliert aus zwei sich schneidenden Wandstücken.
 Dieser Fall ist in Abbildung~\ref{fig:concept:x_joint_variationen} mit der Variante Nummer 3 dargestellt.
 Hier liegt der Schnittpunkt des Wandstück-Paares mindestens \(\frac{w_1}{2}\) innerhalb beider Wandstücke und keines der Wandstücke endet auf dem Anderen.
@@ -224,7 +224,7 @@ Das anzuwendende Modul hat die Dimensionen \([2, 1, 0.5]\).
 Die Höhe des Moduls ist für dieses Problem allerdings irrelevant, weshalb die folgenden Skizzen ausschließlich die Draufsicht auf die Situationen zeigen.
 Wie in Kapitel~\ref{concept:mauerwerksverband} am Beispiel des Läuferverbands gezeigt, gibt es mehrere Möglichkeiten einem Eckplan zu folgen.
 Solange die Reihenfolge weiterhin eingehalten wird, kann mit jeder Schicht des Eckplans begonnen werden einen Eckbereich aufzufüllen.
-Das führt in dem Beispiel aufgrund des zwei-schichtigen Eckplans des Läuferverbands dazu, dass für jede der drei Ecken zwei mögliche Startschichten existieren.
+Das führt in dem Beispiel aufgrund des zweischichtigen Eckplans des Läuferverbands dazu, dass für jede der drei Ecken zwei mögliche Startschichten existieren.
 Dies resultiert demnach in insgesamt acht unterschiedlichen Varianten, von welchen allerdings nicht alle zielführend sind.
 In Abbildung~\ref{fig:concept:loesen_von_beziehungen2} ist eine Variante dargestellt, die Lücken in der Wand hinterlassen würde.
 Das zunächst naheliegend wirkende Füllen der Löcher durch kleinere Bausteine ist nicht zulässig, da damit das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) verletzt wäre.
@@ -257,23 +257,23 @@ Darum ist es notwendig eine Kombination an Startschichten über alle miteinander
   \caption{Eine mögliche Lösung und die durch die Eckpläne entstehende zweite Lösung für die darüber liegende Schicht.}\label{fig:concept:loesen_von_beziehungen3und4}
 \end{figure}
 
-Ein Verfahren, welches für das vorliegende Beispiel des halbversetzten Läuferverbands, dessen sehr einfachen Eckplans und dem durch seine praktische Form gewählten Moduls Lösungen findet, löst nicht zwangsläufig auch eine beliebig andere Situation.
+Ein Verfahren, welches für das vorliegende Beispiel des halb versetzten Läuferverbands, dessen sehr einfachen Eckplans und dem durch seine praktische Form gewählten Moduls Lösungen findet, löst nicht zwangsläufig auch eine beliebig andere Situation.
 Ebenfalls führt das Miteinbeziehen der 3. Dimension, also der Höhe der beteiligten Wandstücke, zu einer erheblichen Vervielfachung möglicher Eck-Konstellationen.
-Zieht man etwa das Beispiel aus Abbildung~\ref{fig:concept:combination_example_base} heran und erweitert es durch Einfügen weiterer Wandstücke um Ecken an den Außenkanten von Bereich 1, 3, 4, 5+6 und 7, an welchen beliebig weitere verkettete Wandstücke in sich geschlossene Kreise bilden, so können sogar nicht lösbare Fälle auftreten.
+Zieht man etwa das Beispiel aus Abbildung~\ref{fig:concept:combination_example_base} heran und erweitert es durch Einfügen weiterer Wandstücke um Ecken an den Außenkanten von Bereich 1, 3, 4, 5 + 6 und 7, an welchen beliebig weitere verkettete Wandstücke in sich geschlossene Kreise bilden, so können sogar nicht lösbare Fälle auftreten.
 Durch die Anzahl der Schichten des Eckplans eines Mauerwerksverbands und die Anzahl der miteinander verketteten Wandstücke baut sich schnell ein großer Lösungsraum auf.
 Aufgrund der Einschränkung eine mögliche Lösung lediglich mit zulässig oder unzulässig bewerten zu können, sind herkömmliche Optimierungsverfahren nicht in der Lage das Problem zu lösen.
 Diese benötigen meistens eine sogenannte \textit{Fitness Funktion}, welche die Güte der derzeitigen Lösung angibt und dem Optimierungsverfahren sozusagen eine Richtung weist, in der ein lokales Minimum oder Maximum dieser Funktion zu erwarten ist.
 Wählt man die \textit{Fitness Funktion} sinnvoll, kann damit ein kontinuierlicher Lösungsraum effizient nach einer passablen Lösung durchsucht werden.
-In dem vorliegenden Fall gibt es allerdings, wenn überhaupt, nur einige wenige zulässige Lösungen, die an den Startindizes der Pläne der jeweilgen Eckbereiche gekoppelt sind.
+In dem vorliegenden Fall gibt es allerdings, wenn überhaupt, nur einige wenige zulässige Lösungen, die an den Startindizes der Pläne der jeweiligen Eckbereiche gekoppelt sind.
 Diese Startindizes weisen aber nicht dieselben Eigenschaften auf, wie kontinuierliche Parameter, die durch kleine Veränderungen eine etwas bessere oder schlechtere Lösung erzeugen.
 Das Ändern eines Startindex einer einzelnen Ecke kann zwar eine Lösung mit einer reduzierten Anzahl an Lücken liefern, gibt aber deswegen keine Richtung vor in der man noch bessere Lösungen erwarten kann.
 Außerdem ist auch eine Lösung mit einer einzigen Lücke nicht zulässig, da dies die Stabilität eines Wandstücks stark beeinflussen könnte.
 
-Darum bleibt zunächst nur die Brute-Force-Methode (auch als Exhautionsmethode bekannt), also das Berechnen sämtlicher Konfigurationen bis eine zulässige gefunden wurde.
-Allerdings fällt schnell auf, das das Wählen eines einzigen Startindex für eine Ecke, alle direkt und indirekt damit verketteten anderen Ecken beinflusst.
+Darum bleibt zunächst nur die Brute-Force-Methode (im Deutschen auch als Exhautionsmethode bekannt), also das Berechnen sämtlicher Konfigurationen bis eine zulässige gefunden wurde.
+Allerdings fällt schnell auf, das das Wählen eines einzigen Startindex für eine Ecke, alle direkt und indirekt damit verketteten anderen Ecken beeinflusst.
 Wählt man in dem obigen Beispiel in Abbildung~\ref{fig:concept:loesen_von_beziehungen3} etwa die untere Ecke aus und legt deren Startindex auf die abgebildete Situation fest, so verbleibt ohnehin nur noch eine zulässige Konfiguration für die darüber liegende Ecke.
 Andernfalls befände man sich in der Situation aus Abbildung~\ref{fig:concept:loesen_von_beziehungen2}, welche keine zulässige Lösung darstellt.
-Setzt man nun den Eckplanindex für diese Ecke ebenfalls fest, zwingt man deren zweiten Nachbarn zwangsläufig in die abgebildete Situation, da der zweite Fall wieder zu einer unzulässigen Lösung führen würde.
+Setzt man nun den Eckplan-Index für diese Ecke ebenfalls fest, zwingt man deren zweiten Nachbarn zwangsläufig in die abgebildete Situation, da der zweite Fall wieder zu einer unzulässigen Lösung führen würde.
 Da sich an einem Wandstück übereinander mehrere Ecken befinden können, bildet sich damit ein Abhängigkeitsgraph zwischen allen miteinander verketteten Wandstücken.
 Dieser kann wie folgt erstellt werden:
 
@@ -281,24 +281,24 @@ Dieser kann wie folgt erstellt werden:
     \item Wähle eine Startecke und finde alle darüber- und darunterliegenden Ecken, die durch Festlegen eines Index einer Ecke in einer dieser Schichten direkt davon betroffen sind. Dies stellt den ersten Knoten des Abhängigkeitsgraphen dar.
     \item Finde alle Nachbarn aller zuvor gefunden Ecken.
     \item Wiederhole für jeden Nachbarn das Vorgehen aus dem ersten Schritt. Daraus resultieren die nächsten Knoten, welche mit dem Vorgängerknoten verbunden werden.
-    \item Stößt man dabei auf einen schon existierenden Knoten, so bricht man diesen Pfad an der Stelle ab. Dieser Fall tritt zum Beispiel auf, wenn in dem Modell ein abgeschlossener Raum exisitiert.
+    \item Stößt man dabei auf einen schon existierenden Knoten, so bricht man diesen Pfad an der Stelle ab. Dieser Fall tritt zum Beispiel auf, wenn in dem Modell ein abgeschlossener Raum existiert.
 \end{enumerate}
 
-Nun kann das Modell mithilfe des Graphen ähnlich einer Breitensuche durchlaufen und ausgehend von den Startindex des Eckplans eines Knotens die Indizes von dessen Nachbarn in passender Weise gewählt werden.
+Nun kann das Modell mithilfe des Graphen ähnlich einer Breitensuche durchlaufen und ausgehend von dem Startindex des Eckplans eines Knotens die Indizes von dessen Nachbarn in passender Weise gewählt werden.
 Dies wiederholt man für alle Nachbarn des derzeitigen Knotens, im nächsten Schritt für deren Nachbarn, solange bis alle Knoten einen Startindex zugewiesen bekommen haben.
 In ungünstigen Situationen hängt das Finden einer passenden Lösung von dem Startknoten ab.
-Dies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph exisitieren.
+Dies tritt manchmal auf, wenn mehrere Kreise im Abhängigkeitsgraph existieren.
 Wird für den gewählten Startknoten mithilfe des Verfahrens keine zulässige Lösung gefunden, so muss ein anderer Startknoten ausprobiert werden.
-Findet man für keinen Startknoten eine valide Lösung, so exisitiert für das Modell und den Modulen der gewünschten Mauerwerksverbände keine naheliegende, lückenlose Bausteinkonfiguration.
+Findet man für keinen Startknoten eine valide Lösung, so existiert für das Modell und den Modulen der gewünschten Mauerwerksverbände keine naheliegende, lückenlose Bausteinkonfiguration.
 
 \subsection{Öffnungen}\label{concept:openings}
 Neben Wänden sind Öffnungen ein integraler Bestandteil bei der Planung von Gebäuden.
 Öffnungen sind Bereiche an welchen das Mauerwerk unterbrochen wird, um Lücken zu schaffen, in die später zum Beispiel Fenster oder Türen eingesetzt werden können.
-Da eine Öffnung nicht ohne eine Wand existieren kann, liegt es nahe die dazugehörigen Informationen in der Wand zu hinterlegen, die von der Öffnung betroffen ist.
+Da eine Öffnung nicht ohne eine Wand existieren kann, liegt es nahe, die dazugehörigen Informationen in der Wand zu hinterlegen, die von der Öffnung betroffen ist.
 Eine Öffnung kann ebenfalls als quaderförmiger Körper angesehen werden, der einen Bereich innerhalb eines Wandstücks definiert, an dem später keine Bausteine gelegt werden dürfen.
-In dieser Arbeit besitzt dieser Quader die selbe Orientierung wie das dazugehörige Wandstück und schneidet zunächst immer durch die gesamte Breite der Wand.
+In dieser Arbeit besitzt dieser Quader dieselbe Orientierung wie das dazugehörige Wandstück und schneidet zunächst immer durch die gesamte Breite der Wand.
 Daher sind nur Position, Länge und Höhe des Quaders von Bedeutung für das Wall Detailing.
-Da es allerdings üblich ist einen sogenannten Sturz über der eigentlichen Öffnung eines Fenster oder einer Tür anzubringen, muss auch für dieses Objekt Platz im Wandstück geschaffen werden. 
+Da es allerdings üblich ist einen sogenannten Sturz über der eigentlichen Öffnung eines Fensters oder einer Tür anzubringen, muss auch für dieses Objekt Platz im Wandstück geschaffen werden. 
 Der Sturz ist etwas länger als die Länge der Öffnung und liegt an beiden Seiten auf dem Mauerwerk auf, um den Bausteinen darüber eine stabile Grundlage zu bieten.
 So bleibt die Stabilität der Wand trotz Öffnungen erhalten.
 
@@ -327,10 +327,10 @@ Für den Fall, dass das vollständige Detailing eines Modells das Anpassen des g
 Somit erhält jeder Baustein aus diesem Grund zusätzlich eine Beschreibung über dessen Dimensionen.
 
 \section{Wall Detailing}\label{concept:wall_detailing}
-Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detailieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang bezeichnet ein als geometrischer Körper definiertes Wandstück in konkretes Mauerwerk zu überführen.
+Als \glqq{}Wall Detailing\grqq{} (sprich das \glqq{}Detaillieren von Wänden\grqq{}) wird in dieser Arbeit der Vorgang bezeichnet, ein als geometrischer Körper definiertes Wandstück in konkretes Mauerwerk zu überführen.
 Dieser Vorgang wendet die zuvor behandelten Konzepte an, um Lösungen für beliebig komplexe Gebäudemodelle zu errechnen.
 Als Lösung sollen nur diejenigen Bausteinmengen gelten, die sämtliche von Wandstücken abgedeckten Bereiche lückenlos mit Bausteinen füllen, während gleichzeitig die gewünschten Mauerwerksverbände eingehalten werden.
-Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzung zwangsläufig Ähnlichkeiten zu dem von Usmanov et al. auf, das bereits in Kapitel~\ref{related:digital_plan_of_brickwork_layout} zusammengefasst wurde.
+Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzung zwangsläufig Ähnlichkeiten zu dem von Usmanov et al.\ auf, das bereits in Kapitel~\ref{related:digital_plan_of_brickwork_layout} zusammengefasst wurde.
 
 \begin{enumerate}
     \item Extrahieren relevanter Informationen wie Geometrie und Typ-Annotationen aus dem vorgegebenen Gebäudemodell. Dabei interessieren in erster Linie Wände und deren Öffnungen sowie gewünschte Module und Mauerwerksverbände (siehe Abschnitt~\ref{concept:mauerwerksverband}).
@@ -344,15 +344,15 @@ Das nachfolgende schrittweise Verfahren weist aufgrund der ähnlichen Zielsetzun
 \end{enumerate}
 
 Das Ergebnis dieser Schritte ist eine Menge aus Bausteinen, nachfolgend auch als \textit{Bauplanentwurf} bezeichnet.
-Durch die Berechnungen in Schritt~\ref{concept:wall_detailing_tmp2} werden bereits die grundlegensten Beziehungen zwischen den Bausteinen hergestellt.
+Durch die Berechnungen in Schritt~\ref{concept:wall_detailing_tmp2} werden bereits die grundlegendsten Beziehungen zwischen den Bausteinen hergestellt.
 Eine Aussage darüber in welcher Reihenfolge die Bausteine gesetzt werden müssen, um das geplante Gebäude unter Berücksichtigung etwaiger physikalischer oder anderer Einschränkungen zu errichten, wird allerdings noch nicht getroffen.
 Dazu müssen Schritt für Schritt Teilmengen aus der Gesamtmenge an Bausteinen extrahiert werden, die nur diejenigen Bausteine beinhalten, die in einer bestimmten Situation gelegt werden können.
-Welche das sind, soll anhand vorgebener Regeln ausgewertet werden können.
-Diese Regeln können dafür verwedet werden bestimmte Voraussetzungen an einen Baustein zu setzen, um zum Beispiel das Ablegen eines Bausteins zu verhindern, unter dem sich weder fester Boden, noch ausreichend andere Bausteine befinden.
+Welche das sind, soll anhand vorgegebener Regeln ausgewertet werden können.
+Diese Regeln können dafür verwendet werden bestimmte Voraussetzungen an einen Baustein zu setzen, um zum Beispiel das Ablegen eines Bausteins zu verhindern, unter dem sich weder fester Boden, noch ausreichend andere Bausteine befinden.
 Denn setzt man einen Baustein mitten in der Luft ab, so fällt er in der echten Welt aufgrund der auf ihn einwirkenden Gravitation zu Boden.
 Außerdem weisen unterschiedliche Bausteinarten und Umgebungen, in die man das Gebäude mithilfe des zuvor errechneten Bauplanentwurfs errichten möchte, womöglich unterschiedliche Einschränkungen auf.
 So ist es notwendig je nach Situation voneinander abweichende Regelsets auf dem Bauplanentwurf anzuwenden zu können.
-Die Möglichkeit der nachträglichen Definition dieser Regeln verhindert zusätzlich die Notwendigkeit den Bauplanentwurf für sich unterscheidene Situationen neu berechnen zu müssen.
+Die Möglichkeit der nachträglichen Definition dieser Regeln verhindert zusätzlich die Notwendigkeit den Bauplanentwurf für sich unterscheidende Situationen neu berechnen zu müssen.
 
 \section{Regelbasierte Bauplandeduktion}\label{concept:regelbasierte_bauplandeduktion}
 Ontologien bieten verschiedene Werkzeuge an, mithilfe derer sowohl streng definierte Objekttypen und deren Relationen zueinander modelliert, als auch konkrete Instanzen gruppiert und gefiltert werden können (siehe Kapitel~\ref{basics:ontologie}).
@@ -365,7 +365,7 @@ Notwendige Informationen für eine generische Ausgangsklasse zur Beschreibung vo
   \item Nachbarschaftsrelationen zu anderen Bausteinen. 
   Da Bausteine sechs Seiten haben, an welchen andere Bausteine anliegen können, ist eine Unterscheidung zwischen den verschiedenen Nachbarschaftsarten (untere, obere, linke, rechte, vordere und hintere Nachbarn) möglich.
   \item Eine \textit{Abhängigkeits}-Eigenschaft zwischen Bausteinen, die angibt, an welchen Bausteinen jeder Baustein gebunden ist. 
-  Diese Relation kann durch eine entsprechende Regel manipuliert werden und dadurch die Schlussfolgerungen eines Reasoners direkt beinflussen. 
+  Diese Relation kann durch eine entsprechende Regel manipuliert werden und dadurch die Schlussfolgerungen eines Reasoners direkt beeinflussen. 
   Sie wird als Objekteigenschaft mit dem Namen \textit{dependsOn} realisiert, deren Wertebereich (Range) Individuen der Klasse Brick sind.
   \item Einen Indikator \textit{hasBeenSet} der angibt, ob der Baustein bereits gesetzt wurde oder nicht. 
   Darüber kann ein Reasoner verstehen, welche benachbarten Bausteine über die \textit{dependsOn}-Eigenschaft nicht mehr zu berücksichtigen sind.
@@ -376,7 +376,7 @@ Notwendige Informationen für eine generische Ausgangsklasse zur Beschreibung vo
   \caption{TODO Klassendiagramm der Ontologie für Baustein und Regelbeschreibungen.}\label{fig:concept:ontologie_diagramm}
 \end{figure}
 Diese Klasse wird nachfolgend als \textit{Brick} bezeichnet.
-Um verschiedene Bauplanentwürfe gleichzeitig zu bearbeiten kann eine Klasse \textit{Building} definiert werden, die alle Bausteine des dazugehörigen Bauplanentwurfs referenziert.
+Um verschiedene Bauplanentwürfe gleichzeitig zu bearbeiten, kann eine Klasse \textit{Building} definiert werden, die alle Bausteine des dazugehörigen Bauplanentwurfs referenziert.
 Eine Klasse \textit{Rule} stellt die Grundlage zur Regeldefinition dar.
 Davon ausgehend können verschiedene Regelarten erstellt werden, die durch konkrete Individuen realisiert werden.
 Ein Beispiel wären Regeln, die eine Kardinalität zu einer ebenfalls in der Regel festgelegten Daten- oder Objekteigenschaft der Ontologie vorgeben (für Informationen zu Eigenschaften im Kontext von Ontologien siehe Kapitel~\ref{basics:ontologie}).
@@ -391,8 +391,8 @@ Notwendige Eigenschaften für diese Klasse sind:
   Alle Instanzen dieser Klassen haben den Namen einer Daten- oder Objekteigenschaft als String-Wert hinterlegt, denn Eigenschaften können im Kontext von Ontologien nicht direkt auf andere Eigenschaften verweisen.
   \item Eine Unterscheidung zwischen Regeln, die Kardinalitäten voraussetzen und jenen, die Eigenschaften übertragen. 
   Nachfolgend werden diese Klassen als \textit{CardinalityRule} und \textit{ApplyObjectPropertyRule} bezeichnet.
-  \item Für Kardinalitäten-vorgebende Regeln exisitieren die Eigenschaften \textit{min}, \textit{max} und \textit{exactly}, welche auf einen Zahlenwert verweisen.
-  \item Für Eigenschafts-übertragende Regeln exisitiert eine Eigenschaft, die ähnlich zu der aus dem obersten Punkt den Namen der \glqq{}Zieleigenschaft\grqq{} enthält.
+  \item Für Kardinalitäten-vorgebende Regeln existieren die Eigenschaften \textit{min}, \textit{max} und \textit{exactly}, welche auf einen Zahlenwert verweisen.
+  \item Für Eigenschafts-übertragende Regeln existiert eine Eigenschaft, die ähnlich zu der aus dem obersten Punkt den Namen der \glqq{}Zieleigenschaft\grqq{} enthält.
 \end{itemize}
 Um zwischen verschiedenen Situationen wechseln zu können, die manchmal die Anwendung mehrerer Regeln voraussetzen, wird die Klasse \textit{Ruleset} definiert, die lediglich auf beliebig viele Individuen der Rule-Klasse referenziert.
 
@@ -413,4 +413,4 @@ Zusätzlich muss angegeben werden, dass diese Menge an Bausteinen auch tatsächl
 Falls dies nicht vorgenommen wird, ist ein Reasoner nicht in der Lage ein PlaceableBrick-Individuum der Klasse NextBrick zuzuordnen, da es theoretisch sein könnte, dass ein anderer PlaceableBrick existiert, der der \textit{dependsOn}-Eigenschaft des Individuums zugeordnet ist.
 
 Werden all die notwendigen Informationen zu den Bausteinen auf diese Weise und unter Einhaltung der definierten Regeln eines Regelsets in die Ontologie gespeist, kann durch Starten eines Reasoners das erste Subset aller platzierbaren Bausteine anhand der Zuordnung zu der Klasse NextBrick ausgelesen werden.
-Nun kann daraus schrittweise ein Baustein gewählt und als platziert markiert werden, sodass mit erneuten Starten des Reasoners ein neues Set an Individuen der Klasse Nextbrick errechnet wird, das zu der veränderten Situation und den vorgegebenen Regeln passt.
+Nun kann daraus schrittweise ein Baustein gewählt und als platziert markiert werden, sodass mit erneuten Starten des Reasoners ein neues Set an Individuen der Klasse NextBrick errechnet wird, das zu der veränderten Situation und den vorgegebenen Regeln passt.
