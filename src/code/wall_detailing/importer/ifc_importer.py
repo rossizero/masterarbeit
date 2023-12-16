@@ -65,7 +65,7 @@ class IfcImporter:
         length = max(dimensions[0], dimensions[1])
         width = min(dimensions[0], dimensions[1])
         height = dimensions[2]
-        ret = (length, width, height)
+        ret = np.array([length, width, height])
         return ret
 
     def get_absolute_position(self, object_placement):
@@ -117,9 +117,14 @@ class IfcImporter:
             if True not in [rep.RepresentationType == "SweptSolid" for rep in w.Representation.Representations]:
                 continue
 
+            # the shape returned by the next line of code has no internal translation and rotation set
+            # but it also is not located at the origin of the world coordinate system
+            # that's why we need to calculate the absolute position of the wall and reverse the translation and rotation
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
 
+            # reverse the translation and rotation (the True, True parameters are important, but idk why)
+            # it took soooo much time to figure out that this is the correct way to do it
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*translation).Reversed())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
@@ -127,23 +132,17 @@ class IfcImporter:
             transformation = gp_Trsf()
             transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
-            # resetting shapes transformation
 
-            wall = Wall(shape, self.wall_type)
-            half_dim = np.round(quaternion.rotate_vectors(rotation, np.array([wall.length / 2, wall.width / 2, wall.height / 2])), decimals=6)
+            # move the shape so that its center is at the origin of the world coordinate system
+            half_dim = self.get_shape_dimensions(shape) / 2.0
             transformation = gp_Trsf()
-            transformation.SetTranslation(gp_Vec(*np.array([wall.length / 2, wall.width / 2, wall.height / 2])).Reversed())
+            transformation.SetTranslation(gp_Vec(*half_dim).Reversed())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
+            # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
             wall = Wall(shape, self.wall_type)
-            wall.translation = translation + half_dim
+            wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, half_dim), decimals=6)
             wall.rotation = rotation
-
-            # update wall
-            #wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, np.array([wall.length / 2, wall.width / 2, wall.height / 2])), decimals=6)
-            #wall.translation = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
-            #wall.rotation = rotation
-            #wall.update_dimensions()
 
             print("wall", wall.length, wall.width, wall.height, wall.get_translation(), translation, wall.get_rotation(), rotation)
             walls.append(wall)
