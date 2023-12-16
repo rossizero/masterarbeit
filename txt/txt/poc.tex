@@ -13,11 +13,22 @@ Mit den in Kapitel~\ref{concept:raster} definierten Modellierungseinschränkunge
 Die Modellierung der zwei sich in der Wanddicke unterscheidenden Versionen des 20 Meter hohen Turms mit einer Grundfläche von 10$\times$10 Metern in Blender war wenig komplex.
 Es bedarf lediglich vier Wände, die einen quadratischen Raum bilden.
 Das vollständige Gebäudemodell ist in Abbildung~\ref{fig:poc:scenario1 modell} zu sehen.
+
 \begin{figure}[ht!]
-  \centering
-  \includegraphics[width=0.6\columnwidth]{fig/TODO.jpg}
-  \caption{TODO IFC Modell der beiden Türme.}\label{fig:poc:scenario1 modell}
+  \hspace*{\fill}%
+  \begin{subfigure}[b]{0.3\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/render_base_thin.png}
+    \caption{Der Turm mit 1 m dicken Wänden.}\label{fig:poc:render_crossbond}
+  \end{subfigure}
+  \hfill%
+  \begin{subfigure}[b]{0.3\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/render_base_thick.png}
+    \caption{Der Turm mit 2 m dicken Wänden.}\label{fig:poc:render_laeuferverband50}
+  \end{subfigure}
+  \hspace*{\fill}%
+  \caption{Die beiden Input Modelle des Turmes.}\label{fig:poc:scenario1 modell}
 \end{figure}
+
 Das Ergebnis nach Anwenden der drei verschiedenen Mauerwerksverbände ist wie erwartet.
 Die verschiedenen Verbände lassen sich wie in Kapitel~\ref{real:verband} gezeigt in den Programmcode einpflegen.
 Das Basismodul ist überall dort zu sehen, wo ein gerader Wandabschnitt vorliegt.
@@ -27,26 +38,23 @@ Die drei den Bauplanentwürfe werden als JSON-Dateien ausgegeben.
 Darin sind alle in Abschnitt~\ref{real:export} angegebenen Informationen enthalten.
 In Abbildung~\ref{fig:poc:result_scenario1} sind die Meshes der drei mit Bausteinen realisierten Türme zu sehen.
 
-
 \begin{figure}[htb]
     \begin{subfigure}[b]{0.3\columnwidth}
       \includegraphics[width=\columnwidth]{fig/render_crossbond.png}
-      \caption{Bla.}\label{fig:poc:render_crossbond}
+      \caption{Kreuzverband.}\label{fig:poc:render_crossbond}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\columnwidth}
       \includegraphics[width=\columnwidth]{fig/render_läuferverband50.png}
-      \caption{Bla.}\label{fig:poc:render_laeuferverband50}
+      \caption{Läuferverband.}\label{fig:poc:render_laeuferverband50}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.3\columnwidth}
       \includegraphics[width=\columnwidth]{fig/render_headbond.png}
-      \caption{Bla.}\label{fig:poc:render_headbond}
+      \caption{Kopfverband.}\label{fig:poc:render_headbond}
     \end{subfigure}
-    \caption{Ergebnisse.}\label{fig:poc:result_scenario1}
-  \end{figure}
-  \begin{comment}
-\end{comment}
+    \caption{Ergebnisse des Wall Detailings mit unterschiedlichen Verbänden.}\label{fig:poc:result_scenario1}
+\end{figure}
 
 \subsection{Szenario 2}\label{poc:scenario2}
 Die Modellierung dieses Szenarios war aufgrund der Fenster und Türen ein wenig anspruchsvoller.

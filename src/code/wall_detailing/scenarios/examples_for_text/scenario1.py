@@ -9,7 +9,7 @@ from wall_detailing.scenarios.scenarios import Scenario
 
 class Scenario1(Scenario):
     def get_walls(self):
-        width = 2
+        width = 1
         height = 20
 
         w0 = Wall.make_wall(10, width, height, np.array([5.0, width/2, height/2.0]),
