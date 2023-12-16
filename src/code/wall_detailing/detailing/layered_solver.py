@@ -159,7 +159,7 @@ class LayeredSolver(Solver):
         min_config = [s[0] for s in starters]
         score = self.all_holes(corners)
 
-        if score > 0:
+        if score > 0 and False:
             print("----------------")
             print("trying", starters, len(list(itertools.product(*starters))), "combinations")
             for config in reversed(list(itertools.product(*starters))):

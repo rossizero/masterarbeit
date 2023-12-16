@@ -1,4 +1,5 @@
 import math
+from time import sleep
 from typing import List, Dict
 import numpy as np
 import quaternion
@@ -207,10 +208,11 @@ class WallDetailer:
             fop.SetArguments(args)
             fop.SetTools(args)
             build = fop.Build()  # for example this one
+
             shape = fop.Shape()
 
             if shape is None or not fop.IsDone():
-                print("[ERROR] Fusion failed")
+                print("[ERROR] Fusion failed", shape, fop.IsDone())
             else:
                 mesh = BRepMesh_IncrementalMesh(shape, detail)
                 mesh.Perform()
@@ -234,8 +236,8 @@ if __name__ == "__main__":
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
     tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc")
     #tmp = IfcImporter("../../models/scenario11.ifc")
-    #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
+    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc", "Scenario2")
+    #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     www = tmp.get_walls()
 
     #scenario = CombinationExampleForText()
@@ -244,7 +246,12 @@ if __name__ == "__main__":
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
-    shapes.extend([w.get_shape() for w in www])
+    for i, w in enumerate(www[0:]):
+        shapes.append(w.get_shape())
+        if i == 24:
+            break
+    print(len(www))
+    #shapes.extend([w.get_shape() for w in www])
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 

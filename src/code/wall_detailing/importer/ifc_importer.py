@@ -147,51 +147,27 @@ class IfcImporter:
             print("wall", wall.length, wall.width, wall.height, wall.get_translation(), translation, wall.get_rotation(), rotation)
             walls.append(wall)
 
-            # get openings of the wall
-            # https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcDoor.htm
-            # https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcOpeningElement.htm
+            # get openings in the wall
             for void_element in w.HasOpenings:
                 o = void_element.RelatedOpeningElement
                 if "Body" in [rep.RepresentationIdentifier for rep in o.Representation.Representations]:
                     try:
                         shape = geom.create_shape(settings, o).geometry
                         translation, rotation = self.get_absolute_position(o.ObjectPlacement)
-                        pl = o.ObjectPlacement
-                        if pl.RelativePlacement is not None:
-                            pl = pl.RelativePlacement.Location
-                            pl = np.round(np.array(pl.Coordinates), decimals=6)
+                        translation = np.array([0.0, 0.0, 0.0])
+                        if o.ObjectPlacement.RelativePlacement is not None:
+                            location = o.ObjectPlacement.RelativePlacement.Location
+                            translation = np.round(np.array(location.Coordinates), decimals=6)
 
                         transformation = gp_Trsf()
                         transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
                         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
-                        #transformation = gp_Trsf()
-                        #transformation.SetTranslation(gp_Vec(*translation).Reversed())
-                        #shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-
                         dimensions = self.get_shape_dimensions(shape)
+
                         dimensions[1] = wall.width
-                        wall_translation = wall.get_translation()
-                        rotated_wall_translation = quaternion.rotate_vectors(wall.get_rotation(), wall.get_translation())
-
-                        #translation -= quaternion.rotate_vectors(wall.get_rotation(), wall.get_translation())  # wall.get_translation() -
-                        print("opening", dimensions, translation, rotation)
-                        #translation += np.array([wall.length / 2, wall.width / 2, wall.height / 2])
-                        #translation -= quaternion.rotate_vectors(wall.get_rotation().inverse(), np.array(dimensions / 2.0))
-                        #translation += quaternion.rotate_vectors(wall.get_rotation(), np.array([dimensions[0] / 2, dimensions[1] / 2, dimensions[2] / 2]))
-
-                        #translation += quaternion.rotate_vectors(wall.get_rotation().inverse(), np.array([wall.length / 2, wall.width / 2, wall.height / 2]))
-                        #translation += quaternion.rotate_vectors(wall.get_rotation(), )
-                        #translation -= np.array([dimensions[0] / 2, dimensions[1] / 2, 0.0])
-                        #translation -= quaternion.rotate_vectors(wall.get_rotation(), np.array([0.0, dimensions[1] / 2.0, 0.0]))
-                        rotation *= wall.get_rotation().inverse()  # rotation = 0 rotation
-                        #print("rotation", rotation)
-                        opening = Opening(wall, pl, rotation, dimensions)
-                        opening2 = Opening(wall, np.array([3.0, 0.0, 0.0]), rotation, (0.6, 0.6, 0.6))
-                        opening3 = IfcOpening(wall, np.array([0.0, 0.0, 0.0]), rotation, (0.4, 0.4, 0.4))
+                        rotation *= wall.get_rotation().inverse()
+                        opening = Opening(wall, translation, rotation, dimensions)
                         wall.openings.append(opening)
-                        #wall.openings.append(opening2)
-                        #wall.openings.append(opening3)
                     except Exception as e:
                         print(e)
                         continue

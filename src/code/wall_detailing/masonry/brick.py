@@ -68,6 +68,8 @@ class BrickInformation:
         make along the x axis with the placement of the rotated brick
         """
         corner = gp_Pnt(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0)
+        if round(self.length, 6) == 0.0 or round(self.width, 6) == 0.0 or round(self.height, 6) == 0.0:
+            return [self.length, self.width, self.height]
         shape = BRepPrimAPI_MakeBox(corner, self.length, self.width, self.height).Shape()
         # ...to rotate around local rotation....
         transformation = gp_Trsf()
