@@ -16,6 +16,7 @@ import quaternion
 
 from wall_detailing.detailing.wall import Wall
 from wall_detailing.detailing.opening import Opening
+from wall_detailing.importer.IfcOpening import IfcOpening
 
 print("OCC version", VERSION)
 print("IfcOpenshell version", ifcopenshell.version)
@@ -118,22 +119,31 @@ class IfcImporter:
 
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
-            wall = Wall(shape, self.wall_type)
 
             transformation = gp_Trsf()
-            tmp = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
-            transformation.SetTranslation(gp_Vec(*tmp).Reversed())
-            wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
+            transformation.SetTranslation(gp_Vec(*translation).Reversed())
+            shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
             transformation = gp_Trsf()
             transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
+            shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
+            # resetting shapes transformation
+
+            wall = Wall(shape, self.wall_type)
+            half_dim = np.round(quaternion.rotate_vectors(rotation, np.array([wall.length / 2, wall.width / 2, wall.height / 2])), decimals=6)
+            transformation = gp_Trsf()
+            transformation.SetTranslation(gp_Vec(*np.array([wall.length / 2, wall.width / 2, wall.height / 2])).Reversed())
+            shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
+
+            wall = Wall(shape, self.wall_type)
+            wall.translation = translation + half_dim
+            wall.rotation = rotation
 
             # update wall
-            wall.occ_shape = BRepBuilderAPI_Transform(wall.occ_shape, transformation).Shape()
-            wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, np.array([wall.length / 2, wall.width / 2, wall.height / 2])), decimals=6)
-            wall.translation = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
-            wall.rotation = rotation
-            wall.update_dimensions()
+            #wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, np.array([wall.length / 2, wall.width / 2, wall.height / 2])), decimals=6)
+            #wall.translation = translation + np.array([wall.length / 2, wall.width / 2, wall.height / 2])
+            #wall.rotation = rotation
+            #wall.update_dimensions()
 
             print("wall", wall.length, wall.width, wall.height, wall.get_translation(), translation, wall.get_rotation(), rotation)
             walls.append(wall)
@@ -158,8 +168,10 @@ class IfcImporter:
                         dimensions = self.get_shape_dimensions(shape)
                         dimensions = (dimensions[0], wall.width, dimensions[2])
                         print("opening", dimensions, translation, rotation)
-                        translation -= wall.get_translation() # quaternion.rotate_vectors(wall.get_rotation(), wall.get_translation())  # wall.get_translation() -
-                        translation += quaternion.rotate_vectors(wall.get_rotation(), np.array([wall.length / 2, wall.width / 2, wall.height / 2]))
+                        translation -= quaternion.rotate_vectors(wall.get_rotation().inverse(), wall.get_translation())  # wall.get_translation() -
+                        #translation += np.array([wall.length / 2, wall.width / 2, wall.height / 2])
+                        translation += np.array([dimensions[0] / 2, dimensions[1] / 2, dimensions[2] / 2])
+                        #translation += quaternion.rotate_vectors(wall.get_rotation(), np.array([dimensions[0] / 2, dimensions[1] / 2, dimensions[2] / 2]))
 
                         #translation += quaternion.rotate_vectors(wall.get_rotation().inverse(), np.array([wall.length / 2, wall.width / 2, wall.height / 2]))
                         #translation += quaternion.rotate_vectors(wall.get_rotation(), )
@@ -167,8 +179,12 @@ class IfcImporter:
                         #translation -= quaternion.rotate_vectors(wall.get_rotation(), np.array([0.0, dimensions[1] / 2.0, 0.0]))
                         rotation *= wall.get_rotation().inverse()  # rotation = 0 rotation
                         #print("rotation", rotation)
-                        opening = Opening(wall, translation, rotation, dimensions)
-                        wall.openings.append(opening)
+                        opening = IfcOpening(wall, translation, rotation, dimensions)
+                        opening2 = Opening(wall, np.array([0.0, 0.0, 0.0]), rotation, (0.6, 0.6, 0.6))
+                        opening3 = IfcOpening(wall, np.array([0.0, 0.0, 0.0]), rotation, (0.4, 0.4, 0.4))
+                        #wall.openings.append(opening)
+                        #wall.openings.append(opening2)
+                        #wall.openings.append(opening3)
                     except Exception as e:
                         print(e)
                         continue
