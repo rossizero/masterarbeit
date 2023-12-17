@@ -16,6 +16,7 @@ import quaternion
 
 from wall_detailing.detailing.wall import Wall
 from wall_detailing.detailing.opening import Opening
+from wall_detailing.die_mathe.pythonocc_utils import get_shape_dimensions
 from wall_detailing.importer.IfcOpening import IfcOpening
 from wall_detailing.masonry.brick import BrickInformation
 
@@ -38,36 +39,6 @@ class IfcImporter:
                 if project.UnitsInContext is not None:
                     for unit in project.UnitsInContext.Units:
                         pass
-
-
-    def get_shape_dimensions(self, shape: TopoDS_Shape):
-        """
-        :param shape: the shape to get the dimensions from
-        :return: the dimensions of the shape
-        """
-        edge_explorer = TopExp_Explorer(shape, TopAbs_EDGE)
-        vertices = []
-        while edge_explorer.More():
-            edge = topods.Edge(edge_explorer.Current())
-            vertex_explorer = TopExp_Explorer(edge, TopAbs_VERTEX)
-            while vertex_explorer.More():
-                vertex = topods.Vertex(vertex_explorer.Current())
-                vertex_point = BRep_Tool.Pnt(vertex)
-                vertices.append(np.array([vertex_point.X(), vertex_point.Y(), vertex_point.Z()]))
-                vertex_explorer.Next()
-            edge_explorer.Next()
-
-        vertices = np.unique(vertices, axis=0)
-        x = max(vertices[:, 0]) - min(vertices[:, 0])
-        y = max(vertices[:, 1]) - min(vertices[:, 1])
-        z = max(vertices[:, 2]) - min(vertices[:, 2])
-
-        dimensions = np.array(np.around([x, y, z], decimals=6))
-        length = max(dimensions[0], dimensions[1])
-        width = min(dimensions[0], dimensions[1])
-        height = dimensions[2]
-        ret = np.array([length, width, height])
-        return ret
 
     def get_absolute_position(self, object_placement):
         transformation_matrix = np.eye(4, dtype=np.float64)
@@ -135,15 +106,18 @@ class IfcImporter:
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
             # move the shape so that its center is at the origin of the world coordinate system
-            half_dim = self.get_shape_dimensions(shape) / 2.0
+
+            # TODO retrieve from IfcPropertySet
+            base_module = BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))
+            half_dim = get_shape_dimensions(shape, base_module.grid) / 2.0
+            bond_type = "HeadBond" if half_dim[1] * 2 == 0.4 else "StretchedBond"
+
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*half_dim).Reversed())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
-            base_module = BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))
-            bond_type = "HeadBond" if half_dim[1] * 2 == 0.4 else "StretchedBond"
-            wall = Wall(shape, self.wall_type, base_module, bond_type)
+            wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
             wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, half_dim), decimals=6)
             wall.rotation = rotation
 
@@ -165,7 +139,7 @@ class IfcImporter:
                         transformation = gp_Trsf()
                         transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
                         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-                        dimensions = self.get_shape_dimensions(shape)
+                        dimensions = get_shape_dimensions(shape)
 
                         dimensions[1] = wall.width
                         rotation *= wall.get_rotation().inverse()

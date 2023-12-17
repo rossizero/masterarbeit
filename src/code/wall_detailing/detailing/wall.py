@@ -2,8 +2,8 @@ import numpy as np
 import quaternion
 
 from OCC.Core.BRep import BRep_Tool
-from OCC.Core.BRepBndLib import brepbndlib_Add, brepbndlib
-from OCC.Core.BRepGProp import brepgprop_VolumeProperties, brepgprop
+from OCC.Core.BRepBndLib import brepbndlib
+from OCC.Core.BRepGProp import brepgprop
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.GProp import GProp_GProps
 from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX
@@ -14,20 +14,24 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 
+from wall_detailing.die_mathe.pythonocc_utils import get_shape_dimensions
 from wall_detailing.masonry.brick import BrickInformation
 
 
 class WallDetailingInformation:
+    """
+    Information about how a wall should be detailed
+    """
     def __init__(self, ifc_wall_type: str, base_module: BrickInformation, bond_type: str):
         self.ifc_wall_type = ifc_wall_type
 
         self.base_module = base_module
         if base_module is None:
-            self.base_module = BrickInformation(0.0, 0.0, 0.0, [0.0, 0.0, 0.0])
+            self.base_module = BrickInformation(0.0, 0.0, 0.0, None)
 
         self.bond_type = bond_type
         if bond_type is None:
-            self.bond_type = "StretchedBond"
+            self.bond_type = "StretchedBond"  # default bond type
 
     def __eq__(self, other):
         if isinstance(other, WallDetailingInformation):
@@ -46,7 +50,7 @@ class Wall:
     """
     A Wall that comes from an ifc file
     """
-    def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, base_module: BrickInformation = None, bond_type: str = None, name: str = ""):
+    def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, name: str = "", base_module: BrickInformation = None, bond_type: str = None):
         self.name = name
         self.ifc_wall_type = ifc_wall_type
         self.detailing_information = WallDetailingInformation(ifc_wall_type, base_module, bond_type)
@@ -65,7 +69,7 @@ class Wall:
         self.openings = []
 
     def update_dimensions(self):
-        dimensions = self._get_dimensions()
+        dimensions = get_shape_dimensions(self.occ_shape, self.detailing_information.base_module.grid)
         self.length = max(dimensions[0], dimensions[1])
         self.width = min(dimensions[0], dimensions[1])
         self.height = dimensions[2]
@@ -101,7 +105,7 @@ class Wall:
         x = max(v[:, 0]) - min(v[:, 0])
         y = max(v[:, 1]) - min(v[:, 1])
         z = max(v[:, 2]) - min(v[:, 2])
-        return np.array(np.around([x, y, z], decimals=6))
+        return np.array(np.round([x, y, z], decimals=6))
 
     def get_shape(self) -> TopoDS_Shape:
         """

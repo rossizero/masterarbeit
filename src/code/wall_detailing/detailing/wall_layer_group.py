@@ -252,7 +252,7 @@ class WallLayerGroup:
         # TODO? wall.is_cubic()
 
         layers = int(height / module.height)
-        leftover = height % module.height
+        leftover = round(height % module.height, 6)
         z = -height * 0.5
         for layer in range(layers):
             translation = np.array([0.0, 0.0, 0.0])

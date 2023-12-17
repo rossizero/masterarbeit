@@ -245,7 +245,7 @@ if __name__ == "__main__":
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
     tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc")
     #tmp = IfcImporter("../../models/scenario11.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc", "Scenario2")
+    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric2.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     www = tmp.get_walls()
 
