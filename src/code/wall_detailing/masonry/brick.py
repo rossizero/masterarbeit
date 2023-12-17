@@ -128,8 +128,7 @@ class Brick:
         self.height = self.__brick_information.height
         self.id = None
 
-        self.__off = 61.5384
-        self.offset = max(self.length, self.width, self.height) / self.__off
+        self.offset = self.__brick_information.grid[0] / 15.0
 
         self.neighbors = {Neighbor.LEFT: set(),
                           Neighbor.RIGHT: set(),

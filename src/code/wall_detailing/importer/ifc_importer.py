@@ -17,7 +17,7 @@ import quaternion
 from wall_detailing.detailing.wall import Wall
 from wall_detailing.detailing.opening import Opening
 from wall_detailing.die_mathe.pythonocc_utils import get_shape_dimensions
-from wall_detailing.importer.IfcOpening import IfcOpening
+
 from wall_detailing.masonry.brick import BrickInformation
 
 print("OCC version", VERSION)

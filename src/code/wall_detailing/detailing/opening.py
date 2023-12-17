@@ -20,7 +20,8 @@ class Opening:
         self.length = dimensions[0]
         self.width = dimensions[1]
         self.height = dimensions[2]
-        self.lintel = BrickInformation(self.length + 1, self.width, 0.5, [1, 1, 0.5])
+        module = parent.detailing_information.base_module
+        self.lintel = BrickInformation(self.length + module.grid[0] * 2, self.width, module.height, module.grid)
 
     def get_rotation(self):
         return self.rotation
@@ -33,12 +34,12 @@ class Opening:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation() - np.array([self.parent.length/2, self.parent.width/2, self.parent.height/2])
-        return ret
+        return np.round(ret, 6)
 
     def get_lintel_position(self, relative: bool = False):
         relative_position = self.get_position(True)
         relative_position -= np.array([self.lintel.length / 2.0, self.width / 2.0, -self.height / 2.0])
-        return relative_position
+        return np.round(relative_position, 6)
 
     def get_shape(self):
         corner = gp_Pnt(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0)

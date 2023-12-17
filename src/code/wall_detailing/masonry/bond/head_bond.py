@@ -48,5 +48,5 @@ class HeadBond(Bond):
 
         for tfs in plan:
             for tf in tfs:
-                tf.module = BrickInformation(self.module.length * 3/4.0, self.module.width, self.module.height, grid=np.array([self.w, self.w, self.h]))
+                tf.module = BrickInformation(self.module.length * 3/4.0, self.module.width, self.module.height, grid=self.module.grid)
         return plan

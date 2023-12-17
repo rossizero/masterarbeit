@@ -249,7 +249,6 @@ class WallLayer:
         is_left = np.linalg.norm(start_point - self.left_edge) < np.linalg.norm(start_point - self.right_edge)
         local_start_point = start_point - self.parent.get_translation()
         local_start_point = np.round(quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point), decimals=6)
-        #local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
 
         right = self.get_right_edge(True)
         left = self.get_left_edge(True)
@@ -258,7 +257,6 @@ class WallLayer:
             x = local_start_point - left
         else:
             x = right - local_start_point
-        x_ = x[0]
         x = round(x[0], 6)
         length += x
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
@@ -279,7 +277,9 @@ class WallLayer:
         b = center[2] <= opening_position[2] + opening.height / 2.0
 
         # check if we are above the actual opening and inside the bounds of the lintel (if one is wanted)
-        lintel = center[2] == opening_position[2] + opening.height / 2.0 + opening.lintel.height / 2.0
+        lintel_pos = opening_position[2] + opening.height / 2.0 + opening.lintel.height / 2.0
+        lintel_pos = np.round(lintel_pos, decimals=6)
+        lintel = center[2] == lintel_pos
         lintel = lintel and opening.lintel.height > 0.0  # do we have a lintel planned for this opening
 
         # does the opening lie between the left and right edge of this layer?
@@ -291,7 +291,11 @@ class WallLayer:
         ret = []
         if (a and (b or lintel)) and (c and d):
             # first, split the layers
-            left, right = self._split(opening.get_position(True)[0] - self.get_left_edge(True)[0])
+            split_position = opening.get_position(True)[0] - self.get_left_edge(True)[0]
+            split_position = round(split_position / self.parent.module.grid[0]) * self.parent.module.grid[0]
+            split_position = np.round(split_position, decimals=6)
+
+            left, right = self._split(split_position)
 
             # calculate how far we need to move each layer away
             length = opening.length if not lintel else opening.lintel.length
@@ -312,7 +316,7 @@ class WallLayer:
         length_left = x
         mid_left = self.get_left_edge(True) + np.array([length_left / 2.0, 0.0, 0.0])
 
-        length_right = self.length - length_left
+        length_right = np.round(self.length - length_left, 6)
         mid_right = self.get_right_edge(True) - np.array([length_right / 2.0, 0.0, 0.0])
 
         left = WallLayer(self.parent, length_left, mid_left)
