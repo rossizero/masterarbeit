@@ -1,6 +1,7 @@
 from typing import List
 import json
 
+import numpy as np
 import quaternion
 
 from wall_detailing.masonry.brick import Brick, Neighbor
@@ -9,7 +10,7 @@ from wall_detailing.masonry.brick import Brick, Neighbor
 class BrickExportInformation:
     def __init__(self, brick: Brick):
         self.shape = [brick.length, brick.width, brick.height]
-        self.position = brick.center().tolist()
+        self.position = np.round(brick.center(), decimals=6).tolist()
         self.rotation = quaternion.as_float_array(brick.orientation).tolist()
         self.neighbors = {}
         self.depends_on = []

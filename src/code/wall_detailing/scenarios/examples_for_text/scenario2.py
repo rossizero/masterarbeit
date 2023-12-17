@@ -23,6 +23,9 @@ class Scenario2(Scenario):
                              quaternion.from_euler_angles(0, 0, 0),
                              ifc_wall_type="LegoWallType2", base_module=base_module_thick, bond_type=bond_type, name="w0")
 
+        o0 = Opening(w0, np.array([0.136 - 13 * thin_width, 0, 2 * 0.0096]), quaternion.from_euler_angles(0, 0, 0), (4 * thin_width, 1 * thick_width, 4 * 0.0096))
+        w0.openings.append(o0)
+
         w1 = Wall.make_wall(0.16, thick_width, height, np.array([0.0160 + 0.08, 0.128 + 0.008, height / 2.0]),
                              quaternion.from_euler_angles(0, 0, 0),
                              ifc_wall_type="LegoWallType2", base_module=base_module_thick, bond_type=bond_type, name="w0")
@@ -32,7 +35,9 @@ class Scenario2(Scenario):
                              ifc_wall_type="LegoWallType2", base_module=base_module_thick, bond_type=bond_type, name="w0")
 
         o1 = Opening(w1, np.array([0.136 - 5 * thin_width, 0, 0]), quaternion.from_euler_angles(0, 0, 0), (4 * thin_width, 1 * thick_width, 6 * 0.0096))
+        o1_2 = Opening(w1, np.array([0.136 - 13 * thin_width, 0, 2 * 0.0096]), quaternion.from_euler_angles(0, 0, 0), (4 * thin_width, 1 * thick_width, 4 * 0.0096))
         w1.openings.append(o1)
+        w1.openings.append(o1_2)
 
         w3 = Wall.make_wall(0.144, thick_width, height, np.array([0.192 - 0.008, 0.144 / 2.0, height / 2.0]),
                             quaternion.from_euler_angles(0, 0, math.pi / 2.0),

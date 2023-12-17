@@ -133,8 +133,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 or True  # to enable filling of possible holes
-            fill_right = len(layer.right_connections) == 0 or True
+            fill_left = len(layer.left_connections) == 0 # or True  # to enable filling of possible holes
+            fill_right = len(layer.right_connections) == 0 # or True
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -256,6 +256,7 @@ if __name__ == "__main__":
 
     #scenario = DoppelEck2_Closed_TJoint()
     scenario = SmallTestToCompareIFC()
+    scenario = Scenario2()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
@@ -267,7 +268,7 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(www, brick_information)
+    wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb)
