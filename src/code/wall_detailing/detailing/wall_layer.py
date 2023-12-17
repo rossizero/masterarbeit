@@ -259,6 +259,7 @@ class WallLayer:
             x = right - local_start_point
         x = round(x[0], 6)
         length += x
+        length = round(length, 6)
         self.reduce_length(length, from_left=is_left, from_right=not is_left)
         return length
 

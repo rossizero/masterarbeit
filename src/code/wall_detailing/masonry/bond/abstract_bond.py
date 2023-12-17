@@ -281,7 +281,7 @@ class Bond(ABC):
 
         # iterate over the layerplan while increasing the multiplier
         # until we find a brick that reaches over the given length
-        while pos[0] + brick_length <= length:
+        while round(pos[0] + brick_length, 6) <= round(length, 6):  # wtf python returned 0.6 <= 0.6 as false
             counter += 1
             leftover_right = max(leftover_right, pos[0] + brick_length)
             leftover_left = min(leftover_left, pos[0])

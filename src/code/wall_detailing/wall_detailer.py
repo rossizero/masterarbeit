@@ -133,8 +133,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 #and False #or True
-            fill_right = len(layer.right_connections) == 0 #and False #or True
+            fill_left = len(layer.left_connections) == 0 or True  # to enable filling of possible holes
+            fill_right = len(layer.right_connections) == 0 or True
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -249,8 +249,9 @@ if __name__ == "__main__":
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
     #tmp = IfcImporter("../../models/scenario11.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric2.ifc", "Scenario2")
+    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
+    #tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls.ifc", "Test1")
     www = tmp.get_walls()
 
     #scenario = DoppelEck2_Closed_TJoint()
@@ -266,7 +267,7 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(scenario.walls, brick_information)
+    wall_detailer = WallDetailer(www, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb)

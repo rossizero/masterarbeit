@@ -25,7 +25,7 @@ class HeadBond(Bond):
                                             value=np.array([self.w, 0, self.h]),
                                             mask=np.array([1, 0, 1])),
                     rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
-            ]
+            ],
         ]
         return plan
 
@@ -37,7 +37,7 @@ class HeadBond(Bond):
                 translation=MaskedArray(value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
                 rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
             Transformation(
-                translation=MaskedArray(offset=np.array([self.w, 0, 0]), value=np.array([0, 0, self.h]), mask=np.array([0, 1, 1])),
+                translation=MaskedArray(offset=np.array([self.w, 0, 0]), value=np.array([0, 0, self.h]), mask=np.array([0, 0, 1])),
                 rotation=MaskedArray(offset=np.array([0, 0, math.pi / 2]))),
         ])
 
