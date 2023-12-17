@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from enum import unique, Enum
 from typing import Tuple, List, Union, Any
 from masonry.brick import BrickInformation
 
@@ -90,6 +91,7 @@ class Bond(ABC):
     Superclass of all masonry bonds. It stores the BrickInformation called module,
     which is used when this bond is applied to sth.
     """
+    BondTypes = {}
 
     def __init__(self, module: BrickInformation):
         self.module = module
@@ -98,6 +100,11 @@ class Bond(ABC):
         self.w = module.width
         self.h = module.height
         self.__reset()
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        __import__(cls.__module__)
+        Bond.BondTypes[cls.__name__] = cls
 
     def __reset(self):
         """

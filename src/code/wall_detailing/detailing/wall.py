@@ -14,6 +14,17 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.gp import gp_Pnt, gp_Quaternion, gp_Trsf, gp_Vec
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 
+from wall_detailing.masonry.brick import BrickInformation
+
+
+class WallDetailingInformation:
+    def __init__(self, ifc_wall_type: str, base_module: BrickInformation = None):
+        self.ifc_wall_type = ifc_wall_type
+        self.base_module: BrickInformation = base_module
+        self.bond = ""
+        if base_module is None:
+            self.base_module = BrickInformation(0.0, 0.0, 0.0, [0.0, 0.0, 0.0])
+
 
 class Wall:
     """

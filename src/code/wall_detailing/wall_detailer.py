@@ -25,6 +25,7 @@ from wall_detailing.exporter.BrickToOntologie import BrickToOntology
 from wall_detailing.importer.ifc_importer import IfcImporter
 #from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
+from masonry.bond import abstract_bond
 from wall_detailing.masonry.bond.head_bond import HeadBond
 from wall_detailing.masonry.bond.streched_bond import StrechedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
@@ -225,6 +226,7 @@ class WallDetailer:
 
 
 if __name__ == "__main__":
+    print("available bonds", Bond.BondTypes.keys())
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))],
                          "LegoWallType2": [BrickInformation(0.032, 0.016, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
@@ -258,6 +260,6 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(www, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
-    brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
+    #brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
     BrickExporter(bb).export_to_json("output.json")
     #BrickToOntology(bb)
