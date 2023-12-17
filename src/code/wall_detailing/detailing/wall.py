@@ -275,7 +275,7 @@ class Wall:
         self.update_shape(shape)
 
     @classmethod
-    def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, name="", use_mid: bool = True):
+    def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, base_module: BrickInformation = None, bond_type: str = None, name="", use_mid: bool = True):
         length, width = max(length, width), min(length, width)
         corner = gp_Pnt(0.0, 0.0, 0.0)
 
@@ -292,5 +292,5 @@ class Wall:
         transformation.SetTranslation(gp_Vec(*position))
         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
 
-        wall = cls(shape, ifc_wall_type, name)
+        wall = cls(shape, ifc_wall_type=ifc_wall_type, bond_type=bond_type, base_module=base_module, name=name)
         return wall

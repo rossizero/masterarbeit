@@ -96,7 +96,7 @@ class WallLayer:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
-        return ret
+        return np.round(ret, 6)
 
     @property
     def right_edge(self):
@@ -116,7 +116,7 @@ class WallLayer:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
-        return ret
+        return np.round(ret, 6)
 
     def relative_x_offset(self) -> float:
         """
@@ -149,7 +149,7 @@ class WallLayer:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
-        return ret
+        return np.round(ret, 6)
 
     def is_touching_at_endpoints(self, other: 'WallLayer', tolerance: float = 1e-8) -> bool:
         """
@@ -224,7 +224,7 @@ class WallLayer:
         :param length: new length = self.length - length if incoming length <= length
         :param from_left: if True, center will be moved so that the right corner stays at its prior position
         :param from_right: if True, center will be moved so that the left corner stays at its prior position
-        :return: if operation was sucessful
+        :return: if operation was successful
         """
         if length >= self.length:
             return False
@@ -236,6 +236,7 @@ class WallLayer:
             else:
                 self.translation[0] -= length / 2.0
         self.length -= length
+        self.length = round(self.length, 6)
         return True
 
     def move_edge(self, start_point: np.array, length: float = 0):
@@ -247,7 +248,8 @@ class WallLayer:
         """
         is_left = np.linalg.norm(start_point - self.left_edge) < np.linalg.norm(start_point - self.right_edge)
         local_start_point = start_point - self.parent.get_translation()
-        local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
+        local_start_point = np.round(quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point), decimals=6)
+        #local_start_point = quaternion.rotate_vectors(self.parent.get_rotation().inverse(), local_start_point)
 
         right = self.get_right_edge(True)
         left = self.get_left_edge(True)
@@ -256,7 +258,7 @@ class WallLayer:
             x = local_start_point - left
         else:
             x = right - local_start_point
-
+        x_ = x[0]
         x = round(x[0], 6)
         length += x
         self.reduce_length(length, from_left=is_left, from_right=not is_left)

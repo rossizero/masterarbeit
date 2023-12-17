@@ -141,7 +141,6 @@ class Corn:
         mid = self._get_corner_direction()
         width = layer.parent.wall.width / 2.0
         outer_corner_point = self.point - np.array([width, width, 1]) * mid
-
         # finally reduce the length of the layer starting from outer_corner_point and going corner_length into the layer
         layer.move_edge(outer_corner_point, corner_length)
 

@@ -251,7 +251,7 @@ if __name__ == "__main__":
 
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario1()
+    scenario = Scenario2()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
@@ -264,7 +264,7 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(www, brick_information)
+    wall_detailer = WallDetailer(scenario.get_walls(), brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     #brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
