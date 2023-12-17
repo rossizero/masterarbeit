@@ -6,11 +6,11 @@ import numpy as np
 import math
 
 
-class StrechedBond(Bond):
+class StretchedBond(Bond):
     def __init__(self, module: BrickInformation, offset: float = 0.5, schleppend: bool = False):
         self.offset = offset
         self.schleppend = schleppend
-        super(StrechedBond, self).__init__(module)
+        super(StretchedBond, self).__init__(module)
 
     def _get_plan(self) -> List[List[Transformation]]:
         plan = []

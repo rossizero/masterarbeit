@@ -56,6 +56,9 @@ class BrickInformation:
         """
         return self.length * self.width * self.height
 
+    def is_valid(self) -> bool:
+        return self.volume() > 0.0
+
     def get_rotated_dimensions(self, rotation: quaternion):
         """
         :param rotation: the rotation we need the box in
@@ -104,6 +107,9 @@ class BrickInformation:
         if isinstance(other, BrickInformation):
             return other.length == self.length and other.width == self.width and other.height == self.height
         return False
+
+    def __str__(self):
+        return f"BrickInformation({self.length}, {self.width}, {self.height})"
 
 
 class Brick:

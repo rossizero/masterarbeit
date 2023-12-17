@@ -17,6 +17,7 @@ import quaternion
 from wall_detailing.detailing.wall import Wall
 from wall_detailing.detailing.opening import Opening
 from wall_detailing.importer.IfcOpening import IfcOpening
+from wall_detailing.masonry.brick import BrickInformation
 
 print("OCC version", VERSION)
 print("IfcOpenshell version", ifcopenshell.version)
@@ -140,7 +141,9 @@ class IfcImporter:
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
-            wall = Wall(shape, self.wall_type)
+            base_module = BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))
+            bond_type = "HeadBond" if half_dim[1] * 2 == 0.4 else "StretchedBond"
+            wall = Wall(shape, self.wall_type, base_module, bond_type)
             wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, half_dim), decimals=6)
             wall.rotation = rotation
 

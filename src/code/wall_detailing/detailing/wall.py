@@ -18,21 +18,39 @@ from wall_detailing.masonry.brick import BrickInformation
 
 
 class WallDetailingInformation:
-    def __init__(self, ifc_wall_type: str, base_module: BrickInformation = None):
+    def __init__(self, ifc_wall_type: str, base_module: BrickInformation, bond_type: str):
         self.ifc_wall_type = ifc_wall_type
-        self.base_module: BrickInformation = base_module
-        self.bond = ""
+
+        self.base_module = base_module
         if base_module is None:
             self.base_module = BrickInformation(0.0, 0.0, 0.0, [0.0, 0.0, 0.0])
+
+        self.bond_type = bond_type
+        if bond_type is None:
+            self.bond_type = "StretchedBond"
+
+    def __eq__(self, other):
+        if isinstance(other, WallDetailingInformation):
+            return (self.ifc_wall_type == other.ifc_wall_type and
+                    self.base_module == other.base_module and
+                    self.bond_type == other.bond_type)
+        return False
+
+    def __str__(self):
+        return "WallDetailingInformation(ifc_wall_type={}, base_module={}, bond_name={})".format(
+            self.ifc_wall_type, self.base_module, self.bond_type
+        )
 
 
 class Wall:
     """
     A Wall that comes from an ifc file
     """
-    def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, name: str = ""):
+    def __init__(self, shape: TopoDS_Shape, ifc_wall_type: str, base_module: BrickInformation = None, bond_type: str = None, name: str = ""):
         self.name = name
         self.ifc_wall_type = ifc_wall_type
+        self.detailing_information = WallDetailingInformation(ifc_wall_type, base_module, bond_type)
+
         self.length = 0.0
         self.width = 0.0
         self.height = 0.0

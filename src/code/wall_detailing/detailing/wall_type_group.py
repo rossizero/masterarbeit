@@ -1,20 +1,13 @@
 from typing import List
-
 from detailing.wall_layer_group import WallLayerGroup
-from masonry.bond.streched_bond import StrechedBond
-from masonry.brick import BrickInformation
-from masonry.bond.head_bond import HeadBond
-
-from wall_detailing.masonry.bond.cross_bond import CrossBond
-from wall_detailing.masonry.bond.gothic_bond import GothicBond
+from wall_detailing.detailing.wall import WallDetailingInformation
+from masonry.bond.abstract_bond import Bond
 
 
 class WallTypeGroup:
-    def __init__(self, ifc_class: str, brick_information: List[BrickInformation]):
-        self.ifc_class = ifc_class
-        self.brick_information = brick_information
-        self.brick_information.sort(key=lambda x: x.volume(), reverse=True)
-        self.module = self.brick_information[0]
-        self.bond = StrechedBond(self.module)
-        #self.bond = CrossBond(self.module)
+    def __init__(self, detailing_information: WallDetailingInformation):
+        self.detailing_information = detailing_information
+        self.module = self.detailing_information.base_module
+        self.bond = Bond.BondTypes[self.detailing_information.bond_type](self.module)
+
         self.layer_groups: List[WallLayerGroup] = []

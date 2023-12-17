@@ -27,7 +27,7 @@ from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
 from masonry.bond import abstract_bond
 from wall_detailing.masonry.bond.head_bond import HeadBond
-from wall_detailing.masonry.bond.streched_bond import StrechedBond
+from wall_detailing.masonry.bond.stretched_bond import StretchedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
@@ -46,10 +46,17 @@ class WallDetailer:
 
         # convert walls to layergroups
         for w in self.walls:
-            if w.ifc_wall_type not in wall_type_groups.keys():
-                wall_type_groups[w.ifc_wall_type] = WallTypeGroup(w.ifc_wall_type, self.brick_informations[w.ifc_wall_type])
-            layer_group = WallLayerGroup.from_wall(w, wall_type_groups[w.ifc_wall_type].module)
-            wall_type_groups[w.ifc_wall_type].layer_groups.append(layer_group)
+            k = str(w.detailing_information)
+
+            if not w.detailing_information.base_module.is_valid():
+                continue
+
+            if k not in wall_type_groups.keys():
+                wall_type_groups[k] = WallTypeGroup(w.detailing_information)
+
+            layer_group = WallLayerGroup.from_wall(w, wall_type_groups[k].module)
+            wall_type_groups[k].layer_groups.append(layer_group)
+
         print("combining now")
         for group in wall_type_groups.values():
             # combine layer_groups if possible
