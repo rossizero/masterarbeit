@@ -13,6 +13,13 @@ from detailing.layered_solver import LayeredSolver
 from detailing.wall_layer_group import WallLayerGroup
 from detailing.wall_type_group import WallTypeGroup
 from masonry.bond.abstract_bond import Bond
+
+from masonry.bond.cross_bond import CrossBond
+from masonry.bond.head_bond import HeadBond
+from masonry.bond.stretched_bond import StretchedBond
+from masonry.bond.gothic_bond import GothicBond
+from masonry.bond.block_bond import BlockBond
+
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns
@@ -25,9 +32,6 @@ from wall_detailing.exporter.BrickToOntologie import BrickToOntology
 from wall_detailing.importer.ifc_importer import IfcImporter
 #from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
-from masonry.bond import abstract_bond
-from wall_detailing.masonry.bond.head_bond import HeadBond
-from wall_detailing.masonry.bond.stretched_bond import StretchedBond
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
@@ -251,7 +255,7 @@ if __name__ == "__main__":
 
     #scenario = CombinationExampleForText()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario2()
+    scenario = CombinationExampleForText()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
@@ -264,7 +268,7 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(www, brick_information)
+    wall_detailer = WallDetailer(scenario.get_walls(), brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     #brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
