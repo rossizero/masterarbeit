@@ -253,9 +253,8 @@ if __name__ == "__main__":
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     www = tmp.get_walls()
 
-    #scenario = CombinationExampleForText()
-    #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario1()
+    scenario = DoppelEck2_Closed_TJoint()
+    scenario = LucaScenario()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
