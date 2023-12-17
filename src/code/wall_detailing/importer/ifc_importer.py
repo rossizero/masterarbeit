@@ -94,8 +94,12 @@ class IfcImporter:
             # that's why we need to calculate the absolute position of the wall and reverse the translation and rotation
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
+            angle = rotation.angle()
+            angle = round(angle / (math.pi / 2.0)) * (math.pi / 2.0)
+            # print(rotation.angle(), angle, rotation, quaternion.from_euler_angles(0, 0, angle))
+            rotation = quaternion.from_euler_angles(0, 0, angle)
 
-            # reverse the translation and rotation (the True, True parameters are important, but idk why)
+            # reverse the translation and rotation (the True, True parameters are important, but IDK why)
             # it took soooo much time to figure out that this is the correct way to do it
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*translation).Reversed())
@@ -117,13 +121,17 @@ class IfcImporter:
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
-            wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
-            wall.translation = translation + np.round(quaternion.rotate_vectors(rotation, half_dim), decimals=6)
-            wall.rotation = rotation
+            _wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
+            translation = translation + np.round(quaternion.rotate_vectors(rotation, half_dim), decimals=6)
+            _wall.translation = translation
+            _wall.rotation = rotation
+            wall = Wall.make_wall(_wall.length, _wall.width, _wall.height, translation,
+                                  rotation,
+                                  ifc_wall_type=self.wall_type, base_module=base_module, bond_type=bond_type)
 
-            print("wall", wall.length, wall.width, wall.height, wall.get_translation(), translation, wall.get_rotation(), rotation)
+            #print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
+
             walls.append(wall)
-
             # get openings in the wall
             for void_element in w.HasOpenings:
                 o = void_element.RelatedOpeningElement

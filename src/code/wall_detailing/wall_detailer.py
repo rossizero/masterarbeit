@@ -37,6 +37,7 @@ from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Sing
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
 from wall_detailing.scenarios.examples_for_text.scenario1 import Scenario1
 from wall_detailing.scenarios.examples_for_text.scenario2 import Scenario2
+from wall_detailing.scenarios.examples_for_text.small_test import SmallTestToCompareIFC
 
 
 class WallDetailer:
@@ -132,8 +133,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0# or True
-            fill_right = len(layer.right_connections) == 0# or True
+            fill_left = len(layer.left_connections) == 0 #and False #or True
+            fill_right = len(layer.right_connections) == 0 #and False #or True
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -247,29 +248,27 @@ if __name__ == "__main__":
                          }
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc")
     #tmp = IfcImporter("../../models/scenario11.ifc")
     tmp = IfcImporter("../../models/scenarios/Scenario2/fabric2.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     www = tmp.get_walls()
 
-    scenario = DoppelEck2_Closed_TJoint()
-    scenario = LucaScenario()
+    #scenario = DoppelEck2_Closed_TJoint()
+    scenario = SmallTestToCompareIFC()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
-    for i, w in enumerate(www[0:]):
+    for i, w in enumerate(www):
         shapes.append(w.get_shape())
         if i == 24:
             break
-    print(len(www))
-    #shapes.extend([w.get_shape() for w in www])
+
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(scenario.get_walls(), brick_information)
+    wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
-    #brick.calculate_neighborhood(bb, grid=np.array([1, 1, 0.5]))
+    brick.calculate_neighborhood(bb)
     BrickExporter(bb).export_to_json("output.json")
     #BrickToOntology(bb)

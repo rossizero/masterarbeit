@@ -143,6 +143,9 @@ class Brick:
                                          self.width - self.offset * 2,
                                          self.height - self.offset * 2).Shape()
 
+    def get_grid(self):
+        return self.__brick_information.grid
+
     @property
     def all_neighbors(self):
         return (self.neighbors[Neighbor.LEFT] |
@@ -328,7 +331,7 @@ class Brick:
         return self.__brick_information.is_inside(relative_point)
 
 
-def calculate_neighborhood(bricks: List[Brick], grid: np.array):
+def calculate_neighborhood(bricks: List[Brick]):
     """
     calculates all neighbours of each brick using the given grid as step size
     """
@@ -336,7 +339,7 @@ def calculate_neighborhood(bricks: List[Brick], grid: np.array):
     for i, brick in enumerate(bricks):
         #if i%10 == 0:
         #    print(i, "/", len(bricks))
-
+        grid = brick.get_grid()
         neighbor_positions = brick.get_neighbour_positions(grid)
 
         for other in bricks[i + 1:]:
