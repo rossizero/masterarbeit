@@ -5,10 +5,6 @@ from typing import List
 import numpy as np
 import math
 
-from masonry.bond import abstract_bond
-
-abstract_bond.BondTypes["block"] = "BlockBond"
-
 
 class BlockBond(Bond):
     def __init__(self, module: BrickInformation):
