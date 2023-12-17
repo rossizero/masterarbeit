@@ -323,7 +323,7 @@ class Bond(ABC):
                 tf.module = self.module
 
                 if tf.get_position()[0] >= x_offset:
-                    diff = tf.get_position()[0] - x_offset
+                    diff = round(tf.get_position()[0] - x_offset, 6)
                     if not any_bricks:
                         any_bricks = True
                         leftover_left = diff
@@ -342,6 +342,7 @@ class Bond(ABC):
                 leftover_left = length - leftover_left
                 leftover_right = length - leftover_left
 
+        # in case we want to build the layer from right to left
         # reverse tfs to build from left to right
         if reversed:
             leftover_right, leftover_left = leftover_left, leftover_right
@@ -350,6 +351,6 @@ class Bond(ABC):
                 brick_length = self.module.get_rotated_dimensions(tf.get_rotation())[0]
                 tf.translation.offset[0] = length - tf.translation.offset[0] - brick_length
                 tf.mask_multiplier[0] *= -1
-
-        # in case we want to build the layer from right to left
+        leftover_left = round(leftover_left, 6)
+        leftover_right = round(leftover_right, 6)
         return ret, leftover_left, leftover_right

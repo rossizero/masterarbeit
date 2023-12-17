@@ -134,7 +134,13 @@ class IfcImporter:
                         translation = np.array([0.0, 0.0, 0.0])
                         if o.ObjectPlacement.RelativePlacement is not None:
                             location = o.ObjectPlacement.RelativePlacement.Location
-                            translation = np.round(np.array(location.Coordinates), decimals=6)
+                            translation = np.array(location.Coordinates)
+                            translation = np.array([
+                                round(translation[0] / base_module.grid[0]) * base_module.grid[0],
+                                round(translation[1] / base_module.grid[1]) * base_module.grid[1],
+                                round(translation[2] / base_module.grid[2]) * base_module.grid[2]
+                            ])
+                            translation = np.round(translation, decimals=6)
 
                         transformation = gp_Trsf()
                         transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
@@ -144,6 +150,7 @@ class IfcImporter:
                         dimensions[1] = wall.width
                         rotation *= wall.get_rotation().inverse()
                         opening = Opening(wall, translation, rotation, dimensions)
+                        print("opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
                         wall.openings.append(opening)
                     except Exception as e:
                         print(e)
