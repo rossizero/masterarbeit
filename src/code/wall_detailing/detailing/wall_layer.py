@@ -96,7 +96,7 @@ class WallLayer:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
-        return np.round(ret, 6)
+        return ret
 
     @property
     def right_edge(self):
@@ -116,7 +116,7 @@ class WallLayer:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
-        return np.round(ret, 6)
+        return ret
 
     def relative_x_offset(self) -> float:
         """
@@ -149,7 +149,7 @@ class WallLayer:
         if not relative:
             ret = quaternion.rotate_vectors(self.parent.get_rotation(), ret)
             ret += self.parent.get_translation()
-        return np.round(ret, 6)
+        return ret
 
     def is_touching_at_endpoints(self, other: 'WallLayer', tolerance: float = 1e-8) -> bool:
         """
