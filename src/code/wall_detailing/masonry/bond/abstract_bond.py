@@ -233,7 +233,7 @@ class Bond(ABC):
         """
         bricks, leftover_left, leftover_right = self.bricks_in_layer(layer, length, x_offset, reversed)
 
-        if leftover_left + leftover_right <= length:
+        if np.isclose(leftover_left + leftover_right, length):
             # if we only want to fill one side, but the layer only consists of leftovers
             # -> fill the whole layer from one side
             if fill_left and not fill_right:
@@ -327,6 +327,15 @@ class Bond(ABC):
                     if not any_bricks:
                         any_bricks = True
                         leftover_left = diff
+
+                        # if leftover_left is exactly one brick length
+                        ttf = self.__get((layer, self.step - 1))
+                        brick_length = self.module.get_rotated_dimensions(ttf.get_rotation())[0]
+                        if leftover_left == brick_length:
+                            ttf.translation.offset[0] -= x_offset
+                            ttf.module = self.module
+                            ret.append(ttf)
+                            leftover_left = 0
 
                     leftover_left = min(leftover_left, diff)
                     tf.translation.offset[0] -= x_offset
