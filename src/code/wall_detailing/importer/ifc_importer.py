@@ -113,6 +113,7 @@ class IfcImporter:
 
             # TODO retrieve from IfcPropertySet
             base_module = BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))
+            base_module = BrickInformation(0.016, 0.008, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))
             half_dim = get_shape_dimensions(shape, base_module.grid) / 2.0
             bond_type = "HeadBond" if half_dim[1] * 2 == 0.4 else "StretchedBond"
 
@@ -122,14 +123,21 @@ class IfcImporter:
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
             _wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
-            translation = translation + np.round(quaternion.rotate_vectors(rotation, half_dim), decimals=6)
+            translation = translation + quaternion.rotate_vectors(rotation, half_dim)
+            translation = np.array([
+                round(translation[0] / base_module.grid[0]) * base_module.grid[0],
+                round(translation[1] / base_module.grid[1]) * base_module.grid[1],
+                round(translation[2] / base_module.grid[2]) * base_module.grid[2]
+            ])
+            translation = np.round(translation, decimals=6)
+
             _wall.translation = translation
             _wall.rotation = rotation
             wall = Wall.make_wall(_wall.length, _wall.width, _wall.height, translation,
                                   rotation,
                                   ifc_wall_type=self.wall_type, base_module=base_module, bond_type=bond_type)
 
-            #print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
+            print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
 
             walls.append(wall)
             # get openings in the wall
@@ -158,7 +166,7 @@ class IfcImporter:
                         dimensions[1] = wall.width
                         rotation *= wall.get_rotation().inverse()
                         opening = Opening(wall, translation, rotation, dimensions)
-                        print("opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
+                        print("  opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
                         wall.openings.append(opening)
                     except Exception as e:
                         print(e)

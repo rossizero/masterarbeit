@@ -249,14 +249,15 @@ if __name__ == "__main__":
 
     #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
     #tmp = IfcImporter("../../models/scenario11.ifc")
-    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric.ifc", "Scenario2")
+    tmp = IfcImporter("../../models/scenarios/Scenario2/fabric2.ifc", "Scenario2")
+    tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2_real.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     #tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls.ifc", "Test1")
     www = tmp.get_walls()
 
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = SmallTestToCompareIFC()
-    #scenario = Scenario2()
+    scenario = DoppelEck2_Closed_TJoint()
+    scenario = Scenario2()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]
@@ -268,7 +269,7 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(scenario.walls, brick_information)
+    wall_detailer = WallDetailer(www, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb)

@@ -276,7 +276,7 @@ class Wall:
 
     @classmethod
     def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, base_module: BrickInformation = None, bond_type: str = None, name="", use_mid: bool = True):
-        print("   make_wall", length, width, height, position, rotation)
+        # print("   make_wall", length, width, height, position, rotation)
 
         length, width = max(length, width), min(length, width)
         corner = gp_Pnt(0.0, 0.0, 0.0)
