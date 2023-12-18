@@ -481,3 +481,8 @@ class LucaScenario(Scenario):
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         all = [w1, w2, w3, w4]
         return all
+
+
+class EmptyScenario(Scenario):
+    def get_walls(self):
+        return []

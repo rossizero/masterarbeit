@@ -25,7 +25,7 @@ from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
     SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners, \
-    OverlappingWalls, LucaScenario
+    OverlappingWalls, LucaScenario, EmptyScenario
 from masonry import corner_rep
 from wall_detailing.exporter.BrickExporter import BrickExporter
 from wall_detailing.exporter.BrickToOntologie import BrickToOntology
@@ -256,8 +256,9 @@ if __name__ == "__main__":
     www = tmp.get_walls()
 
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = DoppelEck2_Closed_TJoint()
+    #scenario = DoppelEck2_Closed_TJoint()
     scenario = Scenario2()
+    #scenario = EmptyScenario()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
     shapes = [o.get_shape() for w in www for o in w.openings]

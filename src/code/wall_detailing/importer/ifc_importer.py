@@ -1,4 +1,5 @@
 import math
+from typing import Tuple
 
 import ifcopenshell
 import numpy as np
@@ -25,6 +26,11 @@ print("IfcOpenshell version", ifcopenshell.version)
 
 
 class IfcImporter:
+    WallDetailingPropertySetName = "wall_detailing_properties"
+    WallDetailing_GRID = "grid"
+    WallDetailing_BASEMODULE = "module"
+    WallDetailing_BONDTYPE = "bond type"
+
     def __init__(self, ifc_file_path, wall_type="Test"):
         self.ifc_file_path = ifc_file_path
         self.ifc_file = ifcopenshell.open(self.ifc_file_path)
@@ -74,6 +80,46 @@ class IfcImporter:
         #rotation = np.quaternion(round(rotation.z, 6), round(rotation.x, 6), round(rotation.y, 6), round(rotation.w, 6))
         return np.round(position, decimals=6), rotation
 
+    def get_detailing_information(self, ifc_product) -> Tuple[BrickInformation, str]:
+        wall_detailing_information_property_set = None
+        base_module = None
+        bond_type = None
+
+        for property_set in ifc_product.IsDefinedBy:
+            if property_set.is_a("IfcRelDefinesByProperties"):
+                if property_set.RelatingPropertyDefinition.Name == IfcImporter.WallDetailingPropertySetName:
+                    wall_detailing_information_property_set = property_set.RelatingPropertyDefinition
+                    break
+        if wall_detailing_information_property_set is None:
+            for ifc_type in ifc_product.IsTypedBy:
+                for property_set in ifc_type.RelatingType.HasPropertySets:
+                    if property_set.Name == IfcImporter.WallDetailingPropertySetName:
+                        wall_detailing_information_property_set = property_set
+                        break
+        if wall_detailing_information_property_set is None:
+            return base_module, bond_type
+
+        dic = {}
+        for property_single_value in wall_detailing_information_property_set.HasProperties:
+            if property_single_value.is_a('IfcPropertySingleValue'):
+                dic[property_single_value.Name] = None
+
+                if property_single_value.NominalValue.is_a("IfcReal"):
+                    dic[property_single_value.Name] = round(property_single_value.NominalValue.wrappedValue, 6)
+                else:
+                    dic[property_single_value.Name] = str(property_single_value.NominalValue.wrappedValue)
+        try:
+            base_module = BrickInformation(dic[IfcImporter.WallDetailing_BASEMODULE + " x"],
+                                           dic[IfcImporter.WallDetailing_BASEMODULE + " y"],
+                                           dic[IfcImporter.WallDetailing_BASEMODULE + " z"],
+                                           grid=np.array([dic[IfcImporter.WallDetailing_GRID + " x"],
+                                                          dic[IfcImporter.WallDetailing_GRID + " y"],
+                                                          dic[IfcImporter.WallDetailing_GRID + " z"]]))
+            bond_type = dic[IfcImporter.WallDetailing_BONDTYPE]
+        finally:
+            return base_module, bond_type
+
+
     def get_walls(self):
         ifc_walls = self.ifc_file.by_type("IfcWall")
         walls = []
@@ -88,6 +134,9 @@ class IfcImporter:
 
             if True not in [rep.RepresentationType == "SweptSolid" for rep in w.Representation.Representations]:
                 continue
+
+            # try to get wall detailing information
+            base_module, bond_type = self.get_detailing_information(w)
 
             # the shape returned by the next line of code has no internal translation and rotation set
             # but it also is not located at the origin of the world coordinate system
@@ -110,12 +159,13 @@ class IfcImporter:
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
             # move the shape so that its center is at the origin of the world coordinate system
+            if base_module is None:
+                base_module = BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))
 
-            # TODO retrieve from IfcPropertySet
-            base_module = BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))
-            base_module = BrickInformation(0.016, 0.008, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))
             half_dim = get_shape_dimensions(shape, base_module.grid) / 2.0
-            bond_type = "HeadBond" if half_dim[1] * 2 == 0.4 else "StretchedBond"
+
+            if bond_type is None:
+                bond_type = "HeadBond" if half_dim[1] * 2 == 0.4 else "StretchedBond"
 
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*half_dim).Reversed())
@@ -123,7 +173,9 @@ class IfcImporter:
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
             _wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
+            # correct the translation
             translation = translation + quaternion.rotate_vectors(rotation, half_dim)
+
             translation = np.array([
                 round(translation[0] / base_module.grid[0]) * base_module.grid[0],
                 round(translation[1] / base_module.grid[1]) * base_module.grid[1],
@@ -137,7 +189,7 @@ class IfcImporter:
                                   rotation,
                                   ifc_wall_type=self.wall_type, base_module=base_module, bond_type=bond_type)
 
-            print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
+            # print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
 
             walls.append(wall)
             # get openings in the wall
@@ -166,12 +218,12 @@ class IfcImporter:
                         dimensions[1] = wall.width
                         rotation *= wall.get_rotation().inverse()
                         opening = Opening(wall, translation, rotation, dimensions)
-                        print("  opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
+                        #print("  opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
                         wall.openings.append(opening)
                     except Exception as e:
                         print(e)
                         continue
-
+        print("ifc importer", len(walls))
         return walls
 
     def code_for_latex(self):
