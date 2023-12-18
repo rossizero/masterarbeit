@@ -109,6 +109,7 @@ class IfcImporter:
                 else:
                     dic[property_single_value.Name] = str(property_single_value.NominalValue.wrappedValue)
         try:
+            # MAYDO if module is defined but grid is not, then we can calculate the grid from the module dimensions
             base_module = BrickInformation(dic[IfcImporter.WallDetailing_BASEMODULE + " x"],
                                            dic[IfcImporter.WallDetailing_BASEMODULE + " y"],
                                            dic[IfcImporter.WallDetailing_BASEMODULE + " z"],
@@ -175,12 +176,6 @@ class IfcImporter:
             _wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
             # correct the translation
             translation = translation + quaternion.rotate_vectors(rotation, half_dim)
-
-            translation = np.array([
-                round(translation[0] / base_module.grid[0]) * base_module.grid[0],
-                round(translation[1] / base_module.grid[1]) * base_module.grid[1],
-                round(translation[2] / base_module.grid[2]) * base_module.grid[2]
-            ])
             translation = np.round(translation, decimals=6)
 
             _wall.translation = translation
@@ -213,12 +208,12 @@ class IfcImporter:
                         transformation = gp_Trsf()
                         transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
                         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
-                        dimensions = get_shape_dimensions(shape)
+                        dimensions = get_shape_dimensions(shape, sort=False)
 
                         dimensions[1] = wall.width
                         rotation *= wall.get_rotation().inverse()
                         opening = Opening(wall, translation, rotation, dimensions)
-                        #print("  opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
+                        print("  opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
                         wall.openings.append(opening)
                     except Exception as e:
                         print(e)

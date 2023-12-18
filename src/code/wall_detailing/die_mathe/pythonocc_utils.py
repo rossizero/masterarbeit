@@ -5,7 +5,7 @@ from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import TopoDS_Shape, topods
 
 
-def get_shape_dimensions(shape: TopoDS_Shape, grid: np.array = None):
+def get_shape_dimensions(shape: TopoDS_Shape, grid: np.array = None, sort:bool = False):
     """
     :param shape: the shape to get the dimensions from
     :param grid: the grid to snap the dimensions to
@@ -40,8 +40,12 @@ def get_shape_dimensions(shape: TopoDS_Shape, grid: np.array = None):
     # sometimes the dimensions are not exactly on the grid, so we round them
     dimensions = np.round(dimensions, decimals=6)
 
-    length = max(dimensions[0], dimensions[1])
-    width = min(dimensions[0], dimensions[1])
+    length = dimensions[0]
+    width = dimensions[1]
+
+    if sort:
+        length = max(dimensions[0], dimensions[1])
+        width = min(dimensions[0], dimensions[1])
     height = dimensions[2]
     ret = np.array([length, width, height])
     return ret
