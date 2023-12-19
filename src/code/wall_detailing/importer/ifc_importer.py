@@ -84,18 +84,20 @@ class IfcImporter:
         wall_detailing_information_property_set = None
         base_module = None
         bond_type = None
-
-        for property_set in ifc_product.IsDefinedBy:
-            if property_set.is_a("IfcRelDefinesByProperties"):
-                if property_set.RelatingPropertyDefinition.Name == IfcImporter.WallDetailingPropertySetName:
-                    wall_detailing_information_property_set = property_set.RelatingPropertyDefinition
-                    break
-        if wall_detailing_information_property_set is None:
-            for ifc_type in ifc_product.IsTypedBy:
-                for property_set in ifc_type.RelatingType.HasPropertySets:
-                    if property_set.Name == IfcImporter.WallDetailingPropertySetName:
-                        wall_detailing_information_property_set = property_set
+        if hasattr(ifc_product, "IsDefinedBy") and ifc_product.IsDefinedBy is not None:
+            for property_set in ifc_product.IsDefinedBy:
+                if property_set.is_a("IfcRelDefinesByProperties"):
+                    if property_set.RelatingPropertyDefinition.Name == IfcImporter.WallDetailingPropertySetName:
+                        wall_detailing_information_property_set = property_set.RelatingPropertyDefinition
                         break
+        if wall_detailing_information_property_set is None:
+            if hasattr(ifc_product, "IsTypedBy") and ifc_product.IsTypedBy is not None:
+                for ifc_type in ifc_product.IsTypedBy:
+                    if ifc_type.RelatingType is not None and ifc_type.RelatingType.HasPropertySets is not None:
+                        for property_set in ifc_type.RelatingType.HasPropertySets:
+                            if property_set.Name == IfcImporter.WallDetailingPropertySetName:
+                                wall_detailing_information_property_set = property_set
+                                break
         if wall_detailing_information_property_set is None:
             return base_module, bond_type
 
@@ -132,12 +134,25 @@ class IfcImporter:
         settings.set(settings.USE_PYTHON_OPENCASCADE, True)
 
         for w in ifc_walls:
+            dimensions = np.zeros(3)
+            bbox = None
+            for rep in w.Representation.Representations:
+                if rep.RepresentationType == "BoundingBox":
+                    if len(rep.Items) > 0:
+                        for item in rep.Items:
+                            if hasattr(item, "XDim") and hasattr(item, "YDim") and hasattr(item, "ZDim"):
+                                bbox = rep
+                                dimensions = np.array([item.XDim, item.YDim, item.ZDim])
+                                break
 
-            if True not in [rep.RepresentationType == "SweptSolid" for rep in w.Representation.Representations]:
-                continue
+            if bbox is None:
+                if True not in [rep.RepresentationType == "SweptSolid" for rep in w.Representation.Representations]:
+                    continue
 
             # try to get wall detailing information
             base_module, bond_type = self.get_detailing_information(w)
+            if base_module is None:
+                continue
 
             # the shape returned by the next line of code has no internal translation and rotation set
             # but it also is not located at the origin of the world coordinate system
@@ -159,15 +174,11 @@ class IfcImporter:
             transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
+            dim = get_shape_dimensions(shape, base_module.grid)
+            half_dim = dim / 2.0
+
+
             # move the shape so that its center is at the origin of the world coordinate system
-            if base_module is None:
-                base_module = BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))
-
-            half_dim = get_shape_dimensions(shape, base_module.grid) / 2.0
-
-            if bond_type is None:
-                bond_type = "HeadBond" if half_dim[1] * 2 == 0.4 else "StretchedBond"
-
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*half_dim).Reversed())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
