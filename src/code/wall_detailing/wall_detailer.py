@@ -252,6 +252,7 @@ if __name__ == "__main__":
     #tmp = IfcImporter("../../models/scenarios/Scenario2/fabric2.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2_real.ifc", "Scenario2")
     tmp = IfcImporter("../../models/scenarios/Scenario3/AC20-FZK-Haus - Kopie.ifc", "Scenario2")
+    #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2 - Kopie.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     #tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls.ifc", "Test1")
@@ -267,7 +268,8 @@ if __name__ == "__main__":
     for i, w in enumerate(www):
         shapes.append(w.get_shape())
         if i == 24:
-            break
+            pass
+            #break
 
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])

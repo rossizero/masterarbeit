@@ -177,7 +177,6 @@ class IfcImporter:
             dim = get_shape_dimensions(shape, base_module.grid)
             half_dim = dim / 2.0
 
-
             # move the shape so that its center is at the origin of the world coordinate system
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*half_dim).Reversed())
@@ -194,7 +193,6 @@ class IfcImporter:
             wall = Wall.make_wall(_wall.length, _wall.width, _wall.height, translation,
                                   rotation,
                                   ifc_wall_type=self.wall_type, base_module=base_module, bond_type=bond_type)
-
             # print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
 
             walls.append(wall)

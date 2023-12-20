@@ -7,7 +7,7 @@ Damit soll die ungeordnete Menge von konkreten Bausteinen eines Bauplanentwurfs 
 \section{Von 3D Gebäudeplan zu Bauplanentwurf}
 Diese erste Fallstudie enthält drei Szenarien anhand derer die Konzepte zur Errechnung eines Bauplanentwurfs ausgehend von 3D Gebäudeplänen erläutert und getestet werden.
 Die Pläne sind das Ergebnis der Gebäudemodellierung innerhalb eines Konstruktionsplaners.
-Die Modellierung soll mithilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen und die Gebäudepläne entsprechen darum in ihrer Struktur einem verbreiteten Industriestandard.
+Die Modellierung soll mithilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen, weshalb die Gebäudepläne in ihrer Struktur einem verbreiteten Industriestandard entsprechen.
 
 \subsection{Szenario 1}\label{scenarios:scenario1}
 In diesem einleitenden Szenario werden mithilfe eines einfachen Turmes mit vier Wänden einige der Kernkonzepte geprüft.
@@ -15,7 +15,7 @@ Dabei werden sowohl die Modellierung des Turmes innerhalb des Konstruktionsplane
 Insbesondere das Anwenden verschiedener Mauerwerksverbände soll die Flexibilität des erarbeiteten Vorgehens demonstrieren.
 \subsubsection*{Beschreibung}
 Der Turm besteht lediglich aus vier 20 Meter hohen Wänden, die einen einzigen Raum einschließen.
-Es hat einen Grundriss von 10$\times$10 Metern.
+Er hat einen Grundriss von 10$\times$10 Metern.
 Die Wände sollen daraufhin unter Anwendung folgender Mauerwerksverbände realisiert werden:
 \begin{itemize}
   \item Einem Läuferverband mit einem Versatz von 50 \% der Bausteinlänge.
@@ -23,6 +23,7 @@ Die Wände sollen daraufhin unter Anwendung folgender Mauerwerksverbände realis
   \item Einem Kreuzverband.
 \end{itemize}
 Da die beiden letzten Verbände bei gleichbleibendem Modul die Wanddicke verdoppeln, muss das Modell etwas angepasst werden, um nach wie vor denselben Grundriss aufzuweisen.
+Daher gibt es sowohl einen Bauplan mit 1 Meter dicken als auch einen mit 2 Meter dicken Wänden.
 Als Basismodul wird ein Baustein mit den Maßen 2$\times$1$\times$0.5 Metern verwendet.
 Das vereinfacht die Interpretation der generierten Lösungen.
 Das dazugehörige Raster hat die Größe 1$\times$1$\times$0.5 Meter.
@@ -40,9 +41,9 @@ Durch Lösen dieses Szenarios werden folgende Fragestellungen beantwortet:
 \end{itemize}
 
 \subsection{Szenario 2}\label{scenarios:scenario2}
-Nun folgt ein Szenario, das den Gegebenheiten eines realen Gebäudes bis auf die Skalierung eher entspricht.
-Es soll ein Gebäude konstruiert werden, welches einen Innenraum, Fenster und Türen enthält.
-Gleichzeitig wird das Modul stark verkleinert, sodass es den Maßen eines 4$\times$2 LEGO Steins entspricht (siehe Kapitel~\ref{basics:lego}).
+Nun folgt ein Szenario, das den Gegebenheiten eines realen Gebäudes bis auf dessen Skalierung eher entspricht.
+Es soll ein LEGO-Gebäude konstruiert werden, welches einen Innenraum, Fenster und Türen enthält.
+Darum wird das Modul stark verkleinert, sodass es den Maßen eines 4$\times$2 LEGO Steins entspricht (siehe Kapitel~\ref{basics:lego}).
 
 \begin{figure}[ht]
   \centering
@@ -77,7 +78,7 @@ Das stellt im Fall von LEGO eine vertretbare Einschränkung dar, da es ohnehin d
   Wie kann das zu verwendende Modul und der Mauerwerksverband für eine Wand vorgegeben werden?
   \item Wie können Übergänge zwischen Wänden verschiedener Dicke oder unterschiedlichem Verband realisiert werden?
   %\item Wie können Eckbereiche zwischen zwei Wänden mit unterschiedlicher Höhe behandelt werden?
-  \item In diesem Szenario liegt eine T-Kreuzung vor. 
+  \item In diesem Szenario gibt es T-Kreuzungen. 
   Wie können T-Kreuzungen von Eckbereichen unterschieden und dem Mauerwerksverband entsprechend umgesetzt werden? 
 \end{itemize}
 

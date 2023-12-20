@@ -1,13 +1,13 @@
 \chapter{Related Work}\label{related}
 \section{Projekte mit automatisierten Lege-Robotern}
 Die Automatisierung der Baubranche hat neben Faktoren wie Geschwindigkeit, Effizienz und Kostenreduzierung auch den Vorteil Bauprojekte an Orten zu realisieren, die für Menschen ungeeignet sind~\cite{Petersen2012}.
-Dafür wurde unter anderem das Projekt \textit{TERMES} von Kirstin Petersen et al.\ konzipiert, mit welchem das Team, angelehnt an dem Verhalten von Termiten, einen Schwarm bodengebundener Roboter koordinieren, die als Einheit Strukturen errichten~\cite{Petersen2012}.
+Dafür wurde unter anderem das Projekt \textit{TERMES} von Kirstin Petersen et al.\ konzipiert, mit welchem das Team, angelehnt an dem Verhalten von Termiten, einen Schwarm bodengebundener Roboter koordiniert, die als Einheit Strukturen errichten~\cite{Petersen2012}.
 Darüber hinaus stellen Kirstin Petersen et al.\ in einer anderen Veröffentlichung eine umfangreiche Übersicht von weiteren Projekten aus dem Bereich \textit{Collective Robotic Construction} vor~\cite{Petersen2019}.
 Doch nicht nur vollautomatische Roboterschwärme haben das Ziel die Baubranche zu verändern.
 Es gibt bereits etablierte Firmen, die semi-automatische Roboteranlagen zur Unterstützung der Arbeiter vor Ort anbieten und damit erfolgreich die Bauzeit reduzieren können.
-Dazu zählt zum Beispiel \textit{Hadrian X} der Firma FBR:\ ein mobiler, bodengebundener Kran der in der Lage ist ausgehend von einem CAD Modell ein bis zu drei Stockwerke hohes Gebäude aufzuschichten~\cite{HadrianX}.
-Ein weiteres Beispiel stellt \textit{SAM100}, ein mobiler Ziegelstein legender Roboter der Firma \textit{Construction Robotics} dar~\cite{SAM}.
-Dieser kann sich sogar erhöht auf einem Gerüst bewegen.
+Dazu zählt zum Beispiel \textit{Hadrian X} der Firma FBR:\ ein mobiler, bodengebundener Kran der in der Lage ist, ausgehend von einem CAD Modell, ein bis zu drei Stockwerke hohes Gebäude aufzuschichten~\cite{HadrianX}.
+Ein weiteres Beispiel stellt \textit{SAM100} dar, ein mobiler, Ziegelstein legender Roboter der Firma \textit{Construction Robotics}~\cite{SAM}.
+Dieser kann sich sogar erhöht auf einem Gerüst bewegen und damit in jedem Stockwerk zum Einsatz kommen.
 
 \section{Planungsvorgehen}
 Grundlage für sämtliche Projekte, in welchen mithilfe von Lege-Robotern automatisiert Gebäude beziehungsweise Gebilde mit einer Form von Bausteinen errichtet werden, ist eine vorangehende Planungsphase.
@@ -60,10 +60,12 @@ Dieses Vorgehen ähnelt dem von Usmanov et al.\ und eignet sich ebenfalls für d
 Nach dem Optimieren der Bausteinkonfiguration muss das Ergebnis auch in ein Format gebracht werden, das für die nachfolgenden Schritte verwendet und eventuell auch dem Nutzer angezeigt werden kann.
 Auch in dieser Veröffentlichung werden lediglich zwei verschiedene Mauerwerksverbände betrachtet, die zwar von den Optimierungsalgorithmen umgesetzt werden konnten, aber nur an geraden Wandstücken getestet wurden.
 Das Anwenden der Lösungsalgorithmen auf Eck- und Kreuzungsbereiche stellt einen sinnvolleren Anwendungsfall dar, als damit das \textit{Wall Detailing} gerader Wandabschnitte zu lösen.
-Letzteres kann ebenso iterativ berechnet werden, was potenzielle Fehler der Optimierungsalgorithmen verhindert, während das Lösen der kritischen Bereiche eher einem Problem entspricht, das mit \glqq{}intelligenten\grqq{} Optimierungsverfahren bewältigt werden kann. 
+Letzteres kann, was mit dieser Arbeit gezeigt wird, ebenso iterativ berechnet werden.
+Dadurch werden potenzielle Fehler der Optimierungsalgorithmen verhindert.
+Das Lösen der kritischen Bereiche entspricht allerdings eher einem Problem, das mit \glqq{}intelligenten\grqq{} Optimierungsverfahren bewältigt werden kann. 
 
 \subsection{Automated Brick Pattern Generator for Robotic Assembly using Machine Learning and Images}
-Bárbara Andrade Zandavali et al.\ untersuchen in ihrem Paper wie gut sich Machine Learning Algorithmen dazu eignen anhand von Bildern Pläne für konkretes Mauerwerk zu erzeugen~\cite{Zandavali2019}.
+Bárbara Andrade Zandavali et al.\ untersuchen in ihrem Paper wie gut sich Machine Learning Algorithmen dazu eignen, anhand von Bildern Pläne für konkretes Mauerwerk zu erzeugen~\cite{Zandavali2019}.
 Ein Kernaspekt dabei war das Anwenden verschiedener Mauerwerksverbände auf arbiträre Vielecke, welche die Form eines Wandabschnitts beschreiben.
 \begin{figure}[ht!]
     \centering
@@ -72,15 +74,15 @@ Ein Kernaspekt dabei war das Anwenden verschiedener Mauerwerksverbände auf arbi
 \end{figure}
 In Abbildung~\ref{fig:related:Zandavali2019} sind verschiedene Eingabeformen (linke Spalte) und deren Ergebnisse in vier verschiedenen Ausgabearten zu sehen.
 Da es sich sowohl bei dem Eingabe- als auch bei dem Ausgabeformat um Bilder handelt, musste im Anschluss zunächst untersucht werden, wie gut sich die verschiedenen Ergebnisarten dazu eignen daraus tatsächliches Mauerwerk zu interpretieren.
-Zusammenfassend konnten die Autoren berichten, dass das Vorgehen teilweise zu fragwürdigen Resultaten geführt hat, welches sich aber mit Sicherheit noch verbessern lässt.
+Zusammenfassend konnten die Autoren berichten, dass das Vorgehen teilweise zu fragwürdigen Resultaten geführt hat, welches sich aber mit Sicherheit durch Anpassungen von Parametern des Algorithmus verbessern lässt.
 Dennoch ist der Anwendungsfall auf gerade Wandabschnitte schlecht gewählt, da sich dieselben Ergebnisse auch durch \glqq{}Ausstanzen\grqq{} der Vielecke aus einem zuvor aufgefüllten quadratischem Bereich erreichen lassen.
-Das Anwenden intelligenter Mechanismen wie Machine Learning zum automatischen Lösen der kritischen Eck- und Kreuzungsbereiche zwischen mehreren Wandstücken kann sich allerdings durchaus als nützlich erweisen.
+Das Anwenden intelligenter Mechanismen wie Machine Learning zum automatischen Lösen der kritischen Eck- und Kreuzungsbereiche zwischen mehreren Wandstücken kann sich allerdings, wie bereits erwähnt, durchaus als nützlich erweisen.
 
 \subsection{Parametric Blockwall-Assembly Algorithms for the Automated Generation of Virtual Wall Mockups Using BIM}
 Tarek Zaki et al.\ beschreiben in diesem Paper ein Vorgehen, das es ermöglicht die Werkstatt- und Montageplanung für ein Bauprojekt, das in einer BIM-fähigen Umgebung geplant wird, direkt innerhalb derselben Umgebung durchführen zu können~\cite{Zaki2017}.
 Dies wurde bisher von Hand als zusätzliches sogenanntes \textit{Level of Detail} (LOD) berechnet und in das Projekt integriert.
-Das angestrebte LOD ist eine Art Mockup und ein Schritt vor dem nächsten LOD, dem Baubestandsplan, der eine exakte Repräsentation der zu bauenden Elemente darstellt.
-Das Ziel dieser Veröffentlichung ist dieses LOD direkt in der BIM Umgebung zu berechnen und anzuzeigen, da die dafür notwendigen Informationen darin ohnehin vorhanden sind.
+Das angestrebte LOD ist eine Art Mockup und ein Schritt vor dem letzten LOD, dem Baubestandsplan, der eine exakte Repräsentation der zu bauenden Elemente darstellt.
+Das Ziel der Veröffentlichung ist dieses LOD direkt in der BIM Umgebung zu berechnen und anzuzeigen, da die dafür notwendigen Informationen darin ohnehin vorhanden sind.
 Insgesamt soll dies eine genauere Materialanalyse und Kostenplanung ermöglichen.
 Da es sich aber \glqq{}nur\grqq{} um ein Mockup handelt, werden zum Beispiel Eckbereiche nicht berücksichtigt, sondern durch sich überlappende Wandstücke realisiert.
 Dafür kann jedoch ein beliebiges Basismodul vorgegeben werden, das nach Erstellen des Mockups bereits offensichtliche Fehler sichtbar macht.
