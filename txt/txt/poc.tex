@@ -18,12 +18,12 @@ Das vollständige Gebäudemodell ist in Abbildung~\ref{fig:poc:scenario1 modell}
   \hspace*{\fill}%
   \begin{subfigure}[b]{0.3\columnwidth}
     \includegraphics[width=\columnwidth]{fig/render_base_thin.png}
-    \caption{Der Turm mit 1 m dicken Wänden.}\label{fig:poc:render_crossbond}
+    \caption{Der Turm mit 1 Meter dicken Wänden.}\label{fig:poc:render_crossbond}
   \end{subfigure}
   \hfill%
   \begin{subfigure}[b]{0.3\columnwidth}
     \includegraphics[width=\columnwidth]{fig/render_base_thick.png}
-    \caption{Der Turm mit 2 m dicken Wänden.}\label{fig:poc:render_laeuferverband50}
+    \caption{Der Turm mit 2 Meter dicken Wänden.}\label{fig:poc:render_laeuferverband50}
   \end{subfigure}
   \hspace*{\fill}%
   \caption{Die beiden Input Modelle des Turmes.}\label{fig:poc:scenario1 modell}
@@ -62,20 +62,21 @@ Das dafür vorgesehene Vorgehen innerhalb der BIM Erweiterung für Blender ist z
 Zumindest ist das Hinzufügen neuer Tür- und Fensterarten ist der Definition neuer Wandarten sehr ähnlich.
 Das finale Modell ist in Abbildung~\ref{fig:poc:scenario2 modell} zu sehen.
 In Kapiteln~\ref{concept:openings} und~\ref{real:openings} wurde bereits aufgeführt, wie Öffnungen aus dem Modell extrahiert und als Teil des Wall-Detailings berücksichtigt werden.
-Das in Abbildung~\ref{fig:poc:scenario2 ergebnis} zu sehende Ergebnis zeigt die korrekte Umsetzung der Fenster und Türbereiche.
+Das in Abbildung~\ref{fig:poc:result_scenario2} zu sehende Ergebnis zeigt die korrekte Umsetzung der Fenster und Türbereiche.
 TODO Übergange zwischen Wänden verschiedener Dicken.
 TODO T-Kreuzungen?
 
-\begin{figure}[hb]
-  \centering
-  \includegraphics[width=0.5\columnwidth]{fig/scenario1_screenshot.png}
-  \caption{TODO 3D Modell neu machen.}\label{fig:poc:scenario2 modell}
-\end{figure}
-
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=0.6\columnwidth]{fig/scenario2_render.png}
-  \caption{Ergebnis Szenario 2.}\label{fig:poc:scenario2 ergebnis}
+\begin{figure}[htb]
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario2_rendering_input.png}
+    \caption{Gebäudemodell Szenario 2.}\label{fig:poc:scenario2 modell}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario2_render.png}
+    \caption{Ergebnis Szenario 2.}\label{fig:poc:scenario2 ergebnis}
+  \end{subfigure}
+\caption{Szenario 2.}\label{fig:poc:result_scenario2}
 \end{figure}
 
 \subsection{Szenario 3}\label{poc:scenario3}

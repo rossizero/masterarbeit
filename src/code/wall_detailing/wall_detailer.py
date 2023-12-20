@@ -253,7 +253,7 @@ if __name__ == "__main__":
     #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2_real.ifc", "Scenario2")
     tmp = IfcImporter("../../models/scenarios/Scenario3/AC20-FZK-Haus - Kopie.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2 - Kopie.ifc", "Scenario2")
-    #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc", "Scenario2")
+    tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test.ifc", "Test1")
     #tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls.ifc", "Test1")
     www = tmp.get_walls()
