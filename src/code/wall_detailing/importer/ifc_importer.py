@@ -194,7 +194,7 @@ class IfcImporter:
                                   rotation,
                                   ifc_wall_type=self.wall_type, base_module=base_module, bond_type=bond_type)
             # print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
-
+            wall.update_dimensions(use_grid=False)
             walls.append(wall)
             # get openings in the wall
             for void_element in w.HasOpenings:

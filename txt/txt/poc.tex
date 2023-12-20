@@ -62,21 +62,24 @@ Das dafür vorgesehene Vorgehen innerhalb der BIM Erweiterung für Blender ist z
 Zumindest ist das Hinzufügen neuer Tür- und Fensterarten ist der Definition neuer Wandarten sehr ähnlich.
 Das finale Modell ist in Abbildung~\ref{fig:poc:scenario2 modell} zu sehen.
 In Kapiteln~\ref{concept:openings} und~\ref{real:openings} wurde bereits aufgeführt, wie Öffnungen aus dem Modell extrahiert und als Teil des Wall-Detailings berücksichtigt werden.
-Das in Abbildung~\ref{fig:poc:result_scenario2} zu sehende Ergebnis zeigt die korrekte Umsetzung der Fenster und Türbereiche.
-TODO Übergange zwischen Wänden verschiedener Dicken.
-TODO T-Kreuzungen?
+Das in Abbildung~\ref{fig:poc:scenario2_ergebnis} zu sehende Ergebnis zeigt die korrekte Umsetzung der Fenster und Türbereiche.
+In Kapitel~\ref{basics:Mauerwerksverband} wurde schon die sogenannte \glqq{}Stumpfstoßtechnik\grqq{} angesprochen.
+Dabei werden Anker dazu verwendet zwei Wandstücke miteinander zu verbinden, ohne dass diese verzahnt werden müssen.
+Da es für T- und X-Kreuzungen selbst bei Wandstücken mit gleichem Modul, Raster und Verband zu einer Vielzahl unterschiedlicher Kreuzungssituationen kommen kann, wurde zunächst darauf verzichtet dies in den Kreuzungslegeplänen der verschiedenen Verbände einzupflegen, obwohl das mit dem erarbeiteten Konzept möglich wäre.
+Stattdessen wird sich an diesen Stellen auf die Stumpfstoßtechnik berufen und das algorithmische Auflösen der Kreuzungsbereiche als weiterführendes Konzept betrachtet.
+Wie bereits mehrfach in Kapitel~\ref{related:planungsvorgehen} erwähnt, könnten dazu \glqq{}intelligente\grqq{} beziehungsweise lernende Algorithmen eingesetzt werden.
 
 \begin{figure}[htb]
-  \begin{subfigure}[b]{0.5\columnwidth}
+  \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario2_rendering_input.png}
     \caption{Gebäudemodell Szenario 2.}\label{fig:poc:scenario2 modell}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.5\columnwidth}
+  \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario2_render.png}
-    \caption{Ergebnis Szenario 2.}\label{fig:poc:scenario2 ergebnis}
+    \caption{Ergebnis Szenario 2.}\label{fig:poc:scenario2_ergebnis}
   \end{subfigure}
-\caption{Szenario 2.}\label{fig:poc:result_scenario2}
+\caption{Eingabemodell und Ergebnis für Szenario 2.}\label{fig:poc:result_scenario2}
 \end{figure}
 
 \subsection{Szenario 3}\label{poc:scenario3}

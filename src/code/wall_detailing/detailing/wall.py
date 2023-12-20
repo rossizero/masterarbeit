@@ -68,8 +68,9 @@ class Wall:
 
         self.openings = []
 
-    def update_dimensions(self):
-        dimensions = get_shape_dimensions(self.occ_shape, self.detailing_information.base_module.grid)
+    def update_dimensions(self, use_grid: bool = True):
+        grid = self.detailing_information.base_module.grid if use_grid else None
+        dimensions = get_shape_dimensions(self.occ_shape, grid)
         self.length = max(dimensions[0], dimensions[1])
         self.width = min(dimensions[0], dimensions[1])
         self.height = dimensions[2]
