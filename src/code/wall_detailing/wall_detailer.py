@@ -25,7 +25,7 @@ from detailing.wall import Wall
 from masonry.corner_rep import Corn, Corns
 from scenarios.scenarios import SimpleCorners, FancyCorners, SimpleCorners2, Window1, DoppelEck1, DoppelEck2_Closed, \
     SimpleOffset, DoppelEck3_Closed, SmallWall, TJoint1, Bug1, DoppelEck2_Closed_TJoint, ThickWall, ThickWallAllCorners, \
-    OverlappingWalls, LucaScenario, EmptyScenario
+    OverlappingWalls, LucaScenario, EmptyScenario, LucaWaende_duenn, LucaWaende_dick
 from masonry import corner_rep
 from wall_detailing.exporter.BrickExporter import BrickExporter
 from wall_detailing.exporter.BrickToOntologie import BrickToOntology
@@ -260,7 +260,7 @@ if __name__ == "__main__":
 
     #scenario = DoppelEck2_Closed_TJoint()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario1()
+    scenario = LucaWaende_duenn()
     #scenario = Single_Wall_Slim()
     #scenario = EmptyScenario()
 
@@ -275,7 +275,7 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(www, brick_information)
+    wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb)

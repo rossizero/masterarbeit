@@ -21,7 +21,7 @@ class Scenario(ABC):
 
 class FancyCorners(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
 
         an = math.pi / 2 * 1.22432
@@ -66,7 +66,7 @@ class FancyCorners(Scenario):
 
 class SimpleCorners(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         an = math.pi / 2 * 1.22432
         an = 0
@@ -89,7 +89,7 @@ class SimpleCorners(Scenario):
 
 class SimpleCorners2(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         an = 0
         height = 0.5 * 4
@@ -115,7 +115,7 @@ class SimpleCorners2(Scenario):
 
 class Window1(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         w0 = Wall.make_wall(10, 1, 4 * 0.5, np.array([0.0, 0.0, 2.0]), quaternion.from_euler_angles(0, 0, 1 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
@@ -133,7 +133,7 @@ class Window1(Scenario):
 
 class DoppelEck1(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         w0 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 1 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
@@ -150,7 +150,7 @@ class DoppelEck1(Scenario):
 
 class SimpleOffset(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         w0 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 1 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
@@ -170,7 +170,7 @@ class Bug1(Scenario):
     ____1_____|__1(2)__
     """
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         w0 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
@@ -190,7 +190,7 @@ class DoppelEck2_Closed(Scenario):
     |____1_____|__2__|
     """
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
 
         w0 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
@@ -231,7 +231,7 @@ class DoppelEck2_Closed_TJoint(Scenario):
     __   _   _   _  _ 2
     """
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
 
         w0 = Wall.make_wall(8, 1, 10 * 0.5, np.array([0.0, -2.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
@@ -271,7 +271,7 @@ class DoppelEck3_Closed(Scenario):
     TODO unsolvable scenario
     """
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         w0 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 0.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
@@ -304,7 +304,7 @@ class DoppelEck3_Closed(Scenario):
 
 class SmallWall(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         width = 1
 
@@ -357,7 +357,7 @@ class TJoint1(Scenario):
     TODO
     """
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         width = 1
 
@@ -377,7 +377,7 @@ class TJoint1(Scenario):
 
 class ThickWall(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "HeadBond"
         width = 2
         height = 5
@@ -399,7 +399,7 @@ class ThickWall(Scenario):
 
 class OverlappingWalls(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
 
         width = 1
@@ -422,7 +422,7 @@ class OverlappingWalls(Scenario):
 
 class ThickWallAllCorners(Scenario):
     def get_walls(self):
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "CrossBond"  # we need to enable fill_left and right for this to work
         bond_type = "HeadBond"
 
@@ -462,7 +462,7 @@ class ThickWallAllCorners(Scenario):
 class LucaScenario(Scenario):
     def get_walls(self):
 
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         width = 1
         height = 20
@@ -486,3 +486,34 @@ class LucaScenario(Scenario):
 class EmptyScenario(Scenario):
     def get_walls(self):
         return []
+
+
+class LucaWaende_duenn(Scenario):
+    def get_walls(self):
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
+        #base_module = BrickInformation(1.0, 0.5, 0.5, grid=np.array([0.5, 0.5, 0.5]))
+        bond_type = "StretchedBond"
+        width = 1
+        height = 20
+        an = 0.0
+
+        w1 = Wall.make_wall(30, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+
+        w1.rotate_around(quaternion.from_euler_angles(0, 0.0, an))
+        return [w1]
+
+
+class LucaWaende_dick(Scenario):
+    def get_walls(self):
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
+        bond_type = "HeadBond"
+        width = 2
+        height = 20
+        an = math.pi / 2.0
+
+        w1 = Wall.make_wall(30, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+
+        w1.rotate_around(quaternion.from_euler_angles(0, 0, an))
+        return [w1]
