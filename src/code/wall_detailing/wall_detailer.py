@@ -260,7 +260,7 @@ if __name__ == "__main__":
 
     #scenario = DoppelEck2_Closed_TJoint()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario2()
+    scenario = Single_Wall_Slim()
     #scenario = EmptyScenario()
 
     WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
@@ -277,6 +277,8 @@ if __name__ == "__main__":
     wall_detailer = WallDetailer(www, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
+    brick.calculate_neighborhood2(bb)
+    print("--------------------------------")
     brick.calculate_neighborhood(bb)
     BrickExporter(bb).export_to_json("output.json")
     #BrickToOntology(bb)

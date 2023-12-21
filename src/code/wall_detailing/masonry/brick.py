@@ -143,6 +143,9 @@ class Brick:
                                          self.width - self.offset * 2,
                                          self.height - self.offset * 2).Shape()
 
+    def get_dimensions(self):
+        return np.array([self.length, self.width, self.height])
+
     def get_grid(self):
         return self.__brick_information.grid
 
@@ -313,6 +316,9 @@ class Brick:
             left_face = pos.copy() - right_v * grid[0]  # one step left of bricks x
             right_face = pos.copy() + right_v * grid[0] * length_steps  # all steps right of bricks x
 
+            left_face += back_v * i * grid[1]  # move in y dir
+            right_face += back_v * i * grid[1]  # move in y dir
+
             for step in range(height_steps):
                 p1 = left_face.copy() + top_v * grid[2] * step  # move in z dir
                 p2 = right_face.copy() + top_v * grid[2] * step  # move in z dir
@@ -334,20 +340,63 @@ class Brick:
 def calculate_neighborhood(bricks: List[Brick]):
     """
     calculates all neighbours of each brick using the given grid as step size
+    waaaay faster than the old method
+    """
+    # first retrieve all possible neighbor positions for each brick
+    # while simultaneously remembering which brick has which position
+    dic = {}
+    for i, brick in enumerate(bricks):
+        neighbors = brick.get_neighbour_positions(brick.get_grid())
+        for key in neighbors.keys():
+            for pos in neighbors[key]:
+                k = tuple(pos)
+                if k in dic.keys():
+                    dic[k].append((i, key))
+                else:
+                    dic[k] = [(i, key)]
+
+    # now iterate over each brick and check what neighbor position are inside of it (all at once)
+    points = np.array([np.array([d[0], d[1], d[2]]) for d in dic.keys()])
+    for i, brick in enumerate(bricks):
+        relative_points = points - brick.position
+        relative_points = quaternion.rotate_vectors(brick.orientation.inverse(), relative_points)
+        dimensions = brick.get_dimensions()
+        inside_mask = np.all((relative_points >= 0.0) & (relative_points <= dimensions), axis=1)
+        indices = np.where(inside_mask)
+        for index in indices[0]:
+            k = tuple(points[index])
+            for brick_index, neighborhood in dic[k]:
+                opp = Neighbor.opposite(neighborhood)
+                brick.neighbors[opp].add(bricks[brick_index])
+                bricks[brick_index].neighbors[neighborhood].add(brick)
+
+
+
+def calculate_neighborhood_bruteforce(bricks: List[Brick]):
+    """
+    calculates all neighbours of each brick using the given grid as step size
     """
     s = 0
     for i, brick in enumerate(bricks):
-        #if i%10 == 0:
-        #    print(i, "/", len(bricks))
+        if i%10 == 0:
+            print(i, "/", len(bricks))
         grid = brick.get_grid()
         neighbor_positions = brick.get_neighbour_positions(grid)
 
-        for other in bricks[i + 1:]:
-            for neighbor_key in neighbor_positions.keys():
-                for pos in neighbor_positions[neighbor_key]:
+        for neighbor_key in neighbor_positions.keys():
+            for pos in neighbor_positions[neighbor_key]:
+                for other in bricks[i + 1:]:
                     if other.is_inside(pos):
                         opp = Neighbor.opposite(neighbor_key)
 
+                        if other not in brick.neighbors[neighbor_key]:
+                            print("Ohhhh")
                         brick.neighbors[neighbor_key].add(other)
+                        if brick not in other.neighbors[opp]:
+                            print("Ohhhh")
                         other.neighbors[opp].add(brick)
+                        # we found a brick for this position, so we can stop searching
+                        # we suppose that there is only one brick for each position
+                        # otherwise there would be a collision between bricks
+                        break
         s += len(brick.all_neighbors)
