@@ -174,7 +174,7 @@ class IfcImporter:
             transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
-            dim = get_shape_dimensions(shape, base_module.grid)
+            dim = get_shape_dimensions(shape, None)
             half_dim = dim / 2.0
 
             # move the shape so that its center is at the origin of the world coordinate system
@@ -184,6 +184,7 @@ class IfcImporter:
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
             _wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
+            _wall.update_dimensions(use_grid=False)
             # correct the translation
             translation = translation + quaternion.rotate_vectors(rotation, half_dim)
             translation = np.round(translation, decimals=6)
@@ -207,11 +208,11 @@ class IfcImporter:
                         if o.ObjectPlacement.RelativePlacement is not None:
                             location = o.ObjectPlacement.RelativePlacement.Location
                             translation = np.array(location.Coordinates)
-                            translation = np.array([
-                                round(translation[0] / base_module.grid[0]) * base_module.grid[0],
-                                round(translation[1] / base_module.grid[1]) * base_module.grid[1],
-                                round(translation[2] / base_module.grid[2]) * base_module.grid[2]
-                            ])
+                            #translation = np.array([
+                            #    round(translation[0] / base_module.grid[0]) * base_module.grid[0],
+                            #    round(translation[1] / base_module.grid[1]) * base_module.grid[1],
+                            #    round(translation[2] / base_module.grid[2]) * base_module.grid[2]
+                            #])
                             translation = np.round(translation, decimals=6)
 
                         transformation = gp_Trsf()
