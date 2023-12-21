@@ -141,7 +141,7 @@ class IfcImporter:
                     if len(rep.Items) > 0:
                         for item in rep.Items:
                             if hasattr(item, "XDim") and hasattr(item, "YDim") and hasattr(item, "ZDim"):
-                                bbox = rep
+                                #bbox = rep
                                 dimensions = np.array([item.XDim, item.YDim, item.ZDim])
                                 break
 
@@ -176,7 +176,7 @@ class IfcImporter:
 
             dim = get_shape_dimensions(shape, None)
             half_dim = dim / 2.0
-
+            #half_dim[1] *= -1
             # move the shape so that its center is at the origin of the world coordinate system
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*half_dim).Reversed())
