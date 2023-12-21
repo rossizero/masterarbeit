@@ -273,9 +273,9 @@ class Brick:
         # bottom front left corner + rotated half of grid size
         pos = self.position + quaternion.rotate_vectors(self.orientation, grid / 2.0)
 
-        length_steps = math.floor(self.length / grid[0])
-        width_steps = math.floor(self.width / grid[1])
-        height_steps = math.floor(self.height / grid[2])
+        length_steps = (self.length / grid[0])
+        width_steps = (self.width / grid[1])
+        height_steps = (self.height / grid[2])
 
         # calculate the rotated axis vectors
         right_v = quaternion.rotate_vectors(self.orientation, np.array([1, 0, 0]))  # x dir
@@ -289,9 +289,9 @@ class Brick:
                               Neighbor.TOP: [],
                               Neighbor.BOTTOM: []}
 
-        for i in range(length_steps):
-            front_face = pos.copy() + back_v * grid[1]  # one step in front of bricks y
-            back_face = pos.copy() - back_v * grid[1] * width_steps  # all steps behind bricks y
+        for i in range(math.floor(length_steps)):
+            front_face = pos.copy() + back_v * grid[1] * width_steps    # one step in front of bricks y
+            back_face = pos.copy() - back_v * grid[1] # all steps behind bricks y
             bottom_face = pos.copy() - top_v * grid[2]  # one step below bricks z
             top_face = pos.copy() + top_v * grid[2] * height_steps  # all steps above bricks z
 
@@ -300,26 +300,26 @@ class Brick:
             bottom_face += right_v * i * grid[0]  # move in x dir
             top_face += right_v * i * grid[0]  # move in x dir
 
-            for step in range(height_steps):
+            for step in range(math.floor(height_steps)):
                 p1 = front_face.copy() + top_v * grid[2] * step  # move in z dir
                 p2 = back_face.copy() + top_v * grid[2] * step  # move in z dir
                 neighbor_positions[Neighbor.FRONT].append(np.round(p1, decimals=6))
                 neighbor_positions[Neighbor.BACK].append(np.round(p2, decimals=6))
 
-            for step in range(width_steps):
-                p1 = bottom_face.copy() - back_v * grid[1] * step  # move in y dir
-                p2 = top_face.copy() - back_v * grid[1] * step  # move in y dir
+            for step in range(math.floor(width_steps)):
+                p1 = bottom_face.copy() + back_v * grid[1] * step  # move in y dir
+                p2 = top_face.copy() + back_v * grid[1] * step  # move in y dir
                 neighbor_positions[Neighbor.BOTTOM].append(np.round(p1, decimals=6))
                 neighbor_positions[Neighbor.TOP].append(np.round(p2, decimals=6))
 
-        for i in range(width_steps):
+        for i in range(math.floor(width_steps)):
             left_face = pos.copy() - right_v * grid[0]  # one step left of bricks x
             right_face = pos.copy() + right_v * grid[0] * length_steps  # all steps right of bricks x
 
             left_face += back_v * i * grid[1]  # move in y dir
             right_face += back_v * i * grid[1]  # move in y dir
 
-            for step in range(height_steps):
+            for step in range(math.floor(height_steps)):
                 p1 = left_face.copy() + top_v * grid[2] * step  # move in z dir
                 p2 = right_face.copy() + top_v * grid[2] * step  # move in z dir
                 neighbor_positions[Neighbor.LEFT].append(np.round(p1, decimals=6))
@@ -340,36 +340,37 @@ class Brick:
 def calculate_neighborhood(bricks: List[Brick]):
     """
     calculates all neighbours of each brick using the given grid as step size
-    waaaay faster than the old method
+    waaaay faster than the old method because we're looking at all bricks at once
+
+    btw: if a brick is a neighbor of itself, probably the given grid size is too big
     """
     # first retrieve all possible neighbor positions for each brick
     # while simultaneously remembering which brick has which position
+    # key is the point as tuple, value is a list of tuples (brick_index, neighbor)
     dic = {}
     for i, brick in enumerate(bricks):
         neighbors = brick.get_neighbour_positions(brick.get_grid())
         for key in neighbors.keys():
             for pos in neighbors[key]:
-                k = tuple(pos)
-                if k in dic.keys():
-                    dic[k].append((i, key))
+                if tuple(pos) in dic.keys():
+                    dic[tuple(pos)].append((i, key))
                 else:
-                    dic[k] = [(i, key)]
+                    dic[tuple(pos)] = [(i, key)]
 
     # now iterate over each brick and check what neighbor position are inside of it (all at once)
     points = np.array([np.array([d[0], d[1], d[2]]) for d in dic.keys()])
-    for i, brick in enumerate(bricks):
+    for brick in bricks:
+        # convert points into local coordinate system of the current brick
         relative_points = points - brick.position
         relative_points = quaternion.rotate_vectors(brick.orientation.inverse(), relative_points)
-        dimensions = brick.get_dimensions()
-        inside_mask = np.all((relative_points >= 0.0) & (relative_points <= dimensions), axis=1)
-        indices = np.where(inside_mask)
-        for index in indices[0]:
-            k = tuple(points[index])
-            for brick_index, neighborhood in dic[k]:
-                opp = Neighbor.opposite(neighborhood)
-                brick.neighbors[opp].add(bricks[brick_index])
-                bricks[brick_index].neighbors[neighborhood].add(brick)
 
+        # since its position is at [0.0, 0.0, 0.0] we just have to check if a points is inside the bricks dimensions
+        inside_mask = np.all((relative_points >= 0.0) & (relative_points <= brick.get_dimensions()), axis=1)
+        for index in np.where(inside_mask)[0]:
+            for brick_index, neighborhood in dic[tuple(points[index])]:
+                #opp = Neighbor.opposite(neighborhood)
+                #brick.neighbors[opp].add(bricks[brick_index])
+                bricks[brick_index].neighbors[neighborhood].add(brick)
 
 
 def calculate_neighborhood_bruteforce(bricks: List[Brick]):

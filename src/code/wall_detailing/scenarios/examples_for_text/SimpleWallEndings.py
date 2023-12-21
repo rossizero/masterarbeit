@@ -12,8 +12,8 @@ class Single_Wall_Slim(Scenario):
     def get_walls(self):
         width = 1
         height = 5
-        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([1.0, 1.0, 0.5]))
-        # base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
+
+        base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
 
         w1 = Wall.make_wall(5, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0]),
