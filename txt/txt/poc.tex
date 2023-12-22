@@ -9,19 +9,19 @@ Diese kann mit der frei verfügbaren Erweiterung \textit{blenderbim} zu einem fu
 Darin lassen sich sowohl individuelle Wandtypen erstellen, als auch mithilfe der \textit{IfcPropertySets} Annotationen über Modul und Rastermaße daran anhängen.
 Mit den in Kapitel~\ref{concept:raster} definierten Modellierungseinschränkungen, deren Umsetzung in Kapitel~\ref{real:modellierung} thematisiert wurde, konnte die Modellierungsphase sowohl erleichtert, als auch beschleunigt werden.
 
-\subsection{Szenario 1}\label{poc:scenario1}
+\subsection{Szenario Turm}\label{poc:scenario1}
 Die Modellierung der zwei sich in der Wanddicke unterscheidenden Versionen des 20 Meter hohen Turms mit einer Grundfläche von 10$\times$10 Metern in Blender war wenig komplex.
 Es bedarf lediglich vier Wände, die einen quadratischen Raum bilden.
 Das vollständige Gebäudemodell ist in Abbildung~\ref{fig:poc:scenario1 modell} zu sehen.
 
 \begin{figure}[ht!]
   \hspace*{\fill}%
-  \begin{subfigure}[b]{0.3\columnwidth}
+  \begin{subfigure}[b]{0.25\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario1_render_base_thin.png}
     \caption{Der Turm mit 1 Meter dicken Wänden.}\label{fig:poc:scenario1_wall_thin}
   \end{subfigure}
   \hfill%
-  \begin{subfigure}[b]{0.3\columnwidth}
+  \begin{subfigure}[b]{0.25\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario1_render_base_thick.png}
     \caption{Der Turm mit 2 Meter dicken Wänden.}\label{fig:poc:scenario1_wall_thick}
   \end{subfigure}
@@ -56,7 +56,7 @@ In Abbildung~\ref{fig:poc:result_scenario1} sind die Meshes der drei mit Baustei
     \caption{Ergebnisse des Wall Detailings mit unterschiedlichen Verbänden.}\label{fig:poc:result_scenario1}
 \end{figure}
 
-\subsection{Szenario 2}\label{poc:scenario2}
+\subsection{Szenario LEGO Klemmbausteine}\label{poc:scenario2}
 Die Modellierung dieses Szenarios war aufgrund der Fenster und Türen ein wenig anspruchsvoller.
 Das dafür vorgesehene Vorgehen innerhalb der BIM Erweiterung für Blender ist zunächst etwas versteckt.
 Zumindest ist das Hinzufügen neuer Tür- und Fensterarten ist der Definition neuer Wandarten sehr ähnlich.
@@ -82,6 +82,6 @@ Wie bereits mehrfach in Kapitel~\ref{related:planungsvorgehen} erwähnt, könnte
 \caption{Eingabemodell und Ergebnis für Szenario 2.}\label{fig:poc:result_scenario2}
 \end{figure}
 
-\subsection{Szenario 3}\label{poc:scenario3}
+\subsection{Szenario Fabrikgebäude}\label{poc:scenario3}
 40409 Steine
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}

@@ -149,7 +149,6 @@
       </owl:intersectionOf>
     </owl:Class>
   </owl:equivalentClass>
-  <owl:equivalentClass rdf:resource="#Brick"/>
 </owl:Class>
 
 <owl:Class rdf:about="#Building">
@@ -165,7 +164,6 @@
     </owl:Restriction>
   </rdfs:subClassOf>
   <owl:disjointWith rdf:resource="#Building"/>
-  <owl:equivalentClass rdf:resource="#NamedBrick"/>
 </owl:Class>
 
 <owl:Class rdf:about="#Ruleset">
@@ -242,7 +240,6 @@
     </owl:Class>
   </owl:equivalentClass>
   <owl:disjointWith rdf:resource="#PlacedBrick"/>
-  <rdfs:subClassOf rdf:resource="#Brick"/>
 </owl:Class>
 
 <owl:Class rdf:about="#PlacedBrick">
@@ -257,7 +254,6 @@
       </owl:intersectionOf>
     </owl:Class>
   </owl:equivalentClass>
-  <rdfs:subClassOf rdf:resource="#Brick"/>
 </owl:Class>
 
 <owl:Class rdf:about="#NextBrick">
@@ -272,7 +268,6 @@
       </owl:intersectionOf>
     </owl:Class>
   </owl:equivalentClass>
-  <rdfs:subClassOf rdf:resource="#PlaceableBrick"/>
 </owl:Class>
 
 <owl:Class rdf:about="#RuleElement"/>
@@ -290,7 +285,6 @@
 
 <owl:NamedIndividual rdf:about="#dependsOnObjectPropertyHolder">
   <rdf:type rdf:resource="#DataPropertyHolderElement"/>
-  <rdf:type rdf:resource="#ObjectPropertyHolderElement"/>
   <holdPropertyByName>dependsOn</holdPropertyByName>
 </owl:NamedIndividual>
 
@@ -322,6 +316,19 @@
   <hasBrick rdf:resource="#brick_13"/>
   <hasBrick rdf:resource="#brick_14"/>
   <hasBrick rdf:resource="#brick_15"/>
+  <hasBrick rdf:resource="#brick_16"/>
+  <hasBrick rdf:resource="#brick_17"/>
+  <hasBrick rdf:resource="#brick_18"/>
+  <hasBrick rdf:resource="#brick_19"/>
+  <hasBrick rdf:resource="#brick_20"/>
+  <hasBrick rdf:resource="#brick_21"/>
+  <hasBrick rdf:resource="#brick_22"/>
+  <hasBrick rdf:resource="#brick_23"/>
+  <hasBrick rdf:resource="#brick_24"/>
+  <hasBrick rdf:resource="#brick_25"/>
+  <hasBrick rdf:resource="#brick_26"/>
+  <hasBrick rdf:resource="#brick_27"/>
+  <hasBrick rdf:resource="#brick_28"/>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#empty_brick">
@@ -330,24 +337,10 @@
 
 <owl:NamedIndividual rdf:about="#brick_1">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_6"/>
   <hasTopNeighbor rdf:resource="#brick_4"/>
+  <hasTopNeighbor rdf:resource="#brick_6"/>
   <hasRightNeighbor rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_1"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasTopNeighbor rdf:resource="#brick_7"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
-  <hasRightNeighbor rdf:resource="#brick_3"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -360,30 +353,16 @@
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
-  <rdf:type rdf:resource="#NextBrick"/>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_2">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_5"/>
   <hasTopNeighbor rdf:resource="#brick_4"/>
+  <hasTopNeighbor rdf:resource="#brick_5"/>
   <hasRightNeighbor rdf:resource="#brick_3"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_2"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasTopNeighbor rdf:resource="#brick_7"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_9"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -396,29 +375,15 @@
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
-  <rdf:type rdf:resource="#NextBrick"/>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_3">
   <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_7"/>
   <hasTopNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasLeftNeighbor rdf:resource="#brick_1"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_4"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_9"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -431,29 +396,16 @@
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
-  <rdf:type rdf:resource="#NextBrick"/>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_4">
   <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_9"/>
   <hasTopNeighbor rdf:resource="#brick_8"/>
-  <hasTopNeighbor rdf:resource="#brick_7"/>
-  <hasLeftNeighbor rdf:resource="#brick_6"/>
   <hasRightNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_4"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
   <dependsOn rdf:resource="#brick_2"/>
   <dependsOn rdf:resource="#brick_1"/>
   <rdf:type>
@@ -471,26 +423,14 @@
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_5">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_8"/>
+  <hasTopNeighbor rdf:resource="#brick_10"/>
   <hasTopNeighbor rdf:resource="#brick_9"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasLeftNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_1"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_11"/>
   <dependsOn rdf:resource="#brick_3"/>
   <dependsOn rdf:resource="#brick_2"/>
   <rdf:type>
@@ -508,27 +448,14 @@
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_6">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_7"/>
+  <hasTopNeighbor rdf:resource="#brick_8"/>
+  <hasBackNeighbor rdf:resource="#brick_4"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_11"/>
-  <hasNeighbor rdf:resource="#brick_8"/>
-  <hasNeighbor rdf:resource="#brick_2"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
-  <hasRightNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_1"/>
   <rdf:type>
     <owl:Restriction>
@@ -544,31 +471,15 @@
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_7">
   <rdf:type rdf:resource="#NamedBrick"/>
   <hasTopNeighbor rdf:resource="#brick_10"/>
-  <hasTopNeighbor rdf:resource="#brick_12"/>
-  <hasRightNeighbor rdf:resource="#brick_8"/>
+  <hasFrontNeighbor rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_11"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasRightNeighbor rdf:resource="#brick_9"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_4"/>
-  <dependsOn rdf:resource="#brick_6"/>
+  <dependsOn rdf:resource="#brick_3"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -576,41 +487,24 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_4"/>
-            <rdf:Description rdf:about="#brick_6"/>
+            <rdf:Description rdf:about="#brick_3"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_8">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_10"/>
   <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasTopNeighbor rdf:resource="#brick_13"/>
   <hasRightNeighbor rdf:resource="#brick_9"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_8"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_3"/>
   <dependsOn rdf:resource="#brick_4"/>
-  <dependsOn rdf:resource="#brick_5"/>
+  <dependsOn rdf:resource="#brick_6"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -618,41 +512,25 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_3"/>
             <rdf:Description rdf:about="#brick_4"/>
-            <rdf:Description rdf:about="#brick_5"/>
+            <rdf:Description rdf:about="#brick_6"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_9">
   <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
   <hasTopNeighbor rdf:resource="#brick_11"/>
+  <hasRightNeighbor rdf:resource="#brick_10"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasLeftNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_1"/>
-  <hasNeighbor rdf:resource="#brick_13"/>
-  <hasNeighbor rdf:resource="#brick_10"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_4"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasTopNeighbor rdf:resource="#brick_15"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_3"/>
   <dependsOn rdf:resource="#brick_5"/>
+  <dependsOn rdf:resource="#brick_4"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -660,44 +538,24 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_3"/>
             <rdf:Description rdf:about="#brick_5"/>
+            <rdf:Description rdf:about="#brick_4"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_10">
   <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_12"/>
   <hasTopNeighbor rdf:resource="#brick_14"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
-  <hasLeftNeighbor rdf:resource="#brick_12"/>
-  <hasRightNeighbor rdf:resource="#brick_11"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_10"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_3"/>
-  <dependsOn rdf:resource="#brick_4"/>
   <dependsOn rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_6"/>
   <dependsOn rdf:resource="#brick_7"/>
-  <dependsOn rdf:resource="#brick_8"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -705,45 +563,23 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_3"/>
-            <rdf:Description rdf:about="#brick_4"/>
             <rdf:Description rdf:about="#brick_5"/>
-            <rdf:Description rdf:about="#brick_6"/>
             <rdf:Description rdf:about="#brick_7"/>
-            <rdf:Description rdf:about="#brick_8"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_11">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_14"/>
   <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_16"/>
+  <hasRightNeighbor rdf:resource="#brick_12"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasLeftNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_13"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_11"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_3"/>
-  <dependsOn rdf:resource="#brick_4"/>
-  <dependsOn rdf:resource="#brick_5"/>
   <dependsOn rdf:resource="#brick_8"/>
   <dependsOn rdf:resource="#brick_9"/>
   <rdf:type>
@@ -753,11 +589,6 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_3"/>
-            <rdf:Description rdf:about="#brick_4"/>
-            <rdf:Description rdf:about="#brick_5"/>
             <rdf:Description rdf:about="#brick_8"/>
             <rdf:Description rdf:about="#brick_9"/>
           </owl:oneOf>
@@ -766,32 +597,16 @@
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_12">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasTopNeighbor rdf:resource="#brick_13"/>
+  <hasTopNeighbor rdf:resource="#brick_17"/>
+  <hasTopNeighbor rdf:resource="#brick_16"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_3"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_14"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_8"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasNeighbor rdf:resource="#brick_5"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasRightNeighbor rdf:resource="#brick_11"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_4"/>
-  <dependsOn rdf:resource="#brick_6"/>
-  <dependsOn rdf:resource="#brick_7"/>
+  <dependsOn rdf:resource="#brick_10"/>
+  <dependsOn rdf:resource="#brick_9"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -799,48 +614,23 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_4"/>
-            <rdf:Description rdf:about="#brick_6"/>
-            <rdf:Description rdf:about="#brick_7"/>
+            <rdf:Description rdf:about="#brick_10"/>
+            <rdf:Description rdf:about="#brick_9"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_13">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasRightNeighbor rdf:resource="#brick_14"/>
+  <hasTopNeighbor rdf:resource="#brick_15"/>
+  <hasBackNeighbor rdf:resource="#brick_11"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_13"/>
-  <hasNeighbor rdf:resource="#brick_9"/>
-  <hasNeighbor rdf:resource="#brick_11"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_7"/>
-  <hasBottomNeighbor rdf:resource="#brick_8"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <hasRightNeighbor rdf:resource="#brick_15"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_3"/>
-  <dependsOn rdf:resource="#brick_4"/>
-  <dependsOn rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_6"/>
-  <dependsOn rdf:resource="#brick_7"/>
   <dependsOn rdf:resource="#brick_8"/>
-  <dependsOn rdf:resource="#brick_10"/>
-  <dependsOn rdf:resource="#brick_12"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -848,53 +638,22 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_3"/>
-            <rdf:Description rdf:about="#brick_4"/>
-            <rdf:Description rdf:about="#brick_5"/>
-            <rdf:Description rdf:about="#brick_6"/>
-            <rdf:Description rdf:about="#brick_7"/>
             <rdf:Description rdf:about="#brick_8"/>
-            <rdf:Description rdf:about="#brick_10"/>
-            <rdf:Description rdf:about="#brick_12"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_14">
   <rdf:type rdf:resource="#NamedBrick"/>
-  <hasRightNeighbor rdf:resource="#brick_15"/>
+  <hasTopNeighbor rdf:resource="#brick_17"/>
+  <hasFrontNeighbor rdf:resource="#brick_12"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasNeighbor rdf:resource="#brick_14"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_6"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_7"/>
-  <hasBottomNeighbor rdf:resource="#brick_9"/>
-  <hasBottomNeighbor rdf:resource="#brick_8"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_3"/>
-  <dependsOn rdf:resource="#brick_4"/>
-  <dependsOn rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_6"/>
-  <dependsOn rdf:resource="#brick_7"/>
-  <dependsOn rdf:resource="#brick_8"/>
-  <dependsOn rdf:resource="#brick_9"/>
   <dependsOn rdf:resource="#brick_10"/>
-  <dependsOn rdf:resource="#brick_11"/>
   <rdf:type>
     <owl:Restriction>
       <owl:onProperty rdf:resource="#dependsOn"/>
@@ -902,51 +661,23 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_3"/>
-            <rdf:Description rdf:about="#brick_4"/>
-            <rdf:Description rdf:about="#brick_5"/>
-            <rdf:Description rdf:about="#brick_6"/>
-            <rdf:Description rdf:about="#brick_7"/>
-            <rdf:Description rdf:about="#brick_8"/>
-            <rdf:Description rdf:about="#brick_9"/>
             <rdf:Description rdf:about="#brick_10"/>
-            <rdf:Description rdf:about="#brick_11"/>
           </owl:oneOf>
         </owl:Class>
       </owl:allValuesFrom>
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">14</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#brick_15">
   <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_18"/>
+  <hasTopNeighbor rdf:resource="#brick_20"/>
+  <hasRightNeighbor rdf:resource="#brick_16"/>
   <dependsOn rdf:resource="#empty_brick"/>
-  <rdf:type rdf:resource="#Brick"/>
-  <rdf:type rdf:resource="#PlaceableBrick"/>
-  <hasLeftNeighbor rdf:resource="#brick_13"/>
-  <hasNeighbor rdf:resource="#brick_10"/>
-  <hasNeighbor rdf:resource="#brick_6"/>
-  <hasNeighbor rdf:resource="#brick_7"/>
-  <hasNeighbor rdf:resource="#brick_15"/>
-  <hasNeighbor rdf:resource="#brick_12"/>
-  <hasBottomNeighbor rdf:resource="#brick_1"/>
-  <hasBottomNeighbor rdf:resource="#brick_3"/>
-  <hasBottomNeighbor rdf:resource="#brick_9"/>
-  <hasBottomNeighbor rdf:resource="#brick_8"/>
-  <hasBottomNeighbor rdf:resource="#brick_2"/>
-  <hasBottomNeighbor rdf:resource="#brick_4"/>
-  <hasBottomNeighbor rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_1"/>
-  <dependsOn rdf:resource="#brick_2"/>
-  <dependsOn rdf:resource="#brick_3"/>
-  <dependsOn rdf:resource="#brick_4"/>
-  <dependsOn rdf:resource="#brick_5"/>
-  <dependsOn rdf:resource="#brick_8"/>
-  <dependsOn rdf:resource="#brick_9"/>
+  <dependsOn rdf:resource="#brick_13"/>
   <dependsOn rdf:resource="#brick_11"/>
   <rdf:type>
     <owl:Restriction>
@@ -955,13 +686,7 @@
         <owl:Class>
           <owl:oneOf rdf:parseType="Collection">
             <rdf:Description rdf:about="#empty_brick"/>
-            <rdf:Description rdf:about="#brick_1"/>
-            <rdf:Description rdf:about="#brick_2"/>
-            <rdf:Description rdf:about="#brick_3"/>
-            <rdf:Description rdf:about="#brick_4"/>
-            <rdf:Description rdf:about="#brick_5"/>
-            <rdf:Description rdf:about="#brick_8"/>
-            <rdf:Description rdf:about="#brick_9"/>
+            <rdf:Description rdf:about="#brick_13"/>
             <rdf:Description rdf:about="#brick_11"/>
           </owl:oneOf>
         </owl:Class>
@@ -969,7 +694,323 @@
     </owl:Restriction>
   </rdf:type>
   <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</hasID>
-  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</hasBeenSet>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_16">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_18"/>
+  <hasTopNeighbor rdf:resource="#brick_19"/>
+  <hasRightNeighbor rdf:resource="#brick_17"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_12"/>
+  <dependsOn rdf:resource="#brick_11"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_12"/>
+            <rdf:Description rdf:about="#brick_11"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">16</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_17">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_19"/>
+  <hasTopNeighbor rdf:resource="#brick_21"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_12"/>
+  <dependsOn rdf:resource="#brick_14"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_12"/>
+            <rdf:Description rdf:about="#brick_14"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_18">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_23"/>
+  <hasTopNeighbor rdf:resource="#brick_22"/>
+  <hasRightNeighbor rdf:resource="#brick_19"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_15"/>
+  <dependsOn rdf:resource="#brick_16"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_15"/>
+            <rdf:Description rdf:about="#brick_16"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_19">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_23"/>
+  <hasTopNeighbor rdf:resource="#brick_24"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_17"/>
+  <dependsOn rdf:resource="#brick_16"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_17"/>
+            <rdf:Description rdf:about="#brick_16"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">19</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_20">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_22"/>
+  <hasBackNeighbor rdf:resource="#brick_18"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_15"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_15"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_21">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_24"/>
+  <hasFrontNeighbor rdf:resource="#brick_19"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_17"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_17"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">21</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_22">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_25"/>
+  <hasTopNeighbor rdf:resource="#brick_27"/>
+  <hasRightNeighbor rdf:resource="#brick_23"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_20"/>
+  <dependsOn rdf:resource="#brick_18"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_20"/>
+            <rdf:Description rdf:about="#brick_18"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">22</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_23">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_26"/>
+  <hasTopNeighbor rdf:resource="#brick_25"/>
+  <hasRightNeighbor rdf:resource="#brick_24"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_18"/>
+  <dependsOn rdf:resource="#brick_19"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_18"/>
+            <rdf:Description rdf:about="#brick_19"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">23</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_24">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasTopNeighbor rdf:resource="#brick_26"/>
+  <hasTopNeighbor rdf:resource="#brick_28"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_19"/>
+  <dependsOn rdf:resource="#brick_21"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_19"/>
+            <rdf:Description rdf:about="#brick_21"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">24</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_25">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasRightNeighbor rdf:resource="#brick_26"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_22"/>
+  <dependsOn rdf:resource="#brick_23"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_22"/>
+            <rdf:Description rdf:about="#brick_23"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_26">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_24"/>
+  <dependsOn rdf:resource="#brick_23"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_24"/>
+            <rdf:Description rdf:about="#brick_23"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">26</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_27">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasBackNeighbor rdf:resource="#brick_25"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_22"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_22"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">27</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#brick_28">
+  <rdf:type rdf:resource="#NamedBrick"/>
+  <hasFrontNeighbor rdf:resource="#brick_26"/>
+  <dependsOn rdf:resource="#empty_brick"/>
+  <dependsOn rdf:resource="#brick_24"/>
+  <rdf:type>
+    <owl:Restriction>
+      <owl:onProperty rdf:resource="#dependsOn"/>
+      <owl:allValuesFrom>
+        <owl:Class>
+          <owl:oneOf rdf:parseType="Collection">
+            <rdf:Description rdf:about="#empty_brick"/>
+            <rdf:Description rdf:about="#brick_24"/>
+          </owl:oneOf>
+        </owl:Class>
+      </owl:allValuesFrom>
+    </owl:Restriction>
+  </rdf:type>
+  <hasID rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</hasID>
+  <hasBeenSet rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</hasBeenSet>
 </owl:NamedIndividual>
 
 <owl:AllDisjointClasses>

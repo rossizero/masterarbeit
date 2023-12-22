@@ -1,11 +1,8 @@
-import math
-from time import sleep
 from typing import List, Dict
 import numpy as np
 import quaternion
-from OCC.Core import BRepAlgoAPI, BOPAlgo, TopTools
+from OCC.Core import BRepAlgoAPI, TopTools
 
-from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.StlAPI import StlAPI_Writer
 
@@ -14,11 +11,14 @@ from detailing.wall_layer_group import WallLayerGroup
 from detailing.wall_type_group import WallTypeGroup
 from masonry.bond.abstract_bond import Bond
 
+# --------------------------------------------- #
+# IMPORTANT needed to import all bonds, so they can be used in the ifc importer
 from masonry.bond.cross_bond import CrossBond
 from masonry.bond.head_bond import HeadBond
 from masonry.bond.stretched_bond import StretchedBond
 from masonry.bond.gothic_bond import GothicBond
 from masonry.bond.block_bond import BlockBond
+# --------------------------------------------- #
 
 from masonry.brick import BrickInformation, Brick
 from detailing.wall import Wall
@@ -30,13 +30,13 @@ from masonry import corner_rep
 from wall_detailing.exporter.BrickExporter import BrickExporter
 from wall_detailing.exporter.BrickToOntologie import BrickToOntology
 from wall_detailing.importer.ifc_importer import IfcImporter
-#from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
 from wall_detailing.scenarios.examples_for_text.scenario1 import Scenario1
 from wall_detailing.scenarios.examples_for_text.scenario2 import Scenario2
+from wall_detailing.scenarios.examples_for_text.scenario2_ontology import Scenario4_Ontology
 from wall_detailing.scenarios.examples_for_text.small_test import SmallTestToCompareIFC
 
 
@@ -240,6 +240,13 @@ class WallDetailer:
         return False
 
 
+def building_plan_to_stl(plan: List[Brick], until_step: int = -1):
+    if until_step == -1:
+        until_step = len(plan)
+    n = "output_" + str(until_step) + ".stl"
+    WallDetailer.convert_to_stl(plan[:until_step], n)
+
+
 if __name__ == "__main__":
     print("available bonds", Bond.BondTypes.keys())
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
@@ -263,7 +270,7 @@ if __name__ == "__main__":
 
     #scenario = DoppelEck2_Closed_TJoint()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = LucaWaende_duenn()
+    scenario = Scenario4_Ontology()
     #scenario = Single_Wall_Slim()
     #scenario = EmptyScenario()
 
@@ -275,9 +282,16 @@ if __name__ == "__main__":
     WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
     WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
 
-    wall_detailer = WallDetailer(www, brick_information)
+    wall_detailer = WallDetailer(scenario.walls, brick_information)
     bb = wall_detailer.detail()
     WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
     brick.calculate_neighborhood(bb)
     BrickExporter(bb).export_to_json("output.json")
-    #BrickToOntology(bb)
+
+    print("Now deducting building plan")
+    bto = BrickToOntology(bb)
+    result = bto.deduct_building_plan()
+    print("Result:", len(result), "brick can be placed with given rulesets. Order:", [b.id for b in result])
+    building_plan_to_stl(result, 6)
+    building_plan_to_stl(result, 15)
+    building_plan_to_stl(result, 23)

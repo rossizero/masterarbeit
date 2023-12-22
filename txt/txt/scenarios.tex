@@ -1,7 +1,7 @@
 \chapter{Fallstudien}\label{scenarios}
-Anhand der nachfolgenden Fallstudien und Szenarien werden die dieser Arbeit zugrundeliegenden Konzepte zur Errechnung eines Bauplanentwurfs aus einem als 3D Modell vorliegenden Gebäudeplans veranschaulicht und auf Anwendbarkeit überprüft.
+Anhand der nachfolgenden Fallstudie und deren Szenarien werden die dieser Arbeit zugrundeliegenden Konzepte zur Errechnung eines Bauplanentwurfs aus einem als 3D Modell vorliegenden Gebäudeplans veranschaulicht und auf Anwendbarkeit überprüft.
 Dabei werden die Szenarien zunehmend komplexer, um auch das Zusammenspiel verschiedener Teilkonzepte zur Lösung einzelner Probleme zu verifizieren.
-Abschließend wird für einige Szenarien untersucht wie Regeln erstens definiert und zweitens auf deren Ergebnisse angewandt werden können.
+Abschließend wird in einer weiteren Fallstudie untersucht, wie Regeln erstens definiert und zweitens auf deren Ergebnisse angewandt werden können.
 Damit soll die ungeordnete Menge von konkreten Bausteinen eines Bauplanentwurfs durch Regeln in eine Reihenfolge gebracht werden, sodass daraus ein schrittweise umsetzbarer Bauplan entsteht.
 
 \section{Von 3D Gebäudeplan zu Bauplanentwurf}
@@ -118,8 +118,8 @@ Zusammengefasst ergibt sich durch dieses Szenario folgende neue Liste an Teilpro
   \item Wie können T- und X-Kreuzungen von Eckbereichen unterschieden und dem Mauerwerksverband entsprechend umgesetzt werden? 
 \end{itemize}
 
-\subsection{Szenario Fabrikhalle}\label{scenarios:scenario3}
-Um das Konzept auch für umfangreichere Projekte zu testen, wird für dieses Szenario ein Modell einer großen Fabrikhalle erstellt; angelehnt an den Stil der Industriearchitektur~\cite{Industriearchitektur}.
+\subsection{Szenario Fabrikgebäude}\label{scenarios:scenario3}
+Um das Konzept auch für umfangreichere Projekte zu testen, wird für dieses Szenario ein Modell eines großen Fabrikgebäudes erstellt; angelehnt an den Stil der Industriearchitektur~\cite{Industriearchitektur}.
 In Abbildung~\ref{fig:scenarios:Scenario3 Gebaeudeplan} ist das geplante Modell der Fabrikhalle zu sehen.
 Alle in den Öffnungen liegenden Fenster und Türen sind zur besseren Veranschaulichung ausgeblendet worden.
 \begin{figure}[hb!]
@@ -130,12 +130,12 @@ Alle in den Öffnungen liegenden Fenster und Türen sind zur besseren Veranschau
   \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario3_render_ifc2.png}
   \end{subfigure}
-  \caption{IFC Modell der Fabrikhalle aus zwei Perspektiven.}\label{fig:scenarios:Scenario3 Gebaeudeplan}
+  \caption{IFC Modell des Fabrikgebäudes aus zwei Perspektiven.}\label{fig:scenarios:Scenario3 Gebaeudeplan}
 \end{figure}
 
 \subsubsection*{Beschreibung}
 Die dabei verwendeten Baustein- und Wanddimensionen entsprechen den Größenordnungen, die von dem sogenannten oktametrischen Maßsystem vorgegeben werden.
-Informationen dazu sind in Kapitel~\ref{fig:basics:OktametrischeMassordnung} zu finden.
+Informationen dazu sind in Kapitel~\ref{basics:masssysteme} zu finden.
 Es werden drei verschiedene Wandtypen verwendet.
 Diese weisen jeweils eine Dicke von 0,125, 0,25 und 0,5 Metern auf, während dabei Grundmodule in den Größen eines 1 DF, 2 DF und 16 DF Steines angewandt werden sollen.
 Zudem soll bei allen ein unterschiedlicher Mauerwerksverband benutzt werden.
@@ -144,20 +144,21 @@ Bei der 0,25 Meter dicken Wand ein Kreuzverband und für die Wand, mit dem 16 DF
 Letztere findet lediglich als Sockel des Kamins Anwendung, während die anderen beiden Wandtypen häufiger vertreten sind.
 Insgesamt weist das eingeschlossene Gelände eine Grundfläche von 20 auf 22 Metern auf.
 
-\subsubsection*{Problemstellungen}
-In diesem Szenario soll vor allem die Laufzeit des erarbeiteten Konzepts auf die Probe gestellt werden.
-Dadurch können Teilbereiche davon identifiziert werden, für die im Realisierungsteil dieser Arbeit eventuell noch Optimierungsbedarf besteht.
+\subsubsection*{Problemstellung}
+In diesem Szenario soll vor allem die Applikabilität der erarbeiteten Konzepte und die Effizienz von deren Implementierung auf die Probe gestellt werden.
+Dadurch können die Teilbereiche der Implementierung dieser Arbeit identifiziert werden, für die eventuell noch Optimierungsbedarf besteht und grundlegende Fehler in den Konzepten aufgespürt werden.
 
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}\label{scenarios:scenario4}
 In dieser Fallstudie wird untersucht wie das Integrieren von Regeln in das erarbeitete Konzept ermöglicht werden kann.
+Mit den Regeln sollen etwa Abhängigkeiten zwischen Bausteinen vorgegeben oder die maximale Bauhöhe beschränkt werden können.
+Dies wird anhand des in Abbildung~\ref{fig:scenarios:Scenario4 Experiment} dargestellten Bauplanentwurfs getestet.
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.5\columnwidth]{fig/TODO.jpg}
-  \caption{Bauplanentwurf des Experiments zur Bauplandeduktion anhand von Regeln.}\label{fig:scenarios:Scenario4 Experiment}
+  \includegraphics[width=0.3\columnwidth]{fig/scenario4_render.png}
+  \caption{Bauplanentwurf des Experiments zur Bauplandeduktion unter Berücksichtigung von Regeln.}\label{fig:scenarios:Scenario4 Experiment}
 \end{figure}
 Dabei ist es wünschenswert Regeln erst im Nachgang an den vorangegangenen Schritt des Berechnens eines Bauplanentwurfs zu definieren und auf diesem anzuwenden.
 Darum dürfen konkrete Regelbeschreibungen nicht Teil der Programmcodebasis dieser Arbeit sein, sondern müssen auf andere Weise in das Projekt eingefügt werden können.
 Zur Informationsdefinition und -strukturierung existieren im Fachbereich der Informatik bereits potente Werkzeuge.
 Eines davon wird in Kapitel~\ref{basics:ontologie} thematisiert und im späteren Verlauf dieser Arbeit zur formalen Definition der genannten Regeln angewandt.
-Mit den Regeln sollen etwa Abhängigkeiten zwischen Bausteinen vorgegeben oder die maximale Bauhöhe beschränkt werden können.
 Die Herausforderung für den Planungsalgorithmus stellt das korrekte Interpretieren und Anwenden dieser Regeln dar.

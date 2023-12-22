@@ -359,6 +359,11 @@ Ontologien bieten verschiedene Werkzeuge an, mithilfe derer sowohl streng defini
 Da damit theoretisch sowohl Bausteindefinitionen und Instanzen, als auch Regeldefinitionen und konkrete Regeln formulierbar sind, ermöglicht dies ein flexibles Hinzufügen und Entfernen von Regeln und Bausteinen ohne dafür Programmcode schreiben zu müssen.
 Durch geschicktes Aufstellen von Einschränkungen an die Bausteinklassen kann ein Reasoner dazu verwendet werden, ein den Regeln entsprechendes Subset derjenigen Bausteine zu bilden, die in der derzeitig in der Ontologie hinterlegten Ausgangssituation platzierbar sind.
 Dies geschieht durch die Neuzuordnung einiger Bausteine zu einer speziell dafür definierten Klasse.
+\begin{figure}[hbt]
+  \centering
+  \includegraphics[width=0.8\columnwidth]{fig/klassendiagramm_ontologie_bricks.drawio.png}
+  \caption{Klassendiagramm der Ontologie zur Bausteinbeschreibung.}\label{fig:concept:ontologie_diagramm_bricks}
+\end{figure}
 Notwendige Informationen für eine generische Ausgangsklasse zur Beschreibung von Bausteinen sind:
 \begin{itemize}
   \item Eine eindeutige ID anhand derer für Bausteine aus der Ontologie die passenden Instanzen aus dem Programmcode identifiziert werden können.
@@ -370,17 +375,7 @@ Notwendige Informationen für eine generische Ausgangsklasse zur Beschreibung vo
   \item Einen Indikator \textit{hasBeenSet} der angibt, ob der Baustein bereits gesetzt wurde oder nicht. 
   Darüber kann ein Reasoner verstehen, welche benachbarten Bausteine über die \textit{dependsOn}-Eigenschaft nicht mehr zu berücksichtigen sind.
 \end{itemize}
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=0.7\columnwidth]{fig/klassendiagramm_ontologie_bricks.drawio.png}
-  \caption{Klassendiagramm der Ontologie zur Bausteinbeschreibung.}\label{fig:concept:ontologie_diagramm_bricks}
-\end{figure}
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=0.7\columnwidth]{fig/klassendiagramm_ontologie_rules.drawio.png}
-  \caption{Klassendiagramm der Ontologie zur Regelbeschreibung.}\label{fig:concept:ontologie_diagramm_bricks}
-\end{figure}
-Diese Klasse wird nachfolgend als \textit{Brick} bezeichnet.
+Diese Klasse wird nachfolgend als \textit{Brick} bezeichnet und ist in Abbildung~\ref{fig:concept:ontologie_diagramm_bricks} dargestellt.
 Um verschiedene Bauplanentwürfe gleichzeitig zu bearbeiten, kann eine Klasse \textit{Building} definiert werden, die alle Bausteine des dazugehörigen Bauplanentwurfs referenziert.
 Eine Klasse \textit{Rule} stellt die Grundlage zur Regeldefinition dar.
 Davon ausgehend können verschiedene Regelarten erstellt werden, die durch konkrete Individuen realisiert werden.
@@ -399,9 +394,18 @@ Notwendige Eigenschaften für diese Klasse sind:
   \item Für Kardinalitäten-vorgebende Regeln existieren die Eigenschaften \textit{min}, \textit{max} und \textit{exactly}, welche auf einen Zahlenwert verweisen.
   \item Für Eigenschafts-übertragende Regeln existiert eine Eigenschaft, die ähnlich zu der aus dem obersten Punkt den Namen der \glqq{}Zieleigenschaft\grqq{} enthält.
 \end{itemize}
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.7\columnwidth]{fig/klassendiagramm_ontologie_rules.drawio.png}
+  \caption{Klassendiagramm der Ontologie zur Regelbeschreibung.}\label{fig:concept:ontologie_diagramm_rules}
+\end{figure}
+
+Eine Übersicht über diese Klassenstruktur ist in Abbildung~\ref{fig:concept:ontologie_diagramm_rules} zu sehen.
 Um zwischen verschiedenen Situationen wechseln zu können, die manchmal die Anwendung mehrerer Regeln voraussetzen, wird die Klasse \textit{Ruleset} definiert, die lediglich auf beliebig viele Individuen der Rule-Klasse referenziert.
 
 Mit diesem Aufbau wurde die Grundlage für einen Reasoner geschaffen, der die Individuen der Klasse Brick konkreteren Subklassen zuweist.
+Eine Übersicht über diese Klassen ist ebenfalls in Abbildung~\ref{fig:concept:ontologie_diagramm_bricks} zu entnehmen.
+Dabei stehen die Notizen, die an manche Klassen gehängt wurden, für die in der Ontologie hinterlegten Bedingungen, die für Individuen der jeweilige Klasse gelten müssen.
 So lässt sich über die Werte in der \textit{hasBeenSet} Dateneigenschaft zwischen schon gesetzten und noch zu setzenden Brick-Individuen unterscheiden.
 Diese Klassen werden als \textit{PlacedBrick} und \textit{PlaceableBrick} bezeichnet und sind zwangsläufig disjunkt.
 Es können nur diejenigen Brick-Individuen, die ebenfalls der Klasse PlaceableBrick zugeordnet werden können, Teil des Subsets an Bausteinen sein, das in der derzeit gegeben Situation platziert werden kann.
