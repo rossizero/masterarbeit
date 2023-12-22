@@ -1,0 +1,12 @@
+name: masterarbeit
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+dependencies:
+  - python=3.10
+  - pythonocc-core=7.7.2
+  - ifcopenshell
+  - quaternion
+  - numpy
+  - owlready2
