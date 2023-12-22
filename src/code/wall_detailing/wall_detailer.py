@@ -72,12 +72,15 @@ class WallDetailer:
             for wall in wall_layer_groups:
                 wall.apply_openings()
 
+            print("applied wall openings, now checking corners")
             cs = corner_rep.check_for_corners(wall_layer_groups)
 
+            print("created corners, now solving them")
             bond = group.bond
             solver = LayeredSolver(cs, bond)
             solver.solve()
 
+            print("now starting to calculate bricks")
             for corner in cs.corners:
                 layers = list(corner.layers)
                 if len(layers) == 2:
@@ -133,8 +136,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 #or True  # to enable filling of possible holes
-            fill_right = len(layer.right_connections) == 0 #or True
+            fill_left = len(layer.left_connections) == 0 or True  # to enable filling of possible holes
+            fill_right = len(layer.right_connections) == 0 or True
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -254,8 +257,8 @@ if __name__ == "__main__":
     #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2 - Kopie.ifc", "Scenario2")
     tmp = IfcImporter("../../models/scenarios/Scenario3/fabric2.ifc", "Scenario2")
     #tmp = IfcImporter("../../models/scenarios/Scenario3/Test2.ifc", "Test1")
-    tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls_headbond.ifc", "Test1")
-    tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc", "Scenario2")
+    #tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls_headbond.ifc", "Test1")
+    #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc", "Scenario2")
     www = tmp.get_walls()
 
     #scenario = DoppelEck2_Closed_TJoint()

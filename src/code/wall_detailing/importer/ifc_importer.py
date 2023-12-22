@@ -215,11 +215,11 @@ class IfcImporter:
                         if o.ObjectPlacement.RelativePlacement is not None:
                             location = o.ObjectPlacement.RelativePlacement.Location
                             translation = np.array(location.Coordinates)
-                            #translation = np.array([
-                            #    round(translation[0] / base_module.grid[0]) * base_module.grid[0],
-                            #    round(translation[1] / base_module.grid[1]) * base_module.grid[1],
-                            #    round(translation[2] / base_module.grid[2]) * base_module.grid[2]
-                            #])
+                            translation = np.array([
+                                round(translation[0] / rounding_grid[0]) * rounding_grid[0],
+                                round(translation[1] / rounding_grid[1]) * rounding_grid[1],
+                                round(translation[2] / rounding_grid[2]) * rounding_grid[2]
+                            ])
                             translation = np.round(translation, decimals=6)
 
                         transformation = gp_Trsf()

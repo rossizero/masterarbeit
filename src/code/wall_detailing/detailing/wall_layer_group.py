@@ -249,8 +249,6 @@ class WallLayerGroup:
         ret.translation = wall.get_translation()
         length, width, height = wall.length, wall.width, wall.height
 
-        # TODO? wall.is_cubic()
-
         layers = int(height / module.height)
         leftover = round(height % module.height, 6)
         z = -height * 0.5

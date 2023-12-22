@@ -129,7 +129,7 @@ class Brick:
         self.id = None
 
         # MAYDO actually let the user set this
-        self.offset = min(self.__brick_information.grid[0] / 15.0, 0.0325)
+        self.offset = min(max(self.__brick_information.grid) / 20.0, 0.0325)
 
         self.neighbors = {Neighbor.LEFT: set(),
                           Neighbor.RIGHT: set(),
