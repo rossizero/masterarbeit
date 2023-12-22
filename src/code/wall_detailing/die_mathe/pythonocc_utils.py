@@ -32,10 +32,11 @@ def get_shape_dimensions(shape: TopoDS_Shape, grid: np.array = None, sort:bool =
 
     # round to nearest grid point
     if grid is not None:
+        precision = 0.005
         dimensions = np.array([
-            round(x / grid[0]) * grid[0],
-            round(y / grid[1]) * grid[1],
-            round(z / grid[2]) * grid[2]
+            round(x / (grid[0] * precision)) * (grid[0] * precision),
+            round(y / (grid[1] * precision)) * (grid[1] * precision),
+            round(z / (grid[2] * precision)) * (grid[2] * precision)
         ])
     # sometimes the dimensions are not exactly on the grid, so we round them
     dimensions = np.round(dimensions, decimals=6)

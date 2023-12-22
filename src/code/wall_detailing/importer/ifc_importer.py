@@ -30,6 +30,7 @@ class IfcImporter:
     WallDetailing_GRID = "grid"
     WallDetailing_BASEMODULE = "module"
     WallDetailing_BONDTYPE = "bond type"
+    WallDetailing_ROUNDING_PRECISION = 0.005
 
     def __init__(self, ifc_file_path, wall_type="Test"):
         self.ifc_file_path = ifc_file_path
@@ -141,7 +142,7 @@ class IfcImporter:
                     if len(rep.Items) > 0:
                         for item in rep.Items:
                             if hasattr(item, "XDim") and hasattr(item, "YDim") and hasattr(item, "ZDim"):
-                                #bbox = rep
+                                bbox = rep
                                 dimensions = np.array([item.XDim, item.YDim, item.ZDim])
                                 break
 
@@ -159,10 +160,10 @@ class IfcImporter:
             # that's why we need to calculate the absolute position of the wall and reverse the translation and rotation
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
-            angle = rotation.angle()
-            angle = round(angle / (math.pi / 2.0)) * (math.pi / 2.0)
+            #angle = rotation.angle()
+            #angle = round(angle / (math.pi / 2.0)) * (math.pi / 2.0)
             # print(rotation.angle(), angle, rotation, quaternion.from_euler_angles(0, 0, angle))
-            rotation = quaternion.from_euler_angles(0, 0, angle)
+            #rotation = quaternion.from_euler_angles(0, 0, angle)
 
             # reverse the translation and rotation (the True, True parameters are important, but IDK why)
             # it took soooo much time to figure out that this is the correct way to do it
@@ -174,7 +175,7 @@ class IfcImporter:
             transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
             shape = BRepBuilderAPI_Transform(shape, transformation, True, True).Shape()
 
-            dim = get_shape_dimensions(shape, None)
+            dim = get_shape_dimensions(shape, base_module.grid)
             half_dim = dim / 2.0
             #half_dim[1] *= -1
             # move the shape so that its center is at the origin of the world coordinate system
@@ -184,9 +185,15 @@ class IfcImporter:
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
             _wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
-            _wall.update_dimensions(use_grid=False)
+            #_wall.update_dimensions(use_grid=False)
             # correct the translation
             translation = translation + quaternion.rotate_vectors(rotation, half_dim)
+            rounding_grid = base_module.grid.copy() * IfcImporter.WallDetailing_ROUNDING_PRECISION
+            translation = np.array([
+                round(translation[0] / rounding_grid[0]) * rounding_grid[0],
+                round(translation[1] / rounding_grid[1]) * rounding_grid[1],
+                round(translation[2] / rounding_grid[2]) * rounding_grid[2]
+            ])
             translation = np.round(translation, decimals=6)
 
             _wall.translation = translation

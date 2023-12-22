@@ -14,10 +14,18 @@ In diesem einleitenden Szenario werden mithilfe eines einfachen Turmes mit vier 
 Dabei werden sowohl die Modellierung des Turmes innerhalb des Konstruktionsplaners, als auch das anschließende Errechnen des Bauplanentwurfs thematisiert.
 Insbesondere das Anwenden verschiedener Mauerwerksverbände soll die Flexibilität des erarbeiteten Vorgehens demonstrieren.
 \begin{figure}[ht!]
-  \centering
-  \includegraphics[width=0.5\columnwidth]{fig/TODO.jpg}
-  \caption{Grundriss der beiden Türme.}\label{fig:scenarios:Scenario1 Gebaeudeplan}
+  \begin{subfigure}[b]{0.49\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario1_story_plan_thin.png}
+    \caption{Turm mit dünnen Wänden.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.49\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario1_story_plan_thick.png}
+    \caption{Turm mit dicken Wänden.}
+  \end{subfigure}
+  \caption{Grundrisse der beiden Türme.}\label{fig:scenarios:Scenario1 Gebaeudeplan}
 \end{figure}
+
 
 \subsubsection*{Beschreibung}
 Der Turm besteht lediglich aus vier 20 Meter hohen Wänden, die einen einzigen Raum einschließen.
@@ -48,6 +56,8 @@ Darum ist es notwendig, das vorgegebene Bausteinformat während dem Errechnen de
 Daraus ergibt sich bereits die nächste Problemstellung:
 Wie können Eckbereiche zwischen einzelnen geraden Wandstücken gefunden und der jeweilige Mauerwerksverband auch an diesen Stellen passend angebracht werden?
 Dabei dürfen das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) oder andere Vorgaben allerdings nicht verletzt werden.
+In Abbildung~\ref{fig:scenarios:Scenario1 Gebaeudeplan} sind verschiedene Konstellationen von Wänden erkennbar, die zusammen eine Ecke bilden.
+Demnach muss das Konzept dieser Arbeit, trotz unterschiedlicher Möglichkeiten der Eck-Modellierung innerhalb des Konstruktionsplaners, jede dieser Situationen auffinden und intern korrekt verarbeiten können.
 Da ein Fokus dieser Arbeit auch auf der simultanen Unterstützung verschiedener Mauerwerksverbände liegt, muss ein generisches Format für die dafür relevanten Informationen entworfen werden, das eine Interpretation durch Algorithmen erlaubt.
 Außerdem ist es nützlich, die Definition eines Mauerwerksverbands so zu abstrahieren, dass das spätere Einpflegen weiterer Verbände leicht möglich ist.
 
