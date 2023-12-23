@@ -25,7 +25,7 @@ Beispielsweise ist es möglich in das Modell eines Hauses zunehmend dünner werd
 Standardmäßig haben \textit{IfcWalls} aber einen einfachen Quader als Grundform, was für die Fallstudien dieser Arbeit ausreichend ist.
 Die Unterkapitel dieses Abschnitts folgen den in Kapitel~\ref{concept:wall_detailing} genannten Schritten, um von einer Menge solcher Wände hin zu einer Menge an Bausteinen zu gelangen, die den gewünschten Mauerwerksverband darauf anwenden.
 
-\subsection{Konvertieren des IFC zu BREP}
+\subsection{Konvertieren und Filtern der Daten der IFC Datei}
 Den ersten Schritt stellt das Extrahieren aller notwendigen Daten aus dem vorliegenden IFC Modell dar.
 Für die Fallstudien dieser Arbeit sind sowohl alle Objekte des Typs \textit{IfcWall} als auch die daran angeknüpften Objekte vom Typ \textit{IfcOpeningElement} (siehe~\ref{basics:IfcOpeningElement}) von Interesse.
 Diese entstehen während der Modellierungsphase etwa durch Anbringen von Fenstern oder Türen an einer Wand.
@@ -272,4 +272,4 @@ Insbesondere das Auffüllen der \textit{dependsOn}-Eigenschaft anhand der zuvor 
 Owlready erlaubt das Wählen und Starten unterschiedlicher Reasoner.
 Nachdem die Berechnungen des Reasoners beendet sind, kann über eine Anfrage, welche alle Individuen einer bestimmten Klasse zurückgibt, die derzeitige Liste platzierbarer Bausteine ausgelesen werden.
 Da es in anderen Programmiersprachen womöglich schwieriger ist, Daten aus Ontologien auszulesen, werden zusätzlich alle relevanten Informationen zu den Bausteinen in einer sogenannten JSON-Datei zur Verfügung gestellt.
-JSON (JavaScript Object Notation) ist ein weit verbreitetes, menschenlesbares Austauschformat, zu welchem in den meisten Programmiersprachen hilfreiche Bibliotheken existieren, die das Auslesen und Strukturieren von Daten aus diesen Dateien sehr~\cite{json}.
+JSON (JavaScript Object Notation) ist ein weit verbreitetes, menschenlesbares Austauschformat, zu welchem in den meisten Programmiersprachen hilfreiche Bibliotheken existieren, die das Auslesen und Strukturieren von Daten aus diesen Dateien erleichtern~\cite{json}.

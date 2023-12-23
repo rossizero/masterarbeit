@@ -27,8 +27,13 @@ Nachfolgend werden einige Veröffentlichungen vorgestellt, die ein ähnliches Zi
 \subsection{Digital Plan of Brickwork Layout for Robotic Bricklaying Technology}\label{related:digital_plan_of_brickwork_layout}
 In diesem Paper stellen Usmanov et al.\ ein generelles Vorgehen für das Erstellen eines Ziegel-Legeplans für ein als digitales Modell vorliegendes Gebäude vor~\cite{Usmanov2021}.
 Dieses Vorgehen gliedern sie in sechs Schritte:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\columnwidth]{fig/sustainability1303905g004.png}
+    \caption{Ergebnis des Verfahrens zur Erstellung eines Ziegel-Legeplans nach Usmanov et al.~\cite{Usmanov2021}.}\label{fig:related:usmanov}
+\end{figure}
 \begin{enumerate}
-\item Das vorliegende IFC Modell (siehe~\ref{basics:ifc}) nach Wandelementen durchsuchen und diese in das sogenannte BREP-Format (siehe~\ref{basics:brep}) konvertieren.
+\item Das vorliegende IFC Modell (siehe~\ref{basics:ifc}) nach Wandelementen durchsuchen und diese in das sogenannte BREP-Format konvertieren.
 \item Das Aufteilen des gesamten Modells in Schichten, die der Modulhöhe des verwendeten Ziegelsteinformats entspricht.
 \item Verbindungen von getrennt modellierten Wandelementen heraussuchen. 
 Dies ist zum Beispiel an Eckstücken der Fall, da dafür oft zwei einzelne Wandelemente modelliert werden, welche in einem Winkel zueinander stehen und sich berühren. 
@@ -39,12 +44,6 @@ In diesem Schritt werden zusätzlich Fenster- und Türstürze über deren Öffnu
 \item Dieser Schritt fasst das Anzeigen als 3D Modell und Konvertieren des Resultats in eine nicht konkreter definierte Listenform zusammen. 
 Das Ergebnis für das von den Autoren ausgewählte Beispielgebäude ist in Abbildung~\ref{fig:related:usmanov} zu sehen. 
 \end{enumerate}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.7\columnwidth]{fig/sustainability1303905g004.png}
-    \caption{Ergebnis des Verfahrens zur Erstellung eines Ziegel-Legeplans nach Usmanov et al.~\cite{Usmanov2021}.}\label{fig:related:usmanov}
-\end{figure}
 
 Besonders detailliert ist ihr Ansatz für das Finden von besagten kritischen Teilbereichen einer Wand mithilfe mathematischer Gleichungen, die alle Wände zueinander in Beziehung stellen.
 Diese Teilbereiche sind Wandecken, T-Kreuzungen (wie etwa der Übergang einer Innenwand an eine Außenwand) und Öffnungen innerhalb einer Wand und sind ebenfalls in Kapitel~\ref{scenarios:scenario2} dieser Arbeit als Fallbeispiel aufgeführt.

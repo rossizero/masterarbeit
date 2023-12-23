@@ -10,11 +10,7 @@ Darin lassen sich sowohl individuelle Wandtypen erstellen, als auch mithilfe der
 Mit den in Kapitel~\ref{concept:raster} definierten Modellierungseinschränkungen, deren Umsetzung in Kapitel~\ref{real:modellierung} thematisiert wurde, konnte die Modellierungsphase sowohl erleichtert, als auch beschleunigt werden.
 
 \subsection{Szenario Turm}\label{poc:scenario1}
-Die Modellierung der zwei sich in der Wanddicke unterscheidenden Versionen des 20 Meter hohen Turms mit einer Grundfläche von 10$\times$10 Metern in Blender war wenig komplex.
-Es bedarf lediglich vier Wände, die einen quadratischen Raum bilden.
-Das vollständige Gebäudemodell ist in Abbildung~\ref{fig:poc:scenario1 modell} zu sehen.
-
-\begin{figure}[ht!]
+\begin{figure}[hbt]
   \hspace*{\fill}%
   \begin{subfigure}[b]{0.25\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario1_render_base_thin.png}
@@ -28,7 +24,9 @@ Das vollständige Gebäudemodell ist in Abbildung~\ref{fig:poc:scenario1 modell}
   \hspace*{\fill}%
   \caption{Die beiden Input Modelle des Turmes.}\label{fig:poc:scenario1 modell}
 \end{figure}
-
+Die Modellierung der zwei sich in der Wanddicke unterscheidenden Versionen des 20 Meter hohen Turms mit einer Grundfläche von 10$\times$10 Metern in Blender war wenig komplex.
+Es bedarf lediglich vier Wände, die einen quadratischen Raum bilden.
+Das vollständige Gebäudemodell ist in Abbildung~\ref{fig:poc:scenario1 modell} zu sehen.
 Das Ergebnis nach Anwenden der drei verschiedenen Mauerwerksverbände ist wie erwartet.
 Die verschiedenen Verbände lassen sich wie in Kapitel~\ref{real:verband} gezeigt in den Programmcode einpflegen.
 Das Basismodul ist überall dort zu sehen, wo ein gerader Wandabschnitt vorliegt.
@@ -85,3 +83,33 @@ Wie bereits mehrfach in Kapitel~\ref{related:planungsvorgehen} erwähnt, könnte
 \subsection{Szenario Fabrikgebäude}\label{poc:scenario3}
 40409 Steine
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}
+Mithilfe der in Kapitel~\ref{basics:ontologie} eingeführten Technologie einer Ontologie und der konkreten Umsetzung der Baustein- und Regeldefinitionen nach dem Konzept aus Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} 
+konnte der resultierende Bauplanentwurf des Modells dieser Fallstudie in die dafür erstellte Ontologie eingepflegt werden.
+Das Konzept der Regeln wurde in dieser Fallstudie anhand der dafür erstellten \textit{RuleDependsOnBottomNeighbor} Regel getestet.
+Diese soll alle nach unten benachbarten Bausteine eines Bausteins in dessen \textit{dependsOn} Objekteigenschaft übertragen, sodass nur diejenigen Bausteine der Klasse \textit{NextBrick} zugeordnet werden können, die keine Individuen der Klasse \textit{PlaceableBrick} als untere Nachbarn besitzen.
+Dafür wurde für das Regel-Individuum über die Dateneigenschaft \textit{holdPropertyByName} der Name der Ziel-Objekteigenschaft \textit{hasBottomNeighbor} festgelegt.
+Über die Objekteigenschaft \textit{applyObjectPropertyTo} wurde schließlich auf das dafür erstelle \textit{ObjectPropertyHolder}-Individuum \textit{dependsOnObjectPropertyHolder} verwiesen.
+Dieses wiederum hält lediglich den Namen der Objekteigenschaft \textit{dependsOn}.
+Mit diesen Informationen kann nun während der Befüllung der Ontologie mit konkreten Bausteinen deren \textit{dependsOn} Objekteigenschaften mit den Einträgen aus deren unteren Nachbarn gleichgesetzt werden.
+
+Im Anschluss wurde durch wiederholtes Ausführen eines Reasoners und Auswählen einer zufälligen nächsten Instanz der Klasse \textit{NextBrick} ein Bauplan erstellt, der die in Abbildung~\ref{fig:scenarios:Scenario4 Experiment} gezeigte Wand von unten nach oben erbaut.
+In Abbildung~\ref{fig:poc:result_scenario4} sind drei Zwischenergebnisse dieses Vorgehens zu sehen.
+Insgesamt enthält die Wand 28 Steine.
+
+\begin{figure}[htb]
+  \begin{subfigure}[b]{0.3\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario4_output_6_render.png}
+    \caption{Ergebnis nach 6 Schritten.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.3\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario4_output_15_render.png}
+    \caption{Nach 15 Schritten.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.3\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/scenario4_output_23_render.png}
+    \caption{Nach 23 Schritten.}
+  \end{subfigure}
+  \caption{Schrittweises Platzieren eines gefundenen NextBrick.}\label{fig:poc:result_scenario4}
+\end{figure}
