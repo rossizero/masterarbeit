@@ -3,10 +3,11 @@ Nun wird das realisierte Konzept anhand der in Kapitel~\ref{scenarios} vorgestel
 Aus den Ergebnissen dieses Kapitels kann im Anschluss ein Fazit gezogen und ein potenzieller Ausblick auf künftige Erweiterungen des Konzepts gegeben werden.
 
 \section{Von 3D Gebäudeplan zu Bauplanentwurf}
-Zunächst müssen für Szenario 1 und 2 Gebäudepläne in einem Konstruktionsplaner modelliert werden.
+Zunächst müssen für einzelnen Szenarien der ersten Fallstudie Gebäudepläne in einem Konstruktionsplaner modelliert werden.
 Dazu wurde, wie schon in Kapitel~\ref{real:modellierung} beschrieben, die 3D Modellierungs-Software Blender herangezogen (siehe Kapitel~\ref{basics:blender}).
-Diese kann mit der frei verfügbaren Erweiterung \textit{blenderbim} zu einem funktionsfähigen BIM Editor mit \textit{IFC} Unterstützung ausgebaut werden (auch diese Technologien wurden bereits in den Kapiteln~\ref{basics:blenderbim} und~\ref{basics:ifc} vorgestellt).
-Darin lassen sich sowohl individuelle Wandtypen erstellen, als auch mithilfe der \textit{IfcPropertySets} Annotationen über Modul und Rastermaße daran anhängen.
+Diese kann mit der frei verfügbaren Erweiterung \textit{blenderbim} zu einem funktionsfähigen BIM Editor mit \textit{IFC} Unterstützung ausgebaut werden.
+Auch diese Technologien wurden bereits in den Kapiteln~\ref{basics:blenderbim} und~\ref{basics:ifc} vorgestellt.
+Darin können sowohl individuelle Wandtypen definiert, als auch Annotationen über Modul und Rastermaß mithilfe eigener \textit{IfcPropertySets} daran angehängt werden.
 Mit den in Kapitel~\ref{concept:raster} definierten Modellierungseinschränkungen, deren Umsetzung in Kapitel~\ref{real:modellierung} thematisiert wurde, konnte die Modellierungsphase sowohl erleichtert, als auch beschleunigt werden.
 
 \subsection{Szenario Turm}\label{poc:scenario1}
@@ -22,19 +23,19 @@ Mit den in Kapitel~\ref{concept:raster} definierten Modellierungseinschränkunge
     \caption{Der Turm mit 2 Meter dicken Wänden.}\label{fig:poc:scenario1_wall_thick}
   \end{subfigure}
   \hspace*{\fill}%
-  \caption{Die beiden Input Modelle des Turmes.}\label{fig:poc:scenario1 modell}
+  \caption{Die beiden Eingabemodelle des Turmes im IFC Format.}\label{fig:poc:scenario1 modell}
 \end{figure}
 Die Modellierung der zwei sich in der Wanddicke unterscheidenden Versionen des 20 Meter hohen Turms mit einer Grundfläche von 10$\times$10 Metern in Blender war wenig komplex.
 Es bedarf lediglich vier Wände, die einen quadratischen Raum bilden.
 Das vollständige Gebäudemodell ist in Abbildung~\ref{fig:poc:scenario1 modell} zu sehen.
 Das Ergebnis nach Anwenden der drei verschiedenen Mauerwerksverbände ist wie erwartet.
-Die verschiedenen Verbände lassen sich wie in Kapitel~\ref{real:verband} gezeigt in den Programmcode einpflegen.
+Die verschiedenen Verbände lassen sich, wie in Kapitel~\ref{real:verband} gezeigt, in den Programmcode einpflegen.
 Das Basismodul ist überall dort zu sehen, wo ein gerader Wandabschnitt vorliegt.
-Alle vier Eckbereiche sind korrekt identifiziert worden, denn dort wurde der für den jeweiligen Mauerwerksverband definierte Eckplan passend umgesetzt.
+Alle vier Eckbereiche sind korrekt identifiziert worden, denn dort wurde der für den jeweiligen Mauerwerksverband vordefinierte Eckplan passend umgesetzt.
 Im Falle des Kreuz- und Kopfverbandes wurde das Basismodul dabei etwas verkürzt.
 Die drei den Bauplanentwürfe werden als JSON-Dateien ausgegeben.
 Darin sind alle in Abschnitt~\ref{real:export} angegebenen Informationen enthalten.
-In Abbildung~\ref{fig:poc:result_scenario1} sind die Meshes der drei mit Bausteinen realisierten Türme zu sehen.
+In Abbildung~\ref{fig:poc:result_scenario1} sind die ebenfalls exportierten Meshes der drei mit Bausteinen realisierten Türme zu sehen.
 
 \begin{figure}[htb]
     \begin{subfigure}[b]{0.3\columnwidth}
@@ -70,18 +71,50 @@ Wie bereits mehrfach in Kapitel~\ref{related:planungsvorgehen} erwähnt, könnte
 \begin{figure}[htb]
   \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario2_rendering_input.png}
-    \caption{Gebäudemodell Szenario 2.}\label{fig:poc:scenario2 modell}
+    \caption{Gebäudemodell.}\label{fig:poc:scenario2 modell}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario2_render.png}
-    \caption{Ergebnis Szenario 2 (223 Bausteine).}\label{fig:poc:scenario2_ergebnis}
+    \caption{Ergebnis mit 223 Bausteinen.}\label{fig:poc:scenario2_ergebnis}
   \end{subfigure}
-\caption{Eingabemodell und Ergebnis für Szenario 2.}\label{fig:poc:result_scenario2}
+\caption{Eingabemodell und Ergebnis für das Szenario LEGO Klemmbausteine.}\label{fig:poc:result_scenario2}
 \end{figure}
 
 \subsection{Szenario Fabrikgebäude}\label{poc:scenario3}
-40409 Steine
+Dieses Szenario besteht aus insgesamt 36 einzelnen Wandstücken.
+Es gibt drei unterschiedliche Wandtypen.
+Vom ersten Typ, der eine 0,125 Meter dicke Wand aus 1 DF Steinen und halb versetztem Läuferverband vorschreibt, gibt es 20 Stück.
+Wände des zweiten Typs sind 0,25 Meter dick und werden im Kreuzverband mit 2 DF Steinen realisiert.
+Davon existieren 12 Stück.
+Für den Sockel des Kamins wurde ein eigener 0,5 Meter dicker Wandtyp definiert.
+Der Sockel soll mit Steinen im 16 DF Format und unter Anwendung des Kopfverbands erbaut werden.
+Darum gibt es von diesem Typ lediglich 4 Wände, auf welchen der eigentliche Kamin ruht.
+Außerdem wurden insgesamt 45 Fenster und 13 Türen an den Wänden angebracht.
+Um einen Dachgiebel anzudeuten, wurden niedrige und kürzer werdende Wandstücke auf den Mittelteil und dem seitlichen Anbau des Gebäudes gesetzt.
+Diese kleineren Wandstücke werden im Kombinationsschritt des Wall Detailings mit den großen darunterliegenden Wandstücken verschmolzen (siehe Abschnitt~\ref{real:combination}).
+Darum werden aus den 12 Wandstücken des zweiten Typs 4 und aus den 20 Wandstücken des ersten Typs 12.
+Dieser Schritt stellt zusammen mit dem Schritt des Findens und Lösens der Eckbereiche (siehe Abschnitt~\ref{real:find_and_solve}) den zeitaufwendigsten dar.
+Der Aufwand diese beiden Schritte zu berechnen verhält sich jeweils quadratisch zur Anzahl der einzelnen Schichten der beteiligten Wandstücke.
+Die Zeit zur Berechnung der konkreten Bausteine ist linear zur Anzahl der notwendigen Ziegel.
+In einem früheren Implementierungsversuch hatte das Finden von Nachbarschaftsbeziehungen zwischen Bausteinen ebenfalls eine quadratische Laufzeit in Abhängigkeit zur Anzahl der Bausteine und der Größe des angegebenen Rasters.
+Später konnte dieses Vorgehen aber optimiert und ebenfalls eine lineare Laufzeit erreicht werden.
+Ein ähnlicher Ansatz könnte für das Kombinieren und Lösen von Eckbereichen womöglich auch anwendbar sein.
+
+\begin{figure}[hbt]
+  \hspace*{\fill}%
+  \begin{subfigure}[b]{0.25\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/TODO.jpg}
+  \end{subfigure}
+  \hfill%
+  \begin{subfigure}[b]{0.25\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/TODO.jpg}
+  \end{subfigure}
+  \hspace*{\fill}%
+  \caption{Ergebnis des Szenario Fabrikgebäude mit 40409 Bausteinen.}\label{fig:poc:scenario3}
+\end{figure}
+
+
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}
 Mithilfe der in Kapitel~\ref{basics:ontologie} eingeführten Technologie einer Ontologie und der konkreten Umsetzung der Baustein- und Regeldefinitionen nach dem Konzept aus Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} 
 konnte der resultierende Bauplanentwurf des Modells dieser Fallstudie in die dafür erstellte Ontologie eingepflegt werden.

@@ -113,7 +113,7 @@ Zwischen drei Schichten des Bereichs der Wandstücke 5 und 6 und des Wandstücks
 Durch das Einbeziehen des \textit{x\_offset} können derartige Situationen jedoch ebenfalls gelöst werden, da für jedes Teilstück einer Schicht ein eigener \textit{x\_offset} berechnet wird.
 Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglichen Wandstücke aus dem Modell in Abbildung~\ref{fig:concept:combination_example_base} von sieben auf zwei.
 
-\subsection{Finden und Lösen von Beziehungen}
+\subsection{Finden und Lösen von Beziehungen}\label{real:find_and_solve}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
 Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-Kreuzungen dar (siehe Kapitel~\ref{concept:solving_beziehungen}).
 Der Grund dafür ist die Komplexität in diesen Bereichen die vorgeschriebenen Normen einzuhalten.
@@ -273,3 +273,7 @@ Owlready erlaubt das Wählen und Starten unterschiedlicher Reasoner.
 Nachdem die Berechnungen des Reasoners beendet sind, kann über eine Anfrage, welche alle Individuen einer bestimmten Klasse zurückgibt, die derzeitige Liste platzierbarer Bausteine ausgelesen werden.
 Da es in anderen Programmiersprachen womöglich schwieriger ist, Daten aus Ontologien auszulesen, werden zusätzlich alle relevanten Informationen zu den Bausteinen in einer sogenannten JSON-Datei zur Verfügung gestellt.
 JSON (JavaScript Object Notation) ist ein weit verbreitetes, menschenlesbares Austauschformat, zu welchem in den meisten Programmiersprachen hilfreiche Bibliotheken existieren, die das Auslesen und Strukturieren von Daten aus diesen Dateien erleichtern~\cite{json}.
+Um eine direkte und nutzerfreundliche Alternative zu textuellen Ausgaben anzubieten, werden außerdem noch Meshes erzeugt und als STL-Dateien exportiert.
+Dabei wird nicht nur ein Mesh des gesamten Ergebnisses generiert, sondern auch von einigen wichtigen Zwischenergebnissen.
+Diese Meshes lassen sich in einem beliebigen 3D Viewer leicht betrachten und auf Probleme untersucht werden.
+So können Fehler in der Modellierung oder in der Implementierung leichter erkannt werden.
