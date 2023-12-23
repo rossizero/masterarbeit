@@ -84,7 +84,7 @@ Wie bereits mehrfach in Kapitel~\ref{related:planungsvorgehen} erwähnt, könnte
 \subsection{Szenario Fabrikgebäude}\label{poc:scenario3}
 Dieses Szenario besteht aus insgesamt 36 einzelnen Wandstücken.
 Es gibt drei unterschiedliche Wandtypen.
-Vom ersten Typ, der eine 0,125 Meter dicke Wand aus 1 DF Steinen und halb versetztem Läuferverband vorschreibt, gibt es 20 Stück.
+Vom ersten Typ, der eine 0,125 Meter dicke Wand aus 1 DF Steinen und halbversetztem Läuferverband vorschreibt, gibt es 20 Stück.
 Wände des zweiten Typs sind 0,25 Meter dick und werden im Kreuzverband mit 2 DF Steinen realisiert.
 Davon existieren 12 Stück.
 Für den Sockel des Kamins wurde ein eigener 0,5 Meter dicker Wandtyp definiert.
@@ -101,19 +101,11 @@ In einem früheren Implementierungsversuch hatte das Finden von Nachbarschaftsbe
 Später konnte dieses Vorgehen aber optimiert und ebenfalls eine lineare Laufzeit erreicht werden.
 Ein ähnlicher Ansatz könnte für das Kombinieren und Lösen von Eckbereichen womöglich auch anwendbar sein.
 
-\begin{figure}[hbt]
-  \hspace*{\fill}%
-  \begin{subfigure}[b]{0.25\columnwidth}
-    \includegraphics[width=\columnwidth]{fig/TODO.jpg}
-  \end{subfigure}
-  \hfill%
-  \begin{subfigure}[b]{0.25\columnwidth}
-    \includegraphics[width=\columnwidth]{fig/TODO.jpg}
-  \end{subfigure}
-  \hspace*{\fill}%
-  \caption{Ergebnis des Szenario Fabrikgebäude mit 40409 Bausteinen.}\label{fig:poc:scenario3}
+\begin{figure}[bt]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{fig/scenario3_output_render2.png}
+  \caption{Ausschnitt des Ergebnisses von Szenario Fabrikgebäude mit 40409 Bausteinen.}\label{fig:poc:scenario3}
 \end{figure}
-
 
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}
 Mithilfe der in Kapitel~\ref{basics:ontologie} eingeführten Technologie einer Ontologie und der konkreten Umsetzung der Baustein- und Regeldefinitionen nach dem Konzept aus Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} 

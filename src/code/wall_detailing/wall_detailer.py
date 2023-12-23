@@ -33,10 +33,12 @@ from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
 from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
+from wall_detailing.scenarios.examples_for_text.DifferentBonds import BasicsStretchedBond, BasicsCrossBond, \
+    BasicsGothicBond, BasicsHeadBond
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
 from wall_detailing.scenarios.examples_for_text.scenario1 import Scenario1
 from wall_detailing.scenarios.examples_for_text.scenario2 import Scenario2
-from wall_detailing.scenarios.examples_for_text.scenario2_ontology import Scenario4_Ontology
+from wall_detailing.scenarios.examples_for_text.scenario4_ontology import Scenario4_Ontology
 from wall_detailing.scenarios.examples_for_text.small_test import SmallTestToCompareIFC
 
 
@@ -136,8 +138,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 or True  # to enable filling of possible holes
-            fill_right = len(layer.right_connections) == 0 or True
+            fill_left = len(layer.left_connections) == 0 #and False  # to enable or disable filling of possible holes
+            fill_right = len(layer.right_connections) == 0 #and False
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -248,6 +250,7 @@ def building_plan_to_stl(plan: List[Brick], until_step: int = -1):
 
 
 if __name__ == "__main__":
+    use_ontology = True
     print("available bonds", Bond.BondTypes.keys())
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))],
@@ -288,10 +291,11 @@ if __name__ == "__main__":
     brick.calculate_neighborhood(bb)
     BrickExporter(bb).export_to_json("output.json")
 
-    print("Now deducting building plan")
-    bto = BrickToOntology(bb)
-    result = bto.deduct_building_plan()
-    print("Result:", len(result), "brick can be placed with given rulesets. Order:", [b.id for b in result])
-    building_plan_to_stl(result, 6)
-    building_plan_to_stl(result, 15)
-    building_plan_to_stl(result, 23)
+    if use_ontology:
+        print("Now deducting building plan")
+        bto = BrickToOntology(bb)
+        result = bto.deduct_building_plan()
+        print("Result:", len(result), "brick can be placed with given rulesets. Order:", [b.id for b in result])
+        building_plan_to_stl(result, 6)
+        building_plan_to_stl(result, 15)
+        building_plan_to_stl(result, 23)

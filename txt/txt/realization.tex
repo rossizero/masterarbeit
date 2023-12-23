@@ -33,7 +33,7 @@ Zusätzlich werden aus den, in den \textit{IfcPropertySets} der Wandstücke hint
 Mithilfe der Werkzeuge der in Kapitel~\ref{basics} vorgestellten Python Bibliothek \textit{IfcOpenShell} (siehe~\ref{basics:ifcopenshell}) ist dies in wenigen Schritten möglich.
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.8\columnwidth]{fig/klassendiagramm_ifc_to_wall.drawio.png}
+  \includegraphics[width=0.65\columnwidth]{fig/klassendiagramm_ifc_to_wall.drawio.png}
   \caption{Klassendiagramm von der Klasse \textit{Wall} und der Klasse \textit{Opening}.}\label{fig:real:ifc_to_wall}
 \end{figure}
 
@@ -52,9 +52,9 @@ Deren Höhe entspricht im Normalfall der Höhe des jeweiligen Moduls.
 Lediglich die oberste Schicht kann durch falsch modellierte Wandstücke eine niedrigere Schichthöhe aufweisen.
 Dies ist der Fall, wenn die Gesamthöhe des Wandstücks nicht exakt einem Vielfachen der Höhe des Moduls entspricht und ein nicht aufzuteilender Rest existiert.
 Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstücken durchzuführen und Beziehungen zwischen ihnen zu finden.
-\begin{figure}[hbt]
+\begin{figure}[tbh]
   \centering
-  \includegraphics[width=0.7\columnwidth]{fig/klassendiagramm_apply_module.drawio.png}
+  \includegraphics[width=0.8\columnwidth]{fig/klassendiagramm_apply_module.drawio.png}
   \caption{Klassendiagramm nach Anwenden des Moduls.}\label{fig:real:apply_module}
 \end{figure}
 
@@ -129,11 +129,10 @@ Bevor aber eine neue Eckinstanz angelegt wird, wird überprüft, ob an dem errec
 Falls dem so ist, kann die dazugehörige und bereits vorhandene Eckinstanz lediglich um die Schichten des neuen Paares erweitert werden.
 Dadurch kann im selben Schritt bereits die Zuweisung der Art der Beziehung vorgenommen werden.
 Durch die Eckinstanzen werden nun die bis dahin unabhängigen Wandstücke, welche durch den vorherigen Schritt bereits schichtweise und kombiniert vorliegen, miteinander verknüpft.
-\begin{figure}[hb]
+\begin{figure}[h!]
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/klassendiagramm_corners.drawio.png}
-  \caption{Klassendiagramm nach Errechnen der Eckbereiche.}
-  \label{fig:real:class_diagram_corners}
+  \caption{Klassendiagramm nach Errechnen der Eckbereiche.}\label{fig:real:class_diagram_corners}
 \end{figure}
 Ein nützlicher Nebeneffekt der schichtweisen Betrachtung der Eckbereiche ist, dass nun auch zwei Wände mit unterschiedlichen Höhen, die gemeinsam einen Eckbereich bilden, korrekt dargestellt werden können, denn es werden nur für die Schichten Eckinstanzen erzeugt, die in beiden Wandstücken vorhanden sind.
 Die daraus resultierende neue Datenstruktur ist im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} zu sehen.
@@ -208,7 +207,7 @@ Auch die beiden rechten Eckbereiche haben jeweils eine andere lokale Rotation um
 \begin{figure}[hb]
   \centering
   \includegraphics[width=0.9\columnwidth]{fig/Eckrotationen.png}
-  \caption{Rotationsmöglichkeiten eines Eckbereichs.}\label{fig:real:eckrotationen}
+  \caption{Die vier Rotationsmöglichkeiten eines Eckbereichs.}\label{fig:real:eckrotationen}
 \end{figure}
 Um diese lokalen Eckrotationen zu berechnen wird für jede Ecke zunächst ein normierter Vektor in Richtung des Punktes x anhand der Mittelpunkte beider \textit{WallLayer} und dem Eckpunkt gebildet.
 Dies entspricht sozusagen der \textit{Richtung} der Ecke.
