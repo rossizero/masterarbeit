@@ -1,4 +1,4 @@
-\chapter{Realisierung}
+\chapter{Realisierung}\label{real}
 Mit dem in Kapitel~\ref{basics:ifc} vorgestellten \textit{IFC Standard} existiert ein umfangreiches Framework zur Beschreibung sämtlicher für die Baubranche relevanter Daten. 
 Im Zusammenspiel mit dem darauf aufbauenden \textit{Building Information Modeling} wird ein einheitliches Verwaltungskonzept für das Planen, Bauen und Bewirtschaften von Infrastruktur vorgeschlagen (siehe Kapitel~\ref{basics:bim}).
 Darum stellen im IFC Format vorliegende Gebäudepläne den Ausgangspunkt dieser Arbeit dar.
@@ -7,14 +7,14 @@ Darum stellen im IFC Format vorliegende Gebäudepläne den Ausgangspunkt dieser 
 Dank den in Kapitel~\ref{basics:ifcopenshell} vorgestellten Open-Source-Projekten zu den Technologien \textit{IFC} und \textit{BIM} sowie deren Anbindungen an die ebenfalls öffentliche 3D-Grafiksoftware Blender (siehe Kapitel~\ref{basics:blender}) ist es möglich auf einen komplett kostenlosen Technologiestack zur Modellierung von Gebäuden im IFC Format zurückzugreifen.
 Die Option Blender mithilfe sogenannter \textit{Add-ons} an spezielle Projekt-abhängige Anforderungen anzupassen, macht diese Modellierungsumgebung noch zweckdienlicher.
 Ein solches Add-on ist zum Beispiel \textit{blenderbim} (siehe Abschnitt~\ref{basics:blenderbim}). 
-Dieses ermöglicht es ein IFC Projekt direkt in Blender entweder neu zu beginnen oder ein vorhandenes zu bearbeiten.
+Dieses ermöglicht es ein IFC Projekt direkt in Blender entweder neu zu beginnen oder ein Vorhandenes zu bearbeiten.
 Für diese Arbeit relevant ist zunächst das Erstellen und Annotieren von Wänden beziehungsweise Wandtypen, sowie das Anbringen von Öffnungen.
 Beide Konzepte sind Teil des IFC Standards und wurden bereits ausführlich in Kapitel~\ref{basics:ifc} vorgestellt.
 Blenderbim ermöglicht es in wenigen Schritten einen neuen \textit{IfcWallType} zu definieren und daraus \textit{IfcWall} Objekte zu erstellen.
 Diese können mit den von Blender nativ angebotenen Werkzeugen angepasst werden.
-Zusätzlich gibt es weitere hilfreiche von Blenderbim eingeführte Modellierungsmöglichkeiten.
+Zusätzlich gibt es weitere hilfreiche, von Blenderbim eingeführte Modellierungsmöglichkeiten.
 Dank der Möglichkeit eigene \textit{IfcPropertySets} (siehe Kapitel~\ref{basics:ifc_properties}) zu definieren, lassen sich die in Kapitel~\ref{concept:raster} konzeptionierten Raster- und Modulinformationen zu den neu definierten Wandtypen hinzufügen.
-Bei Generierung eines \textit{IfcWall} Objekts werden diese Properties ebenfalls an das neue konkrete Wandstück geknüpft.
+Bei Generierung eines \textit{IfcWall} Objekts werden diese Properties ebenfalls an das neue Wandstück geknüpft.
 Damit können diese Informationen sowohl an das nachfolgende Wall Detailing übermittelt, als auch zur intuitiveren Modellierung des 3D Modells herangezogen werden, indem man Nutzern durch ein für diese Arbeit entwickeltes Add-on das für jeden Wandtyp zugeordnete Raster bei sämtlichen Transformationsvorgängen aufzwingt (siehe Abschnitt~\ref{concept:raster}).
 Dadurch werden kleine Modellierungsfehler von vornherein vermieden.
 
@@ -29,7 +29,7 @@ Die Unterkapitel dieses Abschnitts folgen den in Kapitel~\ref{concept:wall_detai
 Den ersten Schritt stellt das Extrahieren aller notwendigen Daten aus dem vorliegenden IFC Modell dar.
 Für die Fallstudien dieser Arbeit sind sowohl alle Objekte des Typs \textit{IfcWall} als auch die daran angeknüpften Objekte vom Typ \textit{IfcOpeningElement} (siehe~\ref{basics:IfcOpeningElement}) von Interesse.
 Diese entstehen während der Modellierungsphase etwa durch Anbringen von Fenstern oder Türen an einer Wand.
-Zusätzlich werden aus den, in den \textit{IfcPropertySets} der Wandstücke hinterlegten Daten, Informationen über das zu verwendende Modul und Raster ausgelesen.
+Zusätzlich werden aus den in den \textit{IfcPropertySets} der Wandstücke hinterlegten Daten Informationen über das zu verwendende Modul und Raster ausgelesen.
 Mithilfe der Werkzeuge der in Kapitel~\ref{basics} vorgestellten Python Bibliothek \textit{IfcOpenShell} (siehe~\ref{basics:ifcopenshell}) ist dies in wenigen Schritten möglich.
 \begin{figure}[htb]
   \centering
@@ -37,10 +37,10 @@ Mithilfe der Werkzeuge der in Kapitel~\ref{basics} vorgestellten Python Biblioth
   \caption{Klassendiagramm von der Klasse \textit{Wall} und der Klasse \textit{Opening}.}\label{fig:real:ifc_to_wall}
 \end{figure}
 
-Zunächst werden aus jeder \textit{IfcWall} ein Objekt der Klasse \textit{Wall} erzeugt und anschließend mit deren in der IFC Datei angegebenen Öffnungen versehen.
+Zunächst werden aus jeder \textit{IfcWall} ein Objekt der Klasse \textit{Wall} erzeugt und anschließend mit deren in der IFC Datei angegebenen Öffnungen (Opening) versehen.
 Deren Zusammenspiel in dieser Arbeit kann dem Klassendiagramm aus Abbildung~\ref{fig:real:ifc_to_wall} entnommen werden und ist eine vereinfachte Version der Struktur innerhalb des IFC Modells.
 Um die globalen Transformationen der \textit{IfcWalls} und \textit{IfcOpenings} zu errechnen, muss der in Abbildung~\ref{fig:IfcWall_Hierarchie} gezeigten Klassenhierarchie nach oben gefolgt werden, da die in den Kindern eines Objekts angegebene Transformation relativ zu dessen Eltern angegeben ist.
-Im Anschluss werden die nun globalen Transformationen der Opening wiederum in eine relative Transformation zum davon betroffenen Wall-Objekt umgewandelt.
+Im Anschluss werden die nun globalen Transformationen der Openings wiederum in eine relative Transformation zum davon betroffenen Wall-Objekt umgewandelt.
 Das erleichtert später die Berechnungen für das Anwenden der Öffnungen in einer Wand.
 Da sich diese Arbeit zunächst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen alle zuvor aus dem IFC Modell extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
 Alle anders geformten \textit{IfcWalls} werden in dieser Arbeit zunächst ignoriert.
@@ -48,6 +48,7 @@ Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgend
 
 \subsection{Anwenden des Moduls}
 Mit dem zu jedem Wandstück festgelegten Modul werden nun alle Wandstücke in Schichten aufgeteilt.
+Diese Schichten werden von der Klasse \textit{WallLayer} in Abbildung~\ref{fig:real:apply_module} repräsentiert und durch eine Instanz der Klasse \textit{WallLayerGroup} gruppiert.
 Deren Höhe entspricht im Normalfall der Höhe des jeweiligen Moduls.
 Lediglich die oberste Schicht kann durch falsch modellierte Wandstücke eine niedrigere Schichthöhe aufweisen.
 Dies ist der Fall, wenn die Gesamthöhe des Wandstücks nicht exakt einem Vielfachen der Höhe des Moduls entspricht und ein nicht aufzuteilender Rest existiert.
@@ -62,7 +63,7 @@ Das Aufteilen in Schichten erleichtert es im Anschluss Berechnungen an Wandstüc
 Eine solche Beziehung stellen Wände dar, die, wie bereits in Kapitel~\ref{concept:relations_wandtuecke} definiert, durch mehrere einzelne Objekte modelliert wurden, eigentlich aber eine Einheit bilden.
 Daher werden in diesem Schritt alle Wandstücke miteinander verglichen und eventuell kombiniert, sodass jeweils ein gefundenes Paar durch ein einzelnes Wandstück repräsentiert wird.
 Um zwei Wandstücke zu sinnvoll kombinieren zu können, müssen die Eigenschaften aus Kapitel~\ref{concept:combination_properties} gelten.
-Allerdings kann Punkt~\ref{concept:schichten}, welcher Berührung oder Überlappung voraussetzt mittlerweile wie folgt verschärft werden:
+Allerdings kann Punkt~\ref{concept:schichten}, welcher Berührung oder Überlappung voraussetzt, mittlerweile wie folgt verschärft werden:
 
 \begin{enumerate}
 \setcounter{enumi}{4}
@@ -86,8 +87,8 @@ Ein solches Paar wird dann wie folgt miteinander verschmolzen:
 \begin{enumerate}
   \item Errechne die kleinste und die größte relative x Koordinate der linken und rechten Ecken beider Schichten.
   \item Die Differenz der beiden Werte entspricht der neuen Länge der resultierenden Schicht.
-  \item Die kleinste x Koordinate ist deren neue linke Eckkoordinate.
-  \item Mit dieser und der halben neuen Länge kann nun der Mittelpunkt der resultierenden Schicht berechnet werden. Dieser entspricht der relativen Translation einer Schicht in Abhängigkeit der dazugehörigen \textit{WallLayerGroup}.
+  \item\label{real:comb_tmp_point} Die kleinste x Koordinate ist deren neue linke Eckkoordinate.
+  \item Mit dieser Eckkoordinate aus Punkt~\ref{real:comb_tmp_point} und der halben neuen Länge kann nun der Mittelpunkt der resultierenden Schicht berechnet werden. Dieser entspricht der relativen Translation einer Schicht in Abhängigkeit der dazugehörigen \textit{WallLayerGroup}.
 \end{enumerate}
 
 \begin{figure}[htb]
@@ -103,8 +104,8 @@ Ein solches Paar wird dann wie folgt miteinander verschmolzen:
 \end{figure}
 
 Steht ein Wandstück in X-Richtung versetzt auf einem anderem, so ist es notwendig diesen Versatz während dem nachfolgenden Detailing zu berücksichtigen.
-Ignoriert man dies, kann das zu den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlern (zum Beispiel zwischen Wandstück 2 und 7) innerhalb des Mauerwerksverbands und damit ebenfalls zu Verletzungen des vorgeschriebenen Überbindemaßes führen (siehe Abschnitt~\ref*{basics:Mauerwerksverband}).
-Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert als die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes (beziehungsweise einer \textit{WallLayerGroup}) und der lokalen X-Koordinate der zu betrachtenden Schicht.
+Ignoriert man dies, kann das, durch Verletzung des vorgeschriebenen Überbindemaßes (siehe Abschnitt~\ref{basics:Mauerwerksverband}), zu den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlern innerhalb des Mauerwerksverbands führen (zum Beispiel zwischen Wandstück 2 und 7).
+Dieser, nachfolgend als \textit{x\_offset} bezeichnete Versatz ist definiert als die Differenz zwischen der kleinsten lokalen X-Koordinate aller Schichten eines Wandstückes (mittlerweile repräsentiert durch eine \textit{WallLayerGroup}) und der lokalen X-Koordinate der zu betrachtenden Schicht.
 Der daraus resultierende Wert wird später dazu verwendet den anzuwendenden Mauerwerksverband erst an passender Stelle zu beginnen.
 Dadurch erzielt man einen einheitlichen Verband über das gesamte Wandstück und verhindert den in Abbildung~\ref{fig:real:combination_example_solution_no_xoffset} gezeigten Fehlerfall.
 Eine weitere Eigenschaft, die aus dem Kombinieren mehrerer Wandstücke entstehen kann, ist das Vorhandensein unterbrochener Schichten oder, anders ausgedrückt, mehrerer Schichten auf einer Höhe innerhalb des resultierenden Wandstückes.
@@ -112,6 +113,7 @@ Dies ist ebenfalls in Abbildung~\ref{fig:concept:combination_example_base} zu se
 Zwischen drei Schichten des Bereichs der Wandstücke 5 und 6 und des Wandstücks 7 ist eine Lücke.
 Durch das Einbeziehen des \textit{x\_offset} können derartige Situationen jedoch ebenfalls gelöst werden, da für jedes Teilstück einer Schicht ein eigener \textit{x\_offset} berechnet wird.
 Nach Vereinigung aller passenden Paare reduziert sich die Zahl der ursprünglichen Wandstücke aus dem Modell in Abbildung~\ref{fig:concept:combination_example_base} von sieben auf zwei.
+Die korrekte Durchführung mit angewandtem \textit{x\_offset} ist in Abbildung~\ref{fig:real:combination_example_solution_xoffset} zu sehen.
 
 \subsection{Finden und Lösen von Beziehungen}\label{real:find_and_solve}
 Nun wird die aus dem vorherigen Schritt entstandene neue Menge an Wandstücken auf weitere Beziehungen untersucht.
@@ -119,13 +121,13 @@ Für das Wall Detailing relevante Beziehungen stellen Ecken, T-Kreuzungen und X-
 Der Grund dafür ist die Komplexität in diesen Bereichen die vorgeschriebenen Normen einzuhalten.
 Dazu zählt zum Beispiel das in Abschnitt~\ref{basics:Mauerwerksverband} genannte Überbindemaß.
 In Abschnitt~\ref{concept:corner_etc_properties} wurden bereits die Eigenschaften aufgeführt, mithilfe derer sich die gesuchten Beziehungen identifizieren lassen.
-Die wichtigsten Informationen für jede dieser Beziehungen ist einerseits der Punkt, an dem sie sich im Raum befindet, andererseits die Art der Beziehung (also die Unterscheidung zwischen Ecke, T- oder X-Kreuzung).
+Wichtige Informationen für jede dieser Beziehungen sind einerseits die Punkte, an denen sie sich im Raum befinden, andererseits die Art der Beziehung (also die Unterscheidung zwischen Ecke, T- oder X-Kreuzung).
 Die Position ist der Schnittpunkt der Richtungsvektoren beider Wandstücke entlang ihrer lokalen X-Achsen.
 Die Unterscheidung der Beziehungen kann mithilfe des Vorgehens, das ebenfalls in Abschnitt~\ref{concept:corner_etc_properties} erläutert wurde, durchgeführt werden.
 Dabei spielen die Anzahl der Wandstücke, die sich in einem Punkt schneiden und der Ort des Punktes innerhalb der beteiligten Wandstücke eine Rolle.
 Da ein Wandstück zu diesem Zeitpunkt schon als Menge an Schichten vorliegt, wird das Verfahren, wie es bereits oben getan wurde, paarweise auf alle Schichten angewandt.
 Somit werden für jede, sich durch Verkettungen über mehrere Wandstücke erstreckende Schicht alle Kreuzungs- und Eckbereiche ausfindig gemacht.
-Bevor aber eine neue Eckinstanz angelegt wird, wird überprüft, ob an dem errechneten Schnittpunkt bereits ein Eckbereich gefunden wurde.
+Bevor aber eine neue Eckinstanz angelegt wird, muss überprüft werden, ob an dem errechneten Schnittpunkt bereits ein Eckbereich gefunden wurde.
 Falls dem so ist, kann die dazugehörige und bereits vorhandene Eckinstanz lediglich um die Schichten des neuen Paares erweitert werden.
 Dadurch kann im selben Schritt bereits die Zuweisung der Art der Beziehung vorgenommen werden.
 Durch die Eckinstanzen werden nun die bis dahin unabhängigen Wandstücke, welche durch den vorherigen Schritt bereits schichtweise und kombiniert vorliegen, miteinander verknüpft.
@@ -170,7 +172,8 @@ So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsr
 Falls keine lückenlose Lösung gefunden werden kann, wird diejenige mit dem insgesamt kleinsten Lückenvolumen zurückgegeben.
 
 \subsection{Anwenden der Öffnungen}\label{real:openings}
-Den nächsten Schritt stellt das Anwenden der Öffnungen (siehe Klasse \textit{Opening} im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners}) sämtlicher \textit{WallLayerGroups} dar.
+Den nächsten Schritt stellt das Anwenden der Öffnungen sämtlicher \textit{WallLayerGroups} dar.
+Diese werden durch die Klasse \textit{Opening} im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} realisiert.
 Auch diese Operation wird schichtweise durchgeführt.
 Auf jeder Schicht der betroffenen \textit{WallLayerGroup} wird folgendes Verfahren angewandt:
 \begin{enumerate}
@@ -182,21 +185,21 @@ Oftmals werden über Öffnungen im Mauerwerk sogenannte Stürze eingesetzt.
 Das ist ein meist vorgefertigtes Bauteil aus Stahlbeton, welches etwas länger ist als die Öffnung selbst.
 Dieses Bauteil wird über eine Öffnung gelegt, um die Stabilität der Wand trotz Integration eines Fensters oder einer Tür zu gewährleisten.
 Stürze werden in dieser Arbeit wie eine eigene Bausteingröße behandelt und können aus diesem Grund als spezielles Modul betrachtet werden.
-Dies wird im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} durch die Verbindung zwischen den Klassen \textit{Opening} und \textit{BrickInformation} dargestellt.
-Der für den Sturz benötigte Platz kann mit dem gleichen Öffnungsverfahren von oben geschaffen werden.
+Dies wird im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_corners} durch die Verbindung zwischen den Klassen \textit{Opening} und \textit{BrickInformation} dargestellt und als \textit{lintel} bezeichnet.
+Der für den Sturz benötigte Platz kann ebenfalls mit dem Öffnungsverfahren von oben geschaffen werden.
 
 \subsection{Anwenden der Mauerwerksverbände}\label{real:verband}
 Die für Mauerwerksverbände entwickelte mathematische Darstellung aus Kapitel~\ref{concept:mauerwerksverband} wurde mithilfe der in Abbildung~\ref{fig:real:class_diagram_bonds} dargestellten Klassenstruktur umgesetzt.
 Beispielhaft sind darin auch die den Kreuzverband und den Läuferverband repräsentierenden Klassen zu sehen.
 Letzterer kann zusätzlich durch Parameter angepasst werden, um zum Beispiel den Versatz zu verändern.
 Dabei ändert sich aber nicht nur der Legeplan für gerade Wandabschnitte.
-Auch die speziellen Pläne für Ecken und Kreuzungen müssen den Parameterwerten entsprechend abgewandelt werden.
+Auch die speziellen Pläne für Ecken und Kreuzungen müssen dann den Parameterwerten entsprechend abgewandelt werden.
 
-Durch die Vorbereitung der vorausgegangen Schritte, müssen nun lediglich Objekte der Klasse \textit{Brick} anhand der vorgegebenen Mauerwerksverbände und den in den einzelnen Wandbereichen festgesetzten \textit{plan\_offsets} erzeugt werden.
+Durch die Vorbereitung der vorausgegangen Schritte, können nun Objekte der Klasse \textit{Brick} anhand der vorgegebenen Mauerwerksverbände und den in den einzelnen Wandbereichen festgesetzten \textit{plan\_offsets} erzeugt werden.
 Diese können mithilfe der Transformationen der jeweiligen \textit{Corner} oder \textit{WallLayerGroups} und den Informationen des Verbands passend positioniert und rotiert werden.
 Es gibt aber drei Besonderheiten, die neben dem bloßen Abarbeiten der jeweiligen Mauerwerksverbände zusätzlich zu beachten sind:
 
-\paragraph*{Lokale \textit{Corner} Rotationen}
+\paragraph*{Lokale Corner Rotationen}
 Im Falle von \textit{Cornern} ist neben der globalen Transformation noch eine weitere Information zu beachten.
 Bei T-Kreuzungen und Ecken ist die globale Rotation nicht ausreichend, um die Bausteine mithilfe des vorgegebenen Plans richtig zu platzieren.
 Es wird zusätzlich ein weitere lokale Rotation um die \textit{Achse} einer T-Kreuzung oder Ecke benötigt.
@@ -213,10 +216,10 @@ Um diese lokalen Eckrotationen zu berechnen wird für jede Ecke zunächst ein no
 Dies entspricht sozusagen der \textit{Richtung} der Ecke.
 Dieser Vektor wird dann um das Inverse der Rotation einer der am \textit{Corner} beteiligten \textit{WallLayerGroup} rotiert, um ihn in das globale Koordinatensystem zu überführen.
 Durch diese Rotation ist nun die Achse der Ecke gleich der z-Achse des Koordinatensystems.
-Deshalb kann mithilfe des sogenannten Arkustangens der Quadrant herausgefunden werden, in dessen Richtung der Vektor zeigt.
+Deshalb kann mithilfe des Arkustangens der Quadrant herausgefunden werden, in dessen Richtung der Vektor zeigt.
 Da sowohl bekannt ist, dass der Vektor des Punktes x um 45\degree{} zur eigentlichen Eckrotation versetzt ist, als auch, dass die Rotation nur die z-Achse betrifft, kann mit dem Ergebnis des Arkustangens nun ein Quaternion erstellt werden, welches die spezielle lokale Eckrotation beschreibt.
 Auch mit T-Kreuzungen kann in ähnlicher Weise verfahren werden. 
-Allerdings existieren hierbei nur zwei Fallunterscheidungen.
+Allerdings existieren hierbei statt vier nur zwei Fallunterscheidungen.
 
 \paragraph*{Abschluss eines Wandstücks} Wandenden sind mithilfe der \textit{Corner} identifizierbar.
 Existiert kein \textit{Corner} an einem Ende einer Schicht, handelt es sich entweder um ein Wandende oder den Außenbereich einer Öffnung.
@@ -236,19 +239,19 @@ Die Dimensionen des Bausteins sind mithilfe des Moduls, das zur Beschreibung des
 
 \subsection{Nachbarschaftsbeziehungen zwischen Bausteinen}
 \begin{figure}[h!bt]
-  \begin{subfigure}[b]{0.5\columnwidth}
+  \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/raster_neighbors1.png}
     \caption{Nachbarschaften in einem 1$\times$1 Raster}\label{fig:real:raster_neigbors1}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.5\columnwidth}
+  \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/raster_neighbors2.png}
     \caption{Nachbarschaften in einem 0.5$\times$0.5 Raster}\label{fig:real:raster_neigbors2}
   \end{subfigure}
   \caption{Mögliche Raster-abhängige Nachbarschaften.}\label{fig:real:raster_neigbors}
 \end{figure}
 
-Um valide Nachbarschaften zwischen den berechneten Bausteinen festzustellen, werden die, den Wandstücken zugeordneten, Raster herangezogen.
+Um valide Nachbarschaften zwischen den berechneten Bausteinen festzustellen, werden die den Wandstücken zugeordneten Raster herangezogen.
 In Abbildung~\ref{fig:real:raster_neigbors} ist der Effekt zweier unterschiedlicher Raster auf den gleichen Baustein dargestellt.
 Die gestrichelten Plätze sind potenzielle Nachbarfelder.
 Da es sich allerdings nicht um eine zwei-, sondern eine dreidimensionale Umgebung handelt, gibt es auch unter- und oberhalb der Bausteine mögliche Nachbarn.
@@ -256,23 +259,24 @@ Um Bausteinen diese Informationen hinzuzufügen, wurde die Enumeration \textit{N
 Dies ist im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_bonds} zu sehen.
 Die Enumeration \textit{Neighbor} definiert sechs mögliche Nachbarschaftsarten: linke, rechte, vordere, hintere, darüber und darunter liegende Nachbarn.
 Die Klasse \textit{Brick} wird mit dem Feld \textit{neighbors} um ein Dictionary ergänzt, welches zu jedem dieser Fälle eine Menge eindeutiger Bausteine beinhalten kann.
-Der Grund dafür ist, dass es einem Baustein möglich ist etwa mehrere linke Nachbarn zu haben.
-Nun kann für einen Baustein durch den Vergleich mit anderen Bausteinen herausgefunden werden, welche Bausteine welche Nachbarfelder besetzen.
-Über die Funktion \textit{opposite} der Enumeration \textit{Neighbor}, kann im selben Zug auch den gefundenen Bausteinen ein Nachbar hinzugefügt werden.
+Der Grund dafür ist, dass es einem Baustein je nach Raster möglich ist etwa mehrere linke Nachbarn zu haben (siehe Abbildung~\ref{fig:real:raster_neigbors2}).
+Nun kann für jeden Baustein durch den Vergleich mit allen anderen herausgefunden werden, welche Bausteine welche Nachbarfelder besetzen.
+Über die Funktion \textit{opposite} der Enumeration \textit{Neighbor}, kann im selben Zug oftmals auch den gefundenen Bausteinen ein Nachbar hinzugefügt werden.
+Das hängt allerdings von den lokalen Rotationen der Nachbarn ab.
 
 
 \subsection{Export}\label{real:export}
 In Kapitel~\ref{concept:regelbasierte_bauplandeduktion} wurde bereits erarbeitet, wie sich Regeln in einer Ontologie definieren lassen.
-Gleichzeitig wurde die Klasse \textit{Brick} definiert, welche alle notwendigen Informationen zu einem Baustein enthält, um diesen nach weiteren Eigenschaften zu analysieren.
+Gleichzeitig wurde die Klasse \textit{Brick} konzeptioniert, die alle notwendigen Informationen zu einem Baustein enthält, um diesen nach weiteren Eigenschaften zu analysieren.
 Sämtliche Klassen und Eigenschaften des Konzepts aus diesem Kapitel konnten mithilfe des Ontologie-Editors Protégé (siehe Kapitel~\ref{basics:protege}) umgesetzt werden.
 Dank der Python Bibliothek \textit{Owlready2} (siehe Kapitel~\ref{basics:owlready}) kann diese Ontologie leicht an den bisher entstandenen Programmcode angeschlossen werden.
 Zunächst werden die in der Ontologie erstellten Regel-Individuen ausgelesen und während der Befüllung der Ontologie mit Brick-Instanzen auf deren Eigenschaften angewandt.
-Insbesondere das Auffüllen der \textit{dependsOn}-Eigenschaft anhand der zuvor ausgerechneten Nachbarschaften spielt hier eine wichtige Rolle.
+Insbesondere das Auffüllen der \textit{dependsOn}-Eigenschaft anhand der zuvor ausgerechneten Nachbarschaften spielt hierbei eine wichtige Rolle.
 Owlready erlaubt das Wählen und Starten unterschiedlicher Reasoner.
 Nachdem die Berechnungen des Reasoners beendet sind, kann über eine Anfrage, welche alle Individuen einer bestimmten Klasse zurückgibt, die derzeitige Liste platzierbarer Bausteine ausgelesen werden.
 Da es in anderen Programmiersprachen womöglich schwieriger ist, Daten aus Ontologien auszulesen, werden zusätzlich alle relevanten Informationen zu den Bausteinen in einer sogenannten JSON-Datei zur Verfügung gestellt.
 JSON (JavaScript Object Notation) ist ein weit verbreitetes, menschenlesbares Austauschformat, zu welchem in den meisten Programmiersprachen hilfreiche Bibliotheken existieren, die das Auslesen und Strukturieren von Daten aus diesen Dateien erleichtern~\cite{json}.
-Um eine direkte und nutzerfreundliche Alternative zu textuellen Ausgaben anzubieten, werden außerdem noch Meshes erzeugt und als STL-Dateien exportiert.
-Dabei wird nicht nur ein Mesh des gesamten Ergebnisses generiert, sondern auch von einigen wichtigen Zwischenergebnissen.
-Diese Meshes lassen sich in einem beliebigen 3D Viewer leicht betrachten und auf Probleme untersucht werden.
+Um eine direkte und nutzerfreundliche Alternative zu textuellen Ausgaben anzubieten, werden außerdem noch 3D Meshes erzeugt und als STL-Dateien exportiert.
+Dabei wird nicht nur ein einziges Mesh des gesamten Ergebnisses generiert, sondern auch von einigen wichtigen Zwischenergebnissen.
+Diese Meshes lassen sich in einem beliebigen 3D Viewer leicht betrachten und auf Probleme untersuchen.
 So können Fehler in der Modellierung oder in der Implementierung leichter erkannt werden.
