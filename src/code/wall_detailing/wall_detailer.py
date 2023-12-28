@@ -273,7 +273,7 @@ if __name__ == "__main__":
 
     #scenario = DoppelEck2_Closed_TJoint()
     #scenario = DoppelEck2_Closed_TJoint()
-    scenario = Scenario4_Ontology()
+    scenario = CombinationExampleForText()
     #scenario = Single_Wall_Slim()
     #scenario = EmptyScenario()
 

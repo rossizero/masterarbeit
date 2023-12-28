@@ -48,7 +48,7 @@ class CombinationExampleForText(Scenario):
                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
 
-        an = 0.4886921905584123
+        an = 0#0.4886921905584123
         w1.rotate_around(quaternion.from_euler_angles(0, an, an))
         w2.rotate_around(quaternion.from_euler_angles(0, an, an))
         w3.rotate_around(quaternion.from_euler_angles(0, an, an))
