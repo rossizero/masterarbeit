@@ -121,3 +121,5 @@ Modellierungsvorgangs
 IfcPropertySetTemplates
 QuantitySets
 ontologieorientiert
+Läuferverbände
+Halbversetzter

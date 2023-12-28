@@ -7,10 +7,10 @@ Dafür werden seit dem Jahr 2000 die \textit{Industry Foundation Classes} (IFC) 
 
 
 \section{Industry Foundation Classes}\label{basics:ifc}
-In der Spezifikation des Standards selbst, wird dieser wie folgt beschrieben:
+In der Spezifikation des Standards selbst, wird dieser wie folgt beschrieben (aus dem Englischen):
 \glqq{}Die Industry Foundation Classes (IFC) sind ein offener internationaler Standard für Daten des Building Information Model (BIM), welche zwischen Softwareanwendungen ausgetauscht, gemeinsam genutzt und von den verschiedenen Akteuren der Bauindustrie und des Gebäudemanagements verwendet werden. 
 Der Standard enthält Definitionen für Daten, die für die Lebenszyklen von Gebäude- und Infrastrukturarbeiten erforderlich sind. 
-Die bis jetzt in die IFC aufgenommenen Infrastruktur-Typen umfassen Brücken, Straßen, Eisenbahnen, Wasserstraßen und Hafenanlagen\grqq{} (aus dem Englischen)~\cite{IFCScope:online}. 
+Die bis jetzt in die IFC aufgenommenen Infrastruktur-Typen umfassen Brücken, Straßen, Eisenbahnen, Wasserstraßen und Hafenanlagen\grqq{}~\cite{IFCScope:online}. 
 Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739 registriert (siehe~\cite{ISOISO1694:online}).
 Da der IFC aber nach wie vor kontinuierlich weiterentwickelt wird, wird in dieser Arbeit die derzeit neueste Version verwendet.
 Diese ist die IFC Spezifikation 4.3.1.0~\cite{IFC4310Spezification:online}.
@@ -65,7 +65,7 @@ In der Dokumentation wird dies wie folgt formuliert (aus dem Englischen): \glqq{
 Es gibt zwei Arten der Klasse IfcOpeningElement, je nachdem ob die Öffnung durch die gesamte Breite eines Objektes reicht oder nicht. 
 Folglich entsteht dadurch eine Unterscheidung zwischen Nischen und tatsächlichen Öffnungen, wobei nur letztere im Zusammenhang mit Fenstern oder Türen Sinn ergibt.
 
-\section{IFC for Blender}\label{basics:blender}
+\section{IFC und Blender}\label{basics:blender}
 \subsection{Blender}
 Blender ist eines der beliebtesten Open-Source-Programme zur Modellierung von 3D Modellen und Animationen~\cite{blendero56:online}.
 Eine umfangreiche Python API erlaubt es Blender durch sogenannte Add-ons an die eigenen Bedürfnisse anzupassen~\cite{PythonWebsite:online}~\cite{BlenderPythonAPI:online}.
@@ -99,13 +99,14 @@ for product in products:
 
         m = mesh.Mesh(np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype))
         for i, f in enumerate(faces):
-            for j in range(3):
-                m.vectors[i][j] = vertices[f[j], :]
+          for j in range(3):
+              m.vectors[i][j] = vertices[f[j], :]
         meshes.append(m)
 
 # Create the combined mesh
 combined = mesh.Mesh(np.concatenate([m.data for m in meshes]))
 combined.save('model.stl', mode=Mode.ASCII)
+
 \end{lstlisting}
 
 IfcOpenShell ist eine frei verfügbare Bibliothek, die es erleichtert mit Daten im IFC Format zu arbeiten.
@@ -117,7 +118,7 @@ Damit existiert ein intuitiver Zugang zu den Daten von IFC Dateien.
 
 \section{Building Information Modeling}\label{basics:bim}
 Ein weiterer Punkt, der für die Verwendung von IFC spricht, ist das sogenannte \textit{Building Information Modeling} (BIM)~\cite{Building41:online}.
-Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Aus dem Englischen)~\cite{Arayici2010}.
+Ein Definitionsvorschlag lautet wie folgt (aus dem Englischen): \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{}~\cite{Arayici2010}.
 Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, daraufhin das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
 BIM kommt in all diesen Phasen zum Tragen und erleichtert diese Prozesse durch Anbieten einer einheitlichen Schnittstelle für alle am Infrastrukturbau und -management beteiligten Personen.
 Zusätzlich ermöglicht BIM eine exakte Dokumentation des Geschehens in sämtlichen Phasen des Bauwerks, was unter anderem zu einer genaueren Zeit- und Kostenplanung führt~\cite{Ding2014}.
@@ -151,11 +152,21 @@ Der Server bietet aber auch eine REST Schnittstelle an, um Clients in anderen Sp
 Der Mauerwerksbau ist eine Art des Massivbaus, bei welchem Natur- oder Formsteine aufgeschichtet werden, um Wände beziehungsweise Mauern zu errichten.
 Eine derart erbaute Wand besteht demnach aus (Bau)-Steinen und den dazwischen entstehenden Fugen.
 Mörtel ist dabei nicht zwangsläufig notwendig.
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=0.7\columnwidth]{fig/Ziegelsteinformate DF NF 2DF 6DF.png}
+  \caption{Darstellung verschiedener Steinformate nach DIN 4172 (Baunennmaß in Millimetern)~\cite{Steinfor38:online}}\label{fig:basics:Steinformate}
+\end{figure}
 Man spricht von trocken versetzten Steinen oder einer Trockenmauer, wenn darauf verzichtet wird.
 Heutzutage wird fast ausschließlich mit quaderförmigen Formsteinen gebaut.
 Zur Beschreibung solcher Formsteine existieren zwei relevante Größen.
 Die eine ist das sogenannte \textit{Baunennmaß}, mit dem die tatsächliche Größe des Steins angegeben wird.
 Die andere das \textit{Baurichtmaß}, das sich aus Baunennmaß und dem Fugenmaß zusammensetzt und sozusagen einem Raster entspricht, das durch die Bausteine vorgegeben wird.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\columnwidth]{fig/Oktametrische Maßordnung.png}
+  \caption{Besondere Eigenschaften der oktametrischen Maßordnung~\cite{Moro2021}}\label{fig:basics:OktametrischeMassordnung}
+\end{figure}
 
 \subsection{Maßsysteme}\label{basics:masssysteme}
 Als Maßsystem bezeichnet man die Festlegung der Größen von Bausteinen anhand eines konkret definierten (Grund-) Moduls.
@@ -167,16 +178,6 @@ Nachfolgend wird auf dieses Maßsystem näher eingegangen.
 Baurichtmaße sind gemäß dem oktametrischen Maßsystem immer ein Vielfaches von \(12.5 cm\) (das entspricht \(1/8 m\)) und nach der Norm aber mindestens \(6.25cm\).
 Dies gilt sowohl für Länge und Breite als auch für die Höhe der Steine.
 Das System ist in der \textit{DIN 4172 Maßordnung im Hochbau} geregelt und ein fest definiertes Grundmaß für das Bauwesen in Europa~\cite{DIN417224}.
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.7\columnwidth]{fig/Ziegelsteinformate DF NF 2DF 6DF.png}
-    \caption{Darstellung verschiedener Steinformate nach DIN 4172 (Baunennmaß in Millimetern)~\cite{Steinfor38:online}}\label{fig:basics:Steinformate}
-\end{figure}
-\begin{figure}[hb]
-  \centering
-  \includegraphics[width=0.8\columnwidth]{fig/Oktametrische Maßordnung.png}
-  \caption{Besondere Eigenschaften der oktametrischen Maßordnung~\cite{Moro2021}}\label{fig:basics:OktametrischeMassordnung}
-\end{figure}
 Daraus gehen insbesondere folgende zwei Formate für Ziegelsteine hervor:
 das Normalformat (NF) mit \(240\times115\times71 mm\) und das Dünnformat (DF) mit \(240\times115\times52 mm\) (Länge $\times$ Breite $\times$ Höhe)~\cite{Moro2021}.
 Alle anderen Formate werden mithilfe dieser beiden Grundsteine angegeben.
@@ -186,6 +187,7 @@ Für Systeme, die eine schmalere oder keine Fuge benötigen, werden entsprechend
 Durch Einhalten eines Systems ist man zusätzlich in der Lage Türen und Fenster an die daraus entstehenden Öffnungsgrößen anzupassen und vermeidet dadurch zeitaufwendiges, nachträgliches Anpassen oder Spezialanfertigungen.
 Da Höhe, Breite und Länge der Steine zusammen mit den dazwischenliegenden Fugen aufgrund des Maßsystems jeweils Vielfache voneinander sind, ergeben sich viele Möglichkeiten zur Aufschichtung und Aneinanderreihung der Bausteine.
 Einige davon sind in Abbildung~\ref{fig:basics:OktametrischeMassordnung} zu sehen und sind gleichzeitig Beispiele für einen sogenannten \textit{Mauerwerksverband}.
+
 \begin{figure}[htb]
   \hspace*{\fill}%
   \begin{subfigure}[b]{0.4\columnwidth}
@@ -200,12 +202,12 @@ Einige davon sind in Abbildung~\ref{fig:basics:OktametrischeMassordnung} zu sehe
   \hspace*{\fill}%
   \begin{subfigure}[b]{0.4\columnwidth}
     \includegraphics[width=\columnwidth]{fig/basics_stretchedbond25_mittig.png}
-    \caption{Mittlerer Läuferverband \textit{(1/4 Versatz).}}
+    \caption{Mittlerer Läuferverband.}\label{fig:basics:verbaende_c}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.4\columnwidth}
     \includegraphics[width=\columnwidth]{fig/basics_stretchedbond25_schleppend}
-    \caption{Schleppender Läuferverband \textit{(1/4 Versatz).}}
+    \caption{Schleppender Läuferverband.}\label{fig:basics:verbaende_d}
   \end{subfigure}
   \hspace*{\fill}%
   \begin{subfigure}[b]{0.4\columnwidth}
@@ -217,7 +219,7 @@ Einige davon sind in Abbildung~\ref{fig:basics:OktametrischeMassordnung} zu sehe
     \includegraphics[width=\columnwidth]{fig/basics_gothicbond.png}
     \caption{Gotischer Verband.}
   \end{subfigure}
-  \caption{Typische Mauerwerksverbände.}\label{fig:basics:verbaende}
+  \caption{Typische Mauerwerksverbände. In diesem Beispiel weisen die Läuferverbände in~\ref{fig:basics:verbaende_c} und~\ref{fig:basics:verbaende_d} einen Versatz von \(1/4\) der Steinlänge auf.}\label{fig:basics:verbaende}
 \end{figure}
 \subsection{Mauerwerksverband}\label{basics:Mauerwerksverband}
 Als Mauerwerksverband bezeichnet man bestimmte, gleichmäßige Anordnungen von Mauersteinen, um einen homogenen Mauerwerkskörper zu erreichen~\cite{Mauerwer39:online}.
@@ -233,6 +235,11 @@ Zudem wird darin die Mindestwanddicke für tragendes Mauerwerk, \glqq{}sofern au
 festgelegt~\cite{DIN_EN_1996_1_1}.
 Dies ist, wie in Abbildung~\ref{fig:basics:Steinformate} zu sehen, exakt die Breite der kleinsten Ziegelformate NF und DF.
 Man unterscheidet zwei Arten von Mauerwerk: das Einsteinmauerwerk und das Verbandsmauerwerk.
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.7\columnwidth]{fig/KreuzungslösungBeispiel.png}
+  \caption{Lösung einer Kreuzung am Beispiel einer \glqq{}Wand aus 2 DF im Kreuz- und Blockverband\grqq{}~\cite{MaurerfibelKreuzungen:online}.}\label{fig:basics:Kreuzungsloesung}
+\end{figure}
 Wie schon dem Namen zu entnehmen, handelt es sich beim Einsteinmauerwerk und ein Mauerwerk, bei welchem die Wanddicke der Steinbreite entspricht.
 Hier muss das Überbindemaß lediglich über die Wandlängsrichtung eingehalten werden.
 Bei Verbandsmauerwerk gilt dies zusätzlich für die Wandquerrichtung~\cite{05maurer1:online}.
@@ -253,22 +260,17 @@ Dabei treten verschiedene Sonderfälle auf, die für unterschiedliche Verbände 
   \item \textbf{Öffnungen} innerhalb eines Wandstücks können in derselben Art behandelt werden, da der vorherrschende Verband in den betroffenen Schichten gerade unterbrochen werden muss.
   Über Öffnungen für Fenster und Türen wird ein sogenannter Sturz gelegt, welcher ebenfalls in den der Wand zugrunde liegenden Mauerwerksverband eingebunden werden muss.  
 \end{itemize}
-\begin{figure}[bh]
+
+\begin{figure}[ht]
   \centering
-  \includegraphics[width=0.9\columnwidth]{fig/Eck- und Kreuzungslösungen.png}
+  \includegraphics[width=0.8\columnwidth]{fig/Eck- und Kreuzungslösungen.png}
   \caption{Lösungen für Ecken und T-Kreuzungen unterschiedlicher Verbände~\cite{Moro2021}.}\label{fig:basics:mauerwerk_eckloesung}
 \end{figure}
 Die Lösungen für die oben genannten Situationen variieren je nach angestrebten Mauerwerksverband und der verwendeten Modulgröße stark.
 Einige Beispiele sind in Abbildung~\ref{fig:basics:mauerwerk_eckloesung} und Abbildung~\ref{fig:basics:Kreuzungsloesung} zu sehen~\cite{Moro2021}\cite{MaurerfibelKreuzungen:online}.
 Während etwa beim Läuferverband manchmal darauf verzichtet werden kann Bausteine für Eckbereiche und Kreuzungen zu zerschneiden, ist dies für andere Verbände teilweise unumgänglich. 
 
-\begin{figure}[th]
-  \centering
-  \includegraphics[width=0.8\columnwidth]{fig/KreuzungslösungBeispiel.png}
-  \caption{Lösung einer Kreuzung am Beispiel einer \glqq{}Wand aus 2 DF im Kreuz- und Blockverband\grqq{}~\cite{MaurerfibelKreuzungen:online}.}\label{fig:basics:Kreuzungsloesung}
-\end{figure}
-
-\section{LEGO}\label{basics:lego}
+\section{LEGO System}\label{basics:lego}
 Ein 1$\times$1 LEGO Stein hat eine quadratische Grundfläche von \(7.8mm\)$\times$\(7.8mm\).
 Dies entspricht demnach dem Baunennmaß des 1$\times$1 LEGO Steins.
 Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2mm\).
@@ -278,11 +280,10 @@ Die für ein dreidimensionales Maß noch fehlende Größe ist die Höhe der Stei
 Diese beträgt \(9.6mm\).
 Der Abstand zwischen zwei übereinander gestapelten Steinen hängt von dem Druck ab, der beim Zusammenstecken geleistet wurde.
 Dennoch kann dieser vernachlässigt und demnach als Abstand von \(0.0mm\) gewertet werden.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\columnwidth]{fig/LEGO 2x4 Brick horizontal.png}
-    \caption{Maße des Standard 2$\times$4 LEGO Steins~\cite{LEGOBric2:online}}\label{fig:basics:Lego 2x4 Brick}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\columnwidth]{fig/LEGO 2x4 Brick horizontal.png}
+  \caption{Maße des Standard 2$\times$4 LEGO Steins~\cite{LEGOBric2:online}}\label{fig:basics:Lego 2x4 Brick}
 \end{figure}
 
 \section{Ontologie}\label{basics:ontologie}
