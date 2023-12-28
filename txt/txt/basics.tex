@@ -1,12 +1,8 @@
-% https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-generate-cross-sections-directly-from-an-ifc-file/
-% https://blenderbim.org/docs-python/ifcopenshell-python/geometry_processing.html
-%https://academy.ifcopenshell.org/posts/using-ifcopenshell-and-pythonocc-to-construct-new-geometry/
-
 \chapter{Grundlagen}\label{basics}
 Zunächst wird für diese Arbeit ein geeignetes Speicherformat für 3D Modelle von Gebäuden benötigt.
 Um den Bau von Gebäuden zu automatisieren, ist es notwendig die Domäne \textit{Gebäude} möglichst vollständig digital abbilden zu können. 
-Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in das Modell zu integrieren, auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen herausgefunden werden können.
-Da diese Informationen oft von Experten verschiedener Fachbereiche (etwa aus den Bereichen der Architektur, des Bauwesens oder der Statik) stammen, muss das Format sehr flexibel und im besten Fall auch zeitgleich bearbeitbar sein.
+Hilfreich ist dabei, wichtige Daten über bestimmte Bestandteile des Gebäudes direkt in das Modell zu integrieren, auf Basis derer etwa Kostenberechnungen durchgeführt oder Materialmengen abgeschätzt werden können.
+Da diese Informationen oft von Experten verschiedener Fachbereiche (etwa aus den Bereichen der Architektur, des Bauwesens oder der Statik) stammen, muss das Format flexibel und im besten Fall auch zeitgleich bearbeitbar sein.
 Dafür werden seit dem Jahr 2000 die \textit{Industry Foundation Classes} (IFC) von buildingsmart entwickelt, deren Anwendung im internationalen Bauwesen mittlerweile weit verbreitet ist~\cite{Industry61:online}.
 
 
@@ -16,7 +12,7 @@ In der Spezifikation des Standards selbst, wird dieser wie folgt beschrieben:
 Der Standard enthält Definitionen für Daten, die für die Lebenszyklen von Gebäude- und Infrastrukturarbeiten erforderlich sind. 
 Die bis jetzt in die IFC aufgenommenen Infrastruktur-Typen umfassen Brücken, Straßen, Eisenbahnen, Wasserstraßen und Hafenanlagen\grqq{} (aus dem Englischen)~\cite{IFCScope:online}. 
 Eine frühere Version des IFC Standards ist unter der Bezeichnung ISO 16739 registriert (siehe~\cite{ISOISO1694:online}).
-Da die IFC aber nach wie vor kontinuierlich weiterentwickelt werden, wird in dieser Arbeit die derzeit neueste Version verwendet.
+Da der IFC aber nach wie vor kontinuierlich weiterentwickelt wird, wird in dieser Arbeit die derzeit neueste Version verwendet.
 Diese ist die IFC Spezifikation 4.3.1.0~\cite{IFC4310Spezification:online}.
 Das verbreitetste Austauschformat für IFC ist das \textit{Step Physical File Format}, welches im ISO 10303 Teil 21 registriert ist~\cite{ISO_Step:online}.
 Zudem gibt es speicherreduzierte Formate wie ifcZip oder für Menschen lesbare Formate wie ifcXML~\cite{Industry93:online}\cite{IFCForma28:online}\cite{BIM_handbook_AEC_XML_SCHEMAS}.
@@ -48,14 +44,14 @@ Dabei werden IfcQuantitySets vorwiegend dazu verwendet numerische Werte zu geome
 IfcPropertySets dienen hingegen dazu bestimmten Objekten oder Objekttypen mit sämtlichen nicht numerischen Werten zu annotieren.
 Beispiele dafür sind etwa Material oder Farbe eines bestimmten Objekts.
 Die Verwendung der Bezeichnung \textit{Set} rührt daher, dass diese Informationen in einer Baumstruktur vorliegen und demnach verschachtelt sein können.
-Es gibt zu vielen Klassenbeschreibungen des IFC Standards vordefinierte IfcPropertySets.
+Es gibt zu vielen Klassenbeschreibungen des IFC Standards vordefinierte IfcPropertySetTemplates.
 Das hilft dabei wichtige Informationen zu bestimmten Objekttypen einheitlich angeben zu können.
 Im Falle des \textit{IfcWallType} existiert beispielsweise das IfcPropertySet mit dem Namen \textit{Pset\_WallCommon}~\cite{IFC4310PSetWallCommon:online}.
 Darin können die Ersteller von neuen WallTypes unter anderem Informationen über Brennbarkeit, thermisches Verhalten oder Akustik hinterlegen.
-Beim Erstellen einer IfcWall Instanz aus einem bestimmten WallType werden die damit verbundenen Property- und QuantitySets automatisch daran angehängt, sodass jedes Objekt relevante Informationen über sich selbst bereithält.
+Bei Erzeugung einer IfcWall Instanz aus einem bestimmten WallType sind die damit verbundenen Property- und QuantitySets automatisch damit verknüpft, sodass jedes Objekt relevante Informationen über sich selbst bereithält.
+Dies ermöglicht eine effiziente Inspektion des Gebäudemodells.
 
 \subsection{Positionierung von \textit{IfcProducts}}
-%https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/concepts/Product_Shape/Product_Placement/Product_Local_Placement/content.html
 Die Platzierung eines \textit{IfcProducts} wird durch eine Verkettung relativer Transformationen ausgehend vom \textit{IfcProduct}, über sämtliche Strukturen, die dieses Objekt enthalten, bis hin zur \textit{IfcSite} realisiert~\cite{IFCPlatzierung}.
 Diese Hierarchie kann der Abbildung~\ref{fig:IFC_Relationships} entnommen werden.
 Um die globale Position eines \textit{IfcProducts} zu erhalten, müssen die relativen Transformationen miteinander verrechnet werden.
@@ -64,20 +60,20 @@ Der IFC Standard unterstützt zudem die Möglichkeit Positionierungen anhand ein
 \subsection{IfcOpeningElement}\label{basics:IfcOpeningElement}
 Neben Wänden stellen Fenster und Türen wichtige Elemente eines Gebäudes dar.
 Diese sind ebenfalls Teil der Klassen des IFC Standards.
-Objekte des Typs \textit{IfcOpeningElement} dienen dazu die notwendigen Lücken in einer Wand zu definieren in die später eine Tür oder ein Fenster eingebaut werden soll.
+Objekte des Typs \textit{IfcOpeningElement} dienen dazu, die notwendigen Lücken in einer Wand zu definieren, in die später eine Tür oder ein Fenster eingebaut werden soll.
 In der Dokumentation wird dies wie folgt formuliert (aus dem Englischen): \glqq{}[Das IfcOpeningElement] stellt eine Lücke in jedem Element dar, das eine physische Manifestation hat\grqq{}~\cite{IFC4310OpeningElement:online}.
-Es gibt zwei Arten an IfcOpeningElement, je nachdem ob die Öffnung durch die gesamte Breite eines Objektes reicht oder nicht. 
+Es gibt zwei Arten der Klasse IfcOpeningElement, je nachdem ob die Öffnung durch die gesamte Breite eines Objektes reicht oder nicht. 
 Folglich entsteht dadurch eine Unterscheidung zwischen Nischen und tatsächlichen Öffnungen, wobei nur letztere im Zusammenhang mit Fenstern oder Türen Sinn ergibt.
 
 \section{IFC for Blender}\label{basics:blender}
 \subsection{Blender}
 Blender ist eines der beliebtesten Open-Source-Programme zur Modellierung von 3D Modellen und Animationen~\cite{blendero56:online}.
 Eine umfangreiche Python API erlaubt es Blender durch sogenannte Add-ons an die eigenen Bedürfnisse anzupassen~\cite{PythonWebsite:online}~\cite{BlenderPythonAPI:online}.
-Aufgrund dessen existiert auch eine Vielzahl an freien Erweiterungen \textendash{} unter anderem auch eine Integration von IFC Projekten.
+Aufgrund dessen existiert auch eine Vielzahl an freien Erweiterungen \textendash{} unter anderem auch eine Integration des IFC Standards.
 
 \subsection{blenderbim}\label{basics:blenderbim}
 Neben kommerziellen Produkten wie etwa revit von autodesk zur Modellierung von IFC Modellen, gibt es auch für Blender ein freies Plugin, um IFC Modelle zu erstellen~\cite{RevitSof26:online}~\cite{BlenderB43:online}.
-Dieses Plugin ermöglicht es neben dem bloßen Designen des Gebäudes in kurzer Zeit z.B. detaillierte Zeichnungen verschiedener Perspektiven herauszuarbeiten, die z.B. von Bauingenieuren verwendet werden können, um einzelne Stockwerke oder Verkabelungen zu planen.
+Dieses Plugin ermöglicht es neben dem bloßen Designen des Gebäudes in kurzer Zeit zum Beispiel detaillierte Zeichnungen verschiedener Perspektiven herauszuarbeiten, die etwa von Bauingenieuren verwendet werden können, um einzelne Stockwerke oder Verkabelungen zu planen.
 Blenderbim selbst kapselt unter anderem die Open Source Python Bibliothek \textit{IfcOpenShell}, sodass diese in der Blender Laufzeitumgebung zur Verfügung steht~\cite{IFCOpenShell:online}.
 
 \subsection{IfcOpenShell}\label{basics:ifcopenshell}
@@ -115,21 +111,23 @@ combined.save('model.stl', mode=Mode.ASCII)
 IfcOpenShell ist eine frei verfügbare Bibliothek, die es erleichtert mit Daten im IFC Format zu arbeiten.
 Sie bietet unter anderem eine Python API an und ist wie bereits erwähnt ein Teil des Blender Add-ons blenderbim.
 Natürlich ist es dennoch möglich diese Bibliothek auch ohne Blender zu verwenden.
-In Listing~\ref{basics:ifcopenshell_sample_code} ist ein kurzes Beispiel eines Programmes gegeben, das in einer IFC Datei alle Objekte des Typs IfcWall ausfindig macht und dessen geometrische Repräsentation in ein herkömmliches Mesh konvertiert.
+In Listing~\ref{basics:ifcopenshell_sample_code} ist ein Beispielprogramm zu sehen, das aus einer IFC Datei alle Objekte des Typs IfcWall filtert und deren geometrische Repräsentationen in ein herkömmliches Mesh konvertiert.
+Auch andere Informationen, wie die in IfcPropertySets enthaltenen Daten, können mit der Bibliothek in ähnlicher Weise extrahiert werden.
 Damit existiert ein intuitiver Zugang zu den Daten von IFC Dateien.
 
 \section{Building Information Modeling}\label{basics:bim}
 Ein weiterer Punkt, der für die Verwendung von IFC spricht, ist das sogenannte \textit{Building Information Modeling} (BIM)~\cite{Building41:online}.
-Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Übersetzt aus dem Englischen)~\cite{Arayici2010}.
-Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
+Ein Definitionsvorschlag lautet wie folgt: \glqq{}BIM ist definiert als der Einsatz von Informations- und Kommunikationstechnologien zur Verschlankung der Prozesse im Lebenszyklus von Gebäuden, um eine sicherere und produktivere Umgebung für die Bewohner zu schaffen, die Umwelt so wenig wie möglich zu belasten und die Effizienz der Betriebsabläufe für die Eigentümer während des gesamten Lebenszyklus des Gebäudes zu erhöhen\grqq{} (Aus dem Englischen)~\cite{Arayici2010}.
+Zum Lebenszyklus eines Gebäudes gehören etwa anfangs das Planen und Designen, später das Bauen, daraufhin das Verwenden und Instandhalten und nach eventuellen Renovierungen das Abreißen.
 BIM kommt in all diesen Phasen zum Tragen und erleichtert diese Prozesse durch Anbieten einer einheitlichen Schnittstelle für alle am Infrastrukturbau und -management beteiligten Personen.
 Zusätzlich ermöglicht BIM eine exakte Dokumentation des Geschehens in sämtlichen Phasen des Bauwerks, was unter anderem zu einer genaueren Zeit- und Kostenplanung führt~\cite{Ding2014}.
 Auch Verantwortlichkeiten sind Teil von BIM, was zu einer erhöhten Produktivität beiträgt.
-Um nun das Zusammenarbeiten der unterschiedlichen Fachbereiche zu erleichtern, gibt es sogenannte BIM-Server auf welchen mehrere Arbeitende synchron an einem Projekt arbeiten können, während sie jeweils die für ihren Aufgabenbereich passende Ansicht vor sich haben.
+Um nun das Zusammenarbeiten der unterschiedlichen Fachbereiche zu erleichtern, gibt es sogenannte BIM-Server auf welchen mehrere Personen synchron an einem Projekt arbeiten können.
+Dabei können je nach Aufgabenbereich passende Teilansichten des Projektes herangezogen werden.
 BIM-Server unterstützen zusätzlich eine Versionierung des Fortschritts an einem Projekt.
 
-In einem Gespräch mit einem Ingenieur aus dem Bereich \glqq{}Energiesystemtechnik\grqq{} kam zur Sprache, dass viele Bereiche von BIM noch nicht ganz Einzug in Deutschland gefunden haben.
-Eben jene \glqq{}Kollaboration über einen BIM-Server mit Änderungsmanagement etc.\ [sei] (noch) nicht üblich, da noch nicht alle Beteiligten dazu in der Lage sind. Vor allem Bauherren, Architekten und Baufirmen können es nicht\grqq{}.
+In einem Gespräch mit einem Ingenieur aus dem Bereich \glqq{}Energiesystemtechnik\grqq{} kam zur Sprache, dass viele Bereiche von BIM noch keinen Einzug in Deutschland gefunden haben.
+Eben jene \glqq{}Kollaboration über einen BIM-Server mit Änderungsmanagement etc.\ [sei] nicht üblich, da noch nicht alle Beteiligten dazu in der Lage sind. Vor allem Bauherren, Architekten und Baufirmen können es nicht\grqq{}.
 Weiter sei \glqq{}auch unklar, wer für falsche Angaben haftet und wer die Konsistenz aller Daten gewährleistet\grqq{}.
 Auf der anderen Seite sei \glqq{}das im BIM festgelegte Datenformat IFC das Maß der Dinge und auch bei uns so in Verwendung\grqq{}.
 Auch das Einpflegen \glqq{}ergänzende[r] Bauteilinformationen (z.B. zu Gewicht, Dämmwert, Recyclebarkeit, \(CO_2\) Fußabdruck, etc.)\grqq{} finden Einsatz und sind Teil seines Alltags.
@@ -142,7 +140,7 @@ Trotzdem sei \glqq{}BIM [\ldots] das große Ding in der Bauwelt und der einzige 
 Während es vorwiegend kommerzielle Produkte gibt, die Unternehmen das Arbeiten mit BIM ermöglichen, existiert auch hier eine aktive Open Source Bewegung.
 Unter dem Namen \glqq{}The open source BIM collective\grqq{} oder kurz \glqq{}opensourceBIM\grqq{} werden derzeit um die 70 Repositories betrieben.
 Darin enthalten sind unter anderem ein BIM-Server inklusive verschiedener Clients für Endanwender auf unterschiedlichen Systemen und Werkzeuge, die es erleichtern den IFC Files zu arbeiten~\cite{Theopens96:online}.
-Ein kurzer Test hat gezeigt, dass die in Blender modellierte IFC Files tatsächlich über einen \glqq{}Anzeige-Client\grqq{}, der mit einem lokal gehosteten BIM-Server verbunden ist, angezeigt werden können.
+Ein kurzer Test hat gezeigt, dass die in Blender modellierte IFC Files tatsächlich über einen \glqq{}Anzeige-Client\grqq{}, der mit einem lokal gehosteten BIM-Server verbunden ist, dargestellt und inspiziert werden können.
 Obwohl die Verwendung des BIM-Servers für diese Arbeit nicht notwendig ist, besteht die Option diesen künftig mit in den Workflow zu integrieren, da damit auch das simultane Arbeiten an einem IFC File möglich ist, was in Blender nur teilweise und mit dem Einsatz von Plugins ermöglicht wird.
 Das stellt einen Praxisbezug zum aktuell verwendeten Stand dieser Technologien her, was in der oftmals konzeptionellen Natur der Forschung nicht immer der Fall ist.
 Wie auch Blender unterstützt BIM-Server das Einbinden von eigenen Plugins, sodass eine Erweiterung um neue Funktionalität möglich ist.
@@ -157,18 +155,18 @@ Man spricht von trocken versetzten Steinen oder einer Trockenmauer, wenn darauf 
 Heutzutage wird fast ausschließlich mit quaderförmigen Formsteinen gebaut.
 Zur Beschreibung solcher Formsteine existieren zwei relevante Größen.
 Die eine ist das sogenannte \textit{Baunennmaß}, mit dem die tatsächliche Größe des Steins angegeben wird.
-Die andere das \textit{Baurichtmaß}, das sich aus Baunennmaß und dem Fugenmaß zusammensetzt.
+Die andere das \textit{Baurichtmaß}, das sich aus Baunennmaß und dem Fugenmaß zusammensetzt und sozusagen einem Raster entspricht, das durch die Bausteine vorgegeben wird.
 
 \subsection{Maßsysteme}\label{basics:masssysteme}
-Als Maßsystem bezeichnet man das Vorgeben der Größen von Bausteinen anhand eines konkret definierten (Grund-)Moduls.
+Als Maßsystem bezeichnet man die Festlegung der Größen von Bausteinen anhand eines konkret definierten (Grund-) Moduls.
 Zwei in Deutschland populäre Grundmodule sind zum einen das \textit{ISO-2848-Basismodul} mit Länge 100 mm und zum anderen der Achtelmeter, verankert in der \textit{DIN 4172 Maßordnung im Hochbau}~\cite{ISO2848}\cite{DIN417224}.
 Letzteres bezeichnet man daher auch als das oktametrische Maßsystem.
 Nachfolgend wird auf dieses Maßsystem näher eingegangen.
 
 \subsubsection*{Oktametrisches Maßsystem}
-Baurichtmaße sind gemäß dem oktametrischen Maßsystem immer ein Vielfaches von \(12,5 cm\) (das entspricht \(1/8 m\)) und nach der Norm aber mindestens \(6.25cm\).
+Baurichtmaße sind gemäß dem oktametrischen Maßsystem immer ein Vielfaches von \(12.5 cm\) (das entspricht \(1/8 m\)) und nach der Norm aber mindestens \(6.25cm\).
 Dies gilt sowohl für Länge und Breite als auch für die Höhe der Steine.
-Das System ist in der \textit{DIN 4172 Maßordnung im Hochbau} geregelt und ist ein fest definiertes Grundmaß für das Bauwesen in Europa~\cite{DIN417224}.
+Das System ist in der \textit{DIN 4172 Maßordnung im Hochbau} geregelt und ein fest definiertes Grundmaß für das Bauwesen in Europa~\cite{DIN417224}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\columnwidth]{fig/Ziegelsteinformate DF NF 2DF 6DF.png}
@@ -185,7 +183,7 @@ Alle anderen Formate werden mithilfe dieser beiden Grundsteine angegeben.
 So sind zum Beispiel die in Abbildung~\ref{fig:basics:Steinformate} gezeigten 2 DF und 6 DF Steine eine Kombination aus mehreren Steinen im Dünnformat.
 Dabei sieht die Norm ein Fugenmaß von \(10 mm\) für Stoßfugen (vertikal) und \(12 mm\) für Lagerfugen (horizontal) vor.
 Für Systeme, die eine schmalere oder keine Fuge benötigen, werden entsprechend größere Steine hergestellt, um der Maßordnung weiterhin zu entsprechen.
-Durch Einhalten eines Systems ist man zusätzlich in der Lage Türen und Fenster an die daraus entstehenden Öffnungsgrößen anzupassen und vermeidet dadurch zeitaufwendiges, nachträgliches Anpassen.
+Durch Einhalten eines Systems ist man zusätzlich in der Lage Türen und Fenster an die daraus entstehenden Öffnungsgrößen anzupassen und vermeidet dadurch zeitaufwendiges, nachträgliches Anpassen oder Spezialanfertigungen.
 Da Höhe, Breite und Länge der Steine zusammen mit den dazwischenliegenden Fugen aufgrund des Maßsystems jeweils Vielfache voneinander sind, ergeben sich viele Möglichkeiten zur Aufschichtung und Aneinanderreihung der Bausteine.
 Einige davon sind in Abbildung~\ref{fig:basics:OktametrischeMassordnung} zu sehen und sind gleichzeitig Beispiele für einen sogenannten \textit{Mauerwerksverband}.
 \begin{figure}[htb]
@@ -262,7 +260,7 @@ Dabei treten verschiedene Sonderfälle auf, die für unterschiedliche Verbände 
 \end{figure}
 Die Lösungen für die oben genannten Situationen variieren je nach angestrebten Mauerwerksverband und der verwendeten Modulgröße stark.
 Einige Beispiele sind in Abbildung~\ref{fig:basics:mauerwerk_eckloesung} und Abbildung~\ref{fig:basics:Kreuzungsloesung} zu sehen~\cite{Moro2021}\cite{MaurerfibelKreuzungen:online}.
-Während etwa beim Läuferverband darauf verzichtet werden kann Bausteine für Eckbereiche und Kreuzungen zu zerschneiden, ist dies für andere Verbände teilweise unumgänglich. 
+Während etwa beim Läuferverband manchmal darauf verzichtet werden kann Bausteine für Eckbereiche und Kreuzungen zu zerschneiden, ist dies für andere Verbände teilweise unumgänglich. 
 
 \begin{figure}[th]
   \centering
@@ -279,7 +277,7 @@ In Abbildung~\ref{fig:basics:Lego 2x4 Brick} werden zur Veranschaulichung die Ma
 Die für ein dreidimensionales Maß noch fehlende Größe ist die Höhe der Steine.
 Diese beträgt \(9.6mm\).
 Der Abstand zwischen zwei übereinander gestapelten Steinen hängt von dem Druck ab, der beim Zusammenstecken geleistet wurde.
-Dennoch kann dieser vernachlässigt, sprich als Abstand von \(0.0mm\) gewertet werden.
+Dennoch kann dieser vernachlässigt und demnach als Abstand von \(0.0mm\) gewertet werden.
 
 \begin{figure}[h]
     \centering
@@ -294,7 +292,7 @@ Ein Definitionsvorschlag lautet wie folgt (aus dem Englischen):
 \glqq{}Die Ontologie als Teilgebiet der Philosophie ist die Wissenschaft von dem, was existiert, den Arten und Strukturen von Objekten, Eigenschaften, Ereignissen, Prozessen und Relationen in allen Bereichen der Wirklichkeit\grqq{}~\cite{Ontology}.
 Eine Anmerkung, die oftmals im Anschluss eines Definitionsvorschlags zu finden ist, besagt, dass dabei nicht nur das, \textit{was ist}, sondern ebenfalls das, \textit{was sein könnte} betrachtet werden müsse~\cite{Ontology}\cite{OntologieDefinitionLMU:online}.
 Dieser Gedanke spiegelt sich ebenfalls in dem Ontologiebegriff aus der Informatik wider und ist unter dem Begriff \textit{Open World Assumption} bekannt.
-Dies wird nach der Definition von Ontologien im Kontext der Informatik noch einmal ausführlicher aufgegriffen.
+Diese Eigenschaft wird nach der Definition von Ontologien im Kontext der Informatik noch einmal ausführlicher aufgegriffen.
 
 Im Fachbereich der Informatik wurde der Begriff Ontologie adaptiert und zunächst als \glqq{}explicit specification of a conceptualization\grqq{} definiert~\cite{Gruber1993}.
 Wörtlich übersetzt lautet diese Definition etwa \glqq{}explizite Spezifizierung einer Konzeptualisierung\grqq{}.
@@ -318,15 +316,14 @@ Drei weit verbreitete Reasoner sind:
   \item Open Source Pellet Reasoner der Clark \& Parsia LLC~\cite{Sirin2007}. 
 \end{itemize}
 Aufgrund der oben genannten Idee der \textit{Open World Assumption} unterscheidet sich die Art der Reasoner logische Schlussfolgerungen zu ziehen von der, mit welcher logische Aussagen von zum Beispiel Programmiersprachen bewertet werden.
-Im Grunde versteht man unter der \textit{Open World Assumption}, das nicht Falsifizieren eines logischen Ausdrucks, falls Wissen existieren könnte, das den Ausdruck doch verifizieren würde.
+Im Grunde versteht man unter der \textit{Open World Assumption}, das nicht falsifizieren eines logischen Ausdrucks, falls Wissen existieren könnte, das den Ausdruck doch verifizieren würde.
 Ein Reasoner beziehungsweise eine Programmiersprache im Kontext der \textit{Closed World Assumption} würde in so einer Situation davon ausgehen alle existierenden Informationen darüber bereits vorliegen zu haben und eventuell zu einem anderen Schluss gelangen.
 Definiert man zum Beispiel eine Klasse A als alle Individuen, die nur eine Eigenschaft E besitzen, die sie mit Individuen einer bestimmten anderen Klasse B verbindet, so kann ein Reasoner innerhalb dieser Ontologie ein Individuum, das zwar diese Anforderung erfüllt, nicht der Klasse A zuordnen, da es sein kann, dass zu einem späteren Zeitpunkt (oder an anderer Stelle) Informationen existieren, die diese Zuordnung fehlerhaft machen würden.
 In einer Umgebung, in der die \textit{Closed World Assumption} gilt, wäre diese Zuordnung hingegen völlig korrekt.
-Deren Annahme einer \textit{offenen Welt} ermöglicht es ebenfalls die Idee des sogenannten \glqq{}Semantic Web\grqq{} mithilfe von Ontologien zu realisieren~\cite{SemanticWebLee}.
-Denn die Natur des Internets entspricht eher einer sich ständig ändernden und \glqq{}offenen\grqq{} Welt, als einer Geschlossenen.
+Die Annahme einer \textit{offenen Welt} ermöglicht es ebenfalls die Idee des sogenannten \glqq{}Semantic Web\grqq{} mithilfe von Ontologien zu realisieren~\cite{SemanticWebLee}.
+Denn die Natur des Internets entspricht eher einer sich ständig ändernden und offenen Welt, als einer Geschlossenen.
 Als Semantic Web wird das Annotieren von sämtlichen Webinhalten mit semantischen Informationen bezeichnet.
 Damit wird das Ziel verfolgt, ein maschinenlesbares Internet zu schaffen. 
-%TODO: da nochmal genauer drauf eingehen und semantic web kurz erwähnen -> wissen könnte ja noch iwo im internet sein, außer explizit anders angegeben.
 
 \subsection{Protégé}\label{basics:protege}
 Protégé ist ein grafischer Editor zur Erstellung und Instandhaltung von Ontologien~\cite{Protege}.
@@ -338,7 +335,7 @@ Das Arbeiten mit einem grafischen Editor erleichtert den Einstieg in das Thema u
 Darum wurde das Programm zur Erstellung einer Ontologie für diese Arbeit herangezogen.
 
 \subsection{Owlready2}\label{basics:owlready}
-Owlready2 ist eine Python 3 Bibliothek, die es ermöglicht \glqq{}Ontologie orientiert\grqq{} zu programmieren~\cite{Owlready}.
+Owlready2 ist eine Python 3 Bibliothek, die es ermöglicht \textit{ontologieorientiert} zu programmieren~\cite{Owlready}.
 Bisher mussten Ontologien mithilfe von Abfragesprachen (etwa SPARQL) oder APIs bearbeitet und ausgewertet werden~\cite{SPARQLF_W3C}.
 Owlready2 bietet hingegen einen einfacheren Umgang mit Ontologien, ebnet damit den Einstieg in das Thema und ermöglicht gleichzeitig die Integration von Ontologien in jedes mit Python umsetzbare Projekt.
 Im Zusammenspiel mit Protégé bietet diese Bibliothek eine für Programmierer intuitive Möglichkeit, die oben genannten Werkzeuge für IFC und BIM durch Nutzung von Python 3 direkt mit der Technologie der Ontologien zu koppeln.

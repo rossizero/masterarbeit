@@ -118,3 +118,6 @@ Wall-Detailings
 Packings
 Vielecks
 Modellierungsvorgangs
+IfcPropertySetTemplates
+QuantitySets
+ontologieorientiert

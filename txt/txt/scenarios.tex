@@ -1,8 +1,8 @@
 \chapter{Fallstudien}\label{scenarios}
 Anhand der nachfolgenden Fallstudie und deren Szenarien werden die dieser Arbeit zugrundeliegenden Konzepte zur Errechnung eines Bauplanentwurfs aus einem als 3D Modell vorliegenden Gebäudeplans veranschaulicht und auf Anwendbarkeit überprüft.
 Dabei werden die Szenarien zunehmend komplexer, um auch das Zusammenspiel verschiedener Teilkonzepte zur Lösung einzelner Probleme zu verifizieren.
-Abschließend wird in einer weiteren Fallstudie untersucht, wie Regeln erstens definiert und zweitens auf deren Ergebnisse angewandt werden können.
-Damit soll die ungeordnete Menge von konkreten Bausteinen eines Bauplanentwurfs durch Regeln in eine Reihenfolge gebracht werden, sodass daraus ein schrittweise umsetzbarer Bauplan entsteht.
+Abschließend wird in einer weiteren Fallstudie untersucht, wie Regeln erstens definiert und zweitens auf den Ergebnissen der ersten Fallstudie angewandt werden können.
+Damit soll die ungeordnete Menge der konkreten Bausteine eines Bauplanentwurfs durch Regeln in eine Reihenfolge gebracht werden, sodass daraus ein schrittweise umsetzbarer Bauplan entsteht.
 
 \section{Von 3D Gebäudeplan zu Bauplanentwurf}
 Diese erste Fallstudie enthält drei Szenarien anhand derer die Konzepte zur Errechnung eines Bauplanentwurfs ausgehend von 3D Gebäudeplänen erläutert und getestet werden.
@@ -32,43 +32,45 @@ Insbesondere das Anwenden verschiedener Mauerwerksverbände soll die Flexibilit�
 \subsubsection*{Beschreibung}
 Der Turm besteht lediglich aus vier 20 Meter hohen Wänden, die einen einzigen Raum einschließen.
 Er hat einen Grundriss von 10$\times$10 Metern.
-Die Wände sollen daraufhin unter Anwendung folgender Mauerwerksverbände realisiert werden:
+Die Wände sollen unter Anwendung folgender Mauerwerksverbände realisiert werden:
 \begin{itemize}
   \item Einem Läuferverband mit einem Versatz von 50 \% der Bausteinlänge.
   \item Einem Kopf/Binderverband.
   \item Einem Kreuzverband.
 \end{itemize}
-Da die beiden letzten Verbände bei gleichbleibendem Modul die Wanddicke verdoppeln, muss das Modell etwas angepasst werden, um nach wie vor denselben Grundriss aufzuweisen.
+Da die beiden letzteren Verbände bei gleichbleibendem Modul die Wanddicke verdoppeln, muss das Modell etwas angepasst werden, um nach wie vor denselben Grundriss aufzuweisen.
 Daher gibt es sowohl einen Bauplan mit 1 Meter dicken als auch einen mit 2 Meter dicken Wänden.
+Dies ist in Abbildung~\ref{fig:scenarios:Scenario1 Gebaeudeplan} zu sehen.
 Als Basismodul wird ein Baustein mit den Maßen 2$\times$1$\times$0.5 Metern verwendet.
 Das vereinfacht die Interpretation der generierten Lösungen.
-Das dazugehörige Raster hat die Größe 1.0$\times$1.0$\times$0.5 Meter.
+Das dazugehörige Raster hat eine Größe 0.5$\times$0.5$\times$0.5 Metern.
 
 \subsubsection*{Problemstellungen}
-Durch Lösen dieses Szenarios werden die nachfolgenden Fragestellungen beantwortet.
 Die Komplexität des Modellierungsvorgangs nimmt durch die Integration eines umfangreichen Industriestandards deutlich zu.
-Das liegt vor allem an dem immensen Abstraktionsgrad des Standards, um in der Lage zu sein, möglichst alle in Realität vorkommenden Szenarien abzubilden.
-Gleichzeitig existiert aufgrund der Vielzahl im Bauwesen zusammenarbeitenden Akteuren aus unterschiedlichen Fachbereichen eine große Informationsfülle, die ebenfalls Teil davon ist.
-Der Standard wird im Detail in Kapitel~\ref{basics:ifc} behandelt.
-Um dem entgegenzuwirken, werden Ansätze gesucht, diese Phase dennoch intuitiv und einsteigerfreundlich zu gestalten.
+Das liegt vor allem an dem immensen Abstraktionsgrad des Standards.
+Dieser ist notwendig, um möglichst alle in Realität vorkommenden Szenarien abzubilden.
+Gleichzeitig existiert aufgrund der Vielzahl der im Bauwesen beteiligten Akteure und Fachbereiche eine große Informationsfülle, die ebenfalls Teil davon ist.
+Dieser Standard wird im Detail in Kapitel~\ref{basics:ifc} behandelt.
+Um der Komplexität entgegenzuwirken, werden Ansätze gesucht, diese Phase dennoch intuitiv und einsteigerfreundlich zu gestalten.
 
 Obwohl sich viele Wandbereiche ausschließlich mit einem am Grundmodul angepassten Bausteinformat errichten lassen, ist es in Realität zum Beispiel an Wandenden oder Ecken unumgänglich, Bausteine durch Zerschneiden zu verkleinern.
-Denn in diesen besonderen Bereichen werden oft Bausteine mit geringerer Länge benötigt, um gerade und lückenlose Übergange umzusetzen.
+Denn in diesen besonderen Bereichen werden oft Bausteine mit geringerer Länge benötigt, um gerade und lückenlose Übergänge umzusetzen.
 Darum ist es notwendig, das vorgegebene Bausteinformat während dem Errechnen des Bauplanentwurfs gegebenenfalls flexibel anpassen zu können.
-Daraus ergibt sich bereits die nächste Problemstellung:
-Wie können Eckbereiche zwischen einzelnen geraden Wandstücken gefunden und der jeweilige Mauerwerksverband auch an diesen Stellen passend angebracht werden?
+Hieraus ergibt sich bereits die nächste Problemstellung:
+Wie können derartige Bereiche zwischen einzelnen geraden Wandstücken gefunden und der jeweilige Mauerwerksverband auch an diesen Stellen passend angebracht werden?
 Dabei dürfen das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) oder andere Vorgaben allerdings nicht verletzt werden.
 In Abbildung~\ref{fig:scenarios:Scenario1 Gebaeudeplan} sind verschiedene Konstellationen von Wänden erkennbar, die zusammen eine Ecke bilden.
-Demnach muss das Konzept dieser Arbeit, trotz unterschiedlicher Möglichkeiten der Eck-Modellierung innerhalb des Konstruktionsplaners, jede dieser Situationen auffinden und intern korrekt verarbeiten können.
-Da ein Fokus dieser Arbeit auch auf der simultanen Unterstützung verschiedener Mauerwerksverbände liegt, muss ein generisches Format für die dafür relevanten Informationen entworfen werden, das eine Interpretation durch Algorithmen erlaubt.
-Außerdem ist es nützlich, die Definition eines Mauerwerksverbands so zu abstrahieren, dass das spätere Einpflegen weiterer Verbände leicht möglich ist.
+Demnach muss das Konzept dieser Arbeit, trotz unterschiedlicher Möglichkeiten der Eck-Modellierung innerhalb des Konstruktionsplaners, jede dieser Situationen auffinden und im Anschluss passend verarbeiten können.
+Ein Fokus dieser Arbeit liegt zudem auf der simultanen Unterstützung verschiedener Mauerwerksverbände innerhalb eines Modells.
+Darum muss ein generisches Format für die dafür relevanten Informationen entworfen werden, das eine Interpretation durch Algorithmen erlaubt.
+Außerdem wird durch diese Abstraktion das spätere Einpflegen weiterer Verbände leicht möglich.
 
 Im letzten Schritt muss ein Datenformat für das Ergebnis des erarbeiteten Konzepts entwickelt und darüber entschieden werden, welche Informationen Teil des resultierenden Bauplanentwurfs sein müssen.
 Damit wird eine einheitliche Schnittstelle definiert, welche eventuellen Folgeprojekten die Anbindung an diese Arbeit erleichtert.
 Zusammengefasst birgt dieses erste Szenario demnach folgende Teilprobleme:
 \begin{itemize}
   \item Wie lässt sich eine intuitive Modellierungsphase ermöglichen?
-  \item Wie können Bausteinformate gegebenenfalls verändert werden?
+  \item Wie können Bausteinformate definiert und gegebenenfalls verändert werden?
   \item Wie können einem Algorithmus die verschiedenen Mauerwerksverbände sinnvoll vorgegeben werden?
   \item Wie können Eckbereiche gefunden und der jeweilige Mauerwerksverband auch dort passend angebracht werden?
   \item Wie sieht das Ergebnis des erarbeiteten Konzepts aus und welche Informationen werden in den resultierenden Bauplanentwurf integriert?
@@ -77,7 +79,8 @@ Zusammengefasst birgt dieses erste Szenario demnach folgende Teilprobleme:
 \subsection{Szenario LEGO Klemmbausteine}\label{scenarios:scenario2}
 Nun folgt ein Szenario, das den Gegebenheiten eines realen Gebäudes bis auf dessen Skalierung eher entspricht.
 Es soll ein LEGO-Gebäude konstruiert werden, welches einen Innenraum, Fenster und Türen enthält.
-Darum wird das Modul stark verkleinert, sodass es den Maßen eines 4$\times$2 LEGO Steins entspricht (siehe Kapitel~\ref{basics:lego}).
+Darum wird das Modul stark verkleinert, sodass es den Maßen eines 4$\times$2 LEGO Steins entspricht.
+Mehr Informationen darüber werden in Kapitel~\ref{basics:lego} bereitgestellt.
 
 \begin{figure}[ht]
   \centering
@@ -86,13 +89,12 @@ Darum wird das Modul stark verkleinert, sodass es den Maßen eines 4$\times$2 LE
 \end{figure}
 
 \subsubsection*{Beschreibung}
-Zu sehen ist der Plan eines einfachen Hauses mit einem Stockwerk.
-Dessen Grundfläche beträgt 19,2 auf 14,4 cm.
-Das Haus besitzt eine Eingangstür, eine Terrassentür neben einem Fenster und eine Tür, die das Badezimmer vom Hauptraum trennt.
+In Abbildung~\ref{fig:scenarios:Scenario2 Gebaeudeplan} ist der Plan eines einfachen Hauses mit einem Stockwerk zu sehen.
+Dessen Grundfläche beträgt 19.2 auf 14.4 cm.
+Das Haus besitzt eine Eingangstür, drei Fenster und eine weitere Tür, die das Badezimmer vom Hauptraum trennt.
 Es gibt außerdem breite Außen- und dünne Innenwände.
 Dafür müssen zwei Wandtypen definiert werden, die jeweils unterschiedliche Wanddicken vorgeben.
-Diese entsprechen in ihren Maßen dem Raster, welches das \textit{LEGO System} vorgibt.
-Mehr Informationen darüber werden in Kapitel~\ref{basics:lego} bereitgestellt.
+Diese entsprechen in ihren Maßen dem Raster, welches das LEGO System vorgibt.
 Dickere Wände sollen zwei Noppen breit sein.
 Daher wird für diesen Wandtyp ein Grundmodul mit den Maßen 31.8$\times$15.8$\times$9.6 Millimetern und einem Raster von 8$\times$8$\times$9.6 Millimetern gewählt.
 Für die dünneren Innenwände soll eine Breite von einer Noppe verwendet werden.
@@ -105,7 +107,7 @@ Zusätzlich zu den Teilproblemen des vorhergehenden Szenarios ergeben sich nun w
 Türen und Fenster stellen eine Herausforderung für den Planungsalgorithmus dar, da der Verlauf einer ansonsten durchgängigen Wand dadurch unterbrochen wird und Lücken aufweist.
 Diese \glqq{}Lücken\grqq{} werden nachfolgend als Öffnungen bezeichnet.
 Öffnungen müssen zunächst im Konstruktionsplaner modelliert werden können, um im Anschluss durch den Planungsalgorithmus weiter verarbeitet zu werden.
-Darum muss ein Konzept für Öffnungen erarbeitet werden, um die Definition eines Bereichs innerhalb einer Wand zu ermöglichen, der nicht mit Bausteinen aufgefüllt werden darf.
+Darum wird ein Konzept für Öffnungen benötigt, das die Definition von Teilbereichen einer Wand ermöglicht, die nicht mit Bausteinen aufgefüllt werden dürfen.
 Wie oben bereits erwähnt, können Wände verschiedene Dicken aufweisen und zusätzlich unter Anwendung unterschiedlicher Grundmodule und Mauerwerksverbände realisiert werden.
 Auch diese Eigenschaften müssen sowohl innerhalb des Konstruktionsplaners, als auch im Planungskonzept dieser Arbeit berücksichtigt werden.
 Auffällig in diesem Szenario ist auch das Auftreten von T-Kreuzungen zwischen Innen- und Außenwänden.
@@ -120,7 +122,8 @@ Zusammengefasst ergibt sich durch dieses Szenario folgende neue Liste an Teilpro
 \end{itemize}
 
 \subsection{Szenario Fabrikgebäude}\label{scenarios:scenario3}
-Um das Konzept auch für umfangreichere Projekte zu testen, wird für dieses Szenario ein Modell eines großen Fabrikgebäudes erstellt; angelehnt an den Stil der Industriearchitektur~\cite{Industriearchitektur}.
+Um das Konzept auch für umfangreichere Projekte zu testen, wird für dieses Szenario ein Modell eines großen Fabrikgebäudes erstellt.
+Dessen Aussehen ist angelehnt an dem Stil der Industriearchitektur~\cite{Industriearchitektur}.
 In Abbildung~\ref{fig:scenarios:Scenario3 Gebaeudeplan} ist das geplante Modell der Fabrikhalle zu sehen.
 Alle in den Öffnungen liegenden Fenster und Türen sind zur besseren Veranschaulichung ausgeblendet worden.
 \begin{figure}[hb!]
@@ -138,15 +141,15 @@ Alle in den Öffnungen liegenden Fenster und Türen sind zur besseren Veranschau
 Die dabei verwendeten Baustein- und Wanddimensionen entsprechen den Größenordnungen, die von dem sogenannten oktametrischen Maßsystem vorgegeben werden.
 Informationen dazu sind in Kapitel~\ref{basics:masssysteme} zu finden.
 Es werden drei verschiedene Wandtypen verwendet.
-Diese weisen jeweils eine Dicke von 0,125, 0,25 und 0,5 Metern auf, während dabei Grundmodule in den Größen eines 1 DF, 2 DF und 16 DF Steines angewandt werden sollen.
-Zudem soll bei allen ein unterschiedlicher Mauerwerksverband benutzt werden.
-Bei der dünnsten Wand ein einfacher halbversetzter Läuferverband.
-Bei der 0,25 Meter dicken Wand ein Kreuzverband und für die Wand, mit dem 16 DF Steinen, ein Kopfverband.
+Diese weisen jeweils eine Dicke von 0.125, 0.25 und 0.5 Metern auf, während dabei Grundmodule in den Größen eines 1 DF, 2 DF und 16 DF Steines angewandt werden sollen.
+Zudem soll bei jedem der drei Wandtypen ein unterschiedlicher Mauerwerksverband benutzt werden.
+Bei der dünnsten Wand ein einfacher, halbversetzter Läuferverband.
+Bei der 0.25 Meter dicken Wand ein Kreuzverband und für die Wand, mit dem 16 DF Steinen, ein Kopfverband.
 Letztere findet lediglich als Sockel des Kamins Anwendung, während die anderen beiden Wandtypen häufiger vertreten sind.
 Insgesamt weist das eingeschlossene Gelände eine Grundfläche von 20 auf 22 Metern auf.
 
 \subsubsection*{Problemstellung}
-In diesem Szenario soll vor allem die Applikabilität der erarbeiteten Konzepte und die Effizienz von deren Implementierung auf die Probe gestellt werden.
+In diesem Szenario soll vor allem die Applikabilität der erarbeiteten Konzepte auf großen Datenmengen und dadurch die Effizienz der Implementierung auf die Probe gestellt werden.
 Dadurch können die Teilbereiche der Implementierung dieser Arbeit identifiziert werden, für die eventuell noch Optimierungsbedarf besteht und grundlegende Fehler in den Konzepten aufgespürt werden.
 
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}\label{scenarios:scenario4}
@@ -158,8 +161,8 @@ Dies wird anhand des in Abbildung~\ref{fig:scenarios:Scenario4 Experiment} darge
   \includegraphics[width=0.3\columnwidth]{fig/scenario4_render.png}
   \caption{Bauplanentwurf des Experiments zur Bauplandeduktion unter Berücksichtigung von Regeln.}\label{fig:scenarios:Scenario4 Experiment}
 \end{figure}
-Dabei ist es wünschenswert Regeln erst im Nachgang an den vorangegangenen Schritt des Berechnens eines Bauplanentwurfs zu definieren und auf diesem anzuwenden.
-Darum dürfen konkrete Regelbeschreibungen nicht Teil der Programmcodebasis dieser Arbeit sein, sondern müssen auf andere Weise in das Projekt eingefügt werden können.
+Dabei ist es wünschenswert Regeln erst im Nachgang an den vorangegangenen Schritt der Berechnung eines Bauplanentwurfs definieren zu können.
+Darum dürfen konkrete Regelbeschreibungen nicht Teil der Programmcodebasis dieser Arbeit sein, sondern müssen auf andere Weise in das Projekt integrierbar sein.
 Zur Informationsdefinition und -strukturierung existieren im Fachbereich der Informatik bereits potente Werkzeuge.
 Eines davon wird in Kapitel~\ref{basics:ontologie} thematisiert und im späteren Verlauf dieser Arbeit zur formalen Definition der genannten Regeln angewandt.
-Die Herausforderung für den Planungsalgorithmus stellt das korrekte Interpretieren und Anwenden dieser Regeln dar.
+Die Herausforderung für den Planungsalgorithmus stellt daher das korrekte Interpretieren und Anwenden dieser Regeln dar.
