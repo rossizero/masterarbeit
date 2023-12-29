@@ -2,7 +2,7 @@
 Nun wird das realisierte Konzept anhand der in Kapitel~\ref{scenarios} vorgestellten Fallstudien auf Applikabilität geprüft.
 Aus den Ergebnissen dieses Kapitels kann im Anschluss ein Fazit gezogen und ein potenzieller Ausblick auf künftige Erweiterungen des Konzepts gegeben werden.
 
-\section{Von 3D Gebäudeplan zu Bauplanentwurf}
+\section{Von 3D Gebäudeplan zum Bauplanentwurf}
 Zunächst müssen für einzelnen Szenarien der ersten Fallstudie Gebäudepläne in einem Konstruktionsplaner modelliert werden.
 Dazu wurde, wie schon in Kapitel~\ref{real:modellierung} beschrieben, die 3D Modellierungs-Software Blender herangezogen (siehe Kapitel~\ref{basics:blender}).
 Diese kann mit der frei verfügbaren Erweiterung \textit{blenderbim} zu einem funktionsfähigen BIM Editor mit \textit{IFC} Unterstützung ausgebaut werden.
@@ -101,27 +101,13 @@ In einem früheren Implementierungsversuch hatte das Finden von Nachbarschaftsbe
 Später konnte dieses Vorgehen aber optimiert und ebenfalls eine lineare Laufzeit erreicht werden.
 Ein ähnlicher Ansatz könnte für das Kombinieren und Lösen von Eckbereichen womöglich auch anwendbar sein.
 
-\begin{figure}[bt]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.9\columnwidth]{fig/scenario3_output_render2.png}
   \caption{Ausschnitt des Ergebnisses von Szenario Fabrikgebäude mit 40409 Bausteinen.}\label{fig:poc:scenario3}
 \end{figure}
 
-\section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}
-Mithilfe der in Kapitel~\ref{basics:ontologie} eingeführten Technologie einer Ontologie und der konkreten Umsetzung der Baustein- und Regeldefinitionen nach dem Konzept aus Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} 
-konnte der resultierende Bauplanentwurf des Modells dieser Fallstudie in die dafür erstellte Ontologie eingepflegt werden.
-Das Konzept der Regeln wurde in dieser Fallstudie anhand der dafür erstellten \textit{RuleDependsOnBottomNeighbor} Regel getestet.
-Diese soll alle nach unten benachbarten Bausteine eines Bausteins in dessen \textit{dependsOn} Objekteigenschaft übertragen, sodass nur diejenigen Bausteine der Klasse \textit{NextBrick} zugeordnet werden können, die keine Individuen der Klasse \textit{PlaceableBrick} als untere Nachbarn besitzen.
-Dafür wurde für das Regel-Individuum über die Dateneigenschaft \textit{holdPropertyByName} der Name der Ziel-Objekteigenschaft \textit{hasBottomNeighbor} festgelegt.
-Über die Objekteigenschaft \textit{applyObjectPropertyTo} wurde schließlich auf das dafür erstelle \textit{ObjectPropertyHolder}-Individuum \textit{dependsOnObjectPropertyHolder} verwiesen.
-Dieses wiederum hält lediglich den Namen der Objekteigenschaft \textit{dependsOn}.
-Mit diesen Informationen kann nun während der Befüllung der Ontologie mit konkreten Bausteinen deren \textit{dependsOn} Objekteigenschaften mit den Einträgen aus deren unteren Nachbarn gleichgesetzt werden.
-
-Im Anschluss wurde durch wiederholtes Ausführen eines Reasoners und Auswählen einer zufälligen nächsten Instanz der Klasse \textit{NextBrick} ein Bauplan erstellt, der die in Abbildung~\ref{fig:scenarios:Scenario4 Experiment} gezeigte Wand von unten nach oben erbaut.
-In Abbildung~\ref{fig:poc:result_scenario4} sind drei Zwischenergebnisse dieses Vorgehens zu sehen.
-Insgesamt enthält die Wand 28 Steine.
-
-\begin{figure}[htb]
+\begin{figure}[h!]
   \begin{subfigure}[b]{0.3\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario4_output_6_render.png}
     \caption{Ergebnis nach 6 Schritten.}
@@ -138,3 +124,17 @@ Insgesamt enthält die Wand 28 Steine.
   \end{subfigure}
   \caption{Schrittweises Platzieren eines gefundenen NextBrick.}\label{fig:poc:result_scenario4}
 \end{figure}
+\section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}
+Mithilfe der in Kapitel~\ref{basics:ontologie} eingeführten Technologie einer Ontologie und der konkreten Umsetzung der Baustein- und Regeldefinitionen nach dem Konzept aus Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} 
+konnte der resultierende Bauplanentwurf des Modells dieser Fallstudie in die dafür erstellte Ontologie eingepflegt werden.
+Das Konzept der Regeln wurde in dieser Fallstudie anhand der dafür erstellten \textit{RuleDependsOnBottomNeighbor} Regel getestet.
+Diese soll alle nach unten benachbarten Bausteine eines Bausteins in dessen \textit{dependsOn} Objekteigenschaft übertragen, sodass nur diejenigen Bausteine der Klasse \textit{NextBrick} zugeordnet werden können, die keine Individuen der Klasse \textit{PlaceableBrick} als untere Nachbarn besitzen.
+Dafür wurde für das Regel-Individuum über die Dateneigenschaft \textit{holdPropertyByName} der Name der Ziel-Objekteigenschaft \textit{hasBottomNeighbor} festgelegt.
+Über die Objekteigenschaft \textit{applyObjectPropertyTo} wurde schließlich auf das dafür erstelle \textit{ObjectPropertyHolder}-Individuum \textit{dependsOnObjectPropertyHolder} verwiesen.
+Dieses wiederum hält lediglich den Namen der Objekteigenschaft \textit{dependsOn}.
+Mit diesen Informationen kann nun während der Befüllung der Ontologie mit konkreten Bausteinen deren \textit{dependsOn} Objekteigenschaften mit den Einträgen aus deren unteren Nachbarn gleichgesetzt werden.
+
+Im Anschluss wurde durch wiederholtes Ausführen eines Reasoners und Auswählen einer zufälligen nächsten Instanz der Klasse \textit{NextBrick} ein Bauplan erstellt, der die in Abbildung~\ref{fig:scenarios:Scenario4 Experiment} gezeigte Wand von unten nach oben erbaut.
+In Abbildung~\ref{fig:poc:result_scenario4} sind drei Zwischenergebnisse dieses Vorgehens zu sehen.
+Insgesamt enthält die Wand 28 Steine.
+
