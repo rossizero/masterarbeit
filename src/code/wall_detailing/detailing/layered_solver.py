@@ -9,12 +9,21 @@ from masonry.bond.abstract_bond import Bond
 
 
 class LayeredSolver(Solver):
+    """
+    This solver is used to solve the detailing problem for a model with corners.
+    It's like brute forcing the solution, with a few optimizations.
+    """
     debug = False
 
     def __init__(self, corners: Corns, bond: Bond):
         super(LayeredSolver, self).__init__(corners, bond)
 
     def fit_layer_to_corner(self, layer: WallLayer, corner: Corn):
+        """
+        fits the layer to the corner
+        :param layer: the layer to fit
+        :param corner: the corner to fit to
+        """
         # if the wall the layer lies in has already been touched, we only need to adjust the corners of the layer
         # else we need to find out the best plan_offset for the parent to fit to the corner
         if layer.parent.touched:
@@ -39,6 +48,11 @@ class LayeredSolver(Solver):
             corner.reduce_layer_length(layer, self.bond)
 
     def fit_corner_to_layer(self, corner: Corn, layer: WallLayer):
+        """
+        fits the corner to the layer
+        :param corner: the corner to fit
+        :param layer: the layer to fit to
+        """
         if corner.touched:
             if LayeredSolver.debug:
                 print("not fitting", corner, "to layer of wall", layer.parent.id)
@@ -60,6 +74,12 @@ class LayeredSolver(Solver):
             corner.reduce_corner_layer_length(self.bond)
 
     def fit(self, corner: Corn, corners: Corns, done: List[Corn]):
+        """
+        fits the corner to all layers of the wall it lies in
+        :param corner: the corner to fit
+        :param corners: all corners
+        :param done: all corners that have already been fitted
+        """
         todo = []
         for layer in corner.layers:
             if layer.parent.touched:
@@ -83,6 +103,13 @@ class LayeredSolver(Solver):
         return todo
 
     def solve_layer(self, complete_layer: List[Corn], corners: Corns, start_index: int = 0) -> bool:
+        """
+        solves a layer
+        :param complete_layer: the layer to solve
+        :param corners: all corners
+        :param start_index: the index of the corner to start with
+        :return: True if the layer has been solved, False if not
+        """
         start = None
         ret = False
 
@@ -129,6 +156,7 @@ class LayeredSolver(Solver):
         "freezes" the x offsets of all layers of all walls to current values
         "freezes" the main layers for each corner to current main layer
         this needs to be done to prevent errors after reducing the length of the wall_layers
+        :param corners: all corners
         """
         for corn in corners.corners:
             corn.set_main_layer()
@@ -136,6 +164,9 @@ class LayeredSolver(Solver):
                 layer.parent.set_x_offsets()
 
     def solve(self):
+        """
+        solves the detailing problem described in the thesis
+        """
         starters = []
 
         # first run -> collect all possible starter indices
@@ -159,7 +190,7 @@ class LayeredSolver(Solver):
         min_config = [s[0] for s in starters]
         score = self.all_holes(corners)
 
-        if score > 0: # and False: # TODO remove again
+        if score > 0:
             print("----------------")
             print("trying", starters, len(list(itertools.product(*starters))), "combinations")
             for config in reversed(list(itertools.product(*starters))):

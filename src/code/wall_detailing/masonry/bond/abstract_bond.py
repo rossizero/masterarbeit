@@ -96,12 +96,16 @@ class Bond(ABC):
     def __init__(self, module: BrickInformation):
         self.module = module
 
-        self.l = module.length
-        self.w = module.width
-        self.h = module.height
-        self.__reset()
+        self.l = module.length  # shortcut to length of brick
+        self.w = module.width  # shortcut to width of brick
+        self.h = module.height  # shortcut to height of brick
+        self.__reset()  # reset counters
 
     def __init_subclass__(cls, **kwargs):
+        """
+        registers all subclasses in BondTypes
+        Subclasses need to be imported for them to be registered
+        """
         super().__init_subclass__(**kwargs)
         __import__(cls.__module__)
         Bond.BondTypes[cls.__name__] = cls
@@ -168,6 +172,9 @@ class Bond(ABC):
         pass
 
     def get_corner_plan_repeat_step(self):
+        """
+        :return: the number of layers in the corner plan
+        """
         return len(self._get_corner_plan())
 
     def apply_corner(self, layer: int = 0) -> List[Transformation]:
@@ -211,6 +218,13 @@ class Bond(ABC):
         return round(ret, 6)
 
     def leftover_of_layer(self, length: float, layer: int = 0, x_offset: float = 0.0, reversed: bool = False):
+        """
+        :param length: length of the wall we want to be filled with this masonry bond
+        :param layer: the index of the plan we want to use
+        :param x_offset: if the layer's left edge is not at x = 0
+        :param reversed: if the bricks are supposed to be placed from right to left
+        :return: leftover on both sides
+        """
         self.__reset()
         self.__up(layer)
 

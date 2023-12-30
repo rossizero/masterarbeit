@@ -94,7 +94,6 @@ class WallDetailer:
                     pass
 
             for wall in wall_layer_groups:
-                pass
                 # wall.apply_openings()
                 bricks.extend(self.detail_wall(wall, bond))
                 bricks.extend(wall.get_opening_lintels())

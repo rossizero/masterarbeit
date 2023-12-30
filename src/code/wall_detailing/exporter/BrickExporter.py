@@ -8,6 +8,9 @@ from wall_detailing.masonry.brick import Brick, Neighbor
 
 
 class BrickExportInformation:
+    """
+    A class to collect relevant information about a brick for exporting it to json
+    """
     def __init__(self, brick: Brick):
         self.shape = [brick.length, brick.width, brick.height]
         self.position = np.round(brick.center(), decimals=6).tolist()
@@ -22,11 +25,16 @@ class BrickExportInformation:
             for b in brick.neighbors[key]:
                 self.neighbors[key].append(b.id)
 
+        # TODO this could now be replaced by the ontology (but for other projects it might be useful)
         for b in brick.neighbors[Neighbor.BOTTOM]:
             self.depends_on.append(b.id)
 
 
 class BrickExporter:
+    """
+    A class to export bricks to a json file
+    Assigns Ids to the bricks and creates a dictionary with the bricks and their information (BrickExportInformation)
+    """
     def __init__(self, bricks: List[Brick]):
         self.bricks = bricks
 

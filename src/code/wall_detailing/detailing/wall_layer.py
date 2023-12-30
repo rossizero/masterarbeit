@@ -57,10 +57,16 @@ class WallLayer:
 
     @property
     def tops(self):
+        """
+        :return: all tops of this layer
+        """
         return self.parent.top_of_layer(self)
 
     @property
     def bottoms(self):
+        """
+        :return: all bottoms of this layer
+        """
         return self.parent.bottom_of_layer(self)
 
     def get_layer_index(self):

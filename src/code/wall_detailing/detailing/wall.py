@@ -69,6 +69,10 @@ class Wall:
         self.openings = []
 
     def update_dimensions(self, use_grid: bool = True):
+        """
+        updates the dimensions of this wall
+        :param use_grid: whether to use the grid of the base module to round the dimensions
+        """
         grid = self.detailing_information.base_module.grid if use_grid else None
         dimensions = get_shape_dimensions(self.occ_shape, grid)
         self.length = max(dimensions[0], dimensions[1])
@@ -76,6 +80,10 @@ class Wall:
         self.height = dimensions[2]
 
     def update_shape(self, shape: TopoDS_Shape):
+        """
+        updates the shape of this wall
+        :param shape: the new shape
+        """
         rotation = np.quaternion(shape.Location().Transformation().GetRotation().W(),
                                       shape.Location().Transformation().GetRotation().X(),
                                       shape.Location().Transformation().GetRotation().Y(),
@@ -276,7 +284,21 @@ class Wall:
         self.update_shape(shape)
 
     @classmethod
-    def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, base_module: BrickInformation = None, bond_type: str = None, name="", use_mid: bool = True):
+    def make_wall(cls, length, width, height, position, rotation, ifc_wall_type, base_module: BrickInformation = None,
+                  bond_type: str = None, name="", use_mid: bool = True):
+        """
+        creates a wall from the given parameters
+        :param length: length of the wall
+        :param width: width of the wall
+        :param height: height of the wall
+        :param position: position of the wall
+        :param rotation: rotation of the wall
+        :param ifc_wall_type: ifc wall type
+        :param base_module: base module of the wall
+        :param bond_type: bond type of the wall
+        :param name: name of the wall
+        :param use_mid: whether to use the mid of the wall as origin
+        """
         print("   make_wall", length, width, height, position, rotation)
 
         length, width = max(length, width), min(length, width)

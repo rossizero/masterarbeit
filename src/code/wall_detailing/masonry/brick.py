@@ -57,6 +57,9 @@ class BrickInformation:
         return self.length * self.width * self.height
 
     def is_valid(self) -> bool:
+        """
+        :return: true if the brick is valid
+        """
         return self.volume() > 0.0
 
     def get_rotated_dimensions(self, rotation: quaternion):
@@ -144,13 +147,22 @@ class Brick:
                                          self.height - self.offset * 2).Shape()
 
     def get_dimensions(self):
+        """
+        :return: dimensions of the brick
+        """
         return np.array([self.length, self.width, self.height])
 
     def get_grid(self):
+        """
+        :return: grid size of the brick
+        """
         return self.__brick_information.grid
 
     @property
     def all_neighbors(self):
+        """
+        :return: all neighbor bricks of the brick
+        """
         return (self.neighbors[Neighbor.LEFT] |
                 self.neighbors[Neighbor.RIGHT] |
                 self.neighbors[Neighbor.FRONT] |
@@ -160,18 +172,28 @@ class Brick:
 
     @property
     def position(self) -> np.array:
+        """
+        :return: position of the brick in global coordinates
+        """
         return np.array([self.shape.Location().Transformation().TranslationPart().X(),
                          self.shape.Location().Transformation().TranslationPart().Y(),
                          self.shape.Location().Transformation().TranslationPart().Z()])
 
     @property
     def orientation(self) -> np.quaternion:
+        """
+        :return: orientation of the brick in global coordinates
+        """
         return np.quaternion(self.shape.Location().Transformation().GetRotation().W(),
                              self.shape.Location().Transformation().GetRotation().X(),
                              self.shape.Location().Transformation().GetRotation().Y(),
                              self.shape.Location().Transformation().GetRotation().Z())
 
     def translate(self, translation: np.array):
+        """
+        :param translation: translation to apply
+        :return: self
+        """
         transformation = gp_Trsf()
         transformation.SetTranslation(gp_Vec(*translation))
         self.shape = BRepBuilderAPI_Transform(self.shape, transformation).Shape()
@@ -181,7 +203,8 @@ class Brick:
         """
         :return: center of the brick in global coordinates
         """
-        mid = quaternion.rotate_vectors(self.orientation, np.array([self.length / 2.0, self.width / 2.0, self.height / 2.0]))
+        mid = quaternion.rotate_vectors(self.orientation,
+                                        np.array([self.length / 2.0, self.width / 2.0, self.height / 2.0]))
         return self.position + mid
 
     def _bottom_left_corner_offset(self):
@@ -290,8 +313,8 @@ class Brick:
                               Neighbor.BOTTOM: []}
 
         for i in range(math.floor(length_steps)):
-            front_face = pos.copy() + back_v * grid[1] * width_steps    # one step in front of bricks y
-            back_face = pos.copy() - back_v * grid[1] # all steps behind bricks y
+            front_face = pos.copy() + back_v * grid[1] * width_steps  # one step in front of bricks y
+            back_face = pos.copy() - back_v * grid[1]  # all steps behind bricks y
             bottom_face = pos.copy() - top_v * grid[2]  # one step below bricks z
             top_face = pos.copy() + top_v * grid[2] * height_steps  # all steps above bricks z
 
@@ -339,8 +362,9 @@ class Brick:
 
 def calculate_neighborhood(bricks: List[Brick]):
     """
+    :param bricks: list of bricks to calculate the neighborhood for
     calculates all neighbours of each brick using the given grid as step size
-    waaaay faster than the old method because we're looking at all bricks at once
+    waaaay faster than the old method (calculate_neighborhood_bruteforce) because we're looking at all bricks at once
 
     btw: if a brick is a neighbor of itself, probably the given grid size is too big
     """
@@ -368,18 +392,21 @@ def calculate_neighborhood(bricks: List[Brick]):
         inside_mask = np.all((relative_points >= 0.0) & (relative_points <= brick.get_dimensions()), axis=1)
         for index in np.where(inside_mask)[0]:
             for brick_index, neighborhood in dic[tuple(points[index])]:
-                #opp = Neighbor.opposite(neighborhood)
-                #brick.neighbors[opp].add(bricks[brick_index])
+                # this is not always true (it depends on the rotation of the neighbor)
+                # opp = Neighbor.opposite(neighborhood)
+                # brick.neighbors[opp].add(bricks[brick_index])
                 bricks[brick_index].neighbors[neighborhood].add(brick)
 
 
 def calculate_neighborhood_bruteforce(bricks: List[Brick]):
     """
+    DEPRECATED
+    :param bricks: list of bricks to calculate the neighborhood for
     calculates all neighbours of each brick using the given grid as step size
     """
     s = 0
     for i, brick in enumerate(bricks):
-        if i%10 == 0:
+        if i % 10 == 0:
             print(i, "/", len(bricks))
         grid = brick.get_grid()
         neighbor_positions = brick.get_neighbour_positions(grid)

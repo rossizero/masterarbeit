@@ -89,11 +89,14 @@ class BrickToOntology:
 
         # setup data step by step
         self.rules = self.load_rules()  # load rules from ontology
-        self.fill_ontology(bricks)  # fill ontology with bricks
+        self.fill_ontology()  # fill ontology with bricks
         self.apply_rules()  # apply rules to bricks
         self.onto.save(file=self.working_file, format="rdfxml")  # save ontology
 
     def load_rules(self):
+        """
+        Loads the rules from the ontology and returns them as a list of RuleSets
+        """
         rules = []
         # Extract rules
         for ruleset in self.onto.Ruleset.instances():
@@ -104,7 +107,10 @@ class BrickToOntology:
             rules.append(rs)
         return rules
 
-    def fill_ontology(self, bricks: List[Brick]):
+    def fill_ontology(self):
+        """
+        Fills the ontology with bricks
+        """
         # Create bricks for building
         building = self.onto.Building(self.building_name)
         self.empty = self.onto.PlacedBrick("empty_brick")
@@ -133,6 +139,9 @@ class BrickToOntology:
             building.hasBrick.append(b)
 
     def status(self):
+        """
+        Prints the status of the ontology
+        """
         if len(self.onto.NamedBrick.instances()) == 0:
             print("No brick individuals in ontology")
             return
@@ -143,6 +152,9 @@ class BrickToOntology:
         print("placed", self.onto.PlacedBrick.instances())
 
     def apply_rules(self):
+        """
+        Applies the rules of the ontology to the bricks
+        """
         with self.onto:
             for ruleset in self.rules:
                 for rule in ruleset.rules:
@@ -154,6 +166,10 @@ class BrickToOntology:
                     close_world(b, Properties=[self.onto.dependsOn])
 
     def deduct_building_plan(self):
+        """
+        Deducts a building plan by using the ontology and its reasoner to infer what bricks to place next
+        Right now it just chooses random buildable bricks to proof the concept
+        """
         ret = []
         for i in range(len(self.onto.NamedBrick.instances())):
             # create a new world and load a fresh ontology
@@ -178,6 +194,9 @@ class BrickToOntology:
         return ret
 
     def __sparql_tests(self):
+        """
+        Some sparql tests
+        """
         sync_reasoner_hermit(
             infer_property_values=True)  # sync_reasoner_pellet(infer_property_values=True, infer_data_property_values=True)
         tmp = self.onto.world.sparql("""
@@ -212,6 +231,9 @@ class BrickToOntology:
         print("select", len(list(tmp)), list(tmp))
 
     def __swrl_tests(self):
+        """
+        Some swrl tests
+        """
         pass
         # rule = Imp(1)
         # rule.set_as_rule("""ConcreteBrick(?b), hasBottomNeighbor(?b, ?n) -> dependsOn(?b, ?n)""")

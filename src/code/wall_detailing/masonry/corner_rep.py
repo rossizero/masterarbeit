@@ -13,8 +13,9 @@ from die_mathe.line import Line
 class Corn:
     idd = 0
     """
-    A class to store information about two layers that form a corner
+    A class to store information about layers that form a corner, a t-joint or a crossing.
     """
+
     def __init__(self, point: np.array):
         self.point = point  # center of the corner
         self.layers = set()  # layers that form the corner
@@ -24,12 +25,10 @@ class Corn:
         self.id = Corn.idd
         Corn.idd += 1
 
-    def __eq__(self, other: "Corn"):
-        if type(other) is Corn:
-            return np.allclose(self.point, other.point)
-        return False
-
     def set_plan_offset(self, offset: int):
+        """
+        :param offset: the offset of the plan
+        """
         assert not self.touched
         self.plan_offset = offset
         self.touched = True
@@ -107,7 +106,7 @@ class Corn:
             mid = quaternion.rotate_vectors(main_layer.parent.get_rotation().inverse(), mid)
             z_rot = np.arctan2(mid[1], mid[0])
             # subtract the 45 degrees from above
-            ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi/4.0)
+            ret = quaternion.from_euler_angles(0, 0, z_rot - math.pi / 4.0)
         return ret
 
     def reduce_corner_layer_length(self, bond: Bond):
@@ -145,9 +144,15 @@ class Corn:
         layer.move_edge(outer_corner_point, corner_length)
 
     def set_main_layer(self):
+        """
+        sets the main layer of the corner
+        """
         self.main_layer = self.get_main_layer()
 
     def get_corner_index(self):
+        """
+        :return: the index/height of the corner in the wall it is in
+        """
         ids = [l.parent.id for l in self.layers]
         main_layer = self.get_main_layer()
         ids.remove(main_layer.parent.id)
@@ -167,8 +172,16 @@ class Corn:
         return min(vals)
 
     def get_unrotated_world_coordinates(self):
+        """
+        :return: the world coordinates of the corner without parent rotation applied
+        """
         p = quaternion.rotate_vectors(self.main_layer.parent.get_rotation().inverse(), self.point)
         return np.round(p, 6)
+
+    def __eq__(self, other: "Corn"):
+        if type(other) is Corn:
+            return np.allclose(self.point, other.point)
+        return False
 
     def __str__(self):
         a = [l.parent.id for l in self.layers]
@@ -182,10 +195,15 @@ class Corns:
     If we find a corner that already exists, we simply add the layers to the existing layers that already
     form the corner. (T- Joints or Crossings can be made possible this way)
     """
+
     def __init__(self):
         self.corners = []
 
     def add_corner(self, corner: Corn):
+        """
+        Creates a new corner or append to an existing corner if there already is a corner at the same location
+        :param corner: a corner to add to the list of corners
+        """
         for c in self.corners:
             if c == corner:
                 c.layers.update(corner.layers)
@@ -265,10 +283,15 @@ class Corns:
 
 
 def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
+    """
+    TODO needs to be faster (look at neighborhood calculation of bricks, maybe sth like that works here too)
+    :param wall_layer_groups: a list of wall_layer_groups
+    :return: a list of corners
+    """
     corners = Corns()
 
     for i, w1 in enumerate(wall_layer_groups):
-        for j in range(i+1, len(wall_layer_groups)):
+        for j in range(i + 1, len(wall_layer_groups)):
             w2 = wall_layer_groups[j]
             r1 = w1.get_rotation()
             r2 = w2.get_rotation()
@@ -285,9 +308,9 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
             x_parallel = np.isclose(abs(np.dot(x_part1, x_part2)), 1.0)
 
             degree90 = (angle == round(math.pi / 2, 6) or angle == round(math.pi * 1.5, 6))
-            #touching = w1.is_touching(w2)
+            # touching = w1.is_touching(w2)
             same_wall_type = w1.module == w2.module
-            #if not (z_parallel and degree90 and touching and same_wall_type):
+            # if not (z_parallel and degree90 and touching and same_wall_type):
             #    continue
 
             for l1 in w1.layers:
@@ -302,7 +325,8 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                             continue
 
                         width = w1.wall.width
-                        if l1.is_touching_at_endpoints(l2, tolerance=width) and z_parallel and degree90 and same_wall_type:
+                        if l1.is_touching_at_endpoints(l2,
+                                                       tolerance=width) and z_parallel and degree90 and same_wall_type:
                             c = Corn(intersection)
                             c.layers.update([l1, l2])
                             corners.add_corner(c)
@@ -330,17 +354,16 @@ def check_for_corners(wall_layer_groups: List[WallLayerGroup]) -> Corns:
                                 t_joint = (np.linalg.norm(intersection - l1.left_edge) < width
                                            or np.linalg.norm(intersection - l1.right_edge) < width
                                            or np.linalg.norm(intersection - l2.left_edge) < width
-                                            or np.linalg.norm(intersection - l2.right_edge) < width)
-                                print("T-Joint")
-                                #c = Corn(intersection)
-                                #c.layers.update([l1, l2, t_joint])
-                                #corners.add_corner(c)
-                                #print("T-Joint" if t_joint else "Crossing", [round(i, 6) for i in intersection], x_parallel)
+                                           or np.linalg.norm(intersection - l2.right_edge) < width)
+                                # c = Corn(intersection)
+                                # c.layers.update([l1, l2, t_joint])
+                                # corners.add_corner(c)
+                                # print("T-Joint" if t_joint else "Crossing", [round(i, 6) for i in intersection], x_parallel)
     # TODO
     # for now just remove TJoints and Crossings
-    #print(len(corners.corners))
-    #for corner in corners.corners.copy():
+    # print(len(corners.corners))
+    # for corner in corners.corners.copy():
     #    if True in corner.layers or False in corner.layers:
     #        corners.corners.remove(corner)
-    #print(len(corners.corners))
+    # print(len(corners.corners))
     return corners

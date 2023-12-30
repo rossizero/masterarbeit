@@ -24,9 +24,16 @@ class Opening:
         self.lintel = BrickInformation(self.length + module.grid[0] * 2, self.width, module.height, module.grid)
 
     def get_rotation(self):
+        """
+        :return: rotation relative to parent
+        """
         return self.rotation
 
     def get_position(self, relative: bool = False):
+        """
+        :param relative: if True, returns relative position to parent, else global position
+        :return: position relative to parent or global position
+        """
         ret = self.translation.copy()
         ret -= np.array([self.parent.length / 2, self.parent.width / 2, self.parent.height / 2])
         ret += np.array([self.length / 2, self.width / 2, self.height / 2])
@@ -36,12 +43,18 @@ class Opening:
             ret += self.parent.get_translation() - np.array([self.parent.length/2, self.parent.width/2, self.parent.height/2])
         return np.round(ret, 6)
 
-    def get_lintel_position(self, relative: bool = False):
+    def get_lintel_position(self):
+        """
+        :return: position of the lintel of this opening
+        """
         relative_position = self.get_position(True)
         relative_position -= np.array([self.lintel.length / 2.0, self.width / 2.0, -self.height / 2.0])
         return np.round(relative_position, 6)
 
     def get_shape(self):
+        """
+        :return: shape of the opening as OCC shape
+        """
         corner = gp_Pnt(-self.length / 2.0, -self.width / 2.0, -self.height / 2.0)
 
         shape = BRepPrimAPI_MakeBox(corner, self.length, self.width, self.height).Shape()

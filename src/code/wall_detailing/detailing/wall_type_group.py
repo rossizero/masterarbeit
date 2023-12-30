@@ -5,6 +5,9 @@ from masonry.bond.abstract_bond import Bond
 
 
 class WallTypeGroup:
+    """
+    A group of walls with the same WallDetailingInformation
+    """
     def __init__(self, detailing_information: WallDetailingInformation):
         self.detailing_information = detailing_information
         self.module = self.detailing_information.base_module

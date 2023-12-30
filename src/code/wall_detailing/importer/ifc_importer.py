@@ -39,8 +39,9 @@ class IfcImporter:
         projects = self.ifc_file.by_type("IfcProject")
         self.wall_type = wall_type
 
+        # MAYDO: get the unit scale from the project
         alll = IfcUnitEnum
-        if len(projects) > 0: # MAYDO differentiate between projects
+        if len(projects) > 0:  # MAYDO differentiate between projects
             project = projects[0]
             if hasattr(project, "UnitsInContext"):
                 if project.UnitsInContext is not None:
@@ -48,6 +49,10 @@ class IfcImporter:
                         pass
 
     def get_absolute_position(self, object_placement):
+        """
+        :param object_placement: the object placement to get the absolute position from
+        :return: the absolute position of the object placement
+        """
         transformation_matrix = np.eye(4, dtype=np.float64)
 
         # Traverse the placement hierarchy
@@ -56,7 +61,7 @@ class IfcImporter:
             relative_placement = object_placement.RelativePlacement
             if relative_placement.is_a("IfcAxis2Placement3D"):
                 translation = np.array(relative_placement.Location.Coordinates)
-                #rotation_matrix = relative_placement.Axis.Orientation.Value
+                # rotation_matrix = relative_placement.Axis.Orientation.Value
                 # Extract rotation information
                 z_axis = relative_placement.Axis.DirectionRatios
                 x_axis = relative_placement.RefDirection.DirectionRatios
@@ -78,10 +83,14 @@ class IfcImporter:
 
         position = np.array([transformation_matrix[0][3], transformation_matrix[1][3], transformation_matrix[2][3]])
         rotation = quaternion.from_rotation_matrix(np.around(transformation_matrix[:3, :3], decimals=6))
-        #rotation = np.quaternion(round(rotation.z, 6), round(rotation.x, 6), round(rotation.y, 6), round(rotation.w, 6))
         return np.round(position, decimals=6), rotation
 
     def get_detailing_information(self, ifc_product) -> Tuple[BrickInformation, str]:
+        """
+        Retrieves the detailing information from an IfcProduct
+        :param ifc_product: the IfcProduct to get the detailing information from
+        :return: the detailing information (base module and bond type)
+        """
         wall_detailing_information_property_set = None
         base_module = None
         bond_type = None
@@ -123,7 +132,6 @@ class IfcImporter:
         finally:
             return base_module, bond_type
 
-
     def get_walls(self):
         ifc_walls = self.ifc_file.by_type("IfcWall")
         walls = []
@@ -160,10 +168,10 @@ class IfcImporter:
             # that's why we need to calculate the absolute position of the wall and reverse the translation and rotation
             shape = geom.create_shape(settings, w).geometry
             translation, rotation = self.get_absolute_position(w.ObjectPlacement)
-            #angle = rotation.angle()
-            #angle = round(angle / (math.pi / 2.0)) * (math.pi / 2.0)
+            # angle = rotation.angle()
+            # angle = round(angle / (math.pi / 2.0)) * (math.pi / 2.0)
             # print(rotation.angle(), angle, rotation, quaternion.from_euler_angles(0, 0, angle))
-            #rotation = quaternion.from_euler_angles(0, 0, angle)
+            # rotation = quaternion.from_euler_angles(0, 0, angle)
 
             # reverse the translation and rotation (the True, True parameters are important, but IDK why)
             # it took soooo much time to figure out that this is the correct way to do it
@@ -177,7 +185,7 @@ class IfcImporter:
 
             dim = get_shape_dimensions(shape, base_module.grid)
             half_dim = dim / 2.0
-            #half_dim[1] *= -1
+            # half_dim[1] *= -1
             # move the shape so that its center is at the origin of the world coordinate system
             transformation = gp_Trsf()
             transformation.SetTranslation(gp_Vec(*half_dim).Reversed())
@@ -185,7 +193,7 @@ class IfcImporter:
 
             # create a wall object and set its translation and rotation manually (MAYDO: a little bit hacky)
             _wall = Wall(shape, self.wall_type, base_module=base_module, bond_type=bond_type)
-            #_wall.update_dimensions(use_grid=False)
+            # _wall.update_dimensions(use_grid=False)
             # correct the translation
             translation = translation + quaternion.rotate_vectors(rotation, half_dim)
             rounding_grid = base_module.grid.copy() * IfcImporter.WallDetailing_ROUNDING_PRECISION
@@ -201,7 +209,8 @@ class IfcImporter:
             wall = Wall.make_wall(_wall.length, _wall.width, _wall.height, translation,
                                   rotation,
                                   ifc_wall_type=self.wall_type, base_module=base_module, bond_type=bond_type)
-            # print("wall", wall.length, wall.width, wall.height, wall.get_translation(), wall.translation, wall.get_rotation(), wall.rotation)
+            # print("wall", wall.length, wall.width, wall.height, wall.get_translation(),
+            #       wall.translation, wall.get_rotation(), wall.rotation)
             wall.update_dimensions(use_grid=False)
             walls.append(wall)
             # get openings in the wall
@@ -223,14 +232,16 @@ class IfcImporter:
                             translation = np.round(translation, decimals=6)
 
                         transformation = gp_Trsf()
-                        transformation.SetRotation(gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
+                        transformation.SetRotation(
+                            gp_Quaternion(rotation.x, rotation.y, rotation.z, rotation.w).Inverted())
                         shape = BRepBuilderAPI_Transform(shape, transformation).Shape()
                         dimensions = get_shape_dimensions(shape, sort=False)
 
                         dimensions[1] = wall.width
                         rotation *= wall.get_rotation().inverse()
                         opening = Opening(wall, translation, rotation, dimensions)
-                        print("  opening", opening.length, opening.width, opening.height, opening.get_position(), translation, opening.get_rotation(), rotation)
+                        print("  opening", opening.length, opening.width, opening.height, opening.get_position(),
+                              translation, opening.get_rotation(), rotation)
                         wall.openings.append(opening)
                     except Exception as e:
                         print(e)
@@ -239,6 +250,9 @@ class IfcImporter:
         return walls
 
     def code_for_latex(self):
+        """
+        Maybe put this into thesis
+        """
         ifc_walls = self.ifc_file.by_type("IfcWall")
 
         settings = geom.settings()

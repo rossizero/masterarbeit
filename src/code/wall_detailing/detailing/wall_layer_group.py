@@ -28,12 +28,15 @@ class WallLayerGroup:
         self.openings = []
 
         # dynamic attributes
-        self.touched = False  # TODO just for testing purposes
-        self.lowest_local_x = None  # TODO test maybe remove
-        self.highest_local_x = None  # TODO test maybe remove
+        self.touched = False  # MAYDO just for testing purposes
+        self.lowest_local_x = None  # MAYDO test maybe remove
+        self.highest_local_x = None  # MAYDO test maybe remove
         self.reversed = False
 
     def set_plan_offset(self, offset: int):
+        """
+        sets the plan offset of the wall plan for applied bond to start with
+        """
         assert not self.touched
         self.plan_offset = offset
         self.touched = True
