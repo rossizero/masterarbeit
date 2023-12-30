@@ -35,6 +35,7 @@ from scenarios.examples_for_text.CombinationExample import CombinationExampleFor
 from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
 from wall_detailing.scenarios.examples_for_text.DifferentBonds import BasicsStretchedBond, BasicsCrossBond, \
     BasicsGothicBond, BasicsHeadBond
+from wall_detailing.scenarios.examples_for_text.ExportSample import RealisationExportScenario
 from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
 from wall_detailing.scenarios.examples_for_text.scenario1 import Scenario1
 from wall_detailing.scenarios.examples_for_text.scenario2 import Scenario2
@@ -246,11 +247,14 @@ def building_plan_to_stl(plan: List[Brick], until_step: int = -1):
     if until_step == -1:
         until_step = len(plan)
     n = "output_" + str(until_step) + ".stl"
-    WallDetailer.convert_to_stl(plan[:until_step], n)
+    if until_step < len(plan):
+        WallDetailer.convert_to_stl(plan[:until_step], n)
 
 
 if __name__ == "__main__":
     use_ontology = True
+    deduct_building_plan = False
+
     print("available bonds", Bond.BondTypes.keys())
     brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
                                   BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))],
@@ -274,6 +278,7 @@ if __name__ == "__main__":
     #scenario = DoppelEck2_Closed_TJoint()
     #scenario = DoppelEck2_Closed_TJoint()
     scenario = CombinationExampleForText()
+    scenario = RealisationExportScenario()
     #scenario = Single_Wall_Slim()
     #scenario = EmptyScenario()
 
@@ -294,8 +299,9 @@ if __name__ == "__main__":
     if use_ontology:
         print("Now deducting building plan")
         bto = BrickToOntology(bb)
-        result = bto.deduct_building_plan()
-        print("Result:", len(result), "brick can be placed with given rulesets. Order:", [b.id for b in result])
-        building_plan_to_stl(result, 6)
-        building_plan_to_stl(result, 15)
-        building_plan_to_stl(result, 23)
+        if deduct_building_plan:
+            result = bto.deduct_building_plan()
+            print("Result:", len(result), "brick can be placed with given rulesets. Order:", [b.id for b in result])
+            building_plan_to_stl(result, 6)
+            building_plan_to_stl(result, 15)
+            building_plan_to_stl(result, 23)

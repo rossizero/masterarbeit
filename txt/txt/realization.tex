@@ -240,12 +240,12 @@ Die Dimensionen des Bausteins sind mithilfe des Moduls, das zur Beschreibung des
 \begin{figure}[h!bt]
   \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/raster_neighbors1.png}
-    \caption{Nachbarschaften in einem 1$\times$1 Raster}\label{fig:real:raster_neigbors1}
+    \caption{Nachbarschaften in einem 1$\times$1 Raster.}\label{fig:real:raster_neigbors1}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.49\columnwidth}
     \includegraphics[width=\columnwidth]{fig/raster_neighbors2.png}
-    \caption{Nachbarschaften in einem 0.5$\times$0.5 Raster}\label{fig:real:raster_neigbors2}
+    \caption{Nachbarschaften in einem 0.5$\times$0.5 Raster.}\label{fig:real:raster_neigbors2}
   \end{subfigure}
   \caption{Mögliche rasterabhängige Nachbarschaften.}\label{fig:real:raster_neigbors}
 \end{figure}
@@ -279,3 +279,15 @@ Um eine direkte und nutzerfreundliche Alternative zu textuellen Ausgaben anzubie
 Dabei wird nicht nur ein einziges Mesh des gesamten Ergebnisses generiert, sondern auch von einigen wichtigen Zwischenergebnissen.
 Diese Meshes lassen sich in einem beliebigen 3D Viewer betrachten und auf Probleme untersuchen.
 So können Fehler in der Modellierung oder in der Implementierung leichter erkannt werden.
+\begin{figure}[ht!]
+  \begin{subfigure}[b]{0.3\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/real_export.png}
+    \caption{STL-Datei des Beispiels.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.6\columnwidth}
+    \includegraphics[width=\columnwidth]{fig/real_export_ontology.drawio.png}
+    \caption{Objektdiagramm der aus dem Beispiel generierten Individuen in der Ontologie. Nachbarschaften wurden zur Übersichtlichkeit abgekürzt (t: Top, b: Bottom, r: Right, l: Left).}
+  \end{subfigure}
+  \caption{Verschiedene Exportformate anhand eines einfachen Beispiels mit 6 Bausteinen. Dabei wurden die unteren Nachbarn jedes Bausteins mithilfe einer entsprechenden Regel in die \textit{dependsOn}-Eigenschaft übertragen (siehe Kapitel~\ref{concept:regelbasierte_bauplandeduktion}).}\label{fig:real:export}
+\end{figure}

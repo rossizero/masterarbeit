@@ -24,7 +24,7 @@ class WallLayerGroup:
         WallLayerGroup.idd += 1
         self.wall = wall
 
-        self.plan_offset = 0
+        self.plan_offset = 1
         self.openings = []
 
         # dynamic attributes
