@@ -273,21 +273,24 @@ Zunächst werden die in der Ontologie erstellten Regel-Individuen ausgelesen und
 Insbesondere das Auffüllen der \textit{dependsOn}-Eigenschaft anhand der zuvor ausgerechneten Nachbarschaften spielt hierbei eine wichtige Rolle.
 Owlready erlaubt das Wählen und Starten unterschiedlicher Reasoner.
 Nachdem die Berechnungen des Reasoners beendet sind, kann über eine Anfrage, welche alle Individuen einer bestimmten Klasse zurückgibt, die derzeitige Liste platzierbarer Bausteine ausgelesen werden.
+In Abbildung~\ref{fig:real:export_ontologie} ist das Objektdiagramm eines kleinen Beispiels zu sehen, in welchem bereits der erste und der zweite Baustein als platziert gekennzeichnet wurden.
+Darin enthalten sind 6 \textit{Brick} Individuen, die durch einen Reasoner anhand ihrer Eigenschaften zu den dargestellten Klassen zugeordnet werden konnten. 
 Da es in anderen Programmiersprachen womöglich schwieriger ist, Daten aus Ontologien auszulesen, werden zusätzlich alle relevanten Informationen zu den Bausteinen in einer sogenannten JSON-Datei zur Verfügung gestellt.
 JSON (JavaScript Object Notation) ist ein weit verbreitetes, menschenlesbares Austauschformat, zu welchem in den meisten Programmiersprachen hilfreiche Bibliotheken existieren, die das Auslesen und Strukturieren von Daten aus diesen Dateien erleichtern~\cite{json}.
 Um eine direkte und nutzerfreundliche Alternative zu textuellen Ausgaben anzubieten, werden außerdem noch 3D Meshes erzeugt und als STL-Dateien exportiert.
+Ein Beispiel dafür ist in Abbildung~\ref{fig:real:export_stl} zu sehen.
 Dabei wird nicht nur ein einziges Mesh des gesamten Ergebnisses generiert, sondern auch von einigen wichtigen Zwischenergebnissen.
 Diese Meshes lassen sich in einem beliebigen 3D Viewer betrachten und auf Probleme untersuchen.
 So können Fehler in der Modellierung oder in der Implementierung leichter erkannt werden.
 \begin{figure}[ht!]
   \begin{subfigure}[b]{0.3\columnwidth}
     \includegraphics[width=\columnwidth]{fig/real_export.png}
-    \caption{STL-Datei des Beispiels.}
+    \caption{STL-Datei des Beispiels.}\label{fig:real:export_stl}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.6\columnwidth}
     \includegraphics[width=\columnwidth]{fig/real_export_ontology.drawio.png}
-    \caption{Objektdiagramm der aus dem Beispiel generierten Individuen in der Ontologie. Nachbarschaften wurden zur Übersichtlichkeit abgekürzt (t: Top, b: Bottom, r: Right, l: Left).}
+    \caption{Objektdiagramm der aus dem Beispiel generierten Individuen in der Ontologie. Nachbarschaften wurden zur Übersichtlichkeit abgekürzt (t: Top, b: Bottom, r: Right, l: Left).}\label{fig:real:export_ontologie}
   \end{subfigure}
-  \caption{Verschiedene Exportformate anhand eines einfachen Beispiels mit 6 Bausteinen. Dabei wurden die unteren Nachbarn jedes Bausteins mithilfe einer entsprechenden Regel in die \textit{dependsOn}-Eigenschaft übertragen (siehe Kapitel~\ref{concept:regelbasierte_bauplandeduktion}).}\label{fig:real:export}
+  \caption{Zwei Exportformate für ein einfaches Beispiel mit 6 Bausteinen. Dabei wurden die unteren Nachbarn jedes Bausteins mithilfe einer entsprechenden Regel in dessen \textit{dependsOn}-Eigenschaft übertragen (siehe Kapitel~\ref{concept:regelbasierte_bauplandeduktion}).}\label{fig:real:export}
 \end{figure}
