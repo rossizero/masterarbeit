@@ -43,7 +43,7 @@ Um die globalen Transformationen der \textit{IfcWalls} und \textit{IfcOpenings} 
 Im Anschluss werden die nun globalen Transformationen der Openings wiederum in eine relative Transformation zum davon betroffenen Wall-Objekt umgewandelt.
 Das erleichtert später die Berechnungen für das Anwenden der Öffnungen in einer Wand.
 Da sich diese Arbeit zunächst ausschließlich mit quaderförmigen Wandstücken beschäftigt, müssen alle zuvor aus dem IFC Modell extrahierten Wandstücke auf diese Eigenschaft geprüft werden.
-Alle anders geformten \textit{IfcWalls} werden in dieser Arbeit zunächst ignoriert.
+Alle anders geformten \textit{IfcWalls} werden in dieser Arbeit vorerst ignoriert.
 Somit ist gewährleistet, dass lediglich passende Wandstücke an die nachfolgenden Schritte weitergegeben werden.
 
 \subsection{Anwenden des Moduls}
@@ -167,7 +167,8 @@ Bei beiden Operationen werden diejenigen \textit{plan\_offsets} aller Schichten 
 Die Startkonfiguration des Verfahrens ist lediglich ein Knoten des Abhängigkeitsgraphen und ein daran angewandter \textit{plan\_offset}.
 Davon ausgehend können diese Operationen abwechselnd auf die nächsten Nachbarknoten und die dazwischenliegenden Wandstücke angewendet werden, bis alle Knoten des Graphen abgearbeitet wurden.
 Findet sich mit einer Startkonfiguration keine valide Lösung, so wird eine neue gewählt; entweder durch Verändern des \textit{plan\_offsets} oder dem Auswählen eines neuen Startknotens.
-So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsraum, dieser wurde aber mithilfe des Abhängigkeitsgraphen deutlich minimiert, da das Modell dadurch in sinnvoller Weise durchsucht wird und Szenarien, die ohnehin zu keiner Lösung geführt hätten, übersprungen werden.
+So gibt es je nach Komplexität eines Modells immer noch einen großen Lösungsraum.
+Dieser wurde aber mithilfe des Abhängigkeitsgraphen deutlich minimiert, da das Modell dadurch in sinnvoller Weise durchsucht wird und Szenarien, die ohnehin zu keiner Lösung geführt hätten, übersprungen werden.
 Falls keine lückenlose Lösung gefunden werden kann, wird diejenige mit dem insgesamt kleinsten Lückenvolumen zurückgegeben.
 
 \subsection{Anwenden der Öffnungen}\label{real:openings}
@@ -201,11 +202,11 @@ Es gibt aber drei Besonderheiten, die neben dem bloßen Abarbeiten der jeweilige
 \paragraph*{Lokale Corner Rotationen}
 Im Falle von \textit{Cornern} ist neben der globalen Transformation noch eine weitere Information zu beachten.
 Bei T-Kreuzungen und Ecken ist die globale Rotation nicht ausreichend, um die Bausteine mithilfe des vorgegebenen Plans richtig zu platzieren.
-Es wird zusätzlich ein weitere lokale Rotation um die \textit{Achse} einer T-Kreuzung oder Ecke benötigt.
+Es wird zusätzlich eine weitere lokale Rotation um die \textit{Achse} einer T-Kreuzung oder Ecke benötigt.
 Dies soll in Abbildung~\ref{fig:real:eckrotationen} anhand einer Ecke veranschaulicht werden.
 Angenommen der Eckplan für den darauf abgebildeten Verband liegt in der Art der linken Ecke vor.
 So ist deutlich zu erkennen, dass das Anwenden desselben nicht rotierten Eckplans am zweiten Eckpunkt zu einem ungewünschten Ergebnis führen würde.
-Auch die beiden rechten Eckbereiche haben jeweils eine andere lokale Rotation um ihre, als Punkt dargestellte Achse.
+Auch die beiden rechten Eckbereiche haben jeweils eine andere lokale Rotation um ihre als Punkt dargestellte Achse.
 \begin{figure}[hb]
   \centering
   \includegraphics[width=0.9\columnwidth]{fig/Eckrotationen.png}
@@ -256,7 +257,7 @@ Die gestrichelten Plätze sind potenzielle Nachbarfelder.
 Da es sich allerdings nicht um eine zwei-, sondern eine dreidimensionale Umgebung handelt, gibt es auch unter- und oberhalb der Bausteine mögliche Nachbarn.
 Um Bausteinen diese Informationen hinzuzufügen, wurde die Enumeration \textit{Neighbor} und das \textit{neighbors} Feld in der Klasse \textit{Brick} erstellt.
 Dies ist im Klassendiagramm in Abbildung~\ref{fig:real:class_diagram_bonds} zu sehen.
-Die Enumeration \textit{Neighbor} definiert sechs mögliche Nachbarschaftsarten: linke, rechte, vordere, hintere, darüber und darunter liegende Nachbarn.
+Die Enumeration \textit{Neighbor} definiert sechs mögliche Nachbarschaftsarten: linke, rechte, vordere, hintere, darüber- und darunterliegende Nachbarn.
 Die Klasse \textit{Brick} wird mit dem Feld \textit{neighbors} um ein Dictionary ergänzt, welches zu jedem dieser Fälle eine Menge eindeutiger Bausteine beinhalten kann.
 Der Grund dafür ist, dass es einem Baustein je nach Raster möglich ist etwa mehrere linke Nachbarn zu haben (siehe Abbildung~\ref{fig:real:raster_neigbors2}).
 Nun kann für jeden Baustein durch den Vergleich mit allen anderen herausgefunden werden, welche Bausteine welche Nachbarfelder besetzen.
@@ -282,7 +283,7 @@ Ein Beispiel dafür ist in Abbildung~\ref{fig:real:export_stl} zu sehen.
 Dabei wird nicht nur ein einziges Mesh des gesamten Ergebnisses generiert, sondern auch von einigen wichtigen Zwischenergebnissen.
 Diese Meshes lassen sich in einem beliebigen 3D Viewer betrachten und auf Probleme untersuchen.
 So können Fehler in der Modellierung oder in der Implementierung leichter erkannt werden.
-\begin{figure}[ht!]
+\begin{figure}[t!]
   \begin{subfigure}[b]{0.3\columnwidth}
     \includegraphics[width=\columnwidth]{fig/real_export.png}
     \caption{STL-Datei des Beispiels.}\label{fig:real:export_stl}
