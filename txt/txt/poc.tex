@@ -38,20 +38,22 @@ Darin sind alle in Abschnitt~\ref{real:export} angegebenen Informationen enthalt
 In Abbildung~\ref{fig:poc:result_scenario1} sind die ebenfalls exportierten Meshes der drei mit Bausteinen realisierten Türme zu sehen.
 
 \begin{figure}[htb]
-    \begin{subfigure}[b]{0.3\columnwidth}
+    \hspace*{\fill}%
+    \begin{subfigure}[b]{0.27\columnwidth}
       \includegraphics[width=\columnwidth]{fig/scenario1_render_crossbond.png}
       \caption{Kreuzverband mit 1360 Bausteinen.}\label{fig:poc:render_crossbond}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.3\columnwidth}
+    \begin{subfigure}[b]{0.27\columnwidth}
       \includegraphics[width=\columnwidth]{fig/scenario1_render_läuferverband50.png}
       \caption{Läuferverband mit 720 Bausteinen.}\label{fig:poc:render_laeuferverband50}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.3\columnwidth}
+    \begin{subfigure}[b]{0.27\columnwidth}
       \includegraphics[width=\columnwidth]{fig/scenario1_render_headbond.png}
       \caption{Kopfverband mit 1360 Bausteinen.}\label{fig:poc:render_headbond}
     \end{subfigure}
+    \hspace*{\fill}%
     \caption{Ergebnisse des Wall Detailings mit unterschiedlichen Verbänden.}\label{fig:poc:result_scenario1}
 \end{figure}
 
@@ -78,7 +80,7 @@ Wie bereits mehrfach in Kapitel~\ref{related:planungsvorgehen} erwähnt, könnte
     \includegraphics[width=\columnwidth]{fig/scenario2_render.png}
     \caption{Ergebnis mit 223 Bausteinen.}\label{fig:poc:scenario2_ergebnis}
   \end{subfigure}
-\caption{Eingabemodell und Ergebnis für das Szenario LEGO Klemmbausteine.}\label{fig:poc:result_scenario2}
+\caption{IFC Eingabemodell und Ergebnis für das Szenario LEGO Klemmbausteine.}\label{fig:poc:result_scenario2}
 \end{figure}
 
 \subsection{Szenario Fabrikgebäude}\label{poc:scenario3}
@@ -97,17 +99,26 @@ Darum werden aus den 12 Wandstücken des zweiten Typs 4 und aus den 20 Wandstüc
 Dieser Schritt stellt zusammen mit dem Schritt des Findens und Lösens der Eckbereiche (siehe Abschnitt~\ref{real:find_and_solve}) den zeitaufwendigsten dar.
 Der Aufwand diese beiden Schritte zu berechnen verhält sich jeweils quadratisch zur Anzahl der einzelnen Schichten der beteiligten Wandstücke.
 Die Zeit zur Berechnung der konkreten Bausteine ist linear zur Anzahl der notwendigen Ziegel.
-In einem früheren Implementierungsversuch hatte das Finden von Nachbarschaftsbeziehungen zwischen Bausteinen ebenfalls eine quadratische Laufzeit in Abhängigkeit zur Anzahl der Bausteine und der Größe des angegebenen Rasters.
+In einem früheren Implementierungsversuch hatte das Errechnen von Nachbarschaftsbeziehungen zwischen Bausteinen ebenfalls eine quadratische Laufzeit in Abhängigkeit zur Anzahl der Bausteine und der Größe des angegebenen Rasters.
 Später konnte dieses Vorgehen aber optimiert und ebenfalls eine lineare Laufzeit erreicht werden.
 Ein ähnlicher Ansatz könnte für das Kombinieren und Lösen von Eckbereichen womöglich auch anwendbar sein.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\columnwidth]{fig/scenario3_output_render2.png}
+  \includegraphics[width=0.95\columnwidth]{fig/scenario3_output_render2.png}
   \caption{Ausschnitt des Ergebnisses von Szenario Fabrikgebäude mit 40409 Bausteinen.}\label{fig:poc:scenario3}
 \end{figure}
 
-\begin{figure}[hb!]
+\section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}
+Mithilfe der in Kapitel~\ref{basics:ontologie} eingeführten Technologie einer Ontologie und der konkreten Umsetzung der Baustein- und Regeldefinitionen nach dem Konzept aus Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} 
+konnte der resultierende Bauplanentwurf des Modells dieser Fallstudie in die dafür erstellte Ontologie eingepflegt werden.
+Das Konzept der Regeln wurde in dieser Fallstudie anhand der dafür erstellten \textit{RuleDependsOnBottomNeighbor} Regel getestet.
+Diese soll alle nach unten benachbarten Bausteine eines Bausteins in dessen \textit{dependsOn} Objekteigenschaft übertragen, sodass nur diejenigen Bausteine der Klasse \textit{NextBrick} zugeordnet werden können, die keine Individuen der Klasse \textit{PlaceableBrick} als untere Nachbarn besitzen.
+Dafür wurde für das Regel-Individuum über die Dateneigenschaft \textit{holdPropertyByName} der Name der Ziel-Objekteigenschaft \textit{hasBottomNeighbor} festgelegt.
+Über die Objekteigenschaft \textit{applyObjectPropertyTo} wurde schließlich auf das dafür erstelle \textit{ObjectPropertyHolder}-Individuum \textit{dependsOnObjectPropertyHolder} verwiesen.
+\newpage
+\begin{figure}[t!]
+  \hspace*{\fill}%
   \begin{subfigure}[b]{0.3\columnwidth}
     \includegraphics[width=\columnwidth]{fig/scenario4_output_6_render.png}
     \caption{Ergebnis nach 6 Schritten.}
@@ -122,20 +133,12 @@ Ein ähnlicher Ansatz könnte für das Kombinieren und Lösen von Eckbereichen w
     \includegraphics[width=\columnwidth]{fig/scenario4_output_23_render.png}
     \caption{Nach 23 Schritten.}
   \end{subfigure}
+  \hspace*{\fill}%
   \caption{Schrittweises Platzieren eines gefundenen NextBrick.}\label{fig:poc:result_scenario4}
 \end{figure}
-\newpage
-\section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}
-Mithilfe der in Kapitel~\ref{basics:ontologie} eingeführten Technologie einer Ontologie und der konkreten Umsetzung der Baustein- und Regeldefinitionen nach dem Konzept aus Abschnitt~\ref{concept:regelbasierte_bauplandeduktion} 
-konnte der resultierende Bauplanentwurf des Modells dieser Fallstudie in die dafür erstellte Ontologie eingepflegt werden.
-Das Konzept der Regeln wurde in dieser Fallstudie anhand der dafür erstellten \textit{RuleDependsOnBottomNeighbor} Regel getestet.
-Diese soll alle nach unten benachbarten Bausteine eines Bausteins in dessen \textit{dependsOn} Objekteigenschaft übertragen, sodass nur diejenigen Bausteine der Klasse \textit{NextBrick} zugeordnet werden können, die keine Individuen der Klasse \textit{PlaceableBrick} als untere Nachbarn besitzen.
-Dafür wurde für das Regel-Individuum über die Dateneigenschaft \textit{holdPropertyByName} der Name der Ziel-Objekteigenschaft \textit{hasBottomNeighbor} festgelegt.
-Über die Objekteigenschaft \textit{applyObjectPropertyTo} wurde schließlich auf das dafür erstelle \textit{ObjectPropertyHolder}-Individuum \textit{dependsOnObjectPropertyHolder} verwiesen.
 Dieses wiederum hält lediglich den Namen der Objekteigenschaft \textit{dependsOn}.
 Mit diesen Informationen kann nun während der Befüllung der Ontologie mit konkreten Bausteinen deren \textit{dependsOn} Objekteigenschaften mit den Einträgen aus deren unteren Nachbarn gleichgesetzt werden.
-
-Im Anschluss wurde durch wiederholtes Ausführen eines Reasoners und Auswählen einer zufälligen nächsten Instanz der Klasse \textit{NextBrick} ein Bauplan erstellt, der die in Abbildung~\ref{fig:scenarios:Scenario4 Experiment} gezeigte Wand von unten nach oben erbaut.
+Im Anschluss wurde durch wiederholtes Ausführen eines Reasoners und Auswählen einer zufälligen nächsten Instanz der Klasse {\textit{NextBrick}} ein Bauplan erstellt, der die in Abbildung~\ref{fig:scenarios:Scenario4 Experiment} gezeigte Wand tatsächlich von unten nach oben erbaut.
 In Abbildung~\ref{fig:poc:result_scenario4} sind drei Zwischenergebnisse dieses Vorgehens zu sehen.
 Insgesamt enthält die Wand 28 Steine.
 
