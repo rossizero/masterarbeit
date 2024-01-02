@@ -5,7 +5,7 @@ Abschließend wird in einer weiteren Fallstudie untersucht, wie Regeln erstens d
 Damit soll die ungeordnete Menge der konkreten Bausteine eines Bauplanentwurfs durch Regeln in eine Reihenfolge gebracht werden, sodass daraus ein schrittweise umsetzbarer Bauplan entsteht.
 
 \section{Von 3D Gebäudeplan zum Bauplanentwurf}
-Diese erste Fallstudie enthält drei Szenarien anhand derer die Konzepte zur Errechnung eines Bauplanentwurfs ausgehend von 3D Gebäudeplänen erläutert und getestet werden.
+Diese erste Fallstudie enthält drei Szenarien anhand derer die Konzepte zur Errechnung von Bauplanentwürfen ausgehend von 3D Gebäudeplänen erläutert und getestet werden.
 Die Pläne sind das Ergebnis der Gebäudemodellierung innerhalb eines Konstruktionsplaners.
 Die Modellierung soll mithilfe der in Kapitel~\ref{basics} näher behandelten Technologien geschehen, weshalb die Gebäudepläne in ihrer Struktur einem verbreiteten Industriestandard entsprechen.
 
@@ -51,11 +51,11 @@ Das liegt vor allem an dem immensen Abstraktionsgrad des Standards.
 Dieser ist notwendig, um möglichst alle in Realität vorkommenden Szenarien abzubilden.
 Gleichzeitig existiert aufgrund der Vielzahl der im Bauwesen beteiligten Akteure und Fachbereiche eine große Informationsfülle, die ebenfalls Teil davon ist.
 Dieser Standard wird im Detail in Kapitel~\ref{basics:ifc} behandelt.
-Um der Komplexität entgegenzuwirken, werden Ansätze gesucht, diese Phase dennoch intuitiv und einsteigerfreundlich zu gestalten.
+Um der Komplexität entgegenzuwirken, werden Ansätze gesucht, die diese Phase dennoch intuitiv und einsteigerfreundlich zu gestalten.
 
 Obwohl sich viele Wandbereiche ausschließlich mit einem am Grundmodul angepassten Bausteinformat errichten lassen, ist es in Realität zum Beispiel an Wandenden oder Ecken unumgänglich, Bausteine durch Zerschneiden zu verkleinern.
 Denn in diesen besonderen Bereichen werden oft Bausteine mit geringerer Länge benötigt, um gerade und lückenlose Übergänge umzusetzen.
-Darum ist es notwendig, das vorgegebene Bausteinformat während dem Errechnen des Bauplanentwurfs gegebenenfalls flexibel anpassen zu können.
+Darum ist es notwendig, das vorgegebene Bausteinformat während der Errechnung des Bauplanentwurfs gegebenenfalls flexibel anpassen zu können.
 Hieraus ergibt sich bereits die nächste Problemstellung:
 Wie können derartige Bereiche zwischen einzelnen geraden Wandstücken gefunden und der jeweilige Mauerwerksverband auch an diesen Stellen passend angebracht werden?
 Dabei dürfen das Überbindemaß (siehe Kapitel~\ref{basics:Mauerwerksverband}) oder andere Vorgaben allerdings nicht verletzt werden.
@@ -90,16 +90,18 @@ Mehr Informationen darüber werden in Kapitel~\ref{basics:lego} bereitgestellt.
 
 \subsubsection*{Beschreibung}
 In Abbildung~\ref{fig:scenarios:Scenario2 Gebaeudeplan} ist der Plan eines einfachen Hauses mit einem Stockwerk zu sehen.
-Dessen Grundfläche beträgt 19.2 auf 14.4 cm.
+Dessen Grundfläche beträgt 19.2 auf 14.4 Zentimeter.
 Das Haus besitzt eine Eingangstür, drei Fenster und eine weitere Tür, die das Badezimmer vom Hauptraum trennt.
 Es gibt außerdem breite Außen- und dünne Innenwände.
 Dafür müssen zwei Wandtypen definiert werden, die jeweils unterschiedliche Wanddicken vorgeben.
 Diese entsprechen in ihren Maßen dem Raster, welches das LEGO System vorgibt.
 Dickere Wände sollen zwei Noppen breit sein.
 Daher wird für diesen Wandtyp ein Grundmodul mit den Maßen 31.8$\times$15.8$\times$9.6 Millimetern und einem Raster von 8$\times$8$\times$9.6 Millimetern gewählt.
+Das entspricht dem oben genannten 4$\times$2 LEGO Stein.
 Für die dünneren Innenwände soll eine Breite von einer Noppe verwendet werden.
-Dies entspricht einem Grundmodul von 15.8$\times$7.8$\times$9.6 Millimetern mit einem gleichbleibenden Raster.
-Mögliche Rotationen von Wänden, Fenstern und Türen sind auf 90\textdegree{} Schritte limitiert.
+Daher wird hierfür der 2$\times$1 LEGO Stein als Grundmodul vorgegeben.
+Dieses hat demnach die Maße 15.8$\times$7.8$\times$9.6 Millimeter mit gleichbleibendem Raster.
+Mögliche Rotationen von Fenstern, Türen und Wänden sind auf 90\textdegree{} Schritte limitiert.
 Das stellt im Fall von LEGO eine vertretbare Einschränkung dar, da es ohnehin dem intuitiven Umgang mit dessen Steinen und gleichzeitig dem Baustil der meisten einfachen Gebäuden entspricht.
 
 \subsubsection*{Problemstellungen}
@@ -116,14 +118,14 @@ Auch der Übergang zwischen Wänden unterschiedlicher Dicke oder Verband stellt 
 Zusammengefasst ergibt sich durch dieses Szenario folgende neue Liste an Teilproblemen:
 \begin{itemize}
   \item Wie werden Öffnungen im Konstruktionsplaner umgesetzt und im Anschluss weiter verarbeitet?
-  \item Wie können Wänden Dicke, Grundmodul und Mauerwerksverband zugewiesen werden?
+  \item Wie können einer Wand Dicke, Grundmodul und Mauerwerksverband zugewiesen werden?
   \item Wie können Übergänge zwischen Wänden verschiedener Dicke oder unterschiedlichem Verband realisiert werden?
   \item Wie können T- und X-Kreuzungen von Eckbereichen unterschieden und dem Mauerwerksverband entsprechend umgesetzt werden? 
 \end{itemize}
 
 \subsection{Szenario Fabrikgebäude}\label{scenarios:scenario3}
 Um das Konzept auch für umfangreichere Projekte zu testen, wird für dieses Szenario ein Modell eines großen Fabrikgebäudes erstellt.
-Dessen Aussehen ist angelehnt an dem Stil der Industriearchitektur~\cite{Industriearchitektur}.
+Dessen Aussehen ist angelehnt an dem Stil der Industriearchitektur.
 In Abbildung~\ref{fig:scenarios:Scenario3 Gebaeudeplan} ist das geplante Modell der Fabrikhalle zu sehen.
 Alle in den Öffnungen liegenden Fenster und Türen sind zur besseren Veranschaulichung ausgeblendet worden.
 \begin{figure}[hb!]
@@ -150,7 +152,7 @@ Insgesamt weist das eingeschlossene Gelände eine Grundfläche von 20 auf 22 Met
 
 \subsubsection*{Problemstellung}
 In diesem Szenario soll vor allem die Applikabilität der erarbeiteten Konzepte auf großen Datenmengen und dadurch die Effizienz der Implementierung auf die Probe gestellt werden.
-Dadurch können die Teilbereiche der Implementierung dieser Arbeit identifiziert werden, für die eventuell noch Optimierungsbedarf besteht und grundlegende Fehler in den Konzepten aufgespürt werden.
+So können die Teilbereiche der Implementierung dieser Arbeit identifiziert werden, für die eventuell noch Optimierungsbedarf besteht und grundlegende Fehler in den Konzepten aufgespürt werden.
 
 \section{Regelbasierte Bauplandeduktion aus einem Bauplanentwurf}\label{scenarios:scenario4}
 In dieser Fallstudie wird untersucht wie das Integrieren von Regeln in das erarbeitete Konzept ermöglicht werden kann.
