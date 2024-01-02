@@ -1,4 +1,4 @@
-\chapter{Related Work}\label{related}
+\chapter{Verwandte Arbeiten}\label{related}
 \section{Projekte mit automatisierten Lege-Robotern}
 Die Automatisierung der Baubranche hat neben Faktoren wie Geschwindigkeit, Effizienz und Kostenreduzierung auch den Vorteil Bauprojekte an Orten zu realisieren, die für Menschen ungeeignet sind~\cite{Petersen2012}.
 Dafür wurde unter anderem das Projekt \textit{TERMES} von Kirstin Petersen et al.\ konzipiert, mit welchem das Team, angelehnt an dem Verhalten von Termiten, einen Schwarm bodengebundener Roboter koordiniert, die als Einheit Strukturen errichten~\cite{Petersen2012}.
@@ -23,7 +23,7 @@ Zusätzlich muss Mauerwerk in Deutschland und Europa einigen Normen entsprechen.
 Darauf wird in Kapitel~\ref{basics:Mauerwerksbau} näher eingegangen.
 Nachfolgend werden aber zunächst einige Veröffentlichungen vorgestellt, die ein ähnliches Ziel wie diese Arbeit verfolgen.
 
-\subsection{Digital Plan of Brickwork Layout for Robotic Bricklaying Technology}\label{related:digital_plan_of_brickwork_layout}
+\subsection{Digitale Pläne von Mauerwerk für den automatisierten Mauerbau}\label{related:digital_plan_of_brickwork_layout}
 In diesem wissenschaftlichen Papier stellen Usmanov et al.\ ein generelles Vorgehen für das Erstellen eines Ziegel-Legeplans für ein als digitales Modell vorliegendes Gebäude vor~\cite{Usmanov2021}.
 Dieses Vorgehen gliedern sie in sechs Schritte:
 \begin{figure}[h!]
@@ -51,7 +51,7 @@ Dennoch werden zum Schluss noch einige Einschränkungen ihres Verfahrens angespr
 Vor allem die Beschränkung auf 90\textdegree{} Ecken und das Gebunden sein an einen einzigen Standardziegel werden als besonders restriktiv wahrgenommen.
 Außerdem fehlt die Unterstützung anderer Mauerwerksverbände.
 
-\subsection{Optimal brick layout of masonry walls based on intelligent evolutionary algorithm and building information modeling}
+\subsection{Errechnung optimaler Legepläne für Mauerwerk mithilfe von evolutionären Algorithmen}
 Xu Chengran et al.\ haben in dieser Veröffentlichung verschiedene Optimierungsansätze aus dem Bereich des 2D Packaging Problems getestet~\cite{Xu2021}.
 Konkret wurden drei Algorithmen verwendet: Differential Evolution, Particle Swarm Optimization und Neighbourhood Field Optimization.
 Außerdem wird ein dreiphasiges Vorgehen vorgeschlagen: \textit{Data collection}, \textit{Brick layout} und \textit{Data Output}.
@@ -63,10 +63,10 @@ Letzteres kann, was mit dieser Arbeit gezeigt wird, ebenso iterativ berechnet we
 Dadurch werden potenzielle Fehler der Optimierungsalgorithmen verhindert.
 Das Lösen der kritischen Bereiche entspricht hingegen eher einem Problem, das mit \glqq{}intelligenten\grqq{} Optimierungsverfahren bewältigt werden kann. 
 
-\subsection{Automated Brick Pattern Generator for Robotic Assembly using Machine Learning and Images}
+\subsection{Automatisierter Mauerwerkgenerator mit maschinellem Lernen und Bildern}
 Bárbara Andrade Zandavali et al.\ untersuchen in ihrem Paper wie gut sich Machine Learning Algorithmen dazu eignen, anhand von Bildern Pläne für konkretes Mauerwerk zu erzeugen~\cite{Zandavali2019}.
 Ein Kernaspekt dabei war das Anwenden verschiedener Mauerwerksverbände auf arbiträre Vielecke, welche die Form eines Wandabschnitts beschreiben.
-\begin{figure}[ht!]
+\begin{figure}[t!]
     \centering
     \includegraphics[width=0.8\columnwidth]{fig/ecaadesigradi2019_605.png}
     \caption{Eingaben und Ergebnisse des \textit{Brick Pattern Generator} nach Bárbara Andrade Zandavali et al.~\cite{Zandavali2019}.}\label{fig:related:Zandavali2019}
@@ -77,8 +77,8 @@ Zusammenfassend konnten die Autoren berichten, dass das Vorgehen teilweise zu fr
 Dennoch ist der Anwendungsfall gerader Wandabschnitte schlecht gewählt, da sich dieselben Ergebnisse auch durch \glqq{}Ausstanzen\grqq{} der Vielecke aus einer zuvor mit Bausteinen aufgefüllten, rechteckigen Wand erreichen lassen.
 Das Anwenden intelligenter Mechanismen wie Machine Learning zum automatischen Lösen der kritischen Eck- und Kreuzungsbereiche zwischen mehreren Wandstücken kann sich allerdings, wie bereits erwähnt, durchaus als nützlich erweisen.
 
-\subsection{Parametric Blockwall-Assembly Algorithms for the Automated Generation of Virtual Wall Mockups Using BIM}
-Tarek Zaki et al.\ beschreiben in dieser Veröffentlichung ein Vorgehen, das es ermöglicht die Werkstatt- und Montageplanung für ein Bauprojekt, das in einer BIM-fähigen Umgebung geplant wird, direkt innerhalb derselben Umgebung durchführen zu können~\cite{Zaki2017}.
+\subsection{Automatische Generierung von virtuellen Wandvorlagen für BIM}
+Tarek Zaki et al.\ beschreiben in dieser Veröffentlichung ein Vorgehen, das es ermöglicht die Werkstatt- und Montageplanung für ein Bauprojekt, das in einer BIM-fähigen Umgebung (siehe Kapitel~\ref{basics:bim}) geplant wird, direkt innerhalb derselben Umgebung durchführen zu können~\cite{Zaki2017}.
 Dies wurde bisher von Hand als zusätzliches sogenanntes \textit{Level of Detail} (LOD) berechnet und im Anschluss wieder in das Projekt integriert.
 Das angestrebte LOD ist eine Art Mockup und siedelt sich einen Schritt vor dem letzten LOD, dem Baubestandsplan, an.
 Baubestandspläne stellen eine exakte Repräsentation der zu bauenden Elemente dar.
