@@ -23,7 +23,7 @@ Diese sind anfangs abstrakte Konzepte, die sich mit zunehmender Tiefe in der Hie
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\columnwidth]{fig/Hierarchie_IfcWall_300.drawio.png}
-    \caption{Klassenhierarchie am Beispiel der Klasse \textit{IfcWall}}\label{fig:IfcWall_Hierarchie}
+    \caption{Klassenhierarchie am Beispiel der Klasse \textit{IfcWall}.}\label{fig:IfcWall_Hierarchie}
 \end{figure}
 Da sich diese Arbeit zum größten Teil mit aus Wänden bestehenden Gebäuden befasst, wird nachfolgend die Klasse \textit{IfcWall} wiederholt als Beispiel herangezogen.
 Der für diese Klasse relevante Ausschnitt aus der Klassenhierarchie ist in Abbildung~\ref{fig:IfcWall_Hierarchie} dargestellt.
@@ -33,7 +33,7 @@ In Abbildung~\ref{fig:IFC_Relationships} erkennt man den Zusammenhang zwischen e
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\columnwidth]{fig/IFC_Relationships_300.drawio.png}
-    \caption{Relation der IfcWall und einem \textit{IfcProject}}\label{fig:IFC_Relationships}
+    \caption{Relation der IfcWall und einem \textit{IfcProject}.}\label{fig:IFC_Relationships}
 \end{figure}
 
 \subsection{IfcPropertySets und IfcQuantitySets}\label{basics:ifc_properties}
@@ -63,7 +63,7 @@ Diese sind ebenfalls Teil der Klassen des IFC Standards.
 Objekte des Typs \textit{IfcOpeningElement} dienen dazu, die notwendigen Lücken in einer Wand zu definieren, in die später eine Tür oder ein Fenster eingebaut werden soll.
 In der Dokumentation wird dies wie folgt formuliert (aus dem Englischen): \glqq{}[Das IfcOpeningElement] stellt eine Lücke in jedem Element dar, das eine physische Manifestation hat\grqq{}~\cite{IFC4310OpeningElement:online}.
 Es gibt zwei Arten der Klasse IfcOpeningElement, je nachdem ob die Öffnung durch die gesamte Breite eines Objektes reicht oder nicht. 
-Folglich entsteht dadurch eine Unterscheidung zwischen Nischen und tatsächlichen Öffnungen, wobei nur letztere im Zusammenhang mit Fenstern oder Türen Sinn ergibt.
+Folglich entsteht dadurch eine Unterscheidung zwischen Nischen und tatsächlichen Öffnungen, wobei nur letztere im Zusammenhang mit Fenstern oder Türen Sinn ergeben.
 
 \section{IFC und Blender}\label{basics:blender}
 Blender ist eines der beliebtesten Open-Source-Programme zur Modellierung von 3D Modellen und Animationen~\cite{blendero56:online}.
@@ -108,7 +108,7 @@ combined.save('model.stl', mode=Mode.ASCII)
 
 \end{lstlisting}
 
-IfcOpenShell ist eine frei verfügbare Bibliothek, die es erleichtert mit Daten im IFC Format zu arbeiten.
+IfcOpenShell ist eine frei verfügbare Bibliothek, die es erleichtert mit Daten im IFC Format zu arbeiten~\cite{IFCOpenShell:online}.
 Sie bietet unter anderem eine Python API an und ist wie bereits erwähnt ein Teil des Blender Add-ons blenderbim.
 Natürlich ist es dennoch möglich diese Bibliothek auch ohne Blender zu verwenden.
 In Listing~\ref{basics:ifcopenshell_sample_code} ist ein Beispielprogramm zu sehen, das aus einer IFC Datei alle Objekte des Typs IfcWall filtert und deren geometrische Repräsentationen in ein herkömmliches Mesh konvertiert.
@@ -136,7 +136,7 @@ Hier unterstützt BIM, indem sämtliche Teile der Installationen in einem Gebäu
 Dies wurde allerdings \glqq{}angesichts der Realität der Handwerker und Gebäudenutzer für völlig unrealistisch und auch etwas over-engineered\grqq{} eingestuft.
 Trotzdem sei \glqq{}BIM [\ldots] das große Ding in der Bauwelt und der einzige echte Standard\grqq{}.
 
-\section{opensourcebim}
+\section{opensourceBIM}
 Während es vorwiegend kommerzielle Produkte gibt, die Unternehmen das Arbeiten mit BIM ermöglichen, existiert auch hier eine aktive Open Source Bewegung.
 Unter dem Namen \glqq{}The open source BIM collective\grqq{} oder kurz \glqq{}opensourceBIM\grqq{} werden derzeit um die 70 Repositories betrieben.
 Darin enthalten sind unter anderem ein BIM-Server inklusive verschiedener Clients für Endanwender auf unterschiedlichen Systemen und Werkzeuge, die es erleichtern den IFC Files zu arbeiten~\cite{Theopens96:online}.
@@ -271,19 +271,19 @@ Während etwa beim Läuferverband manchmal darauf verzichtet werden kann Baustei
 
 \begin{figure}[hb]
   \centering
-  \includegraphics[width=0.85\columnwidth]{fig/LEGO 2x4 Brick horizontal.png}
-  \caption{Maße des Standard 2$\times$4 LEGO Steins~\cite{LEGOBric2:online}}\label{fig:basics:Lego 2x4 Brick}
+  \includegraphics[width=0.85\columnwidth]{fig/LEGO 2mal4 Brick horizontal.png}
+  \caption{Maße des Standard 2$\times$4 LEGO Steins~\cite{LEGOBric2:online}.}\label{fig:basics:Lego 2x4 Brick}
 \end{figure}
 \section{LEGO System}\label{basics:lego}
-Ein 1$\times$1 LEGO Stein hat eine quadratische Grundfläche von \(7.8mm\)$\times$\(7.8mm\).
+Ein 1$\times$1 LEGO Stein hat eine quadratische Grundfläche von \(7.8 mm\)$\times$\(7.8 mm\).
 Dies entspricht demnach dem Baunennmaß des 1$\times$1 LEGO Steins.
-Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2mm\).
-Daraus ergibt sich ein Baurichtmaß beziehungsweise ein Rastermaß von \(8mm\)$\times$\(8mm\).
+Zwischen zwei nebeneinander platzierten Steinen ist ein Abstand von  \(0.2 mm\).
+Daraus ergibt sich ein Baurichtmaß beziehungsweise ein Rastermaß von \(8 mm\)$\times$\(8 mm\).
 In Abbildung~\ref{fig:basics:Lego 2x4 Brick} werden zur Veranschaulichung die Maße des populären 2$\times$4 Steines aufgeschlüsselt.
 Die für ein dreidimensionales Maß noch fehlende Größe ist die Höhe der Steine.
-Diese beträgt \(9.6mm\).
+Diese beträgt \(9.6 mm\).
 Der Abstand zwischen zwei übereinander gestapelten Steinen hängt von dem Druck ab, der beim Zusammenstecken geleistet wurde.
-Dennoch kann dieser vernachlässigt und demnach als Abstand von \(0.0mm\) gewertet werden.
+Dennoch kann dieser vernachlässigt und demnach als Abstand von \(0.0 mm\) gewertet werden.
 
 \section{Ontologie}\label{basics:ontologie}
 Der Begriff Ontologie stammt ursprünglich aus der Philosophie.
