@@ -1,5 +1,6 @@
 # masterarbeit
 ## Overview
+*  `/abgabe`: printable pdfs
 *  `/txt`: latex project files
 *  `/src`: rest
    *  `/code`: blender plugin & code for wall detailing
