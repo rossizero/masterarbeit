@@ -130,3 +130,11 @@ halbversetzten
 rasterabhängige
 darüber-
 darüber-
+Rossi
+Wanninger
+Kreuzungslegeplänen
+halbversetztem
+RuleDependsOnBottomNeighbor
+hasBottomNeighbor
+dependsOnObjectPropertyHolder
+applyObjectPropertyTo
