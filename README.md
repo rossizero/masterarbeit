@@ -44,4 +44,4 @@ conda env create -f /src/env/env_universal.yml  # Linux
 * Output Mesh: `/src/code/wall_detailing/output.stl`
 * Output JSON: `/src/code/wall_detailing/output.json`
 * Output Ontology: `/src/ontologies/temporary_working_env.rdf`
-* Other outputs: `openings.stl` (all openings), `base.stl` (if internal scenario set), `ifc_output.stl` (if ifc scenario set), `output_NUMBER.stl` (partly built output)
+* Other outputs: `openings.stl` (all openings), `base.stl` (all walls that have been loaded), `output_NUMBER.stl` (partly built output)

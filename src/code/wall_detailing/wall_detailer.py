@@ -1,3 +1,4 @@
+import os
 from typing import List, Dict
 import numpy as np
 import quaternion
@@ -31,28 +32,32 @@ from wall_detailing.exporter.BrickExporter import BrickExporter
 from wall_detailing.exporter.BrickToOntologie import BrickToOntology
 from wall_detailing.importer.ifc_importer import IfcImporter
 from wall_detailing.masonry import brick
-from scenarios.examples_for_text.CombinationExample import CombinationExampleForText
-from scenarios.examples_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
-from wall_detailing.scenarios.examples_for_text.DifferentBonds import BasicsStretchedBond, BasicsCrossBond, \
+from scenarios.scenarios_for_text.CombinationExample import CombinationExampleForText
+from scenarios.scenarios_for_text.SimpleWallEndings import Single_Wall_Slim, Single_Wall_Thick
+from wall_detailing.scenarios.scenarios_for_text.DifferentBonds import BasicsStretchedBond, BasicsCrossBond, \
     BasicsGothicBond, BasicsHeadBond
-from wall_detailing.scenarios.examples_for_text.ExportSample import RealisationExportScenario
-from wall_detailing.scenarios.examples_for_text.SimpleCorner import SimpleCorner
-from wall_detailing.scenarios.examples_for_text.scenario1 import Scenario1
-from wall_detailing.scenarios.examples_for_text.scenario2 import Scenario2
-from wall_detailing.scenarios.examples_for_text.scenario4_ontology import Scenario4_Ontology
-from wall_detailing.scenarios.examples_for_text.small_test import SmallTestToCompareIFC
+from wall_detailing.scenarios.scenarios_for_text.ExportSample import RealisationExportScenario
+from wall_detailing.scenarios.scenarios_for_text.SimpleCorner import SimpleCorner
+from wall_detailing.scenarios.scenarios_for_text.scenario1 import Scenario1
+from wall_detailing.scenarios.scenarios_for_text.scenario2 import Scenario2
+from wall_detailing.scenarios.scenarios_for_text.scenario4_ontology import Scenario4_Ontology
+from wall_detailing.scenarios.scenarios_for_text.small_test import SmallTestToCompareIFC
+from wall_detailing.scenarios.ifc_scenario import IFCScenario
 
 
 class WallDetailer:
-    def __init__(self, walls: List[Wall], brick_information: Dict[str, List[BrickInformation]]):
+    def __init__(self, walls: List[Wall]):
         self.walls = walls
-        self.brick_informations = brick_information
 
     def detail(self):
+        """
+        Actual detailing routine described in the latex files. This is the main entry point for the detailing process.
+        """
         bricks = []
         wall_type_groups: Dict[str, WallTypeGroup] = {}
 
         # convert walls to layergroups
+        print("grouping walls now")
         for w in self.walls:
             k = str(w.detailing_information)
 
@@ -65,7 +70,7 @@ class WallDetailer:
             layer_group = WallLayerGroup.from_wall(w, wall_type_groups[k].module)
             wall_type_groups[k].layer_groups.append(layer_group)
 
-        print("combining now")
+        print("detailing now")
         for group in wall_type_groups.values():
             # combine layer_groups if possible
             wall_num = len(group.layer_groups)
@@ -138,8 +143,8 @@ class WallDetailer:
         for layer in wall.get_sorted_layers(grouped=False):
             dimensions = np.array([layer.length, wall.wall.width, module.height])
 
-            fill_left = len(layer.left_connections) == 0 #and False  # to enable or disable filling of possible holes
-            fill_right = len(layer.right_connections) == 0 #and False
+            fill_left = len(layer.left_connections) == 0 or force_fill_holes
+            fill_right = len(layer.right_connections) == 0 or force_fill_holes
 
             transformations = bond.apply_layer(length=layer.length,
                                                width=wall.wall.width,
@@ -208,7 +213,6 @@ class WallDetailer:
         import os
         file_path = os.path.abspath(path)
         bricks_copy = bricks.copy()
-        print("# bricks: ", len(bricks_copy))
 
         if len(bricks_copy) + len(additional_shapes) > 0:
             args = TopTools.TopTools_ListOfShape()  # whatever
@@ -237,7 +241,8 @@ class WallDetailer:
                 assert mesh.IsDone()
 
                 stl_export = StlAPI_Writer()
-                print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path))
+                print("Export to", file_path, " successful", stl_export.Write(mesh.Shape(), file_path),
+                      "num bricks:", len(bricks_copy))
                 return True
         return False
 
@@ -245,62 +250,93 @@ class WallDetailer:
 def building_plan_to_stl(plan: List[Brick], until_step: int = -1):
     if until_step == -1:
         until_step = len(plan)
-    n = "output_" + str(until_step) + ".stl"
+    n = output_dir + "output_" + str(until_step) + ".stl"
     if until_step < len(plan):
         WallDetailer.convert_to_stl(plan[:until_step], n)
 
 
+#############################################
+#                 SETTINGS                  #
+#############################################
+use_ontology = True
+deduct_building_plan = False  # this takes quite long so we can disable it if not needed
+export_partly_built_stls = [6, 15, 23]
+calculate_neighbors = True
+force_fill_holes = False  # somtimes useful when using gothic bond
+
+export_base_stl = True  # tip: to look at stl files either use blender or the windows 3d viewer
+export_openings_stl = True
+export_solution_json = True
+export_solution_stl = True
+
+output_dir = "output/"
+#############################################
+
+
 if __name__ == "__main__":
-    use_ontology = True
-    deduct_building_plan = False
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     print("available bonds", Bond.BondTypes.keys())
-    brick_information = {"test": [BrickInformation(2, 1, 0.5, grid=np.array([1, 1, 0.5])),
-                                  BrickInformation(1, 1, 0.5, grid=np.array([1, 1, 0.5]))],
-                         "LegoWallType2": [BrickInformation(0.032, 0.016, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
-                         "LegoWallType1": [BrickInformation(0.016, 0.008, 0.0096, grid=np.array([0.008, 0.008, 0.0096]))],
-                         "Test1": [BrickInformation(0.32, 0.16, 0.096, grid=np.array([0.08, 0.08, 0.096]))],
-                         "Scenario2": [BrickInformation(0.4, 0.2, 0.12, grid=np.array([0.1, 0.1, 0.12]))],   # like lego but a little nicer to read
-                         }
 
-    #tmp = IfcImporter("../../models/AC20-FZK-Haus.ifc")
-    #tmp = IfcImporter("../../models/scenario11.ifc")
-    #tmp = IfcImporter("../../models/scenarios/Scenario2/fabric2.ifc", "Scenario2")
-    #tmp = IfcImporter("../../models/scenarios/Scenario3/AC20-FZK-Haus - Kopie.ifc", "Scenario2")
-    #tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2 - Kopie.ifc", "Scenario2")
-    tmp = IfcImporter("../../models/scenarios/Scenario3/scenario3.ifc", "Scenario2")
-    #tmp = IfcImporter("../../models/scenarios/Scenario3/Test2.ifc", "Test1")
-    #tmp = IfcImporter("../../models/scenarios/Scenario1/scenario1_tower_thick_walls_headbond.ifc", "Test1")
-    tmp = IfcImporter("../../models/scenarios/Scenario2/scenario2.ifc", "Scenario2")
-    www = tmp.get_walls()
+    # ifc scenarios of the latex project
+    scenario = IFCScenario("../../models/scenarios/Scenario1/scenario1_tower_thick_walls_headbond.ifc")
+    scenario = IFCScenario("../../models/scenarios/Scenario1/scenario1_tower_thick_walls_crossbond.ifc")
+    scenario = IFCScenario("../../models/scenarios/Scenario1/scenario1_tower_thin_walls.ifc")
+    scenario = IFCScenario("../../models/scenarios/Scenario2/scenario2.ifc")
+    scenario = IFCScenario("../../models/scenarios/Scenario3/scenario3.ifc")
+    scenario = IFCScenario("../../models/scenarios/Scenario1/scenario1_tower_thin_walls.ifc")
 
-    #scenario = DoppelEck2_Closed_TJoint()
-    #scenario = DoppelEck2_Closed_TJoint()
-    scenario = CombinationExampleForText()
-    scenario = RealisationExportScenario()
-    #scenario = Single_Wall_Slim()
-    #scenario = EmptyScenario()
+    # rebuilt scenarios of the latex project
+    scenario = Scenario1()
+    scenario = Scenario2()
+    scenario = Scenario4_Ontology()
 
-    WallDetailer.convert_to_stl([], "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
-    shapes = [o.get_shape() for w in www for o in w.openings]
-    for i, w in enumerate(www):
-        shapes.append(w.get_shape())
+    # some scenarios for the figures in the latex project
+    scenario = CombinationExampleForText()  # chapters 5.1.4 and 6.2.3
+    scenario = SimpleCorner()  # chapter 5.1.4
+    scenario = BasicsStretchedBond()  # chapter 4.5.1
+    scenario = SmallTestToCompareIFC()  # just a small test
+    scenario = BasicsCrossBond()  # chapter 4.5.1
+    scenario = BasicsGothicBond()  # chapter 4.5.1
+    scenario = BasicsHeadBond()  # chapter 4.5.1
+    scenario = RealisationExportScenario()  # chapter 6.2.8
+    scenario = Single_Wall_Thick()  # chapter 5.1.7
+    scenario = Single_Wall_Slim()  # chapter 5.1.7
 
-    WallDetailer.convert_to_stl([], "ifc_output.stl", additional_shapes=shapes)
-    WallDetailer.convert_to_stl([], "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
+    # for more scenarios look at the scenarios file
+    # select a scenario here
+    scenario = IFCScenario("../../models/scenarios/Scenario2/scenario2.ifc")
 
-    wall_detailer = WallDetailer(scenario.walls, brick_information)
+    # load the selected scenario
+    scenario.load()
+
+    if export_base_stl:
+        WallDetailer.convert_to_stl([], path=output_dir + "base.stl", additional_shapes=[w.get_shape() for w in scenario.walls])
+
+    if export_openings_stl:
+        WallDetailer.convert_to_stl([], path=output_dir + "openings.stl", additional_shapes=[o.get_shape() for w in scenario.walls for o in w.openings])
+
+    wall_detailer = WallDetailer(scenario.walls)
     bb = wall_detailer.detail()
-    WallDetailer.convert_to_stl(bb, "output.stl", additional_shapes=[])
-    brick.calculate_neighborhood(bb)
-    BrickExporter(bb).export_to_json("output.json")
+
+    if export_solution_stl:
+        WallDetailer.convert_to_stl(bb, path=output_dir + "output.stl", additional_shapes=[])
+
+    if calculate_neighbors:
+        brick.calculate_neighborhood(bb)
+
+    if export_solution_json:
+        BrickExporter(bb).export_to_json(output_dir + "output.json")
 
     if use_ontology:
-        print("Now deducting building plan")
+        print("upload into ontology")
         bto = BrickToOntology(bb)
+
         if deduct_building_plan:
+            print("Now deducting building plan")
             result = bto.deduct_building_plan()
             print("Result:", len(result), "brick can be placed with given rulesets. Order:", [b.id for b in result])
-            building_plan_to_stl(result, 6)
-            building_plan_to_stl(result, 15)
-            building_plan_to_stl(result, 23)
+            if export_partly_built_stls is not None:
+                for i in export_partly_built_stls:
+                    building_plan_to_stl(result, i)

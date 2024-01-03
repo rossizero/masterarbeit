@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 import numpy as np
 import quaternion
 import math
@@ -8,15 +6,7 @@ from detailing.wall import Wall
 from detailing.opening import Opening
 
 from wall_detailing.masonry.brick import BrickInformation
-
-
-class Scenario(ABC):
-    def __init__(self):
-        self.walls = self.get_walls()
-
-    @abstractmethod
-    def get_walls(self):
-        return []
+from wall_detailing.scenarios.abstract_scenario import Scenario
 
 
 class FancyCorners(Scenario):
@@ -27,25 +17,28 @@ class FancyCorners(Scenario):
         an = math.pi / 2 * 1.22432
         an = 0
         w1 = Wall.make_wall(10, 1, 5, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2),
-                       ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
         w11 = Wall.make_wall(10, 1, 10, np.array([5.5, 10.0, -1.0]),
-                        quaternion.from_euler_angles(0, 0, math.pi / 2 + math.pi), ifc_wall_type="test", name="w11")
+                             quaternion.from_euler_angles(0, 0, math.pi / 2 + math.pi), ifc_wall_type="test",
+                             name="w11")
         w11_ = Wall.make_wall(5, 1, 10, np.array([5.5, 10.0, 9.0]),
-                         quaternion.from_euler_angles(0, 0, math.pi / 2 + math.pi), ifc_wall_type="test", name="w11_")
+                              quaternion.from_euler_angles(0, 0, math.pi / 2 + math.pi), ifc_wall_type="test",
+                              name="w11_")
         w11_2 = Wall.make_wall(5, 1, 10, np.array([5.5, 10.0, -11.0]),
-                          quaternion.from_euler_angles(0, 0, math.pi / 2 + math.pi), ifc_wall_type="test", name="w11_2")
+                               quaternion.from_euler_angles(0, 0, math.pi / 2 + math.pi), ifc_wall_type="test",
+                               name="w11_2")
         w111 = Wall.make_wall(5, 1, 10, np.array([5.5, -7.5, 1.0]), quaternion.from_euler_angles(0, 0, math.pi / 2),
-                         ifc_wall_type="test", name="w111", base_module=base_module, bond_type=bond_type)
+                              ifc_wall_type="test", name="w111", base_module=base_module, bond_type=bond_type)
         w2 = Wall.make_wall(10, 1, 5, np.array([10.0, 4.5, 1.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
-                       ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w3 = Wall.make_wall(10, 1, 5, np.array([-5.5, 0.0, -1]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2),
-                       ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
         w4 = Wall.make_wall(10, 1, 5, np.array([0.0, -4.5, -2]), quaternion.from_euler_angles(0.0, 0.0, 0),
-                       ifc_wall_type="test", name="w4", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w4", base_module=base_module, bond_type=bond_type)
         w4_ = Wall.make_wall(4, 1, 5, np.array([0.0, -4.5, 2]), quaternion.from_euler_angles(0.0, 0.0, 0),
-                        ifc_wall_type="test", name="w4_", base_module=base_module, bond_type=bond_type)
+                             ifc_wall_type="test", name="w4_", base_module=base_module, bond_type=bond_type)
         w41_ = Wall.make_wall(4, 1, 5, np.array([1.5, -2.0, 4]), quaternion.from_euler_angles(0.0, 0.0, math.pi / 2),
-                         ifc_wall_type="test", name="w41_", base_module=base_module, bond_type=bond_type)
+                              ifc_wall_type="test", name="w41_", base_module=base_module, bond_type=bond_type)
 
         w1.rotate_around(quaternion.from_euler_angles(0.3, an, an))
         w11.rotate_around(quaternion.from_euler_angles(0.3, an, an))
@@ -71,14 +64,15 @@ class SimpleCorners(Scenario):
         an = math.pi / 2 * 1.22432
         an = 0
         height = 0.5 * 7
-        w1 = Wall.make_wall(10, 1, height, np.array([5.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2  + math.pi),
-                       ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
+        w1 = Wall.make_wall(10, 1, height, np.array([5.5, 0.0, 0.0]),
+                            quaternion.from_euler_angles(0, 0, math.pi / 2 + math.pi),
+                            ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
         w2 = Wall.make_wall(10, 1, height, np.array([10.0, 4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
-                       ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w3 = Wall.make_wall(10, 1, height, np.array([14.5, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, math.pi / 2),
-                       ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
         w4 = Wall.make_wall(10, 1, height, np.array([10.0, -4.5, 0.0]), quaternion.from_euler_angles(0.0, 0.0, 0),
-                       ifc_wall_type="test", name="w4", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w4", base_module=base_module, bond_type=bond_type)
 
         w1.rotate_around(quaternion.from_euler_angles(0, an, an))
         w2.rotate_around(quaternion.from_euler_angles(0, an, an))
@@ -94,15 +88,19 @@ class SimpleCorners2(Scenario):
         an = 0
         height = 0.5 * 4
         height2 = 0.5 * 7
-        w0 = Wall.make_wall(10, 1, height2, np.array([5.5, 0.0, height2 * 0.5]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
-                       ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
-        w1 = Wall.make_wall(8, 1, height2, np.array([9.0, 5.5, height2 * 0.5]), quaternion.from_euler_angles(0.0, 0.0, 0*math.pi),
-                       ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
-        w2 = Wall.make_wall(10, 1, height, np.array([13.5, 1.0, height/2]), quaternion.from_euler_angles(0, 0, math.pi / 2 + 0* math.pi),
-                       ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
-        w3 = Wall.make_wall(9, 1, height, np.array([9.5, -4.5, height/2]), quaternion.from_euler_angles(0.0, 0.0, 0* math.pi),
-                       ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
-        w4 = Wall.make_wall(6, 1, height, np.array([9.5+1.5, -4.5, height / 2]),
+        w0 = Wall.make_wall(10, 1, height2, np.array([5.5, 0.0, height2 * 0.5]),
+                            quaternion.from_euler_angles(0, 0, math.pi / 2 + 0 * math.pi),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+        w1 = Wall.make_wall(8, 1, height2, np.array([9.0, 5.5, height2 * 0.5]),
+                            quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi),
+                            ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
+        w2 = Wall.make_wall(10, 1, height, np.array([13.5, 1.0, height / 2]),
+                            quaternion.from_euler_angles(0, 0, math.pi / 2 + 0 * math.pi),
+                            ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
+        w3 = Wall.make_wall(9, 1, height, np.array([9.5, -4.5, height / 2]),
+                            quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi),
+                            ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
+        w4 = Wall.make_wall(6, 1, height, np.array([9.5 + 1.5, -4.5, height / 2]),
                             quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi),
                             ifc_wall_type="test", name="w3", base_module=base_module, bond_type=bond_type)
 
@@ -122,7 +120,8 @@ class Window1(Scenario):
         w1 = Wall.make_wall(3, 1, 6 * 0.5, np.array([-5 + 1.5, 0.0, 3.0 + 1.5]),
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi),
                             ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
-        w2 = Wall.make_wall(7, 1, 4 * 0.5, np.array([1.5, 0.0, 2.0 + 3.0]), quaternion.from_euler_angles(0, 0, 1 * math.pi),
+        w2 = Wall.make_wall(7, 1, 4 * 0.5, np.array([1.5, 0.0, 2.0 + 3.0]),
+                            quaternion.from_euler_angles(0, 0, 1 * math.pi),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w3 = Wall.make_wall(3, 1, 2 * 0.5, np.array([3.5, 0.0, 1.0 + 2.5]),
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi),
@@ -140,7 +139,8 @@ class DoppelEck1(Scenario):
         w1 = Wall.make_wall(3, 1, 5 * 0.5, np.array([-4.5, -2, 1.25]),
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
-        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]), quaternion.from_euler_angles(0, 0, 1 * math.pi + + math.pi / 2),
+        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]),
+                            quaternion.from_euler_angles(0, 0, 1 * math.pi + + math.pi / 2),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w3 = Wall.make_wall(3, 1, 2 * 0.5, np.array([3.5, 0.0, 7.5]),
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi),
@@ -169,6 +169,7 @@ class Bug1(Scenario):
              0|
     ____1_____|__1(2)__
     """
+
     def get_walls(self):
         base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
@@ -177,7 +178,8 @@ class Bug1(Scenario):
         w1 = Wall.make_wall(5, 1, 5 * 0.5, np.array([-4.5, -2, 1.25]),
                             quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
-        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
+        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]),
+                            quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         bug4 = [w1, w0, w2]
         return bug4
@@ -189,6 +191,7 @@ class DoppelEck2_Closed(Scenario):
     |3        0|    4|
     |____1_____|__2__|
     """
+
     def get_walls(self):
         base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
@@ -198,23 +201,25 @@ class DoppelEck2_Closed(Scenario):
         w1 = Wall.make_wall(5, 1, 5 * 0.5, np.array([-4.5, -3, 1.25]),
                             quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
-        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
+        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]),
+                            quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
 
         w3 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 7.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
-        w4 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, -6.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w4 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, -6.0, 2.5]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
         w5 = Wall.make_wall(5, 1, 5 * 0.5, np.array([4.5, -3, 3.75]),
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi + math.pi / 2),
-                            ifc_wall_type="test", name = "w2", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w6 = Wall.make_wall(7, 1, 5 * 0.5, np.array([4.5, 4, 1.25]),
                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         dummy1 = Wall.make_wall(2, 1, 0.5, np.array([1000.0, 0.0, 0.0]),
-                            quaternion.from_euler_angles(0, 0, 0),
-                            ifc_wall_type="test", name="dummy", base_module=base_module, bond_type=bond_type)
+                                quaternion.from_euler_angles(0, 0, 0),
+                                ifc_wall_type="test", name="dummy", base_module=base_module, bond_type=bond_type)
         dummy2 = Wall.make_wall(2, 1, 0.5, np.array([2000.0, 0.0, 0.0]),
                                 quaternion.from_euler_angles(0, 0, 0),
                                 ifc_wall_type="test", name="dummy", base_module=base_module, bond_type=bond_type)
@@ -230,6 +235,7 @@ class DoppelEck2_Closed_TJoint(Scenario):
 
     __   _   _   _  _ 2
     """
+
     def get_walls(self):
         base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
@@ -237,18 +243,20 @@ class DoppelEck2_Closed_TJoint(Scenario):
         w0 = Wall.make_wall(8, 1, 10 * 0.5, np.array([0.0, -2.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w0.openings.append(Opening(w0, np.array([3.0, 0.0, 0]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
-        w1 = Wall.make_wall(13, 1, 10 * 0.5, np.array([-4.5, 1.0, 2.5]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
+        w1 = Wall.make_wall(13, 1, 10 * 0.5, np.array([-4.5, 1.0, 2.5]),
+                            quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w1.openings.append(Opening(w1, np.array([3, 0.0, 1.5]), quaternion.from_euler_angles(0, 0, 0), (4, 1, 2.5)))
         w3 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, 7.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w3.openings.append(Opening(w3, np.array([3.0, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
-        w4 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, -6.0, 2.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w4 = Wall.make_wall(10, 1, 10 * 0.5, np.array([0.0, -6.0, 2.5]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w4.openings.append(Opening(w4, np.array([4, 0.0, 1.5]), quaternion.from_euler_angles(0, 0, 0), (3, 1, 3)))
         w5 = Wall.make_wall(13.0, 1, 10 * 0.5, np.array([4.5, 0, 2.5]),
-                            quaternion.from_euler_angles(0.0, 0.0,  math.pi + math.pi / 2),
-                            ifc_wall_type="test", name = "w2", base_module=base_module, bond_type=bond_type)
+                            quaternion.from_euler_angles(0.0, 0.0, math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w5.openings.append(Opening(w5, np.array([3, 0.0, 0.0]), quaternion.from_euler_angles(0, 0, 0), (2, 1, 4)))
 
         w2 = Wall.make_wall(20, 1, 10 * 0.5, np.array([-10.5, 1.0, 2.5]),
@@ -270,6 +278,7 @@ class DoppelEck3_Closed(Scenario):
     """
     TODO unsolvable scenario
     """
+
     def get_walls(self):
         base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
@@ -278,17 +287,19 @@ class DoppelEck3_Closed(Scenario):
         w1 = Wall.make_wall(5, 1, 5 * 0.5, np.array([-4.5, -3, 1.25]),
                             quaternion.from_euler_angles(0.0, 0.0, 0 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w1", base_module=base_module, bond_type=bond_type)
-        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]), quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
+        w2 = Wall.make_wall(7, 1, 5 * 0.5, np.array([-4.5, 4.0, 3.75]),
+                            quaternion.from_euler_angles(0, 0, 1 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
 
         w3 = Wall.make_wall(10, 1, 14 * 0.5, np.array([0.0, 7.0, 3.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
-        w4 = Wall.make_wall(10, 1, 14 * 0.5, np.array([0.0, -6.0, 3.5]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w4 = Wall.make_wall(10, 1, 14 * 0.5, np.array([0.0, -6.0, 3.5]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
         w5 = Wall.make_wall(5, 1, 5 * 0.5, np.array([4.5, -3, 3.75]),
                             quaternion.from_euler_angles(0.0, 0.0, 1 * math.pi + math.pi / 2),
-                            ifc_wall_type="test", name = "w2", base_module=base_module, bond_type=bond_type)
+                            ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
         w6 = Wall.make_wall(7, 1, 5 * 0.5, np.array([4.5, 4, 1.25]),
                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w2", base_module=base_module, bond_type=bond_type)
@@ -309,45 +320,58 @@ class SmallWall(Scenario):
         width = 1
 
         # normal small walls
-        w0_ = Wall.make_wall(1, width, 5 * 0.5, np.array([-3.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w0_ = Wall.make_wall(1, width, 5 * 0.5, np.array([-3.0, 0.0, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-        w0 = Wall.make_wall(2, width, 5 * 0.5, np.array([0.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w0 = Wall.make_wall(2, width, 5 * 0.5, np.array([0.0, 0.0, 1.25]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-        w1 = Wall.make_wall(3, width, 5 * 0.5, np.array([4.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w1 = Wall.make_wall(3, width, 5 * 0.5, np.array([4.0, 0.0, 1.25]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-        w2 = Wall.make_wall(4, width, 5 * 0.5, np.array([9.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w2 = Wall.make_wall(4, width, 5 * 0.5, np.array([9.0, 0.0, 1.25]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-        w3 = Wall.make_wall(5, width, 5 * 0.5, np.array([15, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w3 = Wall.make_wall(5, width, 5 * 0.5, np.array([15, 0.0, 1.25]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
         # small corners
-        w00 = Wall.make_wall(2, width, 5 * 0.5, np.array([0.0, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
-
-        w10 = Wall.make_wall(3, width, 5 * 0.5, np.array([4.0, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
-
-        w20 = Wall.make_wall(4, width, 5 * 0.5, np.array([9.0, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
-
-        w30 = Wall.make_wall(5, width, 5 * 0.5, np.array([15, 5.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
-
-        w01 = Wall.make_wall(2, width, 5 * 0.5, np.array([0.5, 6.5, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+        w00 = Wall.make_wall(2, width, 5 * 0.5, np.array([0.0, 5.0, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-        w11 = Wall.make_wall(3, width, 5 * 0.5, np.array([5.0, 7.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+        w10 = Wall.make_wall(3, width, 5 * 0.5, np.array([4.0, 5.0, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-        w21 = Wall.make_wall(4, width, 5 * 0.5, np.array([10.5, 7.5, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+        w20 = Wall.make_wall(4, width, 5 * 0.5, np.array([9.0, 5.0, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-        w31 = Wall.make_wall(5, width, 5 * 0.5, np.array([17, 8, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+        w30 = Wall.make_wall(5, width, 5 * 0.5, np.array([15, 5.0, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+
+        w01 = Wall.make_wall(2, width, 5 * 0.5, np.array([0.5, 6.5, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+
+        w11 = Wall.make_wall(3, width, 5 * 0.5, np.array([5.0, 7.0, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+
+        w21 = Wall.make_wall(4, width, 5 * 0.5, np.array([10.5, 7.5, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+
+        w31 = Wall.make_wall(5, width, 5 * 0.5, np.array([17, 8, 1.25]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         all = [w0_, w0, w1, w2, w3, w00, w10, w20, w30, w01, w11, w21, w31]
         return all
 
@@ -356,19 +380,21 @@ class TJoint1(Scenario):
     """
     TODO
     """
+
     def get_walls(self):
         base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         width = 1
 
-        w0 = Wall.make_wall(5, width, 5 * 0.5, np.array([-3.0, 0.0, 1.25]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+        w0 = Wall.make_wall(5, width, 5 * 0.5, np.array([-3.0, 0.0, 1.25]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w1 = Wall.make_wall(5, width, 5 * 0.5, np.array([-3.0, 7.0, 1.25]),
                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w2 = Wall.make_wall(10, width, 5 * 0.5, np.array([-3.0, 4.5, 1.25]),
-                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w3 = Wall.make_wall(5, width, 5 * 0.5, np.array([-30.0, 3.0, 1.25]),
                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
@@ -381,11 +407,12 @@ class ThickWall(Scenario):
         bond_type = "HeadBond"
         width = 2
         height = 5
-        w0 = Wall.make_wall(9, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+        w0 = Wall.make_wall(9, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w1 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]),
-                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w2 = Wall.make_wall(9, width, height * 0.5, np.array([-3.5, 9.0, height / 4.0]),
                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
@@ -393,7 +420,7 @@ class ThickWall(Scenario):
                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         all = [w0, w1, w2, w3]
-        corn =  [w2, w3]
+        corn = [w2, w3]
         return all
 
 
@@ -414,8 +441,8 @@ class OverlappingWalls(Scenario):
                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w2_Same = Wall.make_wall(7, width, height * 0.5, np.array([-3.5, 1.0, height / 4.0 + 3.5]),
-                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                                 quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                                 ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         complete_overlap = [w2, w2_Same]
         return [w0, w1, w2, w2_Same]
 
@@ -430,24 +457,25 @@ class ThickWallAllCorners(Scenario):
         height = 5
         an = 0.3
 
-        w10 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 2.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w10 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 2.0, height / 4.0]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w11 = Wall.make_wall(5, width, height * 0.5, np.array([4.0, 3.5, height / 4.0]),
                              quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w12 = Wall.make_wall(5, width, height * 0.5, np.array([-4.0, 3.5, height / 4.0]),
-                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
-
-        w20 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, -2.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
+        w20 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, -2.0, height / 4.0]),
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w21 = Wall.make_wall(5, width, height * 0.5, np.array([4.0, -3.5, height / 4.0]),
                              quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
                              ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w22 = Wall.make_wall(5, width, height * 0.5, np.array([-4.0, -3.5, height / 4.0]),
-                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
-                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
         w11.rotate_around(quaternion.from_euler_angles(0, an, an))
         w12.rotate_around(quaternion.from_euler_angles(0, an, an))
@@ -461,24 +489,24 @@ class ThickWallAllCorners(Scenario):
 
 class LucaScenario(Scenario):
     def get_walls(self):
-
         base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         width = 1
         height = 20
         an = 0.3
 
-        w1 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+        w1 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w2 = Wall.make_wall(10, width, height * 0.5, np.array([4.5, 0.5, height / 4.0]),
-                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w3 = Wall.make_wall(10, width, height * 0.5, np.array([0.0, -4.0, height / 4.0]),
-                             quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         w4 = Wall.make_wall(10, width, height * 0.5, np.array([-4.5, 0.5, height / 4.0]),
-                             quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi + math.pi / 2),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
         all = [w1, w2, w3, w4]
         return all
 
@@ -491,14 +519,15 @@ class EmptyScenario(Scenario):
 class LucaWaende_duenn(Scenario):
     def get_walls(self):
         base_module = BrickInformation(2.0, 1.0, 0.5, grid=np.array([0.5, 0.5, 0.5]))
-        #base_module = BrickInformation(1.0, 0.5, 0.5, grid=np.array([0.5, 0.5, 0.5]))
+        # base_module = BrickInformation(1.0, 0.5, 0.5, grid=np.array([0.5, 0.5, 0.5]))
         bond_type = "StretchedBond"
         width = 1
         height = 20
         an = 0.0
 
-        w1 = Wall.make_wall(30, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+        w1 = Wall.make_wall(30, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
         w1.rotate_around(quaternion.from_euler_angles(0, 0.0, an))
         return [w1]
@@ -512,8 +541,9 @@ class LucaWaende_dick(Scenario):
         height = 20
         an = math.pi / 2.0
 
-        w1 = Wall.make_wall(30, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]), quaternion.from_euler_angles(0, 0, 0 * math.pi),
-                             ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
+        w1 = Wall.make_wall(30, width, height * 0.5, np.array([0.0, 5.0, height / 4.0]),
+                            quaternion.from_euler_angles(0, 0, 0 * math.pi),
+                            ifc_wall_type="test", name="w0", base_module=base_module, bond_type=bond_type)
 
         w1.rotate_around(quaternion.from_euler_angles(0, 0, an))
         return [w1]

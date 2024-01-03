@@ -299,7 +299,7 @@ class Wall:
         :param name: name of the wall
         :param use_mid: whether to use the mid of the wall as origin
         """
-        print("   make_wall", length, width, height, position, rotation)
+        # print("   make_wall", length, width, height, position, rotation)  # useful debug message
 
         length, width = max(length, width), min(length, width)
         corner = gp_Pnt(0.0, 0.0, 0.0)

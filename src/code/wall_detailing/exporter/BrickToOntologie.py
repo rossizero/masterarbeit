@@ -50,7 +50,7 @@ class Rule:
                 return None
 
             property2 = ontology.holdPropertyByName[holder][0]
-            print(self.effectedPropertyName, "applyObjectPropertyTo", property2)
+            print("RULE:", self.effectedPropertyName, "applyObjectPropertyTo", property2)
 
             if (ontology[self.effectedPropertyName].domain != ontology[property2].domain
                     or ontology[self.effectedPropertyName].range != ontology[property2].range):

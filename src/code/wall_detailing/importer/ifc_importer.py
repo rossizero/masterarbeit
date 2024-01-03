@@ -1,18 +1,12 @@
-import math
 from typing import Tuple
 
 import ifcopenshell
 import numpy as np
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
 from OCC.Core.gp import gp_Trsf, gp_Vec, gp_Quaternion
-from ifcopenshell import geom, util
+from ifcopenshell import geom
 from OCC import VERSION
-from OCC.Core.BRep import BRep_Tool
-from OCC.Core.TopAbs import TopAbs_EDGE, TopAbs_VERTEX
-from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopoDS import TopoDS_Shape, topods
 from ifcopenshell.express.rules.IFC4X3 import IfcUnitEnum
-from ifcopenshell.util import placement
 import quaternion
 
 from wall_detailing.detailing.wall import Wall
@@ -23,6 +17,7 @@ from wall_detailing.masonry.brick import BrickInformation
 
 print("OCC version", VERSION)
 print("IfcOpenshell version", ifcopenshell.version)
+print("--")
 
 
 class IfcImporter:
@@ -240,11 +235,11 @@ class IfcImporter:
                         dimensions[1] = wall.width
                         rotation *= wall.get_rotation().inverse()
                         opening = Opening(wall, translation, rotation, dimensions)
-                        print("  opening", opening.length, opening.width, opening.height, opening.get_position(),
-                              translation, opening.get_rotation(), rotation)
+                        #print("  opening", opening.length, opening.width, opening.height, opening.get_position(),
+                        #      translation, opening.get_rotation(), rotation)
                         wall.openings.append(opening)
                     except Exception as e:
                         print(e)
                         continue
-        print("ifc importer", len(walls))
+        print("ifc importer", len(walls), "walls found")
         return walls
