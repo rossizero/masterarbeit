@@ -41,7 +41,7 @@ conda env create -f /src/env/env_universal.yml  # Linux
 ## How to
 * set the scenario and flags you want to use
 * run wall_detailer.py
-* Output Mesh: `/src/code/wall_detailing/output.stl`
-* Output JSON: `/src/code/wall_detailing/output.json`
+* Output Mesh: `/src/code/wall_detailing/output/output.stl`
+* Output JSON: `/src/code/wall_detailing/output/output.json`
 * Output Ontology: `/src/ontologies/temporary_working_env.rdf`
-* Other outputs: `openings.stl` (all openings), `base.stl` (all walls that have been loaded), `output_NUMBER.stl` (partly built output)
+* Other outputs: `output/openings.stl` (all openings), `output/base.stl` (all walls that have been loaded), `output/output_NUMBER.stl` (partly built output)
