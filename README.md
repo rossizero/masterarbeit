@@ -8,7 +8,7 @@
    *  `/figures for txt`: source files for the figures in the latex project
    *  `/models`:
       *  `/scenarios`: scenarios (1, 2, 3, 4) and the blender rendering project for figures in the latex project
-      *  `/stuff to test stuff`: some test ifc files
+      *  `/stuff to test stuff`: some test ifc files (some are fromhttps://www.ifcwiki.org/index.php?title=KIT_IFC_Examples)
    *  `/ontologies`: the base ontology and a temporary one that's being used to write and read to by the wall detailing project.
 
 ## Setup
